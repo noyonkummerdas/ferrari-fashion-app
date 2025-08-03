@@ -1,0 +1,119 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+
+interface GlobalContextType {
+  loggedIn: boolean;
+  setLoggedIn: (value: boolean) => void;
+  user: any;
+  setUser: (user: any) => void;
+  loading: boolean;
+  setLoading: (value: boolean) => void;
+  userInfo: any;
+  fetchUser: () => void;
+  logout: () => void;
+  storeData: (key: string, value: any) => Promise<void>;
+  getData: (key: string) => Promise<any>;
+  removeData: (key: string) => Promise<void>;
+}
+
+const GlobalContext = createContext<GlobalContextType>({
+  loggedIn: false,
+  setLoggedIn: () => {},
+  user: null,
+  setUser: () => {},
+  loading: true,
+  setLoading: () => {},
+  userInfo: null,
+  fetchUser: () => {},
+  logout: () => {},
+  storeData: async () => {},
+  getData: async () => null,
+  removeData: async () => {},
+});
+
+export const useGlobalContext = (): GlobalContextType => {
+  const context = useContext(GlobalContext);
+  if (!context) {
+    throw new Error('useGlobalContext must be used within a GlobalProvider');
+  }
+  return context;
+};
+
+interface GlobalProviderProps {
+  children: ReactNode;
+}
+
+const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
+  const [loggedIn, setLoggedIn] = useState(false);
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Initialize auth state - check if user is logged in
+    // This is where you'd check AsyncStorage, SecureStore, etc.
+    // For now, we'll just set loading to false
+    setTimeout(() => {
+      setLoading(false);
+    }, 100);
+  }, []);
+
+  const fetchUser = () => {
+    // Implement user fetching logic here
+    console.log('Fetching user...');
+  };
+
+  const logout = () => {
+    setLoggedIn(false);
+    setUser(null);
+  };
+
+  const storeData = async (key: string, value: any) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(key, jsonValue);
+    } catch (error) {
+      console.error('Error storing data:', error);
+    }
+  };
+
+  const getData = async (key: string) => {
+    try {
+      const jsonValue = await AsyncStorage.getItem(key);
+      return jsonValue != null ? JSON.parse(jsonValue) : null;
+    } catch (error) {
+      console.error('Error getting data:', error);
+      return null;
+    }
+  };
+
+  const removeData = async (key: string) => {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (error) {
+      console.error('Error removing data:', error);
+    }
+  };
+
+  const value: GlobalContextType = {
+    loggedIn,
+    setLoggedIn,
+    user,
+    setUser,
+    loading,
+    setLoading,
+    userInfo: user,
+    fetchUser,
+    logout,
+    storeData,
+    getData,
+    removeData,
+  };
+
+  return (
+    <GlobalContext.Provider value={value}>
+      {children}
+    </GlobalContext.Provider>
+  );
+};
+
+export default GlobalProvider;
