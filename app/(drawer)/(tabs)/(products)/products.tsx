@@ -1,12 +1,12 @@
-import { View, Text, SafeAreaView, useColorScheme, TouchableOpacity, TextInput, RefreshControl, Image, Alert } from 'react-native'
-import React, { useEffect, useLayoutEffect, useRef, useState } from 'react'
-import { useGlobalContext } from '@/context/GlobalProvider';
-import { router, useNavigation } from 'expo-router';
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/Colors';
-import { ScrollView } from 'react-native-gesture-handler';
-import { useProductsQuery } from '@/store/api/productApi';
 import ProductItemList from '@/components/productListItem';
+import { Colors } from '@/constants/Colors';
+import { useGlobalContext } from '@/context/GlobalProvider';
+import { useProductsQuery } from '@/store/api/productApi';
+import { Ionicons } from '@expo/vector-icons';
+import { router, useNavigation } from 'expo-router';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 const Products = () => {
@@ -55,7 +55,7 @@ const Products = () => {
       headerRight: () => (
         <View className='me-4' >
           <TouchableOpacity onPress={()=>router.push("/product/add-product")} className='flex flex-row justify-center items-center gap-2'>
-            <Ionicons name="add" size={24}  color="#f2652d" />
+            <Ionicons name="add" size={24}  color="#FDB714" />
             <Text className='text-primary text-xl font-pmedium'>Add</Text>
           </TouchableOpacity>
         </View>
@@ -86,12 +86,12 @@ useEffect(()=>{
 
   // console.log("DATA::",stockData)
   return (
-    <SafeAreaView className='bg-white h-full'>
-        <View className='flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-gray-200'>
-          <TextInput placeholder='Search Product' className='flex-1' value={searchQuery} onChangeText={setSearchQuery} />
-          <Ionicons name="search-outline"  size={24} />
+    <SafeAreaView className='bg-dark h-full'>
+        <View className='flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-gray-800'>
+          <TextInput placeholder='Search Product' className='flex-1 text-gray-200' value={searchQuery} onChangeText={setSearchQuery} />
+          <Ionicons name="search-outline" color='#E5E7EB'  size={24} />
         </View>
-        <ScrollView  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className=' bg-white'  >
+        <ScrollView  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className=' bg-dark'  >
           {
             data && data?.length > 0 && 
             data?.map((product,index)=>

@@ -70,17 +70,17 @@ const SignIn = () => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-white"
+      className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-      <ScrollView className=" bg-white ">
+      <ScrollView className=" bg-dark ">
         <SafeAreaView
           className="w-full flex justify-center "
           style={{
             minHeight: Dimensions.get("window").height + 200,
           }}
         >
-          <View className="bg-white px-8  pb-10 ">
+          <View className="bg-dark px-8  pb-10 ">
             <View className="flex w-full justify-start items-center">
               <Image className="h-36 w-36" source={logo} />
             </View>
@@ -112,14 +112,14 @@ const SignIn = () => {
               </Text> */}
               <Link
                 href="/forgot-password"
-                className="text-lg font-psemibold text-secondary"
+                className="text-lg font-psemibold text-gray-400"
               >
                 Forgot Password
               </Link>
             </View>
           </View>
         </SafeAreaView>
-        <StatusBar backgroundColor="#fff" style="dark" />
+        <StatusBar backgroundColor="#fff" style="light" />
       </ScrollView>
     </KeyboardAvoidingView>
   );

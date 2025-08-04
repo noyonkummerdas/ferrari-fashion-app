@@ -1,7 +1,6 @@
+import { Ionicons } from "@expo/vector-icons";
 import { useState } from "react";
-import { View, Text, TextInput, TouchableOpacity, Image } from "react-native";
-
-import { icons } from "../constants";
+import { Text, TextInput, TouchableOpacity, View } from "react-native";
 
 const FormField = ({
   title,
@@ -16,10 +15,10 @@ const FormField = ({
 
   return (
     <View className={`space-y-2 ${otherStyles}`}>
-      <Text className="text-lg text-black-200 mb-2 font-pmedium">{title}</Text>
-      <View className="w-full h-14 px-4 py-3 bg-gray-200  border border-gray-200 rounded-full focus:border-secondary flex flex-row items-center">
+      <Text className="text-lg text-gray-400 mb-2 font-regular">{title}</Text>
+      <View className="w-full h-14 px-4 py-3 bg-black-200  border border-black-200 rounded-full focus:border-secondary flex flex-row items-center">
         <TextInput
-          className="flex-1 text-black-100 h-16 font-pregular text-base bg-black-200"
+          className="flex-1 text-gray-400 font-pregular text-base bg-black-200"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#797979"
@@ -31,11 +30,10 @@ const FormField = ({
 
         {title === "Password" && (
           <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
-            <Image
-              source={!showPassword ? icons.eye : icons.eyeHide}
-              // className="w-4 h-4"
-              style={{height:"22", width:"22", float:"end"}}
-              resizeMode="contain"
+            <Ionicons
+              name={!showPassword ? "eye-outline" : "eye-off-outline"}
+              size={22}
+              color="#797979"
             />
           </TouchableOpacity>
         )}

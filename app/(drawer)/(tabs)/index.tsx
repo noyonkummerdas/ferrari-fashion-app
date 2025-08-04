@@ -109,10 +109,10 @@ export default function PosDashboard() {
   // console.log(data,error,isFetching, isLoading, isSuccess)
   // console.log(latestSale,latestError)
   return (
-    <ScrollView className="flex-1 bg-white p-4"
+    <ScrollView className="flex-1 bg-dark p-4"
     refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
-     <Text>Dashboard</Text>
+     <Text className='text-gray-200 font-pbold'>Dashboard</Text>
     </ScrollView>
   );
 }
