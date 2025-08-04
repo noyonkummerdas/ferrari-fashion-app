@@ -17,7 +17,7 @@ interface GlobalContextType {
 }
 
 const GlobalContext = createContext<GlobalContextType>({
-  loggedIn: false,
+  loggedIn: true,
   setLoggedIn: () => {},
   user: null,
   setUser: () => {},

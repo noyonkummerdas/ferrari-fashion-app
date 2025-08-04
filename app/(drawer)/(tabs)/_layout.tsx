@@ -2,23 +2,20 @@ import { router, Tabs } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 
 // import { TabBarIcon } from '@/components/navigation/TabBarIcon';
-import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {  Image,Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
-import profile from "../../../assets/images/profile.jpg"
-import { useNavigation } from '@react-navigation/native';
-import { useGlobalContext } from '@/context/GlobalProvider';
-import logo_h from "../../../assets/images/logo-h.png"
 import { DrawerToggleButton } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import profile from "../../../assets/images/profile.jpg";
 
 //@ts-ignore
 const TabIcon = ({icon,iconAlt, name, color, focused})=>{
   return (
     <>
       <View className={`flex items-center justify-center`}>
-        <View className={` items-center justify-center ${focused && "bg-white rounded-full justify-center"} `}>
+        <View className={` items-center justify-center ${focused && " justify-center"} `}>
           <View className={`flex items-center justify-center ${focused && "w-16"} `}>
             
             <Ionicons 
@@ -28,7 +25,7 @@ const TabIcon = ({icon,iconAlt, name, color, focused})=>{
             size={focused? 30 : 28} 
             color={color} 
             />
-           {focused && <Text className='text-slate-700 font-pregular text-xs'>{name}</Text>} 
+           {focused && <Text className='text-gray-300 font-pregular text-xs'>{name}</Text>} 
           </View>
         </View>         
       </View>
@@ -55,11 +52,11 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         tabBarShowLabel:false,
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        tabBarInactiveTintColor:"#CDCDE0",
+        tabBarActiveTintColor: '#FDB714', // Primary color for active tabs
+        tabBarInactiveTintColor: '#9CA3AF', // Gray-200 for inactive tabs
         tabBarStyle:{
-            backgroundColor: Colors[colorScheme ?? 'light'].background,
-            borderTopColor: Colors[colorScheme ?? 'light'].background,
+            backgroundColor: '#1F2937', // Dark background color
+            borderTopColor: '#1F2937',
             borderTopWidth:1,
             height:64,
             overflow:"hidden",
@@ -74,14 +71,15 @@ export default function TabLayout() {
          <Tabs.Screen 
             name="index"
             options={{
-                title: "AamarDokan",
+                title: "FerrariFashion",
                 headerTitleAlign: 'center',
                 headerTitle: () => (
                     <View className='h-8 w-auto'>
-                      <Image 
+                      {/* <Image 
                         source={logo_h} 
                         className=" w-auto" // Adjust logo size here
-                      />
+                      /> */}
+                      <Text className=' font-pbold text-primary'>FerrariFashion</Text>
                     </View>
                   ),
                 headerShown: true,
@@ -103,13 +101,13 @@ export default function TabLayout() {
             }}
         />
         <Tabs.Screen 
-            name="sales"
+            name="stock"
             options={{
-                title: "Sales",
+                title: "Stock",
                 headerTitleAlign: 'left',
                 headerTitle: () => (
                     <View>
-                      <Text className='font-pbold dark:text-white text-center text-xl'>Sales</Text>
+                      <Text className='font-pbold dark:text-white text-gray-200 text-center text-xl'>Stock</Text>
                     </View>
                   ),
                 headerShown: true,
@@ -117,10 +115,10 @@ export default function TabLayout() {
                
                 tabBarIcon:({color, focused})=>(
                     <TabIcon
-                        icon="cart-sharp"
-                        iconAlt="cart-outline"
+                        icon="time-sharp"
+                        iconAlt="time-outline"
                         color={color}
-                        name="sales"
+                        name="stock"
                         focused={focused}
                     />
                 )               

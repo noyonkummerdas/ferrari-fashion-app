@@ -1,5 +1,5 @@
-import { Text, TouchableOpacity, ActivityIndicator } from 'react-native'
-import React from 'react'
+import React from 'react';
+import { ActivityIndicator, Text, TouchableOpacity } from 'react-native';
 
 
 type ButtonTypes = {
@@ -26,7 +26,7 @@ const CustomButton = ({
         }`}
         disabled={isLoading}
       >
-        <Text className={`text-white font-psemibold text-lg  ${textStyles}`}>
+        <Text className={`text-gray-900 font-psemibold text-lg  ${textStyles}`}>
           {title}
         </Text>
   

@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import Drawer from 'expo-router/drawer'
-import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer'
 import { Ionicons } from '@expo/vector-icons';
-import { Link, router, usePathname, useRouter, useSegments } from 'expo-router';
-import profile from "../../assets/images/icon.png"
+import { DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
+import { router, usePathname, useSegments } from 'expo-router';
+import Drawer from 'expo-router/drawer';
+import React, { useEffect, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import profile from "../../assets/images/icon.png";
 // import * as globalCon from "@/context/GlobalProvider"
 import { useGlobalContext } from "../../context/GlobalProvider";
 
@@ -17,7 +17,7 @@ const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
         //@ts-ignore
         name={isFocused ? icon : iconAlt}
         size={isFocused ? 24 : 26} 
-        color={!isFocused ? color : "#fff"} 
+        color={isFocused ? "#FDB714 " : "#FDB714"} 
         //@ts-ignore
         style={{ marginLeft: isFocused ? 10 : 0 }}
       />
@@ -63,8 +63,8 @@ const CustomDrawerComponent = (props:any)=>{
                 <View className='flex flex-row gap-x-3 border-b items-center border-slate-400 pb-4 mb-2'>
                     <Image  source={profile} className="h-14 w-14"/>
                     <View>
-                        <Text className='text-xl font-pmedium'>{userInfo?.name}</Text>
-                        <Text className='text-base'><Text>Aamar ID: </Text>{userInfo?.aamarId}</Text>
+                        <Text className='text-xl text-gray-200 font-pmedium'>{userInfo?.name}</Text>
+                        <Text className='text-base text-gray-200'><Text className='text-gray-200'>Aamar ID: </Text>{userInfo?.aamarId}</Text>
                     </View>
                 </View>
             </TouchableOpacity>
@@ -78,8 +78,8 @@ const CustomDrawerComponent = (props:any)=>{
                             focused={["/"]}
                         />}
                 label={"Store"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname !== "/" ? "#ffffff": "#ff6a39" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/" ? "#000000": "#FDB714"}]}
+                style={{backgroundColor: pathname !== "/" ? "#000000": "#FDB714" }}
                 onPress={()=>router.push('/(drawer)/(tabs)')}
             /><DrawerItem
                 icon={({size,color,focused})=>
@@ -91,8 +91,8 @@ const CustomDrawerComponent = (props:any)=>{
                         focused={["/pos"]}
                     />}
                 label={"POS"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/pos" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname !== "/pos" ? "#ffffff": "#ff6a39" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/pos" ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/pos" ? "#000000": "#ff6a39" }}
                 onPress={()=>router.push('/(drawer)/(tabs)/pos')}
             />
             <DrawerItem
@@ -105,8 +105,8 @@ const CustomDrawerComponent = (props:any)=>{
                             focused={["/sales"]}
                         />}
                 label={"Sales"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/sales" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname !== "/sales" ? "#ffffff": "#ff6a39" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/sales"  ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/sales" ? "#000000": "#ff6a39" }}
                 onPress={()=>router.push('/(drawer)/(tabs)/sales')}
             />
             <DrawerItem
