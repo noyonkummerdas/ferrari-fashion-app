@@ -91,7 +91,7 @@ const CustomDrawerComponent = (props:any)=>{
                         icon="Home"
                         iconAlt="home-outline"
                         color={color}
-                        focused={["/screen/home"]}
+                        focused={["/home"]}
                     />}
                 label={"Home"}
                 labelStyle={[styles.labelStyle, {color: pathname == "/home" ? "#000000": "#ffffff"}]}
@@ -110,7 +110,7 @@ const CustomDrawerComponent = (props:any)=>{
                 label={"Warehouse"}
                 labelStyle={[styles.labelStyle, {color: pathname == "/warehouse"  ? "#000000": "#ffffff"}]}
                 style={{backgroundColor: pathname !== "/warehouse" ? "#000000": "#FDB714" }}
-                onPress={()=>router.push('/(drawer)/(tabs)/screen/warehouse')}
+                onPress={()=>router.push('/(drawer)/(tabs)/warehouse')}
             />
             <DrawerItem
                 icon={({size,color,focused})=>
@@ -208,9 +208,4 @@ export default DrawerLayout
 const styles = StyleSheet.create({
     labelStyle:{fontSize:18, fontWeight:300
     }
-    ,drowerButton:{
-        backgroundColor: "#000000",
-        marginHorizontal: 10,
-        margin:10,
-    },
-)
+})
