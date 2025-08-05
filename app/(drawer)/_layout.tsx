@@ -21,6 +21,9 @@ const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
         //@ts-ignore
         style={{ marginLeft: isFocused ? 10 : 0 }}
       />
+        {
+        // isFocused && <Text style={{ color: color, fontSize: 12, marginLeft: 5 }}>{name}</Text>
+        }
       {/* {isFocused && <Text className='text-slate-700 font-pregular text-xs'>{name}</Text>}  */}
     </>
   );
@@ -68,7 +71,7 @@ const CustomDrawerComponent = (props:any)=>{
                     </View>
                 </View>
             </TouchableOpacity>
-            <DrawerItem
+            <DrawerItem 
                 icon={({color})=>
                         <TabIcon
                             pathname={pathname}
@@ -78,36 +81,36 @@ const CustomDrawerComponent = (props:any)=>{
                             focused={["/"]}
                         />}
                 label={"Store"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/" ? "#000000": "#FDB714"}]}
-                style={{backgroundColor: pathname !== "/" ? "#000000": "#FDB714" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/" ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/" ? "#000000": "#FDB714"  }}
                 onPress={()=>router.push('/(drawer)/(tabs)')}
             /><DrawerItem
                 icon={({size,color,focused})=>
                         <TabIcon
                         pathname={pathname}
-                        icon="calculator"
-                        iconAlt="calculator-outline"
+                        icon="Home"
+                        iconAlt="home-outline"
                         color={color}
-                        focused={["/pos"]}
+                        focused={["/screen/home"]}
                     />}
-                label={"POS"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/pos" ? "#000000": "#ffffff"}]}
-                style={{backgroundColor: pathname !== "/pos" ? "#000000": "#ff6a39" }}
-                onPress={()=>router.push('/(drawer)/(tabs)/pos')}
+                label={"Home"}
+                labelStyle={[styles.labelStyle, {color: pathname == "/home" ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/home" ? "#000000": "#FDB714" }}
+                onPress={()=>router.push('/(drawer)/(tabs)/home')}
             />
             <DrawerItem
                 icon={({color})=>
                         <TabIcon
                             pathname={pathname}
-                            icon="cart-sharp"
-                            iconAlt="cart-outline"
+                            icon="warehouse"
+                            iconAlt="warehouse-outline"
                             color={color}
-                            focused={["/sales"]}
+                            focused={["/warehouse"]}
                         />}
-                label={"Sales"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/sales"  ? "#000000": "#ffffff"}]}
-                style={{backgroundColor: pathname !== "/sales" ? "#000000": "#ff6a39" }}
-                onPress={()=>router.push('/(drawer)/(tabs)/sales')}
+                label={"Warehouse"}
+                labelStyle={[styles.labelStyle, {color: pathname == "/warehouse"  ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/warehouse" ? "#000000": "#FDB714" }}
+                onPress={()=>router.push('/(drawer)/(tabs)/screen/warehouse')}
             />
             <DrawerItem
                 icon={({size,color,focused})=>
@@ -116,12 +119,12 @@ const CustomDrawerComponent = (props:any)=>{
                         icon="basket"
                         iconAlt="basket-outline"
                         color={color}
-                        focused={["/products","/categories","/brands"]}
+                        focused={["/supplire"]}
                     />}
-                label={"Products"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/products"  || pathname == "/categories" || pathname == "/brands" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname == "/products" || pathname == "/categories" || pathname == "/brands"  ?  "#ff6a39" :"#ffffff" }}
-                onPress={()=>router.push("/(drawer)/(products)/products")}
+                label={"Supplire "}
+                labelStyle={[styles.labelStyle, {color: pathname == "/supplire"  || pathname == "/categories" || pathname == "/brands" ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname == "/supplire" || pathname == "/categories" || pathname !== "/brands"  ?  "#000000": "#FDB714" }}
+                onPress={()=>router.push("/(drawer)/(tabs)/supplire")}
             />
             <DrawerItem
                 icon={({size,color,focused})=>
@@ -132,9 +135,9 @@ const CustomDrawerComponent = (props:any)=>{
                         color={color}
                         focused={["/customers","/suppliers","/user"]}
                     />}
-                label={"People"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/customers"  || pathname == "/suppliers"|| pathname == "/user" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname == "/customers"  || pathname == "/suppliers" || pathname == "/user" ?  "#ff6a39" :"#ffffff" }}
+                label={"customers"}
+                labelStyle={[styles.labelStyle, {color: pathname == "/customers"  || pathname == "/suppliers"|| pathname == "/user" ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname == "/customers"  || pathname == "/suppliers" || pathname !== "/user" ?  "#000000" :"#FDB714" }}
                 onPress={()=>router.push("/(drawer)/(tabs)/(connects)/customers")}
             />
             <DrawerItem
@@ -147,11 +150,12 @@ const CustomDrawerComponent = (props:any)=>{
                         focused={["/stock"]}
                     />}
                 label={"Stock"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/stock" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname !== "/stock" ? "#ffffff": "#ff6a39" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/stock" ?"#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/stock" ? "#000000" :"#FDB714" }}
                 onPress={()=>router.push('/stock/stock')}
             />
-            <DrawerItem
+           <View style={styles.drowerButton} >
+             <DrawerItem
                 icon={({size,color,focused})=>
                         <TabIcon
                         pathname={pathname}
@@ -161,10 +165,13 @@ const CustomDrawerComponent = (props:any)=>{
                         focused={["/reports"]}
                     />}
                 label={"Reports"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/reports" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname !== "/reports" ? "#ffffff": "#ff6a39" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/reports" ?"#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/reports" ? "#000000" :"#FDB714" }}
                 onPress={()=>router.push('/reports')}
             />
+
+
+           </View>
             <DrawerItem
                 icon={({size,color,focused})=>
                         <TabIcon
@@ -175,13 +182,13 @@ const CustomDrawerComponent = (props:any)=>{
                         focused={["/setting"]}
                     />}
                 label={"Setting"}
-                labelStyle={[styles.labelStyle, {color: pathname == "/setting" ? "#ffffff": "#475569"}]}
-                style={{backgroundColor: pathname !== "/setting" ? "#ffffff": "#ff6a39" }}
+                labelStyle={[styles.labelStyle, {color: pathname == "/setting" ? "#000000": "#ffffff"}]}
+                style={{backgroundColor: pathname !== "/setting" ? "#000000" :"#ff6a39" }}
                 onPress={()=>router.push('/settings/setting')}
             />
             <TouchableOpacity onPress={()=>logout()} className='flex flex-row ms-5 mt-4' >
-                <Ionicons name="power" size={24}/>
-                <Text className='text-xl font-pmedium text-slate-600 ms-3'>Logout</Text>
+                <Ionicons name="power" size={24} color={"#ff6a39"} />
+                <Text className='text-xl font-pmedium text-gray-400 ms-3'>Logout</Text>
             </TouchableOpacity>
             
             
@@ -201,4 +208,9 @@ export default DrawerLayout
 const styles = StyleSheet.create({
     labelStyle:{fontSize:18, fontWeight:300
     }
-})
+    ,drowerButton:{
+        backgroundColor: "#000000",
+        marginHorizontal: 10,
+        margin:10,
+    },
+)

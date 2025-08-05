@@ -2,7 +2,7 @@ import { CustomButton, FormField } from "@/components";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Link, router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Alert,
   Dimensions,
@@ -90,7 +90,7 @@ const SignIn = () => {
               handleChangeText={(e) => setForm({ ...form, email: e })}
               otherStyles="mt-14"
               placeholder="username"
-              keyboard="deafult"
+              keyboard="default"
             />
             <FormField
               title="Password"

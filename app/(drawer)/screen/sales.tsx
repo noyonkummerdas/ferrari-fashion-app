@@ -1,14 +1,14 @@
-import { Text ,ScrollView, RefreshControl, View, useColorScheme, TouchableOpacity, SafeAreaView} from 'react-native';
-import { useGlobalContext } from '@/context/GlobalProvider';
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { format, isToday } from 'date-fns';
-import { useAllSaleQuery } from '@/store/api/saleApi';
+import DateRangePickerComponent from '@/components/DateRangePickerComponent';
 import SalesItem from '@/components/SalesItem';
-import avatarUrl from "../../../assets/images/profile.jpg"
-import { useNavigation } from '@react-navigation/native';
-import { Foundation, Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
-import DateRangePickerComponent from '@/components/DateRangePickerComponent'
+import { useGlobalContext } from '@/context/GlobalProvider';
+import { useAllSaleQuery } from '@/store/api/saleApi';
+import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
+import { format } from 'date-fns';
+import { useEffect, useLayoutEffect, useState } from 'react';
+import { RefreshControl, ScrollView, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
+import avatarUrl from "../../../assets/images/profile.jpg";
 
 export default function Sales() {
   const {userInfo} = useGlobalContext()

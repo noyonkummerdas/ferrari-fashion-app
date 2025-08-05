@@ -1,0 +1,9 @@
+import React from "react";
+import { Text, View } from "react-native";
+export default function warehouse() {
+    return (
+        <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+            <Text className="text-white">Warehouse Screen</Text>
+        </View>
+    );
+}
