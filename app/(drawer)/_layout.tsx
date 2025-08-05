@@ -96,7 +96,7 @@ const CustomDrawerComponent = (props:any)=>{
                 label={"Home"}
                 labelStyle={[styles.labelStyle, {color: pathname == "/home" ? "#000000": "#ffffff"}]}
                 style={{backgroundColor: pathname !== "/home" ? "#000000": "#FDB714" }}
-                onPress={()=>router.push('/(drawer)/(tabs)/home')}
+                onPress={()=>router.push('/screen/home')}
             />
             <DrawerItem
                 icon={({color})=>
@@ -110,7 +110,7 @@ const CustomDrawerComponent = (props:any)=>{
                 label={"Warehouse"}
                 labelStyle={[styles.labelStyle, {color: pathname == "/warehouse"  ? "#000000": "#ffffff"}]}
                 style={{backgroundColor: pathname !== "/warehouse" ? "#000000": "#FDB714" }}
-                onPress={()=>router.push('/(drawer)/(tabs)/warehouse')}
+                onPress={()=>router.push('/screen/warehouse')}
             />
             <DrawerItem
                 icon={({size,color,focused})=>
@@ -124,7 +124,7 @@ const CustomDrawerComponent = (props:any)=>{
                 label={"Supplire "}
                 labelStyle={[styles.labelStyle, {color: pathname == "/supplire"  || pathname == "/categories" || pathname == "/brands" ? "#000000": "#ffffff"}]}
                 style={{backgroundColor: pathname == "/supplire" || pathname == "/categories" || pathname !== "/brands"  ?  "#000000": "#FDB714" }}
-                onPress={()=>router.push("/(drawer)/(tabs)/supplire")}
+                onPress={()=>router.push("/screen/supplire")}
             />
             <DrawerItem
                 icon={({size,color,focused})=>
@@ -154,8 +154,7 @@ const CustomDrawerComponent = (props:any)=>{
                 style={{backgroundColor: pathname !== "/stock" ? "#000000" :"#FDB714" }}
                 onPress={()=>router.push('/stock/stock')}
             />
-           <View style={styles.drowerButton} >
-             <DrawerItem
+            <DrawerItem
                 icon={({size,color,focused})=>
                         <TabIcon
                         pathname={pathname}
@@ -169,9 +168,6 @@ const CustomDrawerComponent = (props:any)=>{
                 style={{backgroundColor: pathname !== "/reports" ? "#000000" :"#FDB714" }}
                 onPress={()=>router.push('/reports')}
             />
-
-
-           </View>
             <DrawerItem
                 icon={({size,color,focused})=>
                         <TabIcon
