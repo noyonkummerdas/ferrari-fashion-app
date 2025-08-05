@@ -1,16 +1,3 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import {
-  View,
-  Text,
-  ScrollView,
-  Switch,
-  Image,
-  useColorScheme,
-  TouchableOpacity,
-  Alert,
-  Dimensions,
-} from "react-native";
-import { useSelector, useDispatch } from "react-redux";
 import {
   AntDesign,
   FontAwesome5,
@@ -19,26 +6,27 @@ import {
   Ionicons,
   MaterialCommunityIcons,
 } from "@expo/vector-icons";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  Dimensions,
+  ScrollView,
+  Switch,
+  Text,
+  TouchableOpacity,
+  useColorScheme,
+  View
+} from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
-import InputField from "@/components/InputField";
-import SaveButton from "@/components/SaveButton";
-import {
-  updateSetting,
-  toggleVAT,
-  toggleLoyalty,
-  setPaymentMethods,
-} from "../../store/slice/settingSlice";
-import { useGlobalContext } from "@/context/GlobalProvider";
-import { router, useNavigation } from "expo-router";
-import { Colors } from "@/constants/Colors";
-import PhotoUploader from "@/components/PhotoUploader";
-import logo from "../../assets/images/logo-h.png";
 import CustomInput from "@/components/customInput";
-import {
-  useSettingQuery,
-  useUpdateSettingMutation,
-} from "@/store/api/settingApi";
 import PhotoUpload from "@/components/PhotoUploader";
+import SaveButton from "@/components/SaveButton";
+import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import {
+  useUpdateSettingMutation
+} from "@/store/api/settingApi";
+import { router, useNavigation } from "expo-router";
 
 const SettingScreen = () => {
   const { userInfo, setUserInfo } = useGlobalContext();
@@ -86,15 +74,9 @@ const SettingScreen = () => {
             className="flex flex-row gap-2 items-center"
             onPress={() => handleUpdateSetting()}
           >
-            <Ionicons
-              name={isSaved ? "checkmark" : "save"}
-              size={20}
-              color={isSaved ? "green" : "rgba(255, 106, 57, 0.8)"}
-            />
             <Text
-              className={`text-lg ${isSaved ? "text-green-700" : "text-primary"}`}
+              className={`text-lg ${isSaved ? "#ffffff" : "#ffffff"}`}
             >
-              {isSaved ? "Saved" : "Save Changes"}
             </Text>
           </TouchableOpacity>
         </View>
@@ -110,11 +92,11 @@ const SettingScreen = () => {
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
       },
-      headerTintColor: Colors[colorScheme ?? "dark"].text,
-      headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
-      headerShadowVisible: false,
-      headerTitleAlign: "center",
-      headerShown: true,
+       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+            headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
+            headerShadowVisible: false,
+            headerTitleAlign: "left",
+            headerShown: true,
     });
   }, [navigation, colorScheme, isSaved]);
 
@@ -191,7 +173,7 @@ const SettingScreen = () => {
   };
 
   return (
-    <ScrollView className="p-4 pb-8 bg-white">
+    <ScrollView className="p-4 pb-8 bg-black">
       {/* Store Logo */}
       <Section title="Store Logo" icon="home-outline">
         {/* <Image
@@ -233,8 +215,9 @@ const SettingScreen = () => {
       {/* Basic Info */}
 
       <Section title="Basic Info" icon="person-outline">
-        <View className="rounded-xl overflow-hidden">
+        <View className="rounded-xl overflow-hidden ">
           <CustomInput
+          className=" border-rounded-lg"
             icon="storefront-outline"
             title="Store Name"
             value={userInfo?.storeSettings?.storeName}
@@ -442,7 +425,7 @@ const SettingScreen = () => {
       {/* Loyalty Points */}
       <Section title="Loyalty Point Settings" icon="gift-outline">
         <View className="flex-row justify-between items-center mb-3 pe-2">
-          <Text className="text-gray-700">Enable Loyalty Points</Text>
+          <Text className="text-gray-400 text-lg">Enable Loyalty Points</Text>
           {/* <Switch value={settings?.loyaltyEnabled} onValueChange={() => dispatch(toggleLoyalty())} /> */}
           <Switch
             value={userInfo?.storeSettings?.isRoyalty}
@@ -499,7 +482,7 @@ const SettingScreen = () => {
 
             return (
               <View key={type} className="mb-4">
-                <Text className="text-lg font-semibold capitalize mb-2">
+                <Text className="text-lg font-semibold capitalize mb-2 text-gray-400">
                   {type}
                 </Text>
                 {rows.map((row, rowIndex) => (
@@ -526,18 +509,18 @@ const SettingScreen = () => {
                             }}
                             trackColor={{
                               false: "#ccc",
-                              true: "rgba(255, 106, 57, 0.18)",
+                              true: "#131313",
                             }}
                             thumbColor={
                               method?.status
-                                ? "rgba(255, 106, 57, 0.8)"
+                                ? "#f4f3f4"
                                 : "#f4f3f4"
                             }
                             style={{
                               transform: [{ scaleX: 1.5 }, { scaleY: 1.5 }],
                             }}
                           />
-                          <Text className="ml-2 text-lg">{method?.name}</Text>
+                          <Text className="ml-2 text-lg text-gray-400">{method?.name}</Text>
                         </View>
                       );
                     })}

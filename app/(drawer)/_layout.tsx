@@ -196,7 +196,7 @@ const CustomDrawerComponent = (props: any) => {
           { color: pathname == "/reports" ? "#ffffff" : "#ffffff" },
         ]}
         style={{
-          backgroundColor: pathname == "/reports" ? "#000000" : "#131313",
+          backgroundColor: pathname === "/reports" ? "#000000" : "#131313",
         }}
         onPress={() => router.push("/(drawer)/reports")}
       />
