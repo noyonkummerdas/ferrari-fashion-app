@@ -1,12 +1,12 @@
 import React from "react";
 import { Text, View } from "react-native";
 
-const Stock = () => {
+const Accounts = () => {
   return (
     <View>
-      <Text className="text-white">Stock</Text>
+      <Text>Accounts</Text>
     </View>
   );
 };
 
-export default Stock;
+export default Accounts;
