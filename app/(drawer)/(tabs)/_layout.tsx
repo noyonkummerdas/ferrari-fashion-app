@@ -7,7 +7,7 @@ import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
 import { DrawerToggleButton } from '@react-navigation/drawer';
-import { useNavigation } from '@react-navigation/native';
+import { DrawerActions, useNavigation } from '@react-navigation/native';
 import profile from "../../../assets/images/profile.jpg";
 // Add these imports at the top
 
@@ -126,9 +126,7 @@ export default function TabLayout() {
                     </View>
                   ),
                 headerShown: true,
-                
                 headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-               
                 tabBarIcon:({color, focused})=>(
                     <TabIcon
                         icon="time-sharp"
@@ -140,41 +138,33 @@ export default function TabLayout() {
                 )               
             }}
         />
-        <Tabs.Screen 
-            name="pos"
-            options={{
-                title: "POS",
-                headerTitleAlign: 'left',
-                headerTitle: () => (
-                    <View>
-                      <Text className='font-pbold dark:text-white text-center text-xl'>POS</Text>
-                    </View>
-                  ),
-                headerShown: true,
-                
-                headerRight: () => (
-                  <TouchableOpacity onPress={()=>router.push('/')} className='mx-2 pe-3'>
-                    <Image  source={profile} className="h-8 w-8 ms-4 rounded-full"/>
-                  </TouchableOpacity>
-                  ),
-                headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-                tabBarIcon:({color, focused})=>(
-                    <TabIcon
-                        icon="calculator"
-                        iconAlt="calculator-outline"
-                        color={color}
-                        name="POS"
-                        focused={focused}
-                    />
-                )               
-            }}
+          <Tabs.Screen
+          name="accounts"
+          options={{
+            title: "Account",
+            headerTitleAlign: 'left',
+            headerShown: true,
+
+            headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+            tabBarIcon: ({ color, focused }) => (
+              <TabIcon
+                icon="calculator"
+                iconAlt="calculator-outline"
+                color={color}
+                name="accounts"
+                focused={focused}
+              />
+            ),
+          }}
         />
+        
         <Tabs.Screen
           name="(products)"
           options={{
             title: "Products",
             headerTitleAlign: 'left',
-            headerShown: false,
+            headerShown: true,
+            headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon="bag"
@@ -191,7 +181,9 @@ export default function TabLayout() {
           options={{
             title: "People",
             headerTitleAlign: 'left',
-            headerShown: false,
+            headerShown: true,
+
+            headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
             tabBarIcon: ({ color, focused }) => (
               <TabIcon
                 icon="people"
@@ -203,6 +195,7 @@ export default function TabLayout() {
             ),
           }}
         />
+      
       
     </Tabs>
   );

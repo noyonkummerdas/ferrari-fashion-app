@@ -18,7 +18,7 @@ const FormField = ({
       <Text className="text-lg text-gray-400 mb-2 font-regular">{title}</Text>
       <View className="w-full h-14 px-4 py-3 bg-black-200  border border-black-200 rounded-full focus:border-secondary flex flex-row items-center">
         <TextInput
-          className="flex-1 text-gray-400 font-pregular text-base bg-black-200"
+          className="flex-1 text-gray-400 h-12 font-pregular text-base bg-black-200"
           value={value}
           placeholder={placeholder}
           placeholderTextColor="#797979"

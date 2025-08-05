@@ -1,25 +1,8 @@
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
-// import { useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+import { useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-
-
-const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
-  const navigation = useNavigation();
-
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-      style={{ marginLeft: 16 }}
-    >
-      <Ionicons name="menu" size={24} color={tintColor} />
-    </TouchableOpacity>
-  );
-};
-
+import { Text, View } from "react-native";
 
 const Warehouse = () => {
   const colorScheme = useColorScheme();
@@ -35,16 +18,15 @@ const Warehouse = () => {
       //     </TouchableOpacity>
       // </View>
       // ),
-      title: "Warehouse",
+      title: "Settings",
       //@ts-ignore
       headerStyle: {
         backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       },
-       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
       //@ts-ignore
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
-      headerShadowVisible: true,
+      headerShadowVisible: false,
       headerTitleAlign: "left",
       headerShown: true,
     });
@@ -52,7 +34,7 @@ const Warehouse = () => {
 
   return (
     <View>
-      <Text className="text-white">Warehouse</Text>
+      <Text className="text-white">Settings</Text>
     </View>
   );
 };
