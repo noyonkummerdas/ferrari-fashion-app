@@ -1,15 +1,15 @@
 import { router, Tabs } from 'expo-router';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 
 // import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Colors } from '@/constants/Colors';
 import { useColorScheme } from '@/hooks/useColorScheme';
-import {  Image,Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 
 import { Ionicons } from '@expo/vector-icons';
-import profile from "../../../../assets/images/profile.jpg"
-import { useNavigation } from '@react-navigation/native';
 import { DrawerToggleButton } from '@react-navigation/drawer';
+import { useNavigation } from '@react-navigation/native';
+import profile from "../../../../assets/images/profile.jpg";
 
 //@ts-ignore
 const TabIcon = ({icon,iconAlt, name, color, focused})=>{
@@ -103,7 +103,7 @@ export default function TabLayout() {
             }}
         />
         <Tabs.Screen 
-            name="user"
+            name="Settings"
             options={{
                 title: "Users",
                 headerTitleAlign: 'center',
