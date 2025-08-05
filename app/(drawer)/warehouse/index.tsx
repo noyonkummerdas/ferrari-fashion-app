@@ -1,8 +1,25 @@
 import { Colors } from "@/constants/Colors";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
+import { Ionicons } from "@expo/vector-icons";
+import { DrawerActions } from "@react-navigation/native";
 import { useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
-import { Text, View } from "react-native";
+import { Text, TouchableOpacity, View } from "react-native";
+
+
+const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      style={{ marginLeft: 16 }}
+      
+    >
+      <Ionicons name="menu" size={24} color={tintColor} />
+    </TouchableOpacity>
+  );
+};
 
 const Warehouse = () => {
   const colorScheme = useColorScheme();
@@ -21,7 +38,7 @@ const Warehouse = () => {
       title: "Warehouse",
       //@ts-ignore
       headerStyle: {
-        backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+        headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />
       },
       //@ts-ignore
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,

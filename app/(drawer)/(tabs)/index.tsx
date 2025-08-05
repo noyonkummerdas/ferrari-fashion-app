@@ -1,7 +1,23 @@
-import { Dimensions, RefreshControl, ScrollView, Text } from 'react-native';
+import { DrawerActions } from "@react-navigation/native";
+import { Dimensions, RefreshControl, ScrollView, Text, TouchableOpacity } from 'react-native';
 import { useGlobalContext } from "../../../context/GlobalProvider";
 
 
+const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      style={{ marginLeft: 16 }}
+    >
+      <Ionicons name="menu" size={24} color={tintColor} />
+    </TouchableOpacity>
+  );
+};
+
+
+import { Ionicons } from '@expo/vector-icons';
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
 import { useEffect, useState } from 'react';
@@ -10,6 +26,7 @@ import {
   useDashboardSaleQuery,
   useLatestSaleQuery
 } from "../../../store/api/saleApi";
+
 
 const screenWidth = Dimensions.get('window').width;
 
