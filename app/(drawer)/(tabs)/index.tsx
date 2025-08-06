@@ -1,89 +1,93 @@
-import { DrawerActions } from "@react-navigation/native";
-import { Dimensions, RefreshControl, ScrollView, Text, TouchableOpacity } from 'react-native';
-import { useGlobalContext } from "../../../context/GlobalProvider";
-
-
-const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
-  const navigation = useNavigation();
-
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-      style={{ marginLeft: 16 }}
-    >
-      <Ionicons name="menu" size={24} color={tintColor} />
-    </TouchableOpacity>
-  );
-};
-
-
-import { Ionicons } from '@expo/vector-icons';
+import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
-import { useEffect, useState } from 'react';
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import {
+  Dimensions,
+  RefreshControl,
+  ScrollView,
+  Text,
+  View,
+} from "react-native";
+import { DashboardCard } from "../../../components/DashboardCard";
+import { PaymentChart } from "../../../components/PaymentChart";
+import { StatsGrid } from "../../../components/StatsGrid";
+import { WelcomeCard } from "../../../components/WelcomeCard";
+import { useGlobalContext } from "../../../context/GlobalProvider";
 import {
   useChartSaleQuery,
   useDashboardSaleQuery,
-  useLatestSaleQuery
+  useLatestSaleQuery,
 } from "../../../store/api/saleApi";
 
-
-const screenWidth = Dimensions.get('window').width;
-
+const screenWidth = Dimensions.get("window").width;
+const profile = require("../../../assets/images/profile.jpg");
 
 export default function PosDashboard() {
   const [startDate, setStartDate] = useState(format(new Date(), "MM-dd-yyyy"));
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
-  const {userInfo,fetchUser} = useGlobalContext()
+  const { userInfo, fetchUser } = useGlobalContext();
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   // console.log("AamarID::",userInfo?.aamarId)
 
   const [refreshing, setRefreshing] = useState(false);
-  
-  const { data, error, isLoading, isFetching, isSuccess, refetch } =
-  useDashboardSaleQuery({
-    startDate: startDate,
-    endDate: endDate,
-    warehouse,
-    aamarId,
-    forceRefetch: true,
-  });
 
-  
-  const { data:chartSale, error:chartError, isLoading:chartLoading, isFetching:chartFetching, isSuccess:chartSuccess, refetch:chartRefetch } =
-  useChartSaleQuery({
+  const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    useDashboardSaleQuery({
+      startDate: startDate,
+      endDate: endDate,
+      warehouse,
+      aamarId,
+      forceRefetch: true,
+    });
+
+  const {
+    data: chartSale,
+    error: chartError,
+    isLoading: chartLoading,
+    isFetching: chartFetching,
+    isSuccess: chartSuccess,
+    refetch: chartRefetch,
+  } = useChartSaleQuery({
     warehouse,
     aamarId,
     forceRefetch: true,
   });
 
   // console.log("Dashboaard", chartSale)
-  const { data:latestSale, error:latestError, isLoading:latestLoading, isFetching:latestFetching, isSuccess:latestSuccess, refetch:latestRefetch } =
-  useLatestSaleQuery({
+  const {
+    data: latestSale,
+    error: latestError,
+    isLoading: latestLoading,
+    isFetching: latestFetching,
+    isSuccess: latestSuccess,
+    refetch: latestRefetch,
+  } = useLatestSaleQuery({
     warehouse,
     aamarId,
-    limit:5,
+    limit: 5,
     forceRefetch: true,
   });
 
   useEffect(() => {
     chartRefetch();
   }, [aamarId, warehouse]);
-  
+
   // console.log("DASHBOARD->latestSale::",chartSale,warehouse,aamarId)
 
   useEffect(() => {
     // console.log(data);
-    refetch()
+    refetch();
   }, [aamarId, warehouse]);
 
   useEffect(() => {
-    fetchUser()
+    fetchUser();
   }, []);
 
-  const handleSelectDay = (day:number) => {
+  const handleSelectDay = (day: number) => {
     const today = new Date();
     const last3Day = subDays(today, 3);
     const last7Day = subDays(today, 7);
@@ -102,14 +106,13 @@ export default function PosDashboard() {
     refetch();
   };
 
-
   // Function to fetch updated data
   const onRefresh = () => {
     setRefreshing(true);
 
-    refetch()
-    chartRefetch()
-    latestRefetch()
+    refetch();
+    chartRefetch();
+    latestRefetch();
     // Simulate fetching dashboard data
     setTimeout(() => {
       console.log("Dashboard data refreshed!");
@@ -117,19 +120,127 @@ export default function PosDashboard() {
     }, 1500);
   };
 
-  
-
   useEffect(() => {
     refetch();
   }, [startDate, endDate, warehouse, aamarId]);
 
-  // console.log(data,error,isFetching, isLoading, isSuccess)
-  // console.log(latestSale,latestError)
+  // Prepare stats data for grid
+  const statsData = [
+    {
+      title: "Total Products",
+      value: "23",
+      iconName: "cube" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(products)" as any),
+    },
+    {
+      title: "Stock Items",
+      value: "2345",
+      iconName: "archive" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(stock)"),
+    },
+    {
+      title: "Suppliers",
+      value: "10",
+      iconName: "people" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(connects)/suppliers"),
+    },
+    {
+      title: "Customers",
+      value: "127",
+      iconName: "person" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(connects)/customers"),
+    },
+    {
+      title: "Categories",
+      value: "8",
+      iconName: "grid" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(products)" as any),
+    },
+    {
+      title: "Brands",
+      value: "15",
+      iconName: "diamond" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(products)" as any),
+    },
+    {
+      title: "Low Stock",
+      value: "5",
+      iconName: "warning" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/(stock)"),
+    },
+    {
+      title: "Orders",
+      value: "42",
+      iconName: "receipt" as keyof typeof Ionicons.glyphMap,
+      onPress: () => router.push("/(drawer)/(tabs)/accounts"),
+    },
+  ];
+
   return (
-    <ScrollView className="flex-1 bg-dark p-4"
-    refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+    <ScrollView
+      className="flex-1 bg-black p-4"
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      showsVerticalScrollIndicator={false}
     >
-     <Text className='text-gray-200 font-pbold'>Dashboard</Text>
+      {/* Welcome Card */}
+      <WelcomeCard
+        userName={userInfo?.name || "NK Noyon"}
+        userImage={profile}
+        onProfilePress={() => router.push("/settings/profile")}
+      />
+
+      {/* Cash In/Out Cards */}
+      <View className="flex-row mb-4">
+        <View className="flex-1 mr-2">
+          <DashboardCard
+            title="Cash In"
+            value="2384210"
+            iconName="wallet"
+            bgColor="bg-black-200"
+          />
+        </View>
+        <View className="flex-1 ml-2">
+          <DashboardCard
+            title="Cash Out"
+            value="4342422"
+            iconName="card"
+            bgColor="bg-black-200"
+          />
+        </View>
+      </View>
+
+      {/* Second Row Cash In/Out */}
+      <View className="flex-row mb-4">
+        <View className="flex-1 mr-2">
+          <DashboardCard
+            title="Cash In"
+            value="2384210"
+            iconName="trending-up"
+            bgColor="bg-black-200"
+          />
+        </View>
+        <View className="flex-1 ml-2">
+          <DashboardCard
+            title="Cash Out"
+            value="4342422"
+            iconName="trending-down"
+            bgColor="bg-black-200"
+          />
+        </View>
+      </View>
+
+      {/* Stats Grid */}
+      <StatsGrid stats={statsData} />
+
+      {/* Payment & Collections Chart */}
+      <View className="mt-4">
+        <Text className="text-white text-lg font-pbold mb-3">
+          Payments & Collections
+        </Text>
+        <PaymentChart />
+      </View>
     </ScrollView>
   );
 }
