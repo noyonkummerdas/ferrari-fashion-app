@@ -81,6 +81,24 @@ const CustomDrawerComponent = (props: any) => {
         icon={({ color }) => (
           <TabIcon
             pathname={pathname}
+            icon="user"
+            iconAlt="user-outline"
+            color={color}
+            focused={["/user"]}
+          />
+        )}
+        label={"User"}
+        labelStyle={[
+          styles.labelStyle,
+          { color: pathname == "/" ? "#ffffff" : "#ffffff" },
+        ]}
+        style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
+          onPress={() => router.push("/(drawer)/(tabs)/user")}
+      />
+      <DrawerItem
+        icon={({ color }) => (
+          <TabIcon
+            pathname={pathname}
             icon="home"
             iconAlt="home-outline"
             color={color}

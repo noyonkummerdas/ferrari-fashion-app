@@ -8,7 +8,7 @@ import {
   RefreshControl,
   ScrollView,
   Text,
-  View,
+  View
 } from "react-native";
 import { DashboardCard } from "../../../components/DashboardCard";
 import { PaymentChart } from "../../../components/PaymentChart";
