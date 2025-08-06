@@ -144,29 +144,11 @@ export default function TabLayout() {
       />
 
       <Tabs.Screen
-        name="(products)"
-        options={{
-          title: "Products",
-          headerTitleAlign: "left",
-          headerShown: true,
-          headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-          tabBarIcon: ({ color, focused }) => (
-            <TabIcon
-              icon="bag"
-              iconAlt="bag-outline"
-              color={color}
-              name="Products"
-              focused={focused}
-            />
-          ),
-        }}
-      />
-      <Tabs.Screen
         name="(connects)"
         options={{
           title: "People",
           headerTitleAlign: "left",
-          headerShown: true,
+          headerShown: false,
 
           headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
           tabBarIcon: ({ color, focused }) => (
