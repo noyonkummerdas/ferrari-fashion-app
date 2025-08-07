@@ -1,14 +1,37 @@
-import { View, Text, SafeAreaView, useColorScheme, TouchableOpacity, TextInput, RefreshControl, Image } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useGlobalContext } from '@/context/GlobalProvider';
-import { router, useNavigation, useRouter } from 'expo-router';
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 import { Colors } from '@/constants/Colors';
+import { useGlobalContext } from '@/context/GlobalProvider';
+import { Ionicons } from '@expo/vector-icons';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Image, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 // import { useInventoriesQuery } from '@/store/api/inventoryApi';
-import profile from "../../../../assets/images/profile.jpg"
+import profile from "../../../../assets/images/profile.jpg";
 
-import { ScrollView } from 'react-native-gesture-handler';
 import { useSuppliersQuery } from '@/store/api/supplierApi';
+import { useRouter } from 'expo-router';
+import { ScrollView } from 'react-native-gesture-handler';
+
+
+
+
+import { DrawerActions, useNavigation } from '@react-navigation/native';
+
+
+const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
+  const navigation = useNavigation();
+
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
+      style={{ marginLeft: 16 }}
+    >
+      <Ionicons name="menu" size={24} color={tintColor} />
+    </TouchableOpacity>
+  );
+};
+
+
+
+
 
 interface Customer {
   _id : string;
@@ -67,9 +90,9 @@ console.log(error)
       headerRight: () => (
         <View className='me-4' >
           <TouchableOpacity onPress={()=>router.push("/supplier/add-supplier")} className='flex flex-row justify-center items-center gap-2'>
-            <Ionicons name="person-add" size={18}  color="#f2652d" />
+            <Ionicons name="person-add" size={18}  color="#ffffff" />
             
-            <Text className='text-primary text-xl font-pmedium'>Add</Text>
+            <Text className='text-white text-xl font-pmedium'>Add</Text>
           </TouchableOpacity>
         </View>
         ),
@@ -77,6 +100,7 @@ console.log(error)
       //@ts-ignore
       headerStyle: { backgroundColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}` },
       //@ts-ignore
+      headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
       headerTintColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}`,
       headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
       headerShadowVisible: false,
@@ -92,14 +116,73 @@ console.log(error)
     refetch()
   }, [searchQuery])
 
+
+  const [newSupplire, setSupplire]= useState('')
+
+
+  const supplire = [
+    {
+      name: 'Monisankor vakto',
+      mobile : ' 01683723969',
+      address: 
+        'uttora #house 12 road-21',
+      
+      openingBlance: 230000
+    },
+    {
+      name: 'Nk Noyon kumar das',
+      mobile : ' 01936447781',
+      address: 
+        'uttora #house 12 road-21',
+      
+      openingBlance: 230000
+    },
+    {
+      name: 'Morshed',
+      mobile : ' 01626531980',
+      address: 'uttora #house 12 road-21',
+      openingBlance: 230000
+    },
+    {
+      name: 'Morshed',
+      mobile : ' 01626531980',
+      address: 'uttora #house 12 road-21',
+      openingBlance: 230000
+    },
+    {
+      name: 'Morshed',
+      mobile : ' 01626531980',
+      address: 'uttora #house 12 road-21',
+      openingBlance: 230000
+    },
+    {
+      name: 'Morshed',
+      mobile : ' 01626531980',
+      address: 'uttora #house 12 road-21',
+      openingBlance: 230000
+    },
+    {
+      name: 'Morshed',
+      mobile : ' 01626531980',
+      address: 'uttora #house 12 road-21',
+      openingBlance: 230000
+    },
+    {
+      name: 'Morshed',
+      mobile : ' 01626531980',
+      address: 'uttora #house 12 road-21',
+      openingBlance: 230000
+    },
+  ]
+
   // console.log("DATA::",data)
   return (
-    <SafeAreaView className='bg-white h-full'>
-        <View className='flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-slate-200'>
-          <TextInput placeholder='Search Supplier' className='flex-1' value={searchQuery} onChangeText={setSearchQuery} />
+    <SafeAreaView className='bg-dark h-full'>
+        <View className='flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-gray-700'>
+          <TextInput placeholder='Search Supplier' className='flex-1  ' value={searchQuery} onChangeText={setSearchQuery} />
           <Ionicons name="search-outline"  size={24} />
         </View>
-        <ScrollView  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className=' bg-white'  >
+        <ScrollView  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className=' '  >
           {
             data?.length > 0 && 
             data.map((customer,index)=>
@@ -122,6 +205,24 @@ console.log(error)
                   </View>
                 </View>
               </TouchableOpacity>
+            )
+          }
+        </ScrollView>
+
+        <ScrollView>
+          {
+            supplire.map((sdata, index)=>
+              <View className='flex flex-row justify-between item-center bg-gray-500 w-[400px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+                 
+                 <View>
+                  <Text className='text-white w-[178px] text-lg '>{sdata.name}</Text>
+                  <Text className='text-white'>{sdata.mobile}</Text>
+                  </View>
+                  <View>
+                    <Text className='text-primary font-lg'>{sdata.openingBlance}</Text>
+                  </View>
+              </View>
+            
             )
           }
         </ScrollView>
