@@ -122,12 +122,12 @@ console.log(error)
 
   const supplire = [
     {
-      name: 'Monisankor vakto',
+      name: 'Sir Manishankar Vakta',
       mobile : ' 01683723969',
       address: 
         'uttora #house 12 road-21',
       
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Nk Noyon kumar das',
@@ -135,52 +135,52 @@ console.log(error)
       address: 
         'uttora #house 12 road-21',
       
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Morshed',
       mobile : ' 01626531980',
       address: 'uttora #house 12 road-21',
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Morshed',
       mobile : ' 01626531980',
       address: 'uttora #house 12 road-21',
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Morshed',
       mobile : ' 01626531980',
       address: 'uttora #house 12 road-21',
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Morshed',
       mobile : ' 01626531980',
       address: 'uttora #house 12 road-21',
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Morshed',
       mobile : ' 01626531980',
       address: 'uttora #house 12 road-21',
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
     {
       name: 'Morshed',
       mobile : ' 01626531980',
       address: 'uttora #house 12 road-21',
-      openingBlance: 230000
+      openingBlance: '230000 BDT'
     },
   ]
 
   // console.log("DATA::",data)
   return (
     <SafeAreaView className='bg-dark h-full'>
-        <View className='flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-gray-700'>
-          <TextInput placeholder='Search Supplier' className='flex-1  ' value={searchQuery} onChangeText={setSearchQuery} />
-          <Ionicons name="search-outline"  size={24} />
+        <View className='flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200'>
+          <TextInput placeholder='Search Supplier' className='placeholder:text-gray-100 flex-1 text-gray-300 ' value={searchQuery} onChangeText={setSearchQuery} />
+          <Ionicons name="search-outline"  size={24} color={'#CDCDE0'} />
         </View>
         <ScrollView  refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />} className=' '  >
           {
@@ -211,15 +211,16 @@ console.log(error)
 
         <ScrollView>
           {
-            supplire.map((sdata, index)=>
-              <View className='flex flex-row justify-between item-center bg-gray-500 w-[400px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+            supplire.map((sdata, supplire)=>
+              <View className='flex flex-col justify-between item-center bg-black-200 w-[360px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
                  
-                 <View>
+                 <View className=''>
                   <Text className='text-white w-[178px] text-lg '>{sdata.name}</Text>
-                  <Text className='text-white'>{sdata.mobile}</Text>
+                  
                   </View>
-                  <View>
-                    <Text className='text-primary font-lg'>{sdata.openingBlance}</Text>
+                  <View className='flex flex-row justify-between items-center gap-2'>
+                    <Text className='text-white text-base item-center'><Ionicons name="phone-portrait-sharp" size={16} color="#fdb714" />{sdata.mobile}</Text>
+                    <Text className='text-primary font-2xl'>{sdata.openingBlance}</Text>
                   </View>
               </View>
             
