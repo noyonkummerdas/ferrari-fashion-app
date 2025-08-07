@@ -189,20 +189,20 @@ const CustomDrawerComponent = (props: any) => {
             icon="person"
             iconAlt="person-outline"
             color={color}
-            focused={["/person"]}
+            focused={["/user"]}
           />
         )}
-        label={"Person"}
+        label={"Users"}
         labelStyle={[
           styles.labelStyle,
           {
-            color: pathname == "/person" ? "#ffffff" : "#ffffff",
+            color: pathname == "/user" ? "#ffffff" : "#ffffff",
           },
         ]}
         style={{
-            backgroundColor: pathname == "/person" ? "#000000" : "#131313",
+            backgroundColor: pathname == "/user" ? "#000000" : "#131313",
         }}
-        onPress={() => router.push("/user/index")}
+        onPress={() => router.push("/user")}
       />
       <DrawerItem
         icon={({ size, color, focused }) => (
