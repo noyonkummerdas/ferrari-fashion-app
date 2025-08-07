@@ -214,7 +214,7 @@ console.log(error)
             supplire.map((sdata, supplire)=>
               <View className='flex flex-col justify-between item-center bg-black-200 w-[360px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
                  
-                 <View className=''>
+                 <View >
                   <Text className='text-white w-[178px] text-lg '>{sdata.name}</Text>
                   
                   </View>
