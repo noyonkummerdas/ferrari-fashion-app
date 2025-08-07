@@ -77,24 +77,7 @@ const CustomDrawerComponent = (props: any) => {
           </View>
         </View>
       </TouchableOpacity>
-      <DrawerItem
-        icon={({ color }) => (
-          <TabIcon
-            pathname={pathname}
-            icon="person"
-            iconAlt="person-outline"
-            color={color}
-            focused={["/user"]}
-          />
-        )}
-        label={"User"}
-        labelStyle={[
-          styles.labelStyle,
-          { color: pathname == "/" ? "#ffffff" : "#ffffff" },
-        ]}
-        style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
-          onPress={() => router.push("/(drawer)/(tabs)")}
-      />
+      
       <DrawerItem
         icon={({ color }) => (
           <TabIcon
@@ -196,6 +179,24 @@ const CustomDrawerComponent = (props: any) => {
           backgroundColor: pathname == "/customers" ? "#000000" : "#131313",
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
+      />
+      <DrawerItem
+        icon={({ color }) => (
+          <TabIcon
+            pathname={pathname}
+            icon="person"
+            iconAlt="person-outline"
+            color={color}
+            focused={["/user"]}
+          />
+        )}
+        label={"User"}
+        labelStyle={[
+          styles.labelStyle,
+          { color: pathname == "/" ? "#ffffff" : "#ffffff" },
+        ]}
+        style={{ backgroundColor: pathname === "/user" ? "#000000" : "#131313" }}
+          onPress={() => router.push("/(drawer)/user")}
       />
 
       <DrawerItem
