@@ -158,6 +158,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers")}
       />
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -168,7 +169,7 @@ const CustomDrawerComponent = (props: any) => {
             focused={["/customers"]}
           />
         )}
-        label={"customers"}
+        label={"Customers"}
         labelStyle={[
           styles.labelStyle,
           {
@@ -180,25 +181,29 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
       />
+
       <DrawerItem
-        icon={({ color }) => (
+        icon={({ size, color, focused }) => (
           <TabIcon
             pathname={pathname}
             icon="person"
             iconAlt="person-outline"
             color={color}
-            focused={["/user"]}
+            focused={["/person"]}
           />
         )}
-        label={"User"}
+        label={"Person"}
         labelStyle={[
           styles.labelStyle,
-          { color: pathname == "/" ? "#ffffff" : "#ffffff" },
+          {
+            color: pathname == "/person" ? "#ffffff" : "#ffffff",
+          },
         ]}
-        style={{ backgroundColor: pathname === "/user" ? "#000000" : "#131313" }}
-          onPress={() => router.push("/(drawer)/user")}
+        style={{
+            backgroundColor: pathname == "/person" ? "#000000" : "#131313",
+        }}
+        onPress={() => router.push("/user/index")}
       />
-
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon

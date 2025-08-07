@@ -1,13 +1,8 @@
-import { Text, View } from "react-native";
+import React from "react";
+import { Text } from "react-native";
 
+const User = () => {
+  return <Text>User</Text>;
+};
 
-
-function UserIndex() {
-  return (
-    <View>
-      <Text>UserIndex</Text>
-    </View>
-  );
-}
-
-export default UserIndex;
+export default User;
