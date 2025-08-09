@@ -212,8 +212,8 @@ console.log(error)
         <ScrollView>
           {
             supplire.map((sdata, supplire)=>
-              <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
-                 
+              <TouchableOpacity onPress={()=>router.push("//supplier/supplireDetails")} >
+                  <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
                  <View >
                   <Text className='text-white w-[178px] text-lg '>{sdata.name}</Text>
                   
@@ -223,6 +223,9 @@ console.log(error)
                     <Text className='text-primary font-2xl'>{sdata.openingBlance}</Text>
                   </View>
               </View>
+
+
+              </TouchableOpacity>
             
             )
           }

@@ -106,6 +106,7 @@ const AddSupplier = () => {
         placeholder="Supplier Name"
         value={form.name}
         onChangeText={(value) =>  handleInputChange( "name", value )}
+        underlineColorAndroid="transparent"
         className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
@@ -113,26 +114,26 @@ const AddSupplier = () => {
         placeholder="Phone no"
         value={form.phone}
         onChangeText={(value) => handleInputChange('phone', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-800"
+         className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
       <TextInput
         placeholder="Email"
         value={form.email}
         onChangeText={(value) => handleInputChange('email', value)}
-        className="border border-gray-300 rounded-full p-4 mb-1  mt-2 placeholder:text-gray-500 text-gray-800"
+         className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
       <TextInput
         placeholder="Company"
         value={form.company}
         onChangeText={(value) => handleInputChange('company', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-800"
+         className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
       <TextInput
         placeholder="Address"
         value={form.address}
         onChangeText={(value) => handleInputChange('address', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-800"
+         className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
       <View className='flex flex-row gap-2 justify-between items-center'>
         <View className='flex-1'>
@@ -140,7 +141,7 @@ const AddSupplier = () => {
             placeholder="Code"
             value={form.code}
             onChangeText={(value) => handleInputChange('code', value)}
-            className="border border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-800"
+            className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200 font-based"
           />
         </View>
         <View className='flex-1'>
