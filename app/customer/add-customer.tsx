@@ -1,16 +1,12 @@
-import { View, Text, useColorScheme, TouchableOpacity, ScrollView, Image, Button, TextInput, StyleSheet } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
+import { Colors } from '@/constants/Colors';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { router, useNavigation } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/constants/Colors';
-import { Dropdown } from 'react-native-element-dropdown';
+import React, { useLayoutEffect, useState } from 'react';
+import { Image, ScrollView, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 
-import * as ImagePicker from 'expo-image-picker';
-import CustomDropdown from '@/components/CustomDropdown';
-import { useAddProductMutation } from '@/store/api/productApi';
-import profile from "../../assets/images/profile.jpg"
 import { useAddCustomerMutation } from '@/store/api/customerApi';
+import * as ImagePicker from 'expo-image-picker';
+import profile from "../../assets/images/profile.jpg";
 
 
 const AddCustomer = () => {
@@ -122,7 +118,7 @@ const AddCustomer = () => {
   }
 
   return (
-    <ScrollView className='flex-1 bg-white p-6'>
+    <ScrollView className='flex-1 bg-dark p-6'>
       
         <View>
         <TouchableOpacity onPress={pickImage} className="flex justify-center items-center mb-10">
@@ -134,44 +130,29 @@ const AddCustomer = () => {
         placeholder="Customer Name"
         value={form.name}
         onChangeText={(value) =>  handleInputChange( "name", value )}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+       className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
       <TextInput
         placeholder="Pnone no"
         value={form.phone}
         onChangeText={(value) => handleInputChange('phone', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+       className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
       <TextInput
         placeholder="Email"
         value={form.email}
         onChangeText={(value) => handleInputChange('email', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+       className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <View className='flex flex-row gap-2 justify-between items-center'>
-        <View className='flex-1'>
-          <CustomDropdown
-          data={gender}
-          value={form.gender}
-          placeholder='Gender'
-          search={false}
-          mode="modal"
-          setValue={(value) => handleInputChange('gender', value)}
-          />
-        </View>
-        <View className='flex-1'>
-          <CustomDropdown
-          data={status}
-          value={form.status}
-          placeholder='Status'
-          mode='modal'
-          search={false}
-          setValue={(value) => handleInputChange('status', value)}
-          />
-        </View>
-      </View>
+      <TextInput
+        placeholder="Opening balance"
+        value={form.email}
+        onChangeText={(value) => handleInputChange('email', value)}
+        className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
+     
 
       
 
