@@ -165,16 +165,11 @@ const Customer = [
 ]
 
   return (
-    <SafeAreaView className="bg-white h-full">
-      <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-slate-200">
-        <TextInput
-          placeholder="Search Customer"
-          className="flex-1"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <Ionicons name="search-outline" size={24} />
-      </View>
+    <SafeAreaView className="bg-dark h-full">
+       <View className='flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200'>
+          <TextInput placeholder='Search Supplier' className='placeholder:text-gray-100 flex-1 text-gray-300 ' value={searchQuery} onChangeText={setSearchQuery} />
+          <Ionicons name="search-outline"  size={24} color={'#CDCDE0'} />
+        </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
