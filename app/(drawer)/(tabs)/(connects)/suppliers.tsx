@@ -43,7 +43,7 @@ interface Customer {
 }
 
 
-const Suppliers = ({user}) => {
+const Suppliers = ({}) => {
   const router = useRouter();
   const {userInfo} = useGlobalContext()
   const aamarId = userInfo?.aamarId;
@@ -101,8 +101,8 @@ console.log(error)
       headerStyle: { backgroundColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}` },
       //@ts-ignore
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-      headerTintColor: `${Colors[colorScheme ?? 'light'].backgroundColor}`,
-      headerTitleStyle: { fontWeight: 'bold', fontSize: 18 , color:'white'},
+      headerTintColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}`,
+      headerTitleStyle: { fontWeight: 'bold', fontSize: 18, color: '#ffffff' },
       headerShadowVisible: false,
       headerTitleAlign: 'left',
       headerShown: true,
@@ -212,8 +212,8 @@ console.log(error)
         <ScrollView>
           {
             supplire.map((sdata, supplire)=>
-              <TouchableOpacity onPress={()=>router.push("//supplier/supplireDetails")} >
-                  <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+              <View className='flex flex-col justify-between item-center bg-black-200 w-[360px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+                 
                  <View >
                   <Text className='text-white w-[178px] text-lg '>{sdata.name}</Text>
                   
@@ -223,9 +223,6 @@ console.log(error)
                     <Text className='text-primary font-2xl'>{sdata.openingBlance}</Text>
                   </View>
               </View>
-
-
-              </TouchableOpacity>
             
             )
           }
