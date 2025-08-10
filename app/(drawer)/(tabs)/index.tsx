@@ -2,13 +2,15 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
 import { router } from "expo-router";
+// import { StatusBar } from "expo-status-bar";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   Dimensions,
   RefreshControl,
   ScrollView,
   Text,
-  View
+  View,
 } from "react-native";
 import { DashboardCard } from "../../../components/DashboardCard";
 import { PaymentChart } from "../../../components/PaymentChart";
@@ -241,22 +243,8 @@ export default function PosDashboard() {
         </Text>
         <PaymentChart />
       </View>
+
+      <StatusBar style="light" />
     </ScrollView>
   );
 }
-
-// Overview Card Component
-// function OverviewCard({ title, value, bgColor, textColor, icon }: { title: string; value: string; bgColor: string; textColor: string; icon: JSX.Element }) {
-//   return (
-//     <View className={`w-[48%] p-4 mb-4 rounded-lg flex-row bg-gray-50 items-center`}>
-//       <View className={` ${bgColor} p-4 rounded-md mr-2`}>
-
-//       {icon}
-//       </View>
-//       <View className="ml-2">
-//         <Text className={`text-sm ${textColor}`}>{title}</Text>
-//         <Text className={`text-2xl font-bold ${textColor}`}>{value}</Text>
-//       </View>
-//     </View>
-//   );
-// }
