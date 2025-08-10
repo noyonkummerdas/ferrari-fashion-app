@@ -98,6 +98,7 @@ const StockIndex = () => {
           onChangeText={setSearchQuery}
           placeholder="Search products by name or code..."
         />
+        {/* <Text className="text-red-500">TEST</Text> */}
 
         {/* Stock List */}
         {filteredStockData.map((item) => (
