@@ -77,6 +77,7 @@ const CustomDrawerComponent = (props: any) => {
           </View>
         </View>
       </TouchableOpacity>
+      
       <DrawerItem
         icon={({ color }) => (
           <TabIcon
@@ -157,6 +158,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers")}
       />
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -167,7 +169,7 @@ const CustomDrawerComponent = (props: any) => {
             focused={["/customers"]}
           />
         )}
-        label={"customers"}
+        label={"Customers"}
         labelStyle={[
           styles.labelStyle,
           {
@@ -179,6 +181,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
       />
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -197,11 +200,10 @@ const CustomDrawerComponent = (props: any) => {
           },
         ]}
         style={{
-          backgroundColor: pathname == "/user" ? "#000000" : "#131313",
+            backgroundColor: pathname == "/user" ? "#000000" : "#131313",
         }}
         onPress={() => router.push("/user")}
       />
-
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon

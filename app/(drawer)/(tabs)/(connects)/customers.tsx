@@ -77,8 +77,8 @@ const Customers = () => {
             onPress={() => router.push("/customer/add-customer")}
             className="flex flex-row justify-center items-center gap-2"
           >
-            <Ionicons name="person-add" size={18} color="#f2652d" />
-            <Text className="text-primary text-xl font-pmedium">Add</Text>
+            <Ionicons name="person-add" size={18} color="#ffffff" />
+            <Text className="text-white text-xl font-pmedium">Add</Text>
           </TouchableOpacity>
         </View>
       ),
@@ -101,18 +101,75 @@ const Customers = () => {
     refetch();
   }, [searchQuery]);
 
+
+
   // console.log("DATA::",data)
+
+
+//demo data for customer 
+
+
+const Customer = [
+  {
+    name: 'Sir Manishankar Vakta',
+    mobile : ' 01683723969',
+    address: 
+      'uttora #house 12 road-21',
+    
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Nk Noyon kumar das',
+    mobile : ' 01936447781',
+    address: 
+      'uttora #house 12 road-21',
+    
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Morshed',
+    mobile : ' 01626531980',
+    address: 'uttora #house 12 road-21',
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Morshed',
+    mobile : ' 01626531980',
+    address: 'uttora #house 12 road-21',
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Morshed',
+    mobile : ' 01626531980',
+    address: 'uttora #house 12 road-21',
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Morshed',
+    mobile : ' 01626531980',
+    address: 'uttora #house 12 road-21',
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Morshed',
+    mobile : ' 01626531980',
+    address: 'uttora #house 12 road-21',
+    openingBlance: '230000 BDT'
+  },
+  {
+    name: 'Morshed',
+    mobile : ' 01626531980',
+    address: 'uttora #house 12 road-21',
+    openingBlance: '230000 BDT'
+  },
+]
+
   return (
-    <SafeAreaView className="bg-white h-full">
-      <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-slate-200">
-        <TextInput
-          placeholder="Search Customer"
-          className="flex-1"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <Ionicons name="search-outline" size={24} />
-      </View>
+    <SafeAreaView className="bg-dark h-full">
+       <View className='flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200'>
+          <TextInput placeholder='Search Supplier' className='placeholder:text-gray-100 flex-1 text-gray-300 ' value={searchQuery} onChangeText={setSearchQuery} />
+          <Ionicons name="search-outline"  size={24} color={'#CDCDE0'} />
+        </View>
       <ScrollView
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
@@ -154,6 +211,30 @@ const Customers = () => {
             </TouchableOpacity>
           ))}
       </ScrollView>
+
+
+      <ScrollView>
+          {
+            Customer.map((cdata, Customer)=>
+              <TouchableOpacity onPress={()=>router.push("/customer/customerDatiles")} >
+                  <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+                 <View >
+                  <Text className='text-white w-[178px] text-lg '>{cdata.name}</Text>
+                  
+                  </View>
+                  <View className='flex flex-row justify-between items-center gap-2'>
+                    <Text className='text-white text-base item-center'><Ionicons name="phone-portrait-sharp" size={16} color="#fdb714" />{cdata.mobile}</Text>
+                    <Text className='text-primary font-2xl'>{cdata.openingBlance}</Text>
+                  </View>
+              </View>
+
+
+              </TouchableOpacity>
+            
+            )
+          }
+        </ScrollView>
+
     </SafeAreaView>
   );
 };
