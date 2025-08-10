@@ -19,7 +19,7 @@ const formattedDate = {
       name: "MANISHANKAR VAKTA ",
       email: "john.doe@example.com",
       phone: "01687233969",
-      address: "123 Main St, Anytown, USA"
+      address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230"
     }
   ]
 
@@ -32,9 +32,11 @@ const formattedDate = {
         arrayCustomersd.map(customer => (
           <View key={customer.id} className="mb-4">
             <Text className="text-lg font-bold text-white">{customer.name}</Text>
-            <Text className="text-gray-400">{customer.email}</Text>
-            <Text className="text-gray-400">{customer.phone}</Text>
-            <Text className="text-gray-400">{customer.address}</Text>
+           <View className="flex flex-row ">
+            <Ionicons name="phone-portrait-sharp" size={20} color={"#fdb714"} />
+            <Text className="text-gray-200 text-[18px] ">{customer.phone}</Text>
+           </View>
+            <Text className="text-gray-400  p-1">{customer.address}</Text>
           </View>
         ))
       }
@@ -55,12 +57,12 @@ const formattedDate = {
          </TouchableOpacity>
     </View>
 
-    <View className="flex flex-row justify-between items-center mt-4   ">
-       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg" >
+    <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto ">
+       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg me-1" >
         <Text className="text-white text-xl ">Starting balance</Text>
         <Text className="text-primary font-bold text-center text-xl">234234 <Text className="text-white">BDT</Text></Text>
        </View>
-       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg">
+       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg ms-1">
         <Text className="text-white text-xl">Current balance</Text>
         <Text className="text-primary font-bold text-xl text-center">38234 <Text className="text-white">BDT</Text></Text>
        </View>
@@ -70,21 +72,21 @@ const formattedDate = {
      
  
           {/* Due sell generat part */}
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Due Sale</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg -2">{formattedDate.day}<Text className="text-primary text-lg m-2">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
            <Text className="text-primary font-bold">12345 <Text className="text-white">BDT</Text></Text>
         </View>
        </View>
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Due Sale</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
            <Text className="text-primary font-bold">12345 <Text className="text-white">BDT</Text></Text>
         </View>
        </View>
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Due Sale</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
@@ -96,35 +98,35 @@ const formattedDate = {
 
     {/* Recived payment recived generat part */}
 
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Received Payment</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
            <Text className="text-primary font-bold">12345 <Text className="text-white">BDT</Text></Text>
         </View>
        </View>
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Received Payment</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
            <Text className="text-primary font-bold">12345 <Text className="text-white">BDT</Text></Text>
         </View>
        </View>
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Received Payment</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
            <Text className="text-primary font-bold">12345 <Text className="text-white">BDT</Text></Text>
         </View>
        </View>
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Received Payment</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
            <Text className="text-primary font-bold">12345 <Text className="text-white">BDT</Text></Text>
         </View>
        </View>
-    <View className="bg-black-200 p-4 rounded-lg mt-4" > 
+    <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto" > 
         <Text className="text-white text-xl">Received Payment</Text>
         <View className='flex flex-row justify-between items-center'>
             <Text className="text-white text-lg me-2">{formattedDate.day}<Text className="text-primary text-lg">{formattedDate.month}</Text> <Text className="text-white text-lg ">{formattedDate.year}</Text></Text>
