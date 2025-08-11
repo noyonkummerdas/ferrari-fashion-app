@@ -164,7 +164,6 @@ const AddSupplier = () => {
     </ScrollView>
   )
 }
-
 export default AddSupplier
 
 

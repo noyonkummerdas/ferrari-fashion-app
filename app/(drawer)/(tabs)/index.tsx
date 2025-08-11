@@ -2,6 +2,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
 import { router } from "expo-router";
+import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -177,6 +178,8 @@ export default function PosDashboard() {
   ];
 
   return (
+    <>
+    <StatusBar style="light" backgroundColor="#1f2937" />
     <ScrollView
       className="flex-1 bg-black p-4"
       refreshControl={
@@ -242,6 +245,7 @@ export default function PosDashboard() {
         <PaymentChart />
       </View>
     </ScrollView>
+    </>
   );
 }
 

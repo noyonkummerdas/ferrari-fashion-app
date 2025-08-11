@@ -1,7 +1,10 @@
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Ionicons } from "@expo/vector-icons";
-import { useNavigation, useRouter } from "expo-router";
+import { useNavigation } from "@react-navigation/native";
+import { useRouter } from "expo-router";
+
+
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Image,
@@ -214,25 +217,28 @@ const Customer = [
 
 
       <ScrollView>
-          {
-            Customer.map((cdata, Customer)=>
-              <TouchableOpacity onPress={()=>router.push("/customer/customerDatiles")} >
-                  <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
-                 <View >
-                  <Text className='text-white w-[178px] text-lg '>{cdata.name}</Text>
-                  
-                  </View>
-                  <View className='flex flex-row justify-between items-center gap-2'>
-                    <Text className='text-white text-base item-center'><Ionicons name="phone-portrait-sharp" size={16} color="#fdb714" />{cdata.mobile}</Text>
-                    <Text className='text-primary font-2xl'>{cdata.openingBlance}</Text>
-                  </View>
-              </View>
+          
+           {
+ Customer.map((cdata, index)=>(
+  <TouchableOpacity key ={index}onPress={()=>router.push("/customer/customerDatiles")} >
+      <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+     <View >
+      <Text className='text-white w-[178px] text-lg '>{cdata.name}</Text>
+      
+      </View>
+      <View className='flex flex-row justify-between items-center gap-2'>
+        <Text className='text-white text-base item-center'><Ionicons name="phone-portrait-sharp" size={16} color="#fdb714" />{cdata.mobile}</Text>
+        <Text className='text-primary font-2xl'>{cdata.openingBlance}</Text>
+      </View>
+  </View>
 
 
-              </TouchableOpacity>
-            
-            )
-          }
+   </TouchableOpacity>
+
+))
+
+           }
+          
         </ScrollView>
 
     </SafeAreaView>
