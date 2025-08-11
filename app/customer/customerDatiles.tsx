@@ -58,11 +58,11 @@ const formattedDate = {
     </View>
 
     <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto ">
-       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg me-1" >
+       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1" >
         <Text className="text-white text-xl ">Starting balance</Text>
         <Text className="text-primary font-bold text-center text-xl">234234 <Text className="text-white">BDT</Text></Text>
        </View>
-       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg ms-1">
+       <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
         <Text className="text-white text-xl">Current balance</Text>
         <Text className="text-primary font-bold text-xl text-center">38234 <Text className="text-white">BDT</Text></Text>
        </View>

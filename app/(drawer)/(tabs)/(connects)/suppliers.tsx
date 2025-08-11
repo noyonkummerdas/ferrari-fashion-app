@@ -7,13 +7,15 @@ import { Image, RefreshControl, SafeAreaView, Text, TextInput, TouchableOpacity,
 import profile from "../../../../assets/images/profile.jpg";
 
 import { useSuppliersQuery } from '@/store/api/supplierApi';
+import { useNavigation } from "@react-navigation/native";
 import { useRouter } from 'expo-router';
 import { ScrollView } from 'react-native-gesture-handler';
 
 
 
 
-import { DrawerActions, useNavigation } from '@react-navigation/native';
+
+import { DrawerActions } from '@react-navigation/native';
 
 
 const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
@@ -102,7 +104,7 @@ console.log(error)
       //@ts-ignore
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
       headerTintColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}`,
-      headerTitleStyle: { fontWeight: 'bold', fontSize: 18, color: '#ffffff' },
+      headerTitleStyle: { fontWeight: 'bold', fontSize: 18, color: 'white' },
       headerShadowVisible: false,
       headerTitleAlign: 'left',
       headerShown: true,
@@ -211,9 +213,9 @@ console.log(error)
 
         <ScrollView>
           {
-            supplire.map((sdata, supplire)=>
-              <TouchableOpacity onPress={()=>router.push("/supplier/supplireDetails")} >
-                <View className='flex flex-col justify-between item-center bg-black-200 w-[360px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
+            supplire?.map((sdata, supplire)=>(
+             <TouchableOpacity onPress={()=>router.push(`/supplier/supplireDetails`)}>
+               <View className='flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  '>
                  
                  <View >
                   <Text className='text-white w-[178px] text-lg '>{sdata.name}</Text>
@@ -224,9 +226,9 @@ console.log(error)
                     <Text className='text-primary font-2xl'>{sdata.openingBlance}</Text>
                   </View>
               </View>
-              </TouchableOpacity>
+             </TouchableOpacity>
             
-            )
+            ))
           }
         </ScrollView>
     </SafeAreaView>
