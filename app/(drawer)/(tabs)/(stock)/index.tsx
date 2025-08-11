@@ -1,5 +1,6 @@
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useMemo, useState } from "react";
 import {
   RefreshControl,
@@ -84,7 +85,7 @@ const StockIndex = () => {
   }, [searchQuery]);
 
   return (
-    <View className="flex-1 bg-black">
+    <View className="flex-1 bg-dark">
       <ScrollView
         className="flex-1 p-4"
         refreshControl={
@@ -98,6 +99,7 @@ const StockIndex = () => {
           onChangeText={setSearchQuery}
           placeholder="Search products by name or code..."
         />
+        {/* <Text className="text-red-500">TEST</Text> */}
 
         {/* Stock List */}
         {filteredStockData.map((item) => (
@@ -110,6 +112,7 @@ const StockIndex = () => {
             onPress={() => handleItemPress(item)}
           />
         ))}
+        <StatusBar style="light" />
       </ScrollView>
 
       {/* Floating Add Button */}

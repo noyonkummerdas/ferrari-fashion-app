@@ -1,18 +1,18 @@
+import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useInventoriesQuery } from "@/store/api/inventoryApi";
+import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
+import { router, useNavigation } from "expo-router";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  View,
-  Text,
   SafeAreaView,
-  useColorScheme,
-  TouchableOpacity,
-  TextInput,
   ScrollView,
-} from 'react-native';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { useGlobalContext } from '@/context/GlobalProvider';
-import { router, useNavigation } from 'expo-router';
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
-import { Colors } from '@/constants/Colors';
-import { useInventoriesQuery } from '@/store/api/inventoryApi';
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 
 interface Stocks {
   name: string;
@@ -28,12 +28,12 @@ const Stock = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const [stockData, setStockData] = useState<Stocks[]>([]);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useInventoriesQuery(
       { aamarId, warehouse, forceRefetch: true },
-      { skip: !aamarId || !warehouse } // Prevent query if data is missing
+      { skip: !aamarId || !warehouse }, // Prevent query if data is missing
     );
 
   useEffect(() => {
@@ -41,7 +41,7 @@ const Stock = () => {
   }, [aamarId]);
 
   const resetData = () => {
-    setSearchQuery('');
+    setSearchQuery("");
     refetch();
   };
 
@@ -56,19 +56,19 @@ const Stock = () => {
       ),
       headerLeft: () => (
         <View className="flex flex-row me-4">
-          <TouchableOpacity onPress={()=> router.push('/')}>
-            <Ionicons name="arrow-back" size={24}/>
+          <TouchableOpacity onPress={() => router.push("/")}>
+            <Ionicons name="arrow-back" size={24} />
           </TouchableOpacity>
         </View>
       ),
-      title: 'Stocks',
+      title: "Stocks - Stock",
       headerStyle: {
-        backgroundColor: Colors[colorScheme ?? 'dark'].backgroundColor,
+        backgroundColor: Colors[colorScheme ?? "light"].backgroundColor,
       },
-      headerTintColor: Colors[colorScheme ?? 'dark'].text,
-      headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
+      headerTintColor: Colors[colorScheme ?? "light"].text,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
-      headerTitleAlign: 'left',
+      headerTitleAlign: "left",
       headerShown: true,
     });
   }, [navigation, colorScheme]);
@@ -80,7 +80,7 @@ const Stock = () => {
     const filteredData = data.filter(
       (item: Stocks) =>
         item?.name?.toLowerCase().includes(query) ||
-        item?.article_code?.toLowerCase().includes(query)
+        item?.article_code?.toLowerCase().includes(query),
     );
 
     setStockData(query ? filteredData : data);
@@ -97,10 +97,10 @@ const Stock = () => {
   }, [searchQuery]);
 
   return (
-    <SafeAreaView className="bg-white h-full">
+    <SafeAreaView className="bg-dark h-full">
       <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 mb-2 bg-gray-200">
         <TextInput
-          placeholder="Search Product"
+          placeholder="Search Stock"
           className="flex-1"
           value={searchQuery}
           onChangeText={setSearchQuery}
