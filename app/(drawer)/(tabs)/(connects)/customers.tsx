@@ -21,7 +21,9 @@ import profile from "../../../../assets/images/profile.jpg";
 
 import { CustomDrawerToggleButton } from "@/components";
 import { useCustomerListQuery } from "@/store/api/customerApi";
+import { StatusBar } from 'expo-status-bar';
 import { ScrollView } from "react-native-gesture-handler";
+
 
 interface Customer {
   _id: string;
@@ -168,6 +170,9 @@ const Customer = [
 ]
 
   return (
+    <>
+    <StatusBar style="light" backgroundColor="#1f2937" />
+
     <SafeAreaView className="bg-dark h-full">
        <View className='flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200'>
           <TextInput placeholder='Search Supplier' className='placeholder:text-gray-100 flex-1 text-gray-300 ' value={searchQuery} onChangeText={setSearchQuery} />
@@ -242,7 +247,10 @@ const Customer = [
         </ScrollView>
 
     </SafeAreaView>
+
+    </>
   );
+  
 };
 
 export default Customers;
