@@ -63,7 +63,7 @@ const UserProfile = () => {
           </View>
           <View className="flex-row">
             <TouchableOpacity className="p-1.5 mr-1" onPress={() => navigation.navigate('EditUser')}>
-              <Text className="text-lg text-zinc-300"><Ionicons name="eyedrop-sharp" size={24} color="#fdb714" /></Text>
+              <Text className="text-lg text-zinc-300"><Ionicons name="enter-outline" size={24} color="#fdb714" /></Text>
             </TouchableOpacity>
             <TouchableOpacity className="p-1.5" onPress={() => navigation.navigate('CreateUser')}>
               <Text className="text-lg text-yellow-500">➕</Text>
