@@ -4,8 +4,8 @@
 // export const WS_URL = "ws://192.168.10.225:5001"
 
 // BASHA
-export const BASE_URL = "https://api.aamardokan.online/api";
-export const PHOTO_URL = "https://api.aamardokan.online";
+export const BASE_URL = "https://ffapi.aamardokan.online/api";
+export const PHOTO_URL = "https://ffapi.aamardokan.online";
 export const WS_URL = "wss://api.aamardokan.online";
 
 // LIVE

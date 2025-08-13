@@ -11,7 +11,7 @@ import {
   Platform,
   SafeAreaView,
   ScrollView,
-  View
+  View,
 } from "react-native";
 import logo from "../../assets/images/icon.png";
 import { useLoginUserMutation } from "../../store/api/userApi";
@@ -20,7 +20,7 @@ import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
   const [login] = useLoginUserMutation();
-  const { setLoggedIn, storeData, getData, removeData } = useGlobalContext();
+  const { setLoggedIn, storeData, setUser, removeData } = useGlobalContext();
 
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -29,7 +29,7 @@ const SignIn = () => {
   });
 
   const submit = async () => {
-    console.log(form);
+    // console.log(form);
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
     } else {
@@ -40,7 +40,7 @@ const SignIn = () => {
           password: form.password,
         });
 
-        console.log(result);
+        console.log("RESULT:", result);
 
         if (result?.data?.status) {
           removeData("user");
@@ -48,6 +48,8 @@ const SignIn = () => {
           const decodedToken = jwtDecode(token);
           setLoggedIn(true);
           storeData("user", decodedToken);
+          // console.log("user:", decodedToken);
+          setUser(decodedToken);
           router.push("/(drawer)/(tabs)");
         } else {
           // Custom error handling
