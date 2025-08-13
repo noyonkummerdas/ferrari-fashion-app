@@ -1,98 +1,209 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { Image, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-import Entypo from 'react-native-vector-icons/Entypo';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
+import {
+  Ionicons
+} from "@expo/vector-icons";
+import { useNavigation, useRouter } from "expo-router";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  ScrollView,
+  Text,
+  TouchableOpacity,
+  View
+} from "react-native";
 
-const profilePic = require('../../assets/images/profile.jpg');
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { SafeAreaView } from "react-native";
 
-const menuItems = [
-  {
-    title: 'Account',
-    items: [
-    //   { icon: <Ionicons name="notifications-outline" size={22} color="#fdb714" />, label: 'Notification' },
-      { icon: <MaterialIcons name="email" size={24} color="#fdb714" />, label: 'Email Preference' },
-      { icon: <FontAwesome name="credit-card" size={24} color="#fdb714" />, label: 'Payment' },
-      { icon: <MaterialIcons name="history" size={24} color="#fdb714" />, label: 'History' },
-    ],
-  },
-  {
-    title: 'Action',
-    items: [
-      { icon: <Entypo name="key" size={24} color="#fdb714" />, label: 'Change Password' },
-      { icon: <MaterialIcons name="check-circle-outline" size={24} color="#fdb714" />, label: 'Active Log' },
-      { icon: <MaterialIcons name="business" size={24} color="#fdb714" />, label: 'Switch Warehouse' },
-    ],
-  },
-  {
-    title: 'Support',
-    items: [
-      { icon: <MaterialIcons name="logout" size={24} color="#fdb714" />, label: 'Log Out' },
-      { icon: <MaterialIcons name="help-outline" size={24} color="#fdb714" />, label: 'Help' },
-    ],
-  },
-];
+const Profile = () => {
+    const navigation = useNavigation();
+      const colorScheme = useColorScheme();
+       const [isSaved, setIsSaved] = useState(true);
+       const handleUpdateSetting = async () => {
+    try {
+      const updatedData = {
+        ...userInfo?.storeSettings,
+        paymentMethods: paymentOptions || [],
+      };
 
-const UserProfile = () => {
-  const navigation = useNavigation();
+      console.log("✅ Successfully updated:", response);
+    } catch (error) {
+      console.error("❌ Update failed:", error);
+    }
+  };
+    
+
+  useLayoutEffect(() => {
+      navigation.setOptions({
+        headerRight: () => (
+          <View className="flex flex-row me-4">
+            <TouchableOpacity
+              className="flex flex-row gap-2 items-center"
+              onPress={() => handleUpdateSetting()}
+            >
+              <Text
+                className={`text-lg ${isSaved ? "#ffffff" : "#ffffff"}`}
+              >
+              </Text>
+            </TouchableOpacity>
+          </View>
+        ),
+        headerLeft: () => (
+          <View className="flex flex-row me-4">
+            <TouchableOpacity onPress={() => router.push("/")}>
+              <Ionicons name="arrow-back" size={24} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+        ),
+        title: "User",
+        headerStyle: {
+          backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        },
+         headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+              headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
+              headerShadowVisible: false,
+              headerTitleAlign: "left",
+              headerShown: true,
+      });
+    }, [navigation, colorScheme, isSaved]);
+
+  const router = useRouter();
+  const { userInfo } = useGlobalContext();
+
+  const handleLogout = () => {
+    // Add logout logic here
+    console.log("Logout pressed");
+  };
+
+  const handleEditProfile = () => {
+    // Add edit profile logic here
+     router.push("/user/add-user");
+  };
 
   return (
-    <View className="flex-1 bg-black-200 pt-10 px-4">
-      <StatusBar style="light" backgroundColor="#1f2937" />
-      <ScrollView showsVerticalScrollIndicator={false}>
-        
-        {/* Header */}
-        {/* <View className="flex-row items-center mb-5">
-          <TouchableOpacity className="mr-2" onPress={() => navigation.goBack()}>
-            <Text className="text-white text-xl">{'<'} </Text>
-          </TouchableOpacity>
-          <Text className="text-white text-xl font-bold">Profile</Text>
-        </View> */}
+    <SafeAreaView className="bg-dark flex-1">
+      {/* Header */}
+      {/* <View className="flex-row items-center justify-between px-4 py-3">
+        <TouchableOpacity onPress={() => router.back()}>
+          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        </TouchableOpacity>
+        <Text className="text-white text-xl font-bold">Profile</Text>
+        <View className="w-6" />
+      </View> */}
 
-        {/* Profile Card */}
-        <View className="flex-row items-center bg-zinc-800 rounded-xl p-4 mb-6">
-          <Image source={profilePic} className="w-14 h-14 rounded-full mr-3 border-2 border-yellow-500" />
+      {/* Profile Card */}
+      <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4 mt-4">
+        <View className="flex-row items-center">
+          <View className="w-16 h-16 rounded-full bg-orange-500 items-center justify-center mr-4">
+            <Ionicons name="person" size={32} color="#ffffff" />
+          </View>
           <View className="flex-1">
-            <Text className="text-white text-xl font-bold ">
-              NK Noyon <Text className="text-yellow-500 text-lg">(Admin)</Text>
-            </Text>
-            <Text className="text-zinc-300 text-sm mt-0.5">nknoyon01936@gmail.com</Text>
+            <View className="flex-row items-center mb-1">
+              <Text className="text-yellow-400 text-lg font-bold mr-2">{userInfo?.name || "NK Noyon"}</Text>
+              <Text className="text-white text-sm">(Admin)</Text>
+            </View>
+            <Text className="text-white text-sm">{userInfo?.email || "nknoyon01936@gmail.com"}</Text>
           </View>
-          <View className="flex-row">
-            <TouchableOpacity className="p-1.5 mr-1" onPress={() => navigation.navigate('EditUser')}>
-              <Text className="text-lg text-zinc-300"><Ionicons name="enter-outline" size={24} color="#fdb714" /></Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="p-1.5" onPress={() => navigation.navigate('CreateUser')}>
-              <Text className="text-lg text-yellow-500">➕</Text>
-            </TouchableOpacity>
-          </View>
+          <TouchableOpacity onPress={handleEditProfile}>
+            <Ionicons name="pencil" size={20} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Main Content */}
+      <ScrollView className="flex-1 px-4" showsVerticalScrollIndicator={false}>
+        {/* Account Section */}
+        <View className="mb-6 bg-black-200 rounded-lg p-4">
+          <Text className="text-white text-lg font-bold mb-3">Account</Text>
+          
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="notifications" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Notification</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="mail" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Email Preference</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="wallet" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Payment</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="refresh-circle" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">History</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
         </View>
 
-        {/* Menu Sections */}
-        {menuItems.map((section) => (
-          <View key={section.title} className="mb-7">
-            <Text className="text-white text-xl font-regular mb-2">{section.title}</Text>
-            <View className="bg-zinc-800 rounded-xl py-2 px-1">
-              {section.items.map((item) => (
-                <TouchableOpacity
-                  key={item.label}
-                  className="flex-row items-center py-3 px-2"
-                >
-                  <View className="mr-3">{item.icon}</View>
-                  <Text className="flex-1 text-white text-sm">{item.label}</Text>
-                  <Text className="text-yellow-500 text-[24px] ml-2">›</Text>
-                </TouchableOpacity>
-              ))}
+        {/* Action Section */}
+        <View className="mb-6 bg-black-200 rounded-lg p-4">
+          <Text className="text-white text-lg font-bold mb-3">Action</Text>
+          
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="key" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Change Password</Text>
             </View>
-          </View>
-        ))}
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
 
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="checkmark-circle" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Active Log</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="business" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Switch Warehouse</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+        </View>
+
+        {/* Support Section */}
+        <View className="mb-6 bg-black-200 rounded-lg p-4">
+          <Text className="text-white text-lg font-bold mb-3">Support</Text>
+          
+          <TouchableOpacity 
+            className="flex-row items-center justify-between py-3"
+            onPress={handleLogout}
+          >
+            <View className="flex-row items-center">
+              <Ionicons name="log-out" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Log Out</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+
+          <TouchableOpacity className="flex-row items-center justify-between py-3">
+            <View className="flex-row items-center">
+              <Ionicons name="help-circle" size={20} color="#fdb714" />
+              <Text className="text-white text-base ml-3">Help</Text>
+            </View>
+            <Ionicons name="chevron-forward" size={20} color="#fdb714" />
+          </TouchableOpacity>
+        </View>
       </ScrollView>
-    </View>
+    </SafeAreaView>
   );
 };
 
-export default UserProfile;
+export default Profile;

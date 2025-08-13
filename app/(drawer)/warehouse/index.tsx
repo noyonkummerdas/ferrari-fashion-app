@@ -1,48 +1,34 @@
-import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme.web";
-// import { useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { DrawerActions, useNavigation } from '@react-navigation/native';
-import { router } from "expo-router";
-import React, { useLayoutEffect } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
-
-
-const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
-  const navigation = useNavigation();
-
-  return (
-    <TouchableOpacity
-      onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}
-      style={{ marginLeft: 16 }}
-    >
-      <Ionicons name="menu" size={24} color={tintColor} />
-    </TouchableOpacity>
-  );
-};
-
+import { CustomDrawerToggleButton } from '@/components';
+import { Colors } from '@/constants/Colors';
+import { useAddWarehouseMutation } from '@/store/api/warehouseApi'; // ✅ change to your actual import
+import { Ionicons } from '@expo/vector-icons';
+import { Link, useNavigation } from 'expo-router';
+import React, { useLayoutEffect } from 'react';
+import { Text, TextInput, useColorScheme, View } from 'react-native';
 
 const Warehouse = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
 
+  // ✅ RTK Query mutation hook
+  const [addWarehouse] = useAddWarehouseMutation();
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      // <View className='me-4' >
-      //     <TouchableOpacity onPress={()=>setIsPhoto(!isPhoto)} className='flex flex-row justify-center items-center gap-2'>
-      //       <Ionicons name={isPhoto ? "image-sharp" : "image-outline"} size={24}  color="#f2652d" />
-      //       <Text className='text-primary text-xl font-pmedium'>Photo</Text>
-      //     </TouchableOpacity>
-      // </View>
-      // ),
       title: "Warehouse",
       //@ts-ignore
       headerStyle: {
         backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       },
        headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+       headerRight: () => <View className="flex flex-row items-center">
+        <Link href="warehouse/warehouseEdit" className="text-white">
+         <View className="flex flex-row items-center">
+          <Ionicons name="add" size={24} color="gray" />
+          <Text className='text-gray-200 font-lg'>Add</Text>
+         </View>
+        </Link>
+       </View>,
       //@ts-ignore
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
@@ -120,13 +106,7 @@ const Warehouse = () => {
       </View>
     ))}
 
-    {/* Floating Add Button */}
-    <TouchableOpacity
-      className="absolute bottom-6 right-4 bg-primary w-14 h-14 rounded-full items-center justify-center shadow-lg"
-      onPress={() => router.push("/warehouse/warehouseEdit")}
-    >
-      <Ionicons name="add" size={28} color="#fff" />
-    </TouchableOpacity>
+    
   </View>
 );
 

@@ -1,12 +1,12 @@
-import Profile from '@/app/settings/profile';
 import { Colors } from '@/constants/Colors';
 import { useAddWarehouseMutation } from '@/store/api/warehouseApi'; // ✅ change to your actual import
 import * as ImagePicker from 'expo-image-picker';
 import { router, useNavigation } from 'expo-router';
 import React, { useLayoutEffect, useState } from 'react';
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { ScrollView, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
 
 const WarehouseEdit = () => {
+
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
 
@@ -80,24 +80,20 @@ const WarehouseEdit = () => {
 
   return (
     <View className="flex-1">
-      <ScrollView className="flex-1 bg-dark p-6">
-        {/* Profile Image */}
-        <TouchableOpacity onPress={pickImage} className="flex justify-center items-center mb-10">
-          <Image
-            source={form.photo ? { uri: form.photo } : Profile}
-            className="w-48 h-48 rounded-full"
-          />
-        </TouchableOpacity>
+      <ScrollView className="bg-dark p-6 ">
 
-        {/* Name */}
+       <View className='flex flex-col justify-center  w-full mb-40'>
+         {/* Name */}
+         <Text className='text-gray-200 font-regular text-lg  ms-3'>Company name</Text>
         <TextInput
-          placeholder="Customer Name"
+          placeholder="Company Name"
           value={form.name}
           onChangeText={(value) => handleInputChange('name', value)}
           className="border bg-black-200 rounded-full p-4 mb-3 mt-2 placeholder:text-gray-500 text-gray-200"
         />
 
         {/* Phone */}
+        <Text className='text-gray-200 font-regular text-lg ms-3'>Phone number</Text>
         <TextInput
           placeholder="Phone number"
           value={form.phone}
@@ -106,6 +102,7 @@ const WarehouseEdit = () => {
         />
 
         {/* Address */}
+        <Text className='text-gray-200 font-regular text-lg  ms-3'>Address</Text>
         <TextInput
           placeholder="Address"
           value={form.address[0].street}
@@ -114,6 +111,7 @@ const WarehouseEdit = () => {
         />
 
         {/* Opening Balance */}
+        <Text className='text-gray-200 font-regular text-lg ms-3'>Opening balance</Text>
         <TextInput
           placeholder="Opening balance"
           value={form.openingBalance}
@@ -125,15 +123,28 @@ const WarehouseEdit = () => {
 
 
         {/* Submit Button */}
-        <TouchableOpacity
+     
+
+
+       </View>
+               <View className="flex-row w-full justify-between h-[100px]  mt-40">
+              <TouchableOpacity
           onPress={handleCreateCustomer}
-          className="h-16 justify-center items-center rounded-full bg-primary mt-8"
+          className="h-16 justify-center items-center rounded-lg bg-primary mt-8 w-[170px]"
         >
           <Text className="text-white text-center text-2xl font-pmedium">Submit</Text>
         </TouchableOpacity>
+
+        {/* Cancel Button */}
+        <TouchableOpacity
+          onPress={() => router.back('/warehouse')}
+          className="h-16 justify-center items-center rounded-lg bg-black-200 mt-8 w-[170px]"
+        >
+          <Text className="text-white text-center text-2xl font-pmedium">Cancel</Text>
+        </TouchableOpacity>
+        </View>
       </ScrollView>
     </View>
   );
 };
-
 export default WarehouseEdit;
