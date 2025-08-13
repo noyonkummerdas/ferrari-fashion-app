@@ -1,28 +1,69 @@
-import { useGlobalContext } from "@/context/GlobalProvider";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React from "react";
+import { CustomDrawerToggleButton } from '@/components';
+import { Colors } from '@/constants/Colors';
+import { useGlobalContext } from '@/context/GlobalProvider'; // ✅ add correct path
+import { useAddWarehouseMutation } from '@/store/api/warehouseApi';
+import { Ionicons } from '@expo/vector-icons';
+import { useNavigation, useRouter } from 'expo-router';
+import React, { useLayoutEffect } from "react";
+
 import {
   SafeAreaView,
   ScrollView,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View
-} from "react-native";
+} from 'react-native';
 
 const Profile = () => {
+  const colorScheme = useColorScheme();
+  const navigation = useNavigation();
   const router = useRouter();
+
+  // ✅ RTK Query mutation hook
+  const [addWarehouse] = useAddWarehouseMutation();
+
   const { userInfo } = useGlobalContext();
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Profile",
+      //@ts-ignore
+      headerStyle: {
+        backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      },
+      headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+      // headerRight: () => (
+      //   <View className="flex flex-row items-center">
+      //     <Link href="warehouse/warehouseEdit" className="text-white">
+      //       <View className="flex flex-row items-center">
+      //         <Ionicons name="add" size={24} color="gray" />
+      //         <Text className='text-gray-200 font-lg'>Add</Text>
+      //       </View>
+      //     </Link>
+      //   </View>
+      // ),
+      //@ts-ignore
+      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
+      headerShadowVisible: true,
+      headerTitleAlign: "left",
+      headerShown: true,
+    });
+  }, [navigation, colorScheme]);
+
   const handleLogout = () => {
-    // Add logout logic here
     console.log("Logout pressed");
   };
 
   const handleEditProfile = () => {
-    // Add edit profile logic here
     console.log("Edit profile pressed");
+    // Example: navigate to edit profile screen
+    router.push("/user/edit");
   };
+
+ 
+  
 
   return (
     <SafeAreaView className="bg-dark flex-1">

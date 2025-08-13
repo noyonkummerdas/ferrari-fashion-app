@@ -133,7 +133,7 @@ const Profile = () => {
     <View>
       {
         userData.map((user) => (
-         <TouchableOpacity key={user.id}>
+         <TouchableOpacity key={user.id} onPress={()=>{router.push('/settings/profile')}}>
            <View key={user.id} className="bg-black-200 rounded-lg p-4 mt-4">
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-full bg-orange-500 items-center justify-center mr-4">
@@ -141,14 +141,11 @@ const Profile = () => {
               </View>
               <View className="flex-1">
                 <Text className="text-yellow-400 text-lg font-bold">{user.name}</Text>
-                                <Text className="text-white text-sm">{user.role}</Text>
-
-             
+                <Text className="text-white text-sm">{user.role}</Text>
               </View>
               <View className="flex-col items-center">
-
                 <Text className="text-white text-sm">{user.status}</Text>
-                   <Text className="text-white text-sm">{user.Phone}</Text>
+                <Text className="text-white text-sm">{user.Phone}</Text>
               </View>
             </View>
           </View>
