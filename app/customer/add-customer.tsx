@@ -130,27 +130,27 @@ const AddCustomer = () => {
         placeholder="Customer Name"
         value={form.name}
         onChangeText={(value) =>  handleInputChange( "name", value )}
-       className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+       className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
       <TextInput
-        placeholder="Pnone no"
+        placeholder="Phone no"
         value={form.phone}
         onChangeText={(value) => handleInputChange('phone', value)}
-       className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+       className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
       <TextInput
         placeholder="Email"
         value={form.email}
         onChangeText={(value) => handleInputChange('email', value)}
-       className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+       className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
       <TextInput
         placeholder="Opening balance"
         value={form.email}
         onChangeText={(value) => handleInputChange('email', value)}
-        className="border bg-dark-300 border-gray-300 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+        className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
      
 
