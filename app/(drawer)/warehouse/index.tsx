@@ -79,12 +79,12 @@ const Warehouse = () => {
   return (
   <View className="flex-1 bg-dark">
     {/* Search bar */}
-    <View className="flex flex-row justify-between items-center w-[390px] bg-black-200 p-2 rounded-full m-2 mx-auto">
+    <View className="flex flex-row justify-between items-center w-[390px] h-12 bg-black-200 rounded-lg m-2 p-2 mx-auto">
       <TextInput
         placeholder="Search Warehouse"
-        className="p-4 placeholder:text-gray-400"
+        className="p-2 placeholder:text-gray-400 text-gray-300"
       />
-      <Ionicons name="search" size={24} color="gray" />
+      <Ionicons name="search" size={20} color="#fdb714" />
     </View>
 
     {/* Warehouse list */}
