@@ -42,6 +42,12 @@ const Profile = () => {
               <Text
                 className={`text-lg ${isSaved ? "#ffffff" : "#ffffff"}`}
               >
+                 <TouchableOpacity className="flex items-center flex-row"  onPress={() => router.push("/user/add-user")} >
+                  <Ionicons name="add" size={24} color="#ffffff"  />
+                 <Text className="text-white text-xl font-pmedium">Add</Text>
+                 </TouchableOpacity>
+
+                
               </Text>
             </TouchableOpacity>
           </View>
@@ -53,7 +59,7 @@ const Profile = () => {
             </TouchableOpacity>
           </View>
         ),
-        title: "User",
+        title: "Users",
         headerStyle: {
           backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
         },
@@ -127,7 +133,7 @@ const Profile = () => {
     <View>
       {
         userData.map((user) => (
-         <TouchableOpacity key={user.id} onPress={() => router.push("/user/add-user")}>
+         <TouchableOpacity key={user.id}>
            <View key={user.id} className="bg-black-200 rounded-lg p-4 mt-4">
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-full bg-orange-500 items-center justify-center mr-4">
@@ -135,11 +141,14 @@ const Profile = () => {
               </View>
               <View className="flex-1">
                 <Text className="text-yellow-400 text-lg font-bold">{user.name}</Text>
-                <Text className="text-white text-sm">{user.Phone}</Text>
+                                <Text className="text-white text-sm">{user.role}</Text>
+
+             
               </View>
               <View className="flex-col items-center">
-                <Text className="text-white text-sm">{user.role}</Text>
+
                 <Text className="text-white text-sm">{user.status}</Text>
+                   <Text className="text-white text-sm">{user.Phone}</Text>
               </View>
             </View>
           </View>
