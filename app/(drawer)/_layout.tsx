@@ -71,8 +71,8 @@ const CustomDrawerComponent = (props: any) => {
               {userInfo?.name}
             </Text>
             <Text className="text-base text-gray-200">
-              <Text className="text-gray-200">Aamar ID: </Text>
-              {userInfo?.aamarId}
+              <Text className="text-gray-200"> {userInfo?.type} | </Text>
+              {userInfo?.phone}
             </Text>
           </View>
         </View>
@@ -134,9 +134,7 @@ const CustomDrawerComponent = (props: any) => {
         style={{
           backgroundColor: pathname == "/stock" ? "#000000" : "#131313",
         }}
-
         onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
-
       />
       <DrawerItem
         icon={({ size, color, focused }) => (

@@ -1,5 +1,11 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, ReactNode, useContext, useEffect, useState } from 'react';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, {
+  createContext,
+  ReactNode,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 
 interface GlobalContextType {
   loggedIn: boolean;
@@ -17,7 +23,7 @@ interface GlobalContextType {
 }
 
 const GlobalContext = createContext<GlobalContextType>({
-  loggedIn: true,
+  loggedIn: false,
   setLoggedIn: () => {},
   user: null,
   setUser: () => {},
@@ -34,7 +40,7 @@ const GlobalContext = createContext<GlobalContextType>({
 export const useGlobalContext = (): GlobalContextType => {
   const context = useContext(GlobalContext);
   if (!context) {
-    throw new Error('useGlobalContext must be used within a GlobalProvider');
+    throw new Error("useGlobalContext must be used within a GlobalProvider");
   }
   return context;
 };
@@ -59,10 +65,11 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   const fetchUser = () => {
     // Implement user fetching logic here
-    console.log('Fetching user...');
+    console.log("Fetching user...");
   };
 
   const logout = () => {
+    console.log("Logging out...");
     setLoggedIn(false);
     setUser(null);
   };
@@ -72,7 +79,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       const jsonValue = JSON.stringify(value);
       await AsyncStorage.setItem(key, jsonValue);
     } catch (error) {
-      console.error('Error storing data:', error);
+      console.error("Error storing data:", error);
     }
   };
 
@@ -81,7 +88,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
       const jsonValue = await AsyncStorage.getItem(key);
       return jsonValue != null ? JSON.parse(jsonValue) : null;
     } catch (error) {
-      console.error('Error getting data:', error);
+      console.error("Error getting data:", error);
       return null;
     }
   };
@@ -90,7 +97,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     try {
       await AsyncStorage.removeItem(key);
     } catch (error) {
-      console.error('Error removing data:', error);
+      console.error("Error removing data:", error);
     }
   };
 
@@ -110,9 +117,7 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   };
 
   return (
-    <GlobalContext.Provider value={value}>
-      {children}
-    </GlobalContext.Provider>
+    <GlobalContext.Provider value={value}>{children}</GlobalContext.Provider>
   );
 };
 

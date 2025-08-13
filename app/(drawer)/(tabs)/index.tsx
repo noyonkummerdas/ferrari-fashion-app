@@ -3,7 +3,7 @@ import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
 import { router } from "expo-router";
 
-import { StatusBar } from 'expo-status-bar';
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -34,6 +34,8 @@ export default function PosDashboard() {
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   // console.log("AamarID::",userInfo?.aamarId)
+
+  // console.log(userInfo);
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -180,74 +182,74 @@ export default function PosDashboard() {
 
   return (
     <>
-    <StatusBar style="light" backgroundColor="#1f2937" />
-    <ScrollView
-      className="flex-1 bg-dark-700 p-4"
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-      showsVerticalScrollIndicator={false}
-    >
-      {/* Welcome Card */}
-      <WelcomeCard
-        userName={userInfo?.name || "NK Noyon"}
-        userImage={profile}
-        onProfilePress={() => router.push("/settings/profile")}
-      />
+      <StatusBar style="light" backgroundColor="#1f2937" />
+      <ScrollView
+        className="flex-1 bg-dark-700 p-4"
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+        showsVerticalScrollIndicator={false}
+      >
+        {/* Welcome Card */}
+        <WelcomeCard
+          userName={userInfo?.name || "NK Noyon"}
+          userImage={profile}
+          onProfilePress={() => router.push("/settings/profile")}
+        />
 
-      {/* Cash In/Out Cards */}
-      <View className="flex-row mb-4">
-        <View className="flex-1 mr-2">
-          <DashboardCard
-            title="Cash In"
-            value="2384210"
-            iconName="wallet"
-            bgColor="bg-black-200"
-          />
+        {/* Cash In/Out Cards */}
+        <View className="flex-row mb-4">
+          <View className="flex-1 mr-2">
+            <DashboardCard
+              title="Cash In"
+              value="2384210"
+              iconName="wallet"
+              bgColor="bg-black-200"
+            />
+          </View>
+          <View className="flex-1 ml-2">
+            <DashboardCard
+              title="Cash Out"
+              value="4342422"
+              iconName="card"
+              bgColor="bg-black-200"
+            />
+          </View>
         </View>
-        <View className="flex-1 ml-2">
-          <DashboardCard
-            title="Cash Out"
-            value="4342422"
-            iconName="card"
-            bgColor="bg-black-200"
-          />
+
+        {/* Second Row Cash In/Out */}
+        <View className="flex-row mb-4">
+          <View className="flex-1 mr-2">
+            <DashboardCard
+              title="Cash In"
+              value="2384210"
+              iconName="trending-up"
+              bgColor="bg-black-200"
+            />
+          </View>
+          <View className="flex-1 ml-2">
+            <DashboardCard
+              title="Cash Out"
+              value="4342422"
+              iconName="trending-down"
+              bgColor="bg-black-200"
+            />
+          </View>
         </View>
-      </View>
 
-      {/* Second Row Cash In/Out */}
-      <View className="flex-row mb-4">
-        <View className="flex-1 mr-2">
-          <DashboardCard
-            title="Cash In"
-            value="2384210"
-            iconName="trending-up"
-            bgColor="bg-black-200"
-          />
+        {/* Stats Grid */}
+        <StatsGrid stats={statsData} />
+
+        {/* Payment & Collections Chart */}
+        <View className="mt-4">
+          <Text className="text-white text-lg font-pbold mb-3">
+            Payments & Collections
+          </Text>
+          <PaymentChart />
         </View>
-        <View className="flex-1 ml-2">
-          <DashboardCard
-            title="Cash Out"
-            value="4342422"
-            iconName="trending-down"
-            bgColor="bg-black-200"
-          />
-        </View>
-      </View>
 
-      {/* Stats Grid */}
-      <StatsGrid stats={statsData} />
-
-      {/* Payment & Collections Chart */}
-      <View className="mt-4">
-        <Text className="text-white text-lg font-pbold mb-3">
-          Payments & Collections
-        </Text>
-        <PaymentChart />
-      </View>
-
-      <StatusBar style="light" />
-    </ScrollView>
+        <StatusBar style="light" />
+      </ScrollView>
     </>
   );
 }
