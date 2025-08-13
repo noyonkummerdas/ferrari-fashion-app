@@ -27,16 +27,16 @@ const Profile = () => {
   return (
     <SafeAreaView className="bg-dark flex-1">
       {/* Header */}
-      <View className="flex-row items-center justify-between px-4 py-3">
+      {/* <View className="flex-row items-center justify-between px-4 py-3">
         <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="#ffffff" />
         </TouchableOpacity>
         <Text className="text-white text-xl font-bold">Profile</Text>
         <View className="w-6" />
-      </View>
+      </View> */}
 
       {/* Profile Card */}
-      <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4">
+      <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4 mt-10">
         <View className="flex-row items-center">
           <View className="w-16 h-16 rounded-full bg-orange-500 items-center justify-center mr-4">
             <Ionicons name="person" size={32} color="#ffffff" />

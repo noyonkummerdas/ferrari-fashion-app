@@ -77,7 +77,7 @@ const Customers = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View className="me-4">
+        <View className="me-4 bg-dark">
           <TouchableOpacity
             onPress={() => router.push("/customer/add-customer")}
             className="flex flex-row justify-center items-center gap-2"

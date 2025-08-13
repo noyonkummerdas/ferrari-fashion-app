@@ -84,7 +84,7 @@ const SettingScreen = () => {
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.push("/")}>
-            <Ionicons name="arrow-back" size={24} />
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </TouchableOpacity>
         </View>
       ),
