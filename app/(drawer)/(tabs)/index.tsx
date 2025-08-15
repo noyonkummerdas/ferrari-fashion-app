@@ -184,7 +184,7 @@ export default function PosDashboard() {
     <>
       <StatusBar style="light" backgroundColor="#1f2937" />
       <ScrollView
-        className="flex-1 bg-dark-700 p-4"
+        className="flex-1 bg-black-700 p-4"
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

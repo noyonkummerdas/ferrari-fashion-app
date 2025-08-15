@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Warehouse } from "../../models/warehouseModel";
 
-import { BASE_URL } from '../../constants/baseUrl';
+import { WarehouseTypes } from "@/types/warehouse";
+import { BASE_URL } from "../../constants/baseUrl";
 
 // console.log(BASE_URL);
 
@@ -10,19 +10,15 @@ export const warehouseApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   tagTypes: ["Warehouse"],
   endpoints: (builder) => ({
-    Warehouses: builder.query<Warehouse[], void>({
+    Warehouses: builder.query<WarehouseTypes[], void>({
       query: () => "/warehouse",
       providesTags: ["Warehouse"],
     }),
-    Warehouse: builder.query<Warehouse, string>({
+    Warehouse: builder.query<WarehouseTypes, string>({
       query: (_id) => `/warehouse/${_id}`,
       providesTags: ["Warehouse"],
     }),
-    // masterDamage: builder.query<Warehouse[], void>({
-    //     query: (_id) => `/damage/master`,
-    //     providesTags: ['Warehouse']
-    // }),
-    addWarehouse: builder.mutation<{}, Warehouse>({
+    addWarehouse: builder.mutation<{}, WarehouseTypes>({
       query: (Warehouse) => ({
         url: "/warehouse",
         method: "POST",
@@ -30,7 +26,7 @@ export const warehouseApi = createApi({
       }),
       invalidatesTags: ["Warehouse"],
     }),
-    updateWarehouse: builder.mutation<void, Warehouse>({
+    updateWarehouse: builder.mutation<void, WarehouseTypes>({
       query: ({ _id, ...rest }) => ({
         url: `/warehouse/${_id}`,
         method: "PUT",

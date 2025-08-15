@@ -4,8 +4,9 @@ import { router, usePathname, useSegments } from "expo-router";
 import Drawer from "expo-router/drawer";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import profile from "../../assets/images/icon.png";
+import profile from "../../assets/images/profile.jpg";
 // import * as globalCon from "@/context/GlobalProvider"
+import { useSelector } from "react-redux";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
 const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
@@ -32,23 +33,26 @@ const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
 };
 
 const CustomDrawerComponent = (props: any) => {
+  // Set the animation options. This is optional.
+  // SplashScreen.setOptions({
+  //   duration: 1000,
+  //   fade: true,
+  // });
+
+  const userInfo = useSelector((state: any) => state.user);
+
   const pathname = usePathname();
-  const { loading, loggedIn, logout, userInfo } = useGlobalContext();
+  const { loading, loggedIn, logout } = useGlobalContext();
   // const router = useRouter();
   const segments = useSegments();
   const [isMounted, setIsMounted] = useState(false);
 
-  // console.log(userInfo)
+  // console.log("userInfo", userInfo);
 
   const checkLogin = () => {
     //@ts-ignore
     if (!isMounted || segments?.length === 0) return;
-    // console.log('TAB:', pathname, loggedIn,segments.length);
-    // router.replace("/(drawer)/(tabs)/index");
-
-    // if (pathname !== '/(auth)/sign-in' && !loggedIn) {
-    //     router.replace('/(auth)/sign-in');
-    // }
+    if (!userInfo?.isLoggedIn) router.replace("/(auth)/sign-in");
   };
 
   useEffect(() => {
@@ -91,7 +95,7 @@ const CustomDrawerComponent = (props: any) => {
         label={"Home"}
         labelStyle={[
           styles.labelStyle,
-          { color: pathname == "/" ? "#ffffff" : "#ffffff" },
+          { color: pathname === "/" ? "#ffffff" : "#ffffff" },
         ]}
         style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
         onPress={() => router.push("/(drawer)/(tabs)")}
@@ -109,7 +113,7 @@ const CustomDrawerComponent = (props: any) => {
         label={"Warehouse"}
         labelStyle={[
           styles.labelStyle,
-          { color: pathname == "/warehouse" ? "#ffffff" : "#ffffff" },
+          { color: pathname === "/warehouse" ? "#ffffff" : "#ffffff" },
         ]}
         style={{
           backgroundColor: pathname === "/warehouse" ? "#000000" : "#131313",
@@ -129,10 +133,10 @@ const CustomDrawerComponent = (props: any) => {
         label={"Stock"}
         labelStyle={[
           styles.labelStyle,
-          { color: pathname == "/stock" ? "#ffffff" : "#ffffff" },
+          { color: pathname === "/stock" ? "#ffffff" : "#ffffff" },
         ]}
         style={{
-          backgroundColor: pathname == "/stock" ? "#000000" : "#131313",
+          backgroundColor: pathname === "/stock" ? "#000000" : "#131313",
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
       />
