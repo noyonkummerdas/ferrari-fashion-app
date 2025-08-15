@@ -1,15 +1,16 @@
-import { DarkTheme, ThemeProvider } from '@react-navigation/native';
-import { useFonts } from 'expo-font';
-import { SplashScreen, Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
-import 'react-native-reanimated';
-import '../global.css';
+import { DarkTheme, ThemeProvider } from "@react-navigation/native";
+import { useFonts } from "expo-font";
+import { SplashScreen, Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import "react-native-reanimated";
+import "../global.css";
 
-import { useColorScheme } from '@/hooks/useColorScheme';
-import store from '@/store/store';
-import { useEffect } from 'react';
-import { Provider } from 'react-redux';
-import GlobalProvider from '../context/GlobalProvider';
+import { useColorScheme } from "@/hooks/useColorScheme";
+import store, { persistor } from "@/store/store";
+import { useEffect } from "react";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import GlobalProvider from "../context/GlobalProvider";
 
 export default function RootLayout() {
   const colorScheme = useColorScheme();
@@ -47,16 +48,18 @@ export default function RootLayout() {
 
   return (
     <Provider store={store}>
-      <GlobalProvider>
-        <ThemeProvider value={DarkTheme}>
-          <Stack>
-            <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-            <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
-            <Stack.Screen name="+not-found" />
-          </Stack>
-          <StatusBar style="auto" />
-        </ThemeProvider>
-      </GlobalProvider>
+      <PersistGate loading={null} persistor={persistor}>
+        <GlobalProvider>
+          <ThemeProvider value={DarkTheme}>
+            <Stack>
+              <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+              <Stack.Screen name="(drawer)" options={{ headerShown: false }} />
+              <Stack.Screen name="+not-found" />
+            </Stack>
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </GlobalProvider>
+      </PersistGate>
     </Provider>
   );
 }

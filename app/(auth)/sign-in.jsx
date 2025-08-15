@@ -13,14 +13,17 @@ import {
   ScrollView,
   View,
 } from "react-native";
+import { useDispatch } from "react-redux";
 import logo from "../../assets/images/icon.png";
 import { useLoginUserMutation } from "../../store/api/userApi";
+import { setUserInfo } from "../../store/slice/userSlice";
 
 import { jwtDecode } from "jwt-decode";
 
 const SignIn = () => {
+  const dispatch = useDispatch();
   const [login] = useLoginUserMutation();
-  const { setLoggedIn, storeData, setUser, removeData } = useGlobalContext();
+  const { setLoggedIn, storeData, removeData } = useGlobalContext();
 
   const [isSubmitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({
@@ -48,8 +51,9 @@ const SignIn = () => {
           const decodedToken = jwtDecode(token);
           setLoggedIn(true);
           storeData("user", decodedToken);
+          dispatch(setUserInfo({ ...decodedToken, isLoggedIn: true }));
           // console.log("user:", decodedToken);
-          setUser(decodedToken);
+          // setUser(decodedToken);
           router.push("/(drawer)/(tabs)");
         } else {
           // Custom error handling

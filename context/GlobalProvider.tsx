@@ -6,12 +6,13 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { logoutUser } from "../store/slice/userSlice";
 
 interface GlobalContextType {
   loggedIn: boolean;
   setLoggedIn: (value: boolean) => void;
   user: any;
-  setUser: (user: any) => void;
   loading: boolean;
   setLoading: (value: boolean) => void;
   userInfo: any;
@@ -26,7 +27,6 @@ const GlobalContext = createContext<GlobalContextType>({
   loggedIn: false,
   setLoggedIn: () => {},
   user: null,
-  setUser: () => {},
   loading: true,
   setLoading: () => {},
   userInfo: null,
@@ -51,8 +51,10 @@ interface GlobalProviderProps {
 
 const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
   const [loggedIn, setLoggedIn] = useState(false);
-  const [user, setUser] = useState(null);
+  // const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const user = useSelector((state: any) => state.user);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     // Initialize auth state - check if user is logged in
@@ -65,13 +67,13 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
 
   const fetchUser = () => {
     // Implement user fetching logic here
-    console.log("Fetching user...");
+    // console.log("Fetching user...");
   };
 
   const logout = () => {
     console.log("Logging out...");
+    dispatch(logoutUser());
     setLoggedIn(false);
-    setUser(null);
   };
 
   const storeData = async (key: string, value: any) => {
@@ -105,7 +107,6 @@ const GlobalProvider: React.FC<GlobalProviderProps> = ({ children }) => {
     loggedIn,
     setLoggedIn,
     user,
-    setUser,
     loading,
     setLoading,
     userInfo: user,
