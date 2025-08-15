@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { User } from "../../models/userModel";
 import { BASE_URL } from "../../constants/baseUrl";
+import { User } from "../../models/userModel";
 
 // console.log("BASE_URL",BASE_URL)
 export const UserApi = createApi({
@@ -10,8 +10,7 @@ export const UserApi = createApi({
   endpoints: (builder) => ({
     // new
     Users: builder.query<User[], any>({
-      query: ({ limit, aamarId, q }) =>
-        `/mobileApp/user/all/${limit}/${aamarId}/${q}`,
+      query: () => `/user`,
       providesTags: ["User"],
     }),
     User: builder.query<User, string>({
@@ -20,7 +19,7 @@ export const UserApi = createApi({
     }),
     addUser: builder.mutation<void, User>({
       query: (user) => ({
-        url: "/mobileApp/user/create",
+        url: "/user",
         method: "POST",
         body: user,
       }),
@@ -28,7 +27,7 @@ export const UserApi = createApi({
     }),
     updateUser: builder.mutation<void, User>({
       query: ({ _id, ...rest }) => ({
-        url: `/mobileApp/user/update/${_id}`,
+        url: `/user/${_id}`,
         method: "PUT",
         body: rest,
       }),

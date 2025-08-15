@@ -1,92 +1,126 @@
-import { View, Text, useColorScheme, TouchableOpacity, ScrollView, Image, Button, TextInput, StyleSheet } from 'react-native'
-import React, { useEffect, useLayoutEffect, useState } from 'react'
-import { useGlobalContext } from '@/context/GlobalProvider';
-import { router, useLocalSearchParams, useNavigation } from 'expo-router';
-import { Ionicons } from '@expo/vector-icons';
-import { Colors } from '@/constants/Colors';
-import { Dropdown } from 'react-native-element-dropdown';
+import { Colors } from "@/constants/Colors";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 
-import * as ImagePicker from 'expo-image-picker';
-import CustomDropdown from '@/components/CustomDropdown';
-import { useAddProductMutation } from '@/store/api/productApi';
-import profile from "../../assets/images/profile.jpg"
-import { useAddCustomerMutation, useGetCustomerByIdQuery, useUpdateCustomerMutation } from '@/store/api/customerApi';
-import { useUpdateSupplierMutation } from '@/store/api/supplierApi';
-import { useUpdateUserMutation, useUserQuery } from '@/store/api/userApi';
+import CustomDropdown from "@/components/CustomDropdown";
+import { useUpdateUserMutation, useUserQuery } from "@/store/api/userApi";
+import { useWarehousesQuery } from "@/store/api/warehouseApi";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import { StatusBar } from "expo-status-bar";
+import profile from "../../assets/images/profile.jpg";
 
+const updateUser = () => {
+  // const { userInfo } = useGlobalContext();
+  const { id } = useLocalSearchParams();
 
-const UpdateSupplier = () => {
-    const {userInfo} = useGlobalContext()
-    const aamarId = userInfo?.aamarId;
-    const warehouse = userInfo?.warehouse;
-    const [isPhoto, setIsPhoto] = useState(false)
-      const { id } = useLocalSearchParams()
-    
+  console.log("ID", id);
 
-    const [updateUser] = useUpdateUserMutation()
+  // const warehouse = userInfo?.warehouse;
+  const [isPhoto, setIsPhoto] = useState(false);
 
-    const [type,setType] = useState([
-                    { label: 'Admin', value: 'admin' },
-                    { label: 'Manager', value: 'manager' },
-                    { label: 'POS', value: 'POS' },
-                  ]);
-    const [status,setStatus] = useState([
-                { label: 'Active', value: 'active' },
-                { label: 'Inactive', value: 'inactive' }
-              ]);
+  const [warehouse, setWarehouse] = useState([
+    {
+      label: "Select Warehouse",
+      value: "",
+    },
+  ]);
 
-  
+  const {
+    data: userData,
+    isSuccess: isUseSeccess,
+    refetch: userRefetch,
+  } = useUserQuery({ _id: id });
 
+  useEffect(() => {
+    userRefetch();
+  }, [id]);
 
-    const colorScheme = useColorScheme();
-    const navigation = useNavigation();
-    const {data, error, isLoading, isFetching, isSuccess,refetch} = useUserQuery(
-      {
-        _id:id,
-        forceRefetch: true,
-      })
+  useEffect(() => {
+    if (isUseSeccess) {
+      setForm(userData);
+    }
+  }, [isUseSeccess, userData]);
 
+  // console.log("USER DATA", userData, isUseSeccess);
 
-      console.log("USER DATA",data)
-    useLayoutEffect(() => {
-      navigation.setOptions({
-        title: "Update User",
-        //@ts-ignore
-        headerStyle: { backgroundColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}` },
-        //@ts-ignore
-        headerTintColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}`,
-        headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
-        headerShadowVisible: false,
-        headerTitleAlign: 'left',
-        headerShown: true,
-        
+  const [updateUser] = useUpdateUserMutation();
+
+  const [type, setType] = useState([
+    { label: "Admin", value: "admin" },
+    { label: "Manager", value: "manager" },
+  ]);
+  const [status, setStatus] = useState([
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inactive" },
+  ]);
+
+  const { data, isSuccess, isError, isLoading } = useWarehousesQuery();
+
+  // console.log("WAREHOUSE DATA", data);
+  useEffect(() => {
+    if (isSuccess) {
+      setWarehouse(
+        data?.map((item) => ({ label: item?.name, value: item?._id })),
+      );
+    }
+  }, [isSuccess, data]);
+
+  const colorScheme = useColorScheme();
+  const navigation = useNavigation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View className="flex flex-row me-4">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
+      ),
+      title: "Update User",
+      headerStyle: {
+        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+      },
+      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
+      headerShadowVisible: false,
+      headerTitleAlign: "center",
+      headerShown: true,
     });
-    }, [navigation,isPhoto]);
-
-
-
+  }, [navigation]);
 
   const [form, setForm] = useState({
-        name: "",
-        email: "",
-        username: "",
-        password: "",
-        type: "manager",
-        // photo: "",
-        phone: "",
-        status:"active",
-        aamarId: aamarId,
-        warehouse: warehouse,
-    });
+    _id: id as string,
+    name: "",
+    email: "",
+    username: "",
+    password: "",
+    type: "manager",
+    photo: "",
+    phone: "",
+    status: "active",
+    warehouse: "",
+  });
 
-
-
-
-  // console.log("CUSTOMER DATA",form)
+  // console.log("User DATA", form);
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
   };
+
+  useEffect(() => {
+    handleInputChange("username", form?.phone);
+  }, [form?.phone]);
 
   const pickImage = async () => {
     let result = await ImagePicker.launchImageLibraryAsync({
@@ -101,107 +135,117 @@ const UpdateSupplier = () => {
     }
   };
 
-  useEffect(() => {
-    setForm({
-      ...form,
-      _id: id,
-      name: data?.name || "",
-      email: data?.email || "",
-      username: data?.username || "",
-      // password: data?.password || "",
-      type: data?.type || "manager",
-      // photo: d// || ate."",
-      phone: data?.phone || "",
-      aamarId: aamarId,
-      warehouse: warehouse,
-    })
-  },[data, isSuccess])
-
-  useEffect(() => {
-    refetch()
-  },[id])
-  // console.log("FORM DATA",form)
-
-  
   const handleUpdateUser = async () => {
     try {
-      if (form?.password === "") {
-        delete form?.password;
-      }
+      console.log("FORM DATA", form);
       const response = await updateUser(form).unwrap();
-      console.log('User Update successfully:', response);
+      console.log("Responce", response);
       router.back();
     } catch (error) {
-      console.error('Error adding User:', error);
+      console.error("Error adding User:", error);
     }
-  }
+  };
 
   return (
-    <ScrollView className='flex-1 bg-white p-6'>
+    <ScrollView className="flex-1 bg-dark p-4 mx-auto w-full">
+      <StatusBar style="light" />
       <View>
-        <TouchableOpacity onPress={pickImage} className="flex justify-center items-center mb-10">
-            <Image source={profile} className="w-48 h-48 rounded-full" />
+        <TouchableOpacity
+          onPress={pickImage}
+          className="flex justify-center items-center"
+        >
+          <Image source={profile} className="w-40 h-40 rounded-full" />
         </TouchableOpacity>
       </View>
-       
+
+      <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+        Name
+      </Text>
       <TextInput
         placeholder="User Name"
         value={form.name}
-        onChangeText={(value) =>  handleInputChange( "name", value )}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        onChangeText={(value) => handleInputChange("name", value)}
+        className="border placeholder:text-gray-500 bg-black-200 rounded-full p-4 mb-3 text-gray-200"
       />
-
+      <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+        Phone
+      </Text>
       <TextInput
-        placeholder="Pnone no"
+        placeholder="Phone number"
         value={form.phone}
-        onChangeText={(value) => handleInputChange('phone', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        onChangeText={(value) => handleInputChange("phone", value)}
+        className="border placeholder:text-gray-500 bg-black-200 rounded-full p-4 mb-3 text-gray-200"
       />
+      <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+        Password
+      </Text>
       <TextInput
         placeholder="Password"
         value={form.password}
         secureTextEntry={true}
-        onChangeText={(value) => handleInputChange('password', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        onChangeText={(value) => handleInputChange("password", value)}
+        className="border placeholder:text-gray-500 bg-black-200 rounded-full p-4 mb-3 text-gray-200"
       />
-
+      <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+        Email
+      </Text>
       <TextInput
         placeholder="Email"
         value={form.email}
-        onChangeText={(value) => handleInputChange('email', value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        onChangeText={(value) => handleInputChange("email", value)}
+        className="border placeholder:text-gray-500 bg-black-200 rounded-full p-4 mb-3 text-gray-200"
       />
-      <View className='flex flex-row gap-2 justify-between items-center'>
-        <View className='flex-1'>
+      <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+        Warehouse
+      </Text>
+      <CustomDropdown
+        data={warehouse}
+        value={form.warehouse}
+        setValue={(value) => handleInputChange("warehouse", value)}
+        placeholder="Select Warehouse"
+        mode="modal"
+        search={false}
+      />
+
+      <View className="flex flex-row gap-2 justify-center ms-[-25px]  ">
+        <View className="w-[160px]">
+          <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+            Type
+          </Text>
           <CustomDropdown
-          data={type}
-          value={form.type}
-          placeholder='Type'
-          mode="modal"
-          setValue={(value) => handleInputChange('type', value)}
+            data={type}
+            value={form.type}
+            placeholder="Type"
+            mode="modal"
+            setValue={(value) => handleInputChange("type", value)}
           />
         </View>
-        <View className='flex-1'>
+
+        <View className="w-[160px]">
+          <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
+            Status
+          </Text>
           <CustomDropdown
-          data={status}
-          value={form.status}
-          placeholder='Status'
-          mode='modal'
-          search={false}
-          setValue={(value) => handleInputChange('status', value)}
+            data={status}
+            value={form.status}
+            placeholder="Status"
+            mode="modal"
+            search={false}
+            setValue={(value) => handleInputChange("status", value)}
           />
         </View>
       </View>
 
-      
-
-      <TouchableOpacity  onPress={ handleUpdateUser} className="h-16 justify-center items-center rounded-full bg-primary mt-8">
-        <Text className="text-white text-center text-xl font-pmedium">Update User</Text>
+      <TouchableOpacity
+        onPress={handleUpdateUser}
+        className="h-14 justify-center items-center rounded-full bg-primary mt-2"
+      >
+        <Text className="text-white text-center text-md font-pmedium">
+          Update User
+        </Text>
       </TouchableOpacity>
     </ScrollView>
-  )
-}
+  );
+};
 
-export default UpdateSupplier
-
-
+export default updateUser;
