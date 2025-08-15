@@ -7,6 +7,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { StatusBar } from "expo-status-bar";
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -139,6 +140,7 @@ const Profile = () => {
 
   return (
     <View>
+      <StatusBar style="light" backgroundColor="#1f2937" />
       {data?.map((user) => (
         <TouchableOpacity
           key={user._id}
