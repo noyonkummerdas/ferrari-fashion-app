@@ -1,38 +1,30 @@
-import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
+import { useSupplierQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect } from "react";
-import {
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  useColorScheme,
-  View,
-} from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CustomerDetails = () => {
-  const colorScheme = useColorScheme();
-  const navigation = useNavigation();
-  const router = useRouter();
   const { id } = useLocalSearchParams();
+  const router = useRouter();
+  const navigation = useNavigation();
 
-  const { data, isLoading, error, refetch } = useGetCustomerByIdQuery({ id });
-  // console.log(data);÷
+  const { data, isLoading, error, refetch } = useSupplierQuery({ _id: id });
+
+  console.log("DATA::", id, data);
 
   useEffect(() => {
     refetch();
   }, [id]);
 
-  // const arrayCustomersd = [
-  //   {
-  //     id: 1,
-  //     name: "MANISHANKAR VAKTA ",
-  //     email: "john.doe@example.com",
-  //     phone: "01687233969",
-  //     address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230",
-  //   },
-  // ];
+  //date formatting
+  const today = new Date();
+  const formattedDate = {
+    day: today.getDate(),
+    month: today.toLocaleString("en-US", { month: "long" }), // e.g. August
+    year: today.getFullYear(),
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: `${data?.name || "Customer Details"}`,
@@ -53,7 +45,7 @@ const CustomerDetails = () => {
       ),
       headerRight: () => (
         <TouchableOpacity
-          onPress={() => router.push(`/customer/${id}`)}
+          onPress={() => router.push(`/supplier/${id}`)}
           className="flex flex-row items-center gap-2"
         >
           <Ionicons name="pencil-outline" size={24} color="white" />
@@ -63,20 +55,13 @@ const CustomerDetails = () => {
     });
   }, [navigation, data]);
 
-  //date formatting
-  const today = new Date();
-  const formattedDate = {
-    day: today.getDate(),
-    month: today.toLocaleString("en-US", { month: "long" }), // e.g. August
-    year: today.getFullYear(),
-  };
-
   return (
     <>
-      <ScrollView className="bg-dark">
-        <StatusBar style="light" backgroundColor="#1f2937" />
-        <View className="bg-dark p-4">
-          <View key={data?._id} className="mb-2">
+      <ScrollView>
+        <View className=" px-4">
+          {/* {data.map((customer) => ( */}
+          <View key={data?._id} className="mb-4">
+            {/* <Text className="text-lg font-bold text-white">{data?.name}</Text> */}
             <View className="flex flex-row ">
               <Ionicons
                 name="phone-portrait-sharp"
@@ -85,9 +70,9 @@ const CustomerDetails = () => {
               />
               <Text className="text-gray-200 text-[18px] ">{data?.phone}</Text>
             </View>
-            <Text className="text-gray-400  p-1">{data?.company}</Text>
             <Text className="text-gray-400  p-1">{data?.address}</Text>
           </View>
+          {/* ))} */}
         </View>
 
         {/* calendar */}
@@ -112,13 +97,13 @@ const CustomerDetails = () => {
         </View>
 
         <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto ">
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
+          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg me-1">
             <Text className="text-white text-xl ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               234234 <Text className="text-white">BDT</Text>
             </Text>
           </View>
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
+          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg ms-1">
             <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
               38234 <Text className="text-white">BDT</Text>

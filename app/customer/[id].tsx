@@ -110,12 +110,12 @@ const updateCustomer = () => {
       _id: id,
       name: data?.name || "",
       email: data?.email || "",
+      // code: data?.code || "",
       company: data?.company || "",
       phone: data?.phone || "",
       photo: "",
       address: data?.address || "",
       balance: data?.balance || "",
-      warehouse: warehouse,
       status: data?.status || "active",
     });
   }, [data, isSuccess]);

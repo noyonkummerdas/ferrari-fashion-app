@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Supplier } from "../../models/supplierModel";
 
-import { BASE_URL } from '../../constants/baseUrl';
+import { BASE_URL } from "../../constants/baseUrl";
 
 // console.log(BASE_URL);
 
@@ -12,16 +12,16 @@ export const SupplierApi = createApi({
   endpoints: (builder) => ({
     // new
     Suppliers: builder.query<Supplier[], any>({
-      query: ({limit, aamarId, q}) => `/mobileApp/supplier/all/${limit}/${aamarId}/${q}`,
+      query: ({ q }) => `/supplier/search/${q}`,
       providesTags: ["Supplier"],
     }),
-    Supplier: builder.query<Supplier, string>({
-      query: ({_id}) => `/supplier/${_id}`,
+    Supplier: builder.query<string, Supplier>({
+      query: ({ _id }) => `/supplier/${_id}`,
       providesTags: ["Supplier"],
     }),
     addSupplier: builder.mutation<{}, Supplier>({
       query: (supplier) => ({
-        url: "/mobileApp/supplier/create",
+        url: "/supplier",
         method: "POST",
         body: supplier,
       }),
@@ -29,7 +29,7 @@ export const SupplierApi = createApi({
     }),
     updateSupplier: builder.mutation<{}, Supplier>({
       query: ({ _id, ...rest }) => ({
-        url: `/mobileApp/supplier/update/${_id}`,
+        url: `/supplier/${_id}`,
         method: "PUT",
         body: rest,
       }),
@@ -54,15 +54,14 @@ export const SupplierApi = createApi({
       providesTags: ["Supplier"],
     }),
 
-    
-
     countSupplier: builder.query<Supplier[], void>({
       query: () => "/supplier/count",
       providesTags: ["Supplier"],
     }),
 
     supplierPagenation: builder.query<Supplier, any>({
-      query: ({ page, size, warehouse, q }) => `/supplier/${page}/${size}?q=${q}`, // not found
+      query: ({ page, size, warehouse, q }) =>
+        `/supplier/${page}/${size}?q=${q}`, // not found
       // query: ({page, size, q}) => `/Customer`,
       providesTags: ["Supplier"],
     }),
@@ -71,9 +70,13 @@ export const SupplierApi = createApi({
       query: (_id) => `/supplier/ledger/${_id}`,
       providesTags: ["Supplier"],
     }),
-    supplierLedgerByDate: builder.query<any, { id: string; start: string; end: string }>({
-      query: ({ id, start, end }) => `/supplier/ledgerByDate/${id}/${start}/${end}`,
-      providesTags: ['Supplier'],
+    supplierLedgerByDate: builder.query<
+      any,
+      { id: string; start: string; end: string }
+    >({
+      query: ({ id, start, end }) =>
+        `/supplier/ledgerByDate/${id}/${start}/${end}`,
+      providesTags: ["Supplier"],
     }),
 
     deleteSupplier: builder.mutation<void, string>({

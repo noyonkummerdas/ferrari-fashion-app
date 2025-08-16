@@ -1,68 +1,68 @@
-import { Colors } from '@/constants/Colors';
-import { useGlobalContext } from '@/context/GlobalProvider';
-import { router, useNavigation } from 'expo-router';
-import React, { useLayoutEffect, useState } from 'react';
-import { Image, ScrollView, Text, TextInput, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { router, useNavigation } from "expo-router";
+import React, { useLayoutEffect, useState } from "react";
+import {
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
 
-import CustomDropdown from '@/components/CustomDropdown';
-import { useAddSupplierMutation } from '@/store/api/supplierApi';
-import * as ImagePicker from 'expo-image-picker';
+import { useAddSupplierMutation } from "@/store/api/supplierApi";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/images/profile.jpg";
 
-
 const AddSupplier = () => {
-    const {userInfo} = useGlobalContext()
-    const aamarId = userInfo?.aamarId;
-    const warehouse = userInfo?.warehouse;
-    const [isPhoto, setIsPhoto] = useState(false)
+  const { userInfo } = useGlobalContext();
+  const warehouse = userInfo?.warehouse;
+  const [isPhoto, setIsPhoto] = useState(false);
 
-    const [addNewSupplier] = useAddSupplierMutation()
+  const [createSupplier] = useAddSupplierMutation();
 
-   
-    const [status,setStatus] = useState([
-                { label: 'Active', value: 'active' },
-                { label: 'Inactive', value: 'inactive' }
-              ]);
+  const [status, setStatus] = useState([
+    { label: "Active", value: "active" },
+    { label: "Inactive", value: "inactive" },
+  ]);
 
-  
+  const colorScheme = useColorScheme();
+  const navigation = useNavigation();
 
-
-    const colorScheme = useColorScheme();
-    const navigation = useNavigation();
-
-    useLayoutEffect(() => {
-      navigation.setOptions({
-       
-        title: "Add Supplier",
-        //@ts-ignore
-        headerStyle: { backgroundColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}` },
-        //@ts-ignore
-        headerTintColor: `${Colors[colorScheme ?? 'dark'].backgroundColor}`,
-        headerTitleStyle: { fontWeight: 'bold', fontSize: 18 },
-        headerShadowVisible: false,
-        headerTitleAlign: 'left',
-        headerShown: true,
-        
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View className="flex flex-row me-4">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
+      ),
+      title: "Add Supplier",
+      headerStyle: {
+        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+      },
+      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
+      headerShadowVisible: false,
+      headerTitleAlign: "center",
+      headerShown: true,
     });
-    }, [navigation,isPhoto]);
+  }, [navigation]);
 
   const [form, setForm] = useState({
-    name:"",
-    email:"",
-    code:"",
-    company:"",
-    // products"",
-    address:"",
-    phone:"",
-    status:"active",
-    aamarId: aamarId,
+    name: "",
+    email: "",
+    company: "",
+    balance: "",
+    address: "",
+    phone: "",
+    status: "active",
     warehouse: warehouse,
   });
-
-
-
-
-  console.log("CUSTOMER DATA",form)
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -81,89 +81,81 @@ const AddSupplier = () => {
     }
   };
 
-
-  
   const handleCreateSupplier = async () => {
     try {
-      const response = await addNewSupplier(form).unwrap();
-      console.log('Supplier added successfully:', response);
+      // console.log("FORM DATA", form);
+      const response = await createSupplier(form).unwrap();
+      console.log("Supplier added successfully:", response);
       router.back();
     } catch (error) {
-      console.error('Error adding Supplier:', error);
+      console.error("Error adding Supplier:", error);
     }
-  }
+  };
 
   return (
-    <ScrollView className='flex-1 bg-dark-200 p-6'>
-      
-        <View>
-        <TouchableOpacity onPress={pickImage} className="flex justify-center items-center mb-310">
-            <Image source={profile} className="w-48 h-48 rounded-full" />
+    <ScrollView className="flex-1 bg-dark p-4">
+      <View>
+        <TouchableOpacity
+          onPress={pickImage}
+          className="flex justify-center items-center mb-2"
+        >
+          <Image source={profile} className="w-40 h-40 rounded-full" />
         </TouchableOpacity>
       </View>
-       
+      <Text className="text-white text-md font-regular">Customer name</Text>
       <TextInput
-        placeholder="Supplier Name"
+        placeholder="Customer Name"
         value={form.name}
-        onChangeText={(value) =>  handleInputChange( "name", value )}
-        underlineColorAndroid="transparent"
+        onChangeText={(value) => handleInputChange("name", value)}
         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Phone </Text>
 
       <TextInput
         placeholder="Phone no"
         value={form.phone}
-        onChangeText={(value) => handleInputChange('phone', value)}
-         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+        onChangeText={(value) => handleInputChange("phone", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      
+
+      <Text className="text-white text-md font-regular">Email </Text>
       <TextInput
-        placeholder="Company"
-        value={form.company}
-        onChangeText={(value) => handleInputChange('company', value)}
-         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+        placeholder="Email"
+        value={form.email}
+        onChangeText={(value) => handleInputChange("email", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Company name </Text>
+      <TextInput
+        placeholder="Company name"
+        value={form.company}
+        onChangeText={(value) => handleInputChange("company", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
+      <Text className="text-white text-md font-regular">Address </Text>
       <TextInput
         placeholder="Address"
         value={form.address}
-        onChangeText={(value) => handleInputChange('address', value)}
-         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+        onChangeText={(value) => handleInputChange("address", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Opening balance </Text>
       <TextInput
-        placeholder="Opening Balance"
-        value={form.address}
-        onChangeText={(value) => handleInputChange('openingBalance', value)}
-         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+        placeholder="Opening balance"
+        value={form.balance}
+        onChangeText={(value) => handleInputChange("balance", value)}
+        className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <View className='flex flex-row gap-2 justify-between items-center'>
-        <View className='flex-1'>
-          <TextInput
-            placeholder="Code"
-            value={form.code}
-            onChangeText={(value) => handleInputChange('code', value)}
-            className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200 font-based"
-          />
-        </View>
-        <View className='flex-1'>
-          <CustomDropdown
-          data={status}
-          value={form.status}
-          placeholder='Status'
-          mode='modal'
-          search={false}
-          setValue={(value) => handleInputChange('status', value)}
-          />
-        </View>
-      </View>
 
-      
-
-      <TouchableOpacity  onPress={ handleCreateSupplier} className="h-16 justify-center items-center rounded-full bg-primary mt-8">
-        <Text className="text-white text-center text-xl font-pmedium">Add Supplier</Text>
+      <TouchableOpacity
+        onPress={handleCreateSupplier}
+        className="h-14 justify-center items-center rounded-full bg-primary mt-2"
+      >
+        <Text className="text-black-200 text-center text-md font-regular">
+          Add Customer
+        </Text>
       </TouchableOpacity>
     </ScrollView>
-  )
-}
-export default AddSupplier
-
-
+  );
+};
+export default AddSupplier;

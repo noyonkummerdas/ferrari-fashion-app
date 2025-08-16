@@ -2,7 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
 import { router } from "expo-router";
+<<<<<<< HEAD
 
+=======
+// import { StatusBar } from "expo-status-bar";
+>>>>>>> c2424b8 (Status bar color)
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useState } from "react";
 import {
@@ -182,7 +186,6 @@ export default function PosDashboard() {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#1f2937" />
       <ScrollView
         className="flex-1 bg-black-700 p-4"
         refreshControl={
@@ -248,8 +251,24 @@ export default function PosDashboard() {
           <PaymentChart />
         </View>
 
+<<<<<<< HEAD
         <StatusBar style="light" />
       </ScrollView>
     </>
+=======
+      {/* Stats Grid */}
+      <StatsGrid stats={statsData} />
+
+      {/* Payment & Collections Chart */}
+      <View className="mt-4">
+        <Text className="text-white text-lg font-pbold mb-3">
+          Payments & Collections
+        </Text>
+        <PaymentChart />
+      </View>
+
+      <StatusBar style="light" />
+    </ScrollView>
+>>>>>>> c2424b8 (Status bar color)
   );
 }

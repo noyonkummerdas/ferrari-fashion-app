@@ -161,10 +161,9 @@ const Customers = () => {
               onPress={() => router.push(`/customer/details/${cdata._id}`)}
             >
               <View className="flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  ">
-                <View>
-                  <Text className="text-white w-[178px] text-lg ">
-                    {cdata.name}
-                  </Text>
+                <View className="flex flex-row justify-between items-center gap-2">
+                  <Text className="text-white text-lg ">{cdata.name}</Text>
+                  <Text className="text-primary text-lg ">{cdata.status}</Text>
                 </View>
                 <View className="flex flex-row justify-between items-center gap-2">
                   <Text className="text-white text-base item-center">
@@ -175,7 +174,7 @@ const Customers = () => {
                     />
                     {cdata.phone}
                   </Text>
-                  <Text className="text-primary font-2xl">
+                  <Text className="text-white text-lg">
                     {cdata.balance ?? 0}
                   </Text>
                 </View>
