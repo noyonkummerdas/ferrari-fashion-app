@@ -3,19 +3,19 @@ import { Image, Text, TouchableOpacity, View } from "react-native";
 
 interface StockListItemProps {
   id: string;
-  name: string;
+  style: string;
   code: string;
-  price: string;
-  image?: any;
+  openingStock: number;
+  photo: string;
   onPress?: () => void;
 }
 
 export const StockListItem: React.FC<StockListItemProps> = ({
   id,
-  name,
+  style,
   code,
-  price,
-  image,
+  openingStock,
+  photo,
   onPress,
 }) => {
   const productImage = require("../assets/images/product.jpg");
@@ -29,7 +29,7 @@ export const StockListItem: React.FC<StockListItemProps> = ({
       {/* Product Image */}
       <View className="mr-4">
         <Image
-          source={image || productImage}
+          source={photo || productImage}
           className="w-12 h-12 rounded-lg"
           resizeMode="cover"
         />
@@ -37,13 +37,13 @@ export const StockListItem: React.FC<StockListItemProps> = ({
 
       {/* Product Info */}
       <View className="flex-1">
-        <Text className="text-white text-base font-pmedium mb-1">{name}</Text>
+        <Text className="text-white text-base font-pmedium mb-1">{style}</Text>
         <Text className="text-gray-400 text-sm">Code: {code}</Text>
       </View>
 
       {/* Price */}
       <View className="items-end">
-        <Text className="text-primary text-lg font-pbold">৳{price}</Text>
+        <Text className="text-primary text-lg font-pbold">{openingStock}</Text>
       </View>
     </TouchableOpacity>
   );

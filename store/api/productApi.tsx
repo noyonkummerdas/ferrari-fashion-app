@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Product } from "../../models/productModel";
 
-import { BASE_URL } from '../../constants/baseUrl';
+import { Product } from "@/types/product";
+import { BASE_URL } from "../../constants/baseUrl";
 
 // console.log(BASE_URL);
 
@@ -10,9 +10,38 @@ export const ProductApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   tagTypes: ["Product"],
   endpoints: (builder) => ({
-    
+    addProduct: builder.mutation<{}, Product>({
+      query: (product) => ({
+        url: "/product",
+        method: "POST",
+        body: product,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+    //new
+    products: builder.query<Product[], any>({
+      query: ({ q }) => `/product/search/${q}`,
+      providesTags: ["Product"],
+    }),
+
+    product: builder.query<Product, any>({
+      query: ({ _id }) => `/product/${_id}`,
+      providesTags: ["Product"],
+    }),
+
+    updateProduct: builder.mutation<void, Product>({
+      query: ({ _id, ...rest }) => ({
+        url: `/product/${_id}`,
+        method: "PUT",
+        body: rest,
+      }),
+      invalidatesTags: ["Product"],
+    }),
+
+    // ========================
+
     productsExport: builder.query<Product[], any>({
-      query: ({warehouse}) => `/product/export/${warehouse}`,
+      query: ({ warehouse }) => `/product/export/${warehouse}`,
       providesTags: ["Product"],
     }),
     productCount: builder.query<Product[], void>({
@@ -23,22 +52,15 @@ export const ProductApi = createApi({
       query: () => "/product/best-seller",
       providesTags: ["Product"],
     }),
-    product: builder.query<Product, string>({
-      query: (_id) => `/product/${_id}`,
-      providesTags: ["Product"],
-    }),
+
     productMovement: builder.query<Product, any>({
       query: ({ startDate, endDate }) =>
         `/product/movement/:${startDate}/:${endDate}`,
       providesTags: ["Product"],
     }),
-    //new
-    products: builder.query<Product[], any>({
-      query: ({warehouse,aamarId,q,limit}) => `/mobileApp/product/${limit}/${warehouse}/${aamarId}/${q}`,
-      providesTags: ["Product"],
-    }),
+
     productDetailsById: builder.query<Product[], any>({
-      query: ({id}) => `/mobileApp/product/details/${id}`,
+      query: ({ id }) => `/mobileApp/product/details/${id}`,
       providesTags: ["Product"],
     }),
     uniqueAc: builder.query<Product, any>({
@@ -46,14 +68,7 @@ export const ProductApi = createApi({
         `/product/uniqueAc/${aamarId}/${article_code}`,
       providesTags: ["Product"],
     }),
-    addProduct: builder.mutation<{}, Product>({
-      query: (product) => ({
-        url: "/mobileApp/product/create",
-        method: "POST",
-        body: product,
-      }),
-      invalidatesTags: ["Product"],
-    }),
+
     //new
     productPromo: builder.query<Product, string>({
       query: (_id) => `/product/promo-update/${_id}`,
@@ -83,15 +98,7 @@ export const ProductApi = createApi({
       // query: ({page, size, q}) => `/product`,
       providesTags: ["Product"],
     }),
-    
-    updateProduct: builder.mutation<void, Product>({
-      query: ({ _id, ...rest }) => ({
-        url: `/mobileApp/product/update/${_id}`,
-        method: "PUT",
-        body: rest,
-      }),
-      invalidatesTags: ["Product"],
-    }),
+
     updateProductPrice: builder.mutation<void, Product>({
       query: ({ _id, ...rest }) => ({
         url: `/product/price/${_id}`,
@@ -114,12 +121,12 @@ export const {
   //new
   useUniqueAcQuery,
   useProductsQuery,
+  useProductQuery,
   useProductDetailsByIdQuery,
   //new
   useProductsExportQuery,
   useProductPopularQuery,
   useProductMovementQuery,
-  useProductQuery,
   useProductPromoQuery,
   useProductInfoQuery,
   useProductPriceQuery,
