@@ -122,7 +122,7 @@ const UpdateSupplier = () => {
     refetch();
   }, [id]);
   // console.log("FORM DATA",form)
-  // console.log("ID",data)
+  // console.log("ID",data)/
 
   const handleUpdareSupplier = async () => {
     try {
