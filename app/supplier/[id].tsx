@@ -1,34 +1,23 @@
-import {
-  View,
-  Text,
-  useColorScheme,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Button,
-  TextInput,
-  StyleSheet,
-} from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/constants/Colors";
-import { Dropdown } from "react-native-element-dropdown";
-
-import * as ImagePicker from "expo-image-picker";
-import CustomDropdown from "@/components/CustomDropdown";
-import { useAddProductMutation } from "@/store/api/productApi";
-import profile from "../../assets/images/profile.jpg";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  useAddCustomerMutation,
-  useGetCustomerByIdQuery,
-  useUpdateCustomerMutation,
-} from "@/store/api/customerApi";
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
+
 import {
   useSupplierQuery,
   useUpdateSupplierMutation,
 } from "@/store/api/supplierApi";
+import * as ImagePicker from "expo-image-picker";
+import profile from "../../assets/images/profile.jpg";
 
 const UpdateSupplier = () => {
   const { userInfo } = useGlobalContext();
@@ -118,14 +107,13 @@ const UpdateSupplier = () => {
       ...form,
       _id: id,
       name: data?.name || "",
+      // code: data?.code || "",
       email: data?.email || "",
-      code: data?.code || "",
       company: data?.company || "",
-      address: data?.address || "",
       phone: data?.phone || "",
-      // photo:"",
-      aamarId: aamarId,
-      warehouse: warehouse,
+      photo: "",
+      address: data?.address || "",
+      balance: data?.balance || "",
       status: data?.status || "active",
     });
   }, [data, isSuccess]);
@@ -136,85 +124,77 @@ const UpdateSupplier = () => {
   // console.log("FORM DATA",form)
   // console.log("ID",data)
 
-  const handleUpdateSupplier = async () => {
+  const handleUpdareSupplier = async () => {
     try {
       const response = await updateSupplier(form).unwrap();
-      console.log("Customer Update successfully:", response);
+      console.log("Supplier Update successfully:", response);
       router.back();
     } catch (error) {
-      console.error("Error adding customer:", error);
+      console.error("Error adding Supplier:", error);
     }
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-6">
+    <ScrollView className="flex-1 bg-dark p-6">
       <View>
         <TouchableOpacity
           onPress={pickImage}
-          className="flex justify-center items-center mb-10"
+          className="flex justify-center items-center mb-2"
         >
-          <Image source={profile} className="w-48 h-48 rounded-full" />
+          <Image source={profile} className="w-32 h-32 rounded-full" />
         </TouchableOpacity>
       </View>
 
+      <Text className="text-white text-md font-regular">Customer name</Text>
       <TextInput
-        placeholder="Supplier Name"
+        placeholder="Customer Name"
         value={form.name}
         onChangeText={(value) => handleInputChange("name", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Phone </Text>
 
       <TextInput
-        placeholder="Pnone no"
+        placeholder="Phone no"
         value={form.phone}
         onChangeText={(value) => handleInputChange("phone", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
+      <Text className="text-white text-md font-regular">Email </Text>
       <TextInput
         placeholder="Email"
         value={form.email}
         onChangeText={(value) => handleInputChange("email", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Company name </Text>
       <TextInput
-        placeholder="Company"
+        placeholder="Company name"
         value={form.company}
         onChangeText={(value) => handleInputChange("company", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Address </Text>
       <TextInput
         placeholder="Address"
         value={form.address}
         onChangeText={(value) => handleInputChange("address", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <View className="flex flex-row gap-2 justify-between items-center">
-        <View className="flex-1">
-          <TextInput
-            placeholder="Code"
-            value={form.code}
-            onChangeText={(value) => handleInputChange("code", value)}
-            className="border border-gray-300 rounded-full p-4 mb-3"
-          />
-        </View>
-        <View className="flex-1">
-          <CustomDropdown
-            data={status}
-            value={form.status}
-            placeholder="Status"
-            mode="modal"
-            search={false}
-            setValue={(value) => handleInputChange("status", value)}
-          />
-        </View>
-      </View>
+      <Text className="text-white text-md font-regular">Opening balance </Text>
+      <TextInput
+        placeholder="Opening balance"
+        value={form.balance}
+        onChangeText={(value) => handleInputChange("balance", value)}
+        className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
 
       <TouchableOpacity
-        onPress={handleUpdateSupplier}
-        className="h-16 justify-center items-center rounded-full bg-primary mt-8"
+        onPress={handleUpdareSupplier}
+        className="h-14 justify-center items-center rounded-full bg-primary mt-4"
       >
-        <Text className="text-white text-center text-xl font-pmedium">
+        <Text className="text-dark text-center text-lg font-pmedium">
           Update Supplier
         </Text>
       </TouchableOpacity>
