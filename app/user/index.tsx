@@ -140,6 +140,7 @@ const Profile = () => {
 
   return (
     <View>
+
       <StatusBar style="light" backgroundColor="#1f2937" />
       {data?.map((user) => (
         <TouchableOpacity
@@ -147,11 +148,13 @@ const Profile = () => {
           onPress={() => router.push(`/user/${user._id}`)}
         >
           <View key={user.id} className="bg-black-200 rounded-lg p-4 mt-4">
+
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-full bg-orange-500 items-center justify-center mr-4">
                 <Ionicons name="person" size={24} color="#ffffff" />
               </View>
               <View className="flex-1">
+
                 <Text className="text-yellow-400 text-lg font-bold">
                   {user.name}
                 </Text>
@@ -160,6 +163,7 @@ const Profile = () => {
               <View className="flex-col items-end">
                 <Text className=" text-sm text-primary">{user.status}</Text>
                 <Text className="text-white text-sm">{user.phone}</Text>
+
               </View>
             </View>
           </View>
