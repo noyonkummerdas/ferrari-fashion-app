@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { Customer } from "../../models/customerModel";
 
-import { BASE_URL } from '../../constants/baseUrl';
+import { BASE_URL } from "../../constants/baseUrl";
 
 // console.log(BASE_URL);
 
@@ -16,24 +16,23 @@ export const CustomerApi = createApi({
     }),
     // new
     CustomerList: builder.query<Customer[], any>({
-      query: ({aamarId,limit,q}) => `/mobileApp/customer/all/${limit}/${aamarId}/${q}`,
+      query: ({ q }) => `/customer/search/${q}`,
       providesTags: ["Customer"],
     }),
     GetCustomerById: builder.query<Customer, any>({
-      query: ({ id, aamarId }) =>
-        `/customer/getCustomerById/${aamarId}/${id}`,
+      query: ({ id }) => `/customer/${id}`,
       providesTags: ["Customer"],
     }),
     // new
     CustomersExport: builder.query<Customer[], any>({
-      query: ({warehouse}) => `/customer/export/${warehouse}`,
+      query: ({ warehouse }) => `/customer/export/${warehouse}`,
       providesTags: ["Customer"],
     }),
     Customer: builder.query<Customer, string>({
       query: (id) => `/customer/select/${id}`,
       providesTags: ["Customer"],
     }),
-    
+
     customerCount: builder.query<Customer[], void>({
       query: () => "/customer/count",
 
@@ -50,14 +49,15 @@ export const CustomerApi = createApi({
       providesTags: ["Customer"],
     }),
     customerPagenation: builder.query<Customer, any>({
-      query: ({ page, size,warehouse, q }) => `/customer/all/${page}/${size}/${warehouse}?q=${q}`,
+      query: ({ page, size, warehouse, q }) =>
+        `/customer/all/${page}/${size}/${warehouse}?q=${q}`,
       // query: ({page, size, q}) => `/Customer`,
       providesTags: ["Customer"],
     }),
     //new
     addCustomer: builder.mutation<{}, Customer>({
       query: (Customer) => ({
-        url: "/mobileApp/customer/create",
+        url: "/customer/",
         method: "POST",
         body: Customer,
       }),

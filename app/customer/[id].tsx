@@ -1,30 +1,23 @@
-import {
-  View,
-  Text,
-  useColorScheme,
-  TouchableOpacity,
-  ScrollView,
-  Image,
-  Button,
-  TextInput,
-  StyleSheet,
-} from "react-native";
-import React, { useEffect, useLayoutEffect, useState } from "react";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/constants/Colors";
-import { Dropdown } from "react-native-element-dropdown";
-
-import * as ImagePicker from "expo-image-picker";
-import CustomDropdown from "@/components/CustomDropdown";
-import { useAddProductMutation } from "@/store/api/productApi";
-import profile from "../../assets/images/profile.jpg";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  useAddCustomerMutation,
+  Image,
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  useColorScheme,
+  View,
+} from "react-native";
+
+import {
   useGetCustomerByIdQuery,
   useUpdateCustomerMutation,
 } from "@/store/api/customerApi";
+import { Ionicons } from "@expo/vector-icons";
+import * as ImagePicker from "expo-image-picker";
+import profile from "../../assets/images/profile.jpg";
 
 const updateCustomer = () => {
   const { userInfo } = useGlobalContext();
@@ -46,31 +39,33 @@ const updateCustomer = () => {
   ]);
 
   const colorScheme = useColorScheme();
+
   const navigation = useNavigation();
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useGetCustomerByIdQuery({
       id: id,
-      aamarId,
       forceRefetch: true,
     });
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      // <View className='me-4' >
-      //     <TouchableOpacity onPress={()=>setIsPhoto(!isPhoto)} className='flex flex-row justify-center items-center gap-2'>
-      //       <Ionicons name={isPhoto ? "image-sharp" : "image-outline"} size={24}  color="#f2652d" />
-      //       <Text className='text-primary text-xl font-pmedium'>Photo</Text>
-      //     </TouchableOpacity>
-      // </View>
-      // ),
+      headerLeft: () => (
+        <View className="me-4">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="flex flex-row justify-center items-center gap-2"
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      ),
       title: "Update Customer",
       //@ts-ignore
       headerStyle: {
-        backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+        backgroundColor: `#000000`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
       },
       //@ts-ignore
-      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTintColor: `#ffffff`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
       headerTitleAlign: "left",
@@ -79,33 +74,18 @@ const updateCustomer = () => {
   }, [navigation, isPhoto]);
 
   const [form, setForm] = useState({
-    name: data?.name || "",
-    email: data?.name || "",
-    membership: "gold",
-    gender: "",
-    address: [
-      {
-        type: "Home",
-        holdingNo: "",
-        street: "",
-        city: "",
-        town: "",
-        division: "",
-        state: "",
-        zipCode: "",
-        country: "Bangladesh",
-      },
-    ],
-    type: "regular",
-    point: 0,
+    name: "",
+    email: "",
+    address: "",
     phone: "",
     photo: "",
+    balance: "",
+    company: "",
     status: "active",
-    aamarId: aamarId,
     warehouse: warehouse,
   });
 
-  console.log("CUSTOMER DATA", form);
+  // console.log("CUSTOMER DATA", form);
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -130,10 +110,11 @@ const updateCustomer = () => {
       _id: id,
       name: data?.name || "",
       email: data?.email || "",
-      gender: data?.gender || "",
+      company: data?.company || "",
       phone: data?.phone || "",
       photo: "",
-      aamarId: aamarId,
+      address: data?.address || "",
+      balance: data?.balance || "",
       warehouse: warehouse,
       status: data?.status || "active",
     });
@@ -156,64 +137,66 @@ const updateCustomer = () => {
   };
 
   return (
-    <ScrollView className="flex-1 bg-white p-6">
+    <ScrollView className="flex-1 bg-dark p-6">
       <View>
         <TouchableOpacity
           onPress={pickImage}
-          className="flex justify-center items-center mb-10"
+          className="flex justify-center items-center mb-2"
         >
-          <Image source={profile} className="w-48 h-48 rounded-full" />
+          <Image source={profile} className="w-32 h-32 rounded-full" />
         </TouchableOpacity>
       </View>
 
+      <Text className="text-white text-md font-regular">Customer name</Text>
       <TextInput
         placeholder="Customer Name"
         value={form.name}
         onChangeText={(value) => handleInputChange("name", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
+      <Text className="text-white text-md font-regular">Phone </Text>
 
       <TextInput
-        placeholder="Pnone no"
+        placeholder="Phone no"
         value={form.phone}
         onChangeText={(value) => handleInputChange("phone", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
+      <Text className="text-white text-md font-regular">Email </Text>
       <TextInput
         placeholder="Email"
         value={form.email}
         onChangeText={(value) => handleInputChange("email", value)}
-        className="border border-gray-300 rounded-full p-4 mb-3"
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <View className="flex flex-row gap-2 justify-between items-center">
-        <View className="flex-1">
-          <CustomDropdown
-            data={gender}
-            value={form.gender}
-            placeholder="Gender"
-            search={false}
-            mode="modal"
-            setValue={(value) => handleInputChange("gender", value)}
-          />
-        </View>
-        <View className="flex-1">
-          <CustomDropdown
-            data={status}
-            value={form.status}
-            placeholder="Status"
-            mode="modal"
-            search={false}
-            setValue={(value) => handleInputChange("status", value)}
-          />
-        </View>
-      </View>
+      <Text className="text-white text-md font-regular">Company name </Text>
+      <TextInput
+        placeholder="Company name"
+        value={form.company}
+        onChangeText={(value) => handleInputChange("company", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
+      <Text className="text-white text-md font-regular">Address </Text>
+      <TextInput
+        placeholder="Address"
+        value={form.address}
+        onChangeText={(value) => handleInputChange("address", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
+      <Text className="text-white text-md font-regular">Opening balance </Text>
+      <TextInput
+        placeholder="Opening balance"
+        value={form.balance}
+        onChangeText={(value) => handleInputChange("balance", value)}
+        className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
 
       <TouchableOpacity
         onPress={handleCreateCustomer}
-        className="h-16 justify-center items-center rounded-full bg-primary mt-8"
+        className="h-14 justify-center items-center rounded-full bg-primary mt-4"
       >
-        <Text className="text-white text-center text-xl font-pmedium">
+        <Text className="text-dark text-center text-lg font-pmedium">
           Update Customer
         </Text>
       </TouchableOpacity>
