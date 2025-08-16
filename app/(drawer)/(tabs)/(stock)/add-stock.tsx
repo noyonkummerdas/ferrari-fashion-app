@@ -1,3 +1,6 @@
+import { DatePickerField } from "@/components/DatePickerField";
+import { ImageUploader } from "@/components/ImageUploader";
+import { useAddProductMutation } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import React, { useState } from "react";
@@ -9,17 +12,17 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { DatePickerField } from "../../../../components/DatePickerField";
-import { ImageUploader } from "../../../../components/ImageUploader";
 
 const AddStock = () => {
   const [formData, setFormData] = useState({
     style: "",
     code: "",
-    quantity: "",
+    openingStock: "",
     date: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD format
-    image: null,
+    photo: null,
   });
+
+  const [createProduct] = useAddProductMutation();
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({
@@ -28,46 +31,32 @@ const AddStock = () => {
     }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validate required fields
-    if (!formData.style || !formData.code || !formData.quantity) {
+    if (!formData.style || !formData.code || !formData.openingStock) {
       Alert.alert("Error", "Please fill in all required fields");
       return;
     }
 
     // Console log all form data
-    console.log("=== ADD STOCK FORM DATA ===");
-    console.log("Style:", formData.style);
-    console.log("Code:", formData.code);
-    console.log("Quantity:", formData.quantity);
-    console.log("Date:", formData.date);
-    console.log("Image URI:", formData.image);
-    console.log("Complete Form Data:", formData);
-    console.log("============================");
-
-    Alert.alert("Success", "Stock item added successfully!", [
-      {
-        text: "OK",
-        onPress: () => router.back(),
-      },
-    ]);
+    // console.log("=== ADD STOCK FORM DATA ===");
+    // console.log("Style:", formData.style);
+    // console.log("Code:", formData.code);
+    // console.log("Quantity:", formData.openingStock);
+    // console.log("Date:", formData.date);
+    // console.log("Image URI:", formData.photo);
+    // // console.log("Complete Form Data:", formData);
+    // console.log("============================");
+    const response = await createProduct(formData);
+    console.log("Response:", response);
+    router.back();
   };
 
   return (
-    <ScrollView className="flex-1 bg-black">
-      <View className="p-4">
-        {/* Header */}
-        <View className="mb-6">
-          <Text className="text-white text-2xl font-pbold mb-2">
-            Add New Stock Item
-          </Text>
-          <Text className="text-gray-400">
-            Fill in the details to add a new item to your inventory
-          </Text>
-        </View>
-
+    <ScrollView className="flex-1 bg-dark">
+      <View className="">
         {/* Form */}
-        <View className="bg-black-200 p-4 rounded-lg mb-6">
+        <View className="bg-dark p-4 rounded-lg">
           {/* Styles Input */}
           <View className="mb-4">
             <Text className="text-white text-base font-pmedium mb-2">
@@ -126,8 +115,10 @@ const AddStock = () => {
               />
               <TextInput
                 className="flex-1 text-white text-base"
-                value={formData.quantity}
-                onChangeText={(value) => handleInputChange("quantity", value)}
+                value={formData.openingStock}
+                onChangeText={(value) =>
+                  handleInputChange("openingStock", value)
+                }
                 placeholder="Enter quantity"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"

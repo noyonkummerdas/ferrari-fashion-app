@@ -1,58 +1,33 @@
+import { SearchBar } from "@/components/SearchBar";
+import { StockListItem } from "@/components/StockListItem";
+import { useProductsQuery } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   RefreshControl,
   ScrollView,
   TouchableOpacity,
   View,
 } from "react-native";
-import { SearchBar } from "../../../../components/SearchBar";
-import { StockListItem } from "../../../../components/StockListItem";
-
-// Sample stock data matching your screenshot
-const stockData = [
-  { id: "1", name: "Style Hood", code: "001", price: "234234", quantity: "50" },
-  { id: "2", name: "Style Hood", code: "002", price: "234234", quantity: "30" },
-  { id: "3", name: "Style Hood", code: "003", price: "234234", quantity: "25" },
-  {
-    id: "4",
-    name: "Classic T-Shirt",
-    code: "004",
-    price: "150000",
-    quantity: "100",
-  },
-  { id: "5", name: "Style Hood", code: "005", price: "234234", quantity: "15" },
-  {
-    id: "6",
-    name: "Denim Jacket",
-    code: "006",
-    price: "450000",
-    quantity: "8",
-  },
-  { id: "7", name: "Style Hood", code: "007", price: "234234", quantity: "40" },
-  {
-    id: "8",
-    name: "Cotton Polo",
-    code: "008",
-    price: "180000",
-    quantity: "60",
-  },
-  { id: "9", name: "Style Hood", code: "009", price: "234234", quantity: "20" },
-  {
-    id: "10",
-    name: "Casual Shirt",
-    code: "010",
-    price: "200000",
-    quantity: "35",
-  },
-];
 
 const StockIndex = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
 
+  const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    useProductsQuery({
+      q: searchQuery || "all",
+    });
+
+  useEffect(() => {
+    if (searchQuery) {
+      refetch();
+    }
+  }, [searchQuery]);
+
+  // console.log("STOCK", data, error, isLoading, isFetching, isSuccess);
   const onRefresh = () => {
     setRefreshing(true);
     // Simulate API call
@@ -61,28 +36,15 @@ const StockIndex = () => {
     }, 1500);
   };
 
-  const handleItemPress = (item: any) => {
-    console.log("Selected item:", item);
+  const handleItemPress = (id) => {
+    // console.log("Selected item:", item);
     // Navigate to stock details
-    router.push(`/(drawer)/(tabs)/(stock)/${item.id}`);
+    router.push(`/(drawer)/(tabs)/(stock)/${id}`);
   };
 
   const handleAddStock = () => {
     router.push("/(drawer)/(tabs)/(stock)/add-stock");
   };
-
-  // Filter stock data based on search query
-  const filteredStockData = useMemo(() => {
-    if (!searchQuery.trim()) {
-      return stockData;
-    }
-
-    return stockData.filter(
-      (item) =>
-        item.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        item.code.toLowerCase().includes(searchQuery.toLowerCase()),
-    );
-  }, [searchQuery]);
 
   return (
     <View className="flex-1 bg-dark">
@@ -102,16 +64,18 @@ const StockIndex = () => {
         {/* <Text className="text-red-500">TEST</Text> */}
 
         {/* Stock List */}
-        {filteredStockData.map((item) => (
-          <StockListItem
-            key={item.id}
-            id={item.id}
-            name={item.name}
-            code={item.code}
-            price={item.price}
-            onPress={() => handleItemPress(item)}
-          />
-        ))}
+        {data?.length > 0 &&
+          data?.map((item) => (
+            <StockListItem
+              key={item._id}
+              id={item._id}
+              style={item.style}
+              code={item.code}
+              photo={item.photo}
+              openingStock={item.openingStock}
+              onPress={() => handleItemPress(item._id)}
+            />
+          ))}
         <StatusBar style="light" />
       </ScrollView>
 

@@ -1,6 +1,7 @@
+import { useProductQuery } from "@/store/api/productApi";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -25,13 +26,21 @@ const StockDetails = () => {
     stock: "12345",
   });
 
+  const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    useProductQuery({
+      _id: id,
+    });
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
+
+  // console.log("PRODUCT", id, data, error, isLoading, isFetching, isSuccess);
+
   const productImage = require("../../../../assets/images/product.jpg");
 
   const handleEdit = () => {
-    router.push({
-      pathname: "/(drawer)/(tabs)/(stock)/update-stock",
-      params: { id: stockItem.id },
-    });
+    router.push(`/(drawer)/(tabs)/(stock)/update/${data?._id}`);
   };
 
   const handleAddStock = () => {
@@ -48,12 +57,12 @@ const StockDetails = () => {
     setStockInput("");
     setShowAddDialog(false);
 
-    console.log("=== ADD STOCK ===");
-    console.log("Stock ID:", stockItem.id);
-    console.log("Added Amount:", addAmount);
-    console.log("Previous Stock:", currentStock);
-    console.log("New Stock:", newStock);
-    console.log("=================");
+    // console.log("=== ADD STOCK ===");
+    // console.log("Stock ID:", stockItem.id);
+    // console.log("Added Amount:", addAmount);
+    // console.log("Previous Stock:", currentStock);
+    // console.log("New Stock:", newStock);
+    // console.log("=================");
   };
 
   const handleRemoveStock = () => {
@@ -70,12 +79,12 @@ const StockDetails = () => {
     setStockInput("");
     setShowRemoveDialog(false);
 
-    console.log("=== REMOVE STOCK ===");
-    console.log("Stock ID:", stockItem.id);
-    console.log("Removed Amount:", removeAmount);
-    console.log("Previous Stock:", currentStock);
-    console.log("New Stock:", newStock);
-    console.log("====================");
+    // console.log("=== REMOVE STOCK ===");
+    // console.log("Stock ID:", data?._id);
+    // console.log("Removed Amount:", removeAmount);
+    // console.log("Previous Stock:", currentStock);
+    // console.log("New Stock:", newStock);
+    // console.log("====================");
   };
 
   const StockDialog = ({
@@ -170,19 +179,19 @@ const StockDetails = () => {
       </View>
 
       {/* Product Info Section */}
-      <View
-        className="bg-black flex-1 rounded-t-3xl px-6 pt-8"
-        style={{ marginTop: -30 }}
-      >
+      <View className="bg-black flex-1 px-6 pt-8">
         {/* Title */}
         <Text className="text-white text-2xl font-pbold mb-8">
-          Style: {stockItem.style}
+          Style: {data?.style}
         </Text>
 
         {/* Stock and Code Info */}
         <View className="flex-row justify-between mb-8">
           {/* Stock Section */}
           <View className="flex-1 mr-6">
+            <Text className="text-yellow-500 text-lg font-pmedium mb-4">
+              Stock
+            </Text>
             <View className="flex-row items-center mb-3">
               <MaterialIcons
                 name="inventory"
@@ -190,29 +199,28 @@ const StockDetails = () => {
                 color="#FDB714"
                 style={{ marginRight: 8 }}
               />
-              <Text className="text-yellow-500 text-lg font-pmedium">
-                Stock
+              <Text className="text-white text-2xl font-pbold items-center">
+                {data?.openingStock}
               </Text>
             </View>
-            <Text className="text-white text-2xl font-pbold">
-              X {stockItem.stock}
-            </Text>
           </View>
 
           {/* Code Section */}
           <View className="flex-1 ml-6">
             <View className="flex-row items-center mb-3">
+              <Text className="text-yellow-500 text-lg font-pmedium">Code</Text>
+            </View>
+            <View className="flex-row items-center">
               <MaterialIcons
                 name="qr-code"
                 size={24}
                 color="#FDB714"
                 style={{ marginRight: 8 }}
               />
-              <Text className="text-yellow-500 text-lg font-pmedium">Code</Text>
+              <Text className="text-white text-2xl font-pbold">
+                {data?.code}
+              </Text>
             </View>
-            <Text className="text-white text-2xl font-pbold">
-              {stockItem.code}
-            </Text>
           </View>
         </View>
 

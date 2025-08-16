@@ -71,7 +71,7 @@ const updateCustomer = () => {
       headerTitleAlign: "left",
       headerShown: true,
     });
-  }, [navigation, isPhoto]);
+  }, [navigation]);
 
   const [form, setForm] = useState({
     name: "",

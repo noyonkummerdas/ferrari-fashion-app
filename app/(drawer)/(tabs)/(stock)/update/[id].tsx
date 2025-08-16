@@ -1,6 +1,10 @@
+import {
+  useProductQuery,
+  useUpdateProductMutation,
+} from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
-import React, { useState } from "react";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -9,20 +13,71 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import { DatePickerField } from "../../../../components/DatePickerField";
-import { ImageUploader } from "../../../../components/ImageUploader";
-
+import { DatePickerField } from "../../../../../components/DatePickerField";
+import { ImageUploader } from "../../../../../components/ImageUploader";
 const UpdateStock = () => {
+  const navigation = useNavigation();
   const { id } = useLocalSearchParams();
 
+  // console.log(id);
+  const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    useProductQuery({
+      _id: id,
+    });
   // Sample existing data (in real app, fetch by id)
   const [formData, setFormData] = useState({
-    style: "Style Hood",
-    code: `00${id}`,
-    quantity: "50",
-    date: "2024-01-01",
-    image: null,
+    _id: "",
+    style: "",
+    code: "",
+    openingStock: 0,
+    date: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD format
+    photo: null as string | null,
   });
+
+  useEffect(() => {
+    refetch();
+  }, [id]);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setFormData({
+        _id: data?._id || "",
+        style: data?.style || "",
+        code: data?.code || "",
+        openingStock: data?.openingStock
+          ? parseInt(data.openingStock.toString()) || 0
+          : 0,
+        date: data?.date || new Date().toISOString().split("T")[0],
+        photo: data?.photo || null,
+      });
+    }
+  }, [isSuccess, data]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View className="me-4">
+          <TouchableOpacity
+            onPress={() => router.back()}
+            className="flex flex-row justify-center items-center gap-2"
+          >
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+        </View>
+      ),
+      title: "Update Customer",
+      //@ts-ignore
+      headerStyle: {
+        backgroundColor: `#000000`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      },
+      //@ts-ignore
+      headerTintColor: `#ffffff`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
+      headerShadowVisible: false,
+      headerTitleAlign: "left",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   const handleInputChange = (field: string, value: any) => {
     setFormData((prev) => ({
@@ -30,48 +85,28 @@ const UpdateStock = () => {
       [field]: value,
     }));
   };
+  const [updateProduct] = useUpdateProductMutation();
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Validate required fields
-    if (!formData.style || !formData.code || !formData.quantity) {
+    if (!formData.style || !formData.code) {
       Alert.alert("Error", "Please fill in all required fields");
       return;
     }
 
-    // Console log all form data
-    console.log("=== UPDATE STOCK FORM DATA ===");
-    console.log("Stock ID:", id);
-    console.log("Style:", formData.style);
-    console.log("Code:", formData.code);
-    console.log("Quantity:", formData.quantity);
-    console.log("Date:", formData.date);
-    console.log("Image URI:", formData.image);
-    console.log("Complete Form Data:", formData);
-    console.log("===============================");
+    // console.log("FORM DATA", formData);
 
-    Alert.alert("Success", "Stock item updated successfully!", [
-      {
-        text: "OK",
-        onPress: () => router.back(),
-      },
-    ]);
+    // Console log all form data
+    const updateStock = await updateProduct(formData).unwrap();
+    console.log("Update Stock", updateStock);
+    router.back();
   };
 
   return (
-    <ScrollView className="flex-1 bg-black">
-      <View className="p-4">
-        {/* Header */}
-        <View className="mb-6">
-          <Text className="text-white text-2xl font-pbold mb-2">
-            Update Stock Item
-          </Text>
-          <Text className="text-gray-400">
-            Modify the details of your inventory item
-          </Text>
-        </View>
-
+    <ScrollView className="flex-1 bg-dark">
+      <View className="">
         {/* Form */}
-        <View className="bg-black-200 p-4 rounded-lg mb-6">
+        <View className="bg-dark p-4 rounded-lg">
           {/* Styles Input */}
           <View className="mb-4">
             <Text className="text-white text-base font-pmedium mb-2">
@@ -117,7 +152,7 @@ const UpdateStock = () => {
           </View>
 
           {/* Quantity Input */}
-          <View className="mb-4">
+          {/* <View className="mb-4">
             <Text className="text-white text-base font-pmedium mb-2">
               Qty <Text className="text-red-500">*</Text>
             </Text>
@@ -130,14 +165,16 @@ const UpdateStock = () => {
               />
               <TextInput
                 className="flex-1 text-white text-base"
-                value={formData.quantity}
-                onChangeText={(value) => handleInputChange("quantity", value)}
+                value={formData.openingStock.toString()}
+                onChangeText={(value) =>
+                  handleInputChange("openingStock", parseInt(value) || 0)
+                }
                 placeholder="Enter quantity"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />
             </View>
-          </View>
+          </View> */}
 
           {/* Date Picker */}
           <DatePickerField
@@ -150,8 +187,8 @@ const UpdateStock = () => {
 
         {/* Media Upload */}
         <ImageUploader
-          image={formData.image}
-          onImageSelected={(uri) => handleInputChange("image", uri)}
+          image={formData.photo}
+          onImageSelected={(uri) => handleInputChange("photo", uri)}
         />
 
         {/* Action Buttons */}
@@ -171,7 +208,7 @@ const UpdateStock = () => {
             activeOpacity={0.8}
           >
             <Ionicons name="checkmark-outline" size={20} color="#000000" />
-            <Text className="text-black font-pbold ml-2">Update Stock</Text>
+            <Text className="text-black font-pbold ml-2">Save Stock</Text>
           </TouchableOpacity>
         </View>
       </View>
