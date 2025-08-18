@@ -23,6 +23,7 @@ import SettingApi from "./api/settingApi";
 import UploadApi from "./api/uploadApi";
 import WarehouseApi from "./api/warehouseApi";
 import settingReducer from "./slice/settingSlice";
+import stockReducer from "./slice/stockSlice";
 import userReducer from "./slice/userSlice";
 
 const persistConfig = {
@@ -34,6 +35,7 @@ const persistConfig = {
 const rootReducers = combineReducers({
   user: userReducer,
   setting: settingReducer,
+  stock: stockReducer,
   [UserApi.reducerPath]: UserApi.reducer,
   [WarehouseApi.reducerPath]: WarehouseApi.reducer,
   [CustomerApi.reducerPath]: CustomerApi.reducer,
@@ -66,6 +68,10 @@ export const store = configureStore({
       UploadApi.middleware,
     ]),
 });
+
+// Export the RootState type
+export type RootState = ReturnType<typeof store.getState>;
+export type AppDispatch = typeof store.dispatch;
 
 export const persistor = persistStore(store);
 export default store;
