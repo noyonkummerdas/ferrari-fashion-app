@@ -1,60 +1,72 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useProductQuery } from "@/store/api/productApi";
+import { useAddStockMutation } from "@/store/api/stockApi";
+import {
+  clearError,
+  clearSuccess,
+  resetStockItem,
+  setError,
+  setLoading,
+  setStockItem,
+  setStockType,
+  setSuccess,
+  updateCurrentStock,
+  updateNote,
+  updateStockQuantity,
+} from "@/store/slice/stockSlice";
+import { RootState } from "@/store/store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams } from "expo-router";
-import React, { useEffect, useState } from "react";
-import {
-  Alert,
-  Image,
-  Modal,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from "react-native";
+import { StatusBar } from "expo-status-bar";
+import React, { useEffect } from "react";
+import { Image, Text, TouchableOpacity, View } from "react-native";
+import { useDispatch, useSelector } from "react-redux";
 
 const StockDetails = () => {
   const { id } = useLocalSearchParams();
-  const [showAddDialog, setShowAddDialog] = useState(false);
-  const [showRemoveDialog, setShowRemoveDialog] = useState(false);
-  const [stockInput, setStockInput] = useState("");
   const { userInfo } = useGlobalContext();
+  const dispatch = useDispatch();
 
-  const { data, error, isLoading, isFetching, isSuccess, refetch } =
-    useProductQuery({
-      _id: id,
-    });
+  // Redux selectors
+  const { stockItem, isLoading, error, success, successMessage } = useSelector(
+    (state: RootState) => state.stock,
+  );
 
-  const [stockItem, setStockItem] = useState({
-    product: id,
-    stock: 0,
-    note: "",
-    openingStock: 0,
-    type: "",
-    status: "active",
-    currentStock: 0,
-    user: userInfo.id,
-    warehouse: userInfo.warehouse,
+  // API hooks
+  const [addStock] = useAddStockMutation();
+
+  const {
+    data,
+    error: productError,
+    isLoading: productLoading,
+    isFetching,
+    isSuccess,
+    refetch,
+  } = useProductQuery({
+    _id: id,
   });
-  // console.log("Stock:", data);
 
   useEffect(() => {
-    console.log("Stock:", stockItem);
     refetch();
   }, [id]);
 
   useEffect(() => {
-    setStockItem({
-      ...stockItem,
-      product: id,
-      openingStock: data?.currentStock || 0,
-      currentStock: data?.currentStock || 0,
-      type: "",
-      status: "active",
-      user: userInfo.id,
-      warehouse: userInfo.warehouse,
-    });
-  }, [data, isSuccess]);
+    if (data && isSuccess) {
+      dispatch(
+        setStockItem({
+          product: id as string,
+          openingStock: data?.currentStock || 0,
+          currentStock: data?.currentStock || 0,
+          type: "",
+          status: "active",
+          user: userInfo.id,
+          warehouse: userInfo.warehouse,
+        }),
+      );
+    }
+  }, [data, isSuccess, id, userInfo.id, userInfo.warehouse, dispatch]);
+
+  console.log("STOCK ITEM FROM REDUX:", stockItem);
 
   const productImage = require("../../../../assets/images/product.jpg");
 
@@ -62,184 +74,115 @@ const StockDetails = () => {
     router.push(`/(drawer)/(tabs)/(stock)/update/${data?._id}`);
   };
 
-  const handleAddStock = () => {
-    if (!stockItem.stock || stockItem.stock <= 0) {
-      Alert.alert("Error", "Please enter a valid stock quantity");
-      return;
-    }
-    if (!stockItem.note.trim()) {
-      Alert.alert("Error", "Please enter a note");
-      return;
-    }
-
-    console.log("Adding stock:", stockItem);
-    // Here you can add API call to update stock
-    setShowAddDialog(false);
-    setStockItem((prev) => ({
-      ...prev,
-      stock: 0,
-      note: "",
-      currentStock: data?.currentStock || 0,
-    }));
+  // Stock operation functions
+  const handleStockIn = () => {
+    console.log("Opening Stock In");
+    dispatch(setStockType("stockIn"));
+    dispatch(
+      setStockItem({
+        stock: 0,
+        note: "",
+        currentStock: data?.currentStock || 0,
+      }),
+    );
+    // TODO: Open modal or navigate to stock input screen
   };
 
-  const handleRemoveStock = () => {
-    if (!stockItem.stock || stockItem.stock <= 0) {
-      Alert.alert("Error", "Please enter a valid stock quantity");
-      return;
-    }
-    if (!stockItem.note.trim()) {
-      Alert.alert("Error", "Please enter a note");
-      return;
-    }
-
-    console.log("Removing stock:", stockItem);
-    // Here you can add API call to update stock
-    setShowRemoveDialog(false);
-    setStockItem((prev) => ({
-      ...prev,
-      stock: 0,
-      note: "",
-      currentStock: data?.currentStock || 0,
-    }));
+  const handleStockOut = () => {
+    console.log("Opening Stock Out");
+    dispatch(setStockType("stockOut"));
+    dispatch(
+      setStockItem({
+        stock: 0,
+        note: "",
+        currentStock: data?.currentStock || 0,
+      }),
+    );
+    // TODO: Open modal or navigate to stock input screen
   };
 
-  const StockDialog = React.memo(
-    ({
-      visible,
-      onClose,
-      onConfirm,
-      title,
-      buttonText,
-      buttonColor,
-      stockItem,
-      setStockItem,
-    }: any) => {
-      const [localStock, setLocalStock] = useState(0);
-      const [localNote, setLocalNote] = useState("");
-      const [localCurrentStock, setLocalCurrentStock] = useState(0);
-
-      // Update local state when modal opens
-      React.useEffect(() => {
-        if (visible) {
-          setLocalStock(stockItem.stock);
-          setLocalNote(stockItem.note);
-          setLocalCurrentStock(stockItem.currentStock);
-        }
-      }, [visible]);
-
-      const handleStockChange = (value: string) => {
-        const stockValue = parseInt(value) || 0;
-        setLocalStock(stockValue);
-
-        if (stockItem.type === "stockIn") {
-          const currentStock =
-            parseInt((data?.currentStock || 0).toString()) || 0;
-          const newStock = currentStock + stockValue;
-          setLocalCurrentStock(newStock);
-        } else {
-          const currentStock =
-            parseInt((data?.currentStock || 0).toString()) || 0;
-          const newStock = Math.max(0, currentStock - stockValue);
-          setLocalCurrentStock(newStock);
-        }
-      };
-
-      const handleNoteChange = (value: string) => {
-        setLocalNote(value);
-      };
-
-      const handleConfirm = () => {
-        // Update the global state only when confirming
-        setStockItem((prev: any) => ({
-          ...prev,
-          stock: localStock,
-          note: localNote,
-          currentStock: localCurrentStock,
-        }));
-        onConfirm();
-      };
-
-      return (
-        <Modal
-          visible={visible}
-          transparent={true}
-          animationType="fade"
-          onRequestClose={onClose}
-        >
-          <View className="flex-1 bg-black/70 justify-center items-center p-6">
-            <View className="bg-black-200 rounded-2xl p-6 w-full max-w-sm border border-gray-600">
-              <Text className="text-white text-xl font-bold mb-4 text-center">
-                {title}
-              </Text>
-
-              <View className="mb-6">
-                <Text className="text-gray-400 mb-2">Enter quantity:</Text>
-                <TextInput
-                  className="border border-gray-600 bg-black rounded-lg p-4 text-lg text-center text-white"
-                  value={localStock.toString()}
-                  onChangeText={handleStockChange}
-                  placeholder="0"
-                  placeholderTextColor="#9CA3AF"
-                  keyboardType="numeric"
-                  autoFocus={true}
-                />
-                <Text className="text-gray-400 mb-2">Note:</Text>
-                <TextInput
-                  multiline={true}
-                  numberOfLines={4}
-                  className="border border-gray-600 bg-black-200 rounded-lg p-4 text-base text-left text-white min-h-[100px]"
-                  value={localNote}
-                  onChangeText={handleNoteChange}
-                  placeholder="Enter your note here..."
-                  placeholderTextColor="#9CA3AF"
-                  textAlignVertical="top"
-                />
-              </View>
-
-              <View className="flex-row gap-3">
-                <TouchableOpacity
-                  className="flex-1 bg-gray-700 p-4 rounded-lg"
-                  onPress={onClose}
-                  activeOpacity={0.8}
-                >
-                  <Text className="text-white font-bold text-center">
-                    Cancel
-                  </Text>
-                </TouchableOpacity>
-
-                <TouchableOpacity
-                  className={`flex-1 ${buttonColor} p-4 rounded-lg`}
-                  onPress={handleConfirm}
-                  activeOpacity={0.8}
-                >
-                  <Text className="text-black font-bold text-center">
-                    {buttonText}
-                  </Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+  const handleUpdateStockQuantity = (quantity: number) => {
+    dispatch(updateStockQuantity(quantity));
+    // Calculate new current stock based on type
+    if (stockItem.type === "stockIn") {
+      dispatch(
+        updateCurrentStock({
+          baseStock: data?.currentStock || 0,
+          operation: "add",
+        }),
       );
-    },
-  );
-
-  StockDialog.displayName = "StockDialog";
-
-  const handleAddModal = () => {
-    setShowAddDialog(true);
-    setStockItem((prev) => ({ ...prev, type: "stockIn", stock: 0, note: "" }));
+    } else if (stockItem.type === "stockOut") {
+      dispatch(
+        updateCurrentStock({
+          baseStock: data?.currentStock || 0,
+          operation: "subtract",
+        }),
+      );
+    }
   };
 
-  const handleRemoveModal = () => {
-    setShowRemoveDialog(true);
-    setStockItem((prev) => ({ ...prev, type: "stockOut", stock: 0, note: "" }));
+  const handleUpdateNote = (note: string) => {
+    dispatch(updateNote(note));
+  };
+
+  const handleSubmitStock = async () => {
+    if (!stockItem.stock || stockItem.stock <= 0) {
+      dispatch(setError("Please enter a valid stock quantity"));
+      return;
+    }
+    if (!stockItem.note.trim()) {
+      dispatch(setError("Please enter a note"));
+      return;
+    }
+
+    try {
+      dispatch(setLoading(true));
+      dispatch(clearError());
+
+      const stockData = {
+        _id: "",
+        product: id as string,
+        stock: stockItem.stock,
+        note: stockItem.note,
+        openingStock: (data?.currentStock || 0).toString(),
+        currentStock: stockItem.currentStock.toString(),
+        type: stockItem.type,
+        status: "active",
+        user: userInfo.id,
+        warehouse: userInfo.warehouse,
+      };
+
+      const result = await addStock(stockData).unwrap();
+      console.log("Stock created:", result);
+
+      dispatch(
+        setSuccess({
+          success: true,
+          message: `Stock ${stockItem.type === "stockIn" ? "added" : "removed"} successfully!`,
+        }),
+      );
+
+      // Reset stock item
+      dispatch(resetStockItem());
+
+      // Refetch product data to show updated stock
+      refetch();
+
+      // Clear success message after 3 seconds
+      setTimeout(() => {
+        dispatch(clearSuccess());
+      }, 3000);
+    } catch (error) {
+      console.error("Error submitting stock:", error);
+      dispatch(setError("Failed to submit stock. Please try again."));
+    } finally {
+      dispatch(setLoading(false));
+    }
   };
 
   return (
     <View className="flex-1 bg-white">
-      {/* Header Buttons */}
+      <StatusBar style="light" />
       {/* Back Button */}
       <View className="absolute top-12 left-4 z-10">
         <TouchableOpacity
@@ -273,6 +216,21 @@ const StockDetails = () => {
 
       {/* Product Info Section */}
       <View className="bg-black flex-1 px-6 pt-8">
+        {/* Success/Error Messages */}
+        {success && (
+          <View className="absolute top-4 left-6 right-6 z-20 bg-green-500 rounded-lg p-4 shadow-lg">
+            <Text className="text-white text-center font-bold">
+              {successMessage}
+            </Text>
+          </View>
+        )}
+
+        {error && (
+          <View className="absolute top-4 left-6 right-6 z-20 bg-red-500 rounded-lg p-4 shadow-lg">
+            <Text className="text-white text-center font-bold">{error}</Text>
+          </View>
+        )}
+
         {/* Title */}
         <Text className="text-white text-2xl font-pbold mb-8">
           Style: {data?.style}
@@ -293,7 +251,7 @@ const StockDetails = () => {
                 style={{ marginRight: 8 }}
               />
               <Text className="text-white text-2xl font-pbold items-center">
-                {data?.openingStock}
+                {data?.currentStock || 0}
               </Text>
             </View>
           </View>
@@ -322,54 +280,30 @@ const StockDetails = () => {
           <View className="flex-row justify-between gap-4">
             <TouchableOpacity
               className="flex-1 bg-primary p-4 rounded-lg flex-row items-center justify-center"
-              onPress={handleAddModal}
+              onPress={handleStockIn}
+              disabled={isLoading}
               activeOpacity={0.8}
             >
               <MaterialIcons name="add" size={20} color="#000000" />
-              <Text className="text-black font-pbold ml-2">Stock In</Text>
+              <Text className="text-black font-pbold ml-2">
+                {isLoading ? "Loading..." : "Stock In"}
+              </Text>
             </TouchableOpacity>
 
             <TouchableOpacity
               className="flex-1 bg-primary p-4 rounded-lg flex-row items-center justify-center"
-              onPress={handleRemoveModal}
+              onPress={handleStockOut}
+              disabled={isLoading}
               activeOpacity={0.8}
             >
               <MaterialIcons name="remove" size={20} color="#000000" />
-              <Text className="text-black font-pbold ml-2">Stock Out</Text>
+              <Text className="text-black font-pbold ml-2">
+                {isLoading ? "Loading..." : "Stock Out"}
+              </Text>
             </TouchableOpacity>
           </View>
         </View>
       </View>
-
-      {/* Add Stock Dialog */}
-      <StockDialog
-        visible={showAddDialog}
-        onClose={() => {
-          setShowAddDialog(false);
-          setStockItem((prev) => ({ ...prev, stock: 0, note: "" }));
-        }}
-        onConfirm={handleAddStock}
-        title="Stock In"
-        buttonText="Add"
-        buttonColor="bg-primary"
-        stockItem={stockItem}
-        setStockItem={setStockItem}
-      />
-
-      {/* Remove Stock Dialog */}
-      <StockDialog
-        visible={showRemoveDialog}
-        onClose={() => {
-          setShowRemoveDialog(false);
-          setStockItem((prev) => ({ ...prev, stock: 0, note: "" }));
-        }}
-        onConfirm={handleRemoveStock}
-        title="Stock Out"
-        buttonText="Remove"
-        buttonColor="bg-primary"
-        stockItem={stockItem}
-        setStockItem={setStockItem}
-      />
     </View>
   );
 };
