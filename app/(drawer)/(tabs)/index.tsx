@@ -246,17 +246,6 @@ export default function PosDashboard() {
           <PaymentChart />
         </View>
 
-        {/* Stats Grid */}
-        <StatsGrid stats={statsData} />
-
-        {/* Payment & Collections Chart */}
-        <View className="mt-4">
-          <Text className="text-white text-lg font-pbold mb-3">
-            Payments & Collections
-          </Text>
-          <PaymentChart />
-        </View>
-
         <StatusBar style="light" />
       </ScrollView>
     </>
