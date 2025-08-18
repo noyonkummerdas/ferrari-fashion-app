@@ -18,7 +18,7 @@ const Payment = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Payment",
+      title: "Create Payment",
       //@ts-ignore
       headerStyle: {
         backgroundColor: `#000000`,
@@ -30,7 +30,7 @@ const Payment = () => {
       headerTitleAlign: "center",
       headerShown: true,
       headerLeft: () => (
-        <TouchableOpacity onPress={() => router.back('')}>
+        <TouchableOpacity onPress={() => router.back()}>
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
@@ -39,11 +39,16 @@ const Payment = () => {
 
   return (
     <>
-      <ScrollView className="flex-1 bg-black-700 p-4" showsVerticalScrollIndicator={false}>
+      <ScrollView
+        className="flex-1 bg-black-700 p-4"
+        showsVerticalScrollIndicator={false}
+      >
         <View className="bg-black-200 rounded-xl p-4 border border-gray-700">
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-gray-300">Date</Text>
-            <Text className="text-white font-psemibold">{formattedDateString}</Text>
+            <Text className="text-white font-psemibold">
+              {formattedDateString}
+            </Text>
           </View>
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-gray-300">Reference</Text>
@@ -71,14 +76,10 @@ const Payment = () => {
           </View>
         </View>
 
-        <TouchableOpacity 
-        onPress={()=>router.push('/account/cashDeposit/Id')}
+        <TouchableOpacity
+          onPress={() => router.push("/account/cashDeposit/Id")}
         >
-
-          <Text className="text-gray-200">
-                update diposti
-          </Text>
-
+          <Text className="text-gray-200">update diposti</Text>
         </TouchableOpacity>
       </ScrollView>
     </>

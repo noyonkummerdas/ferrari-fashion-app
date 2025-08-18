@@ -110,10 +110,11 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="accounts"
+        name="(account)"
         options={{
-          title: "Accounts",
-          headerTitleAlign: "left",
+          title: "Account",
+          headerTitleAlign: "center",
+          headerStyle: { backgroundColor: "#000000" },
           headerTitle: () => (
             <View>
               <Text className="font-pbold text-white text-center text-xl">
@@ -121,22 +122,19 @@ export default function TabLayout() {
               </Text>
             </View>
           ),
-          headerShown: true,
+          headerShown: false,
           headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
           headerRight: () => (
-            <TouchableOpacity
-              onPress={() => router.push("/")}
-              className="mx-2 pe-3"
-            >
+            <View className="mx-2 pe-3">
               <Image source={profile} className="h-8 w-8 ms-4 rounded-full" />
-            </TouchableOpacity>
+            </View>
           ),
           tabBarIcon: ({ color, focused }) => (
             <TabIcon
               icon="calculator"
               iconAlt="calculator-outline"
               color={color}
-              name="accounts"
+              name="Account"
               focused={focused}
             />
           ),

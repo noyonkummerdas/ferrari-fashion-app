@@ -65,6 +65,8 @@ const CustomDrawerComponent = (props: any) => {
     checkLogin();
   }, [pathname, loggedIn, segments, isMounted]);
 
+  // console.log(pathname);
+
   return (
     <DrawerContentScrollView {...props}>
       <TouchableOpacity onPress={() => router.push("/")} className="mx-2 pe-3">
@@ -199,13 +201,13 @@ const CustomDrawerComponent = (props: any) => {
         labelStyle={[
           styles.labelStyle,
           {
-            color: pathname == "/account" ? "#ffffff" : "#ffffff",
+            color: pathname === "/account" ? "#ffffff" : "#ffffff",
           },
         ]}
         style={{
-          backgroundColor: pathname == "/account" ? "#000000" : "#131313",
+          backgroundColor: pathname === "/account" ? "#000000" : "#131313",
         }}
-        onPress={() => router.push("/(drawer)/account")}
+        onPress={() => router.push("/(drawer)/(tabs)/(account)")}
       />
 
       <DrawerItem
@@ -222,11 +224,11 @@ const CustomDrawerComponent = (props: any) => {
         labelStyle={[
           styles.labelStyle,
           {
-            color: pathname == "/user" ? "#ffffff" : "#ffffff",
+            color: pathname === "/user" ? "#ffffff" : "#ffffff",
           },
         ]}
         style={{
-          backgroundColor: pathname == "/user" ? "#000000" : "#131313",
+          backgroundColor: pathname === "/user" ? "#000000" : "#131313",
         }}
         onPress={() => router.push("/user")}
       />

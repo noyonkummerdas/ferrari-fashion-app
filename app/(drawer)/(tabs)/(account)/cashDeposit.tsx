@@ -18,7 +18,7 @@ const CashDepositDetails = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Cash Deposit Details",
+      title: "Create Deposit",
       //@ts-ignore
       headerStyle: {
         backgroundColor: `#000000`,
@@ -37,8 +37,6 @@ const CashDepositDetails = () => {
     });
   }, [navigation]);
 
-
-
   const cashDeposit = [
     {
       id: 1,
@@ -47,7 +45,7 @@ const CashDepositDetails = () => {
       date: "2025-08-15",
       paymentMethod: "Cash",
       referenceNo: "CD-1001",
-      memoNumber:1234567
+      memoNumber: 1234567,
     },
     {
       id: 2,
@@ -56,7 +54,7 @@ const CashDepositDetails = () => {
       date: "2025-08-16",
       paymentMethod: "Bank Transfer",
       referenceNo: "CD-1002",
-      memoNumber:1234567
+      memoNumber: 1234567,
     },
     {
       id: 3,
@@ -65,7 +63,7 @@ const CashDepositDetails = () => {
       date: "2025-08-16",
       paymentMethod: "Cheque",
       referenceNo: "CD-1003",
-      memoNumber:1234567
+      memoNumber: 1234567,
     },
     {
       id: 4,
@@ -74,7 +72,7 @@ const CashDepositDetails = () => {
       date: "2025-08-17",
       paymentMethod: "Cash",
       referenceNo: "CD-1004",
-      memoNumber:1234567
+      memoNumber: 1234567,
     },
     {
       id: 5,
@@ -83,45 +81,44 @@ const CashDepositDetails = () => {
       date: "2025-08-18",
       paymentMethod: "Mobile Banking",
       referenceNo: "CD-1005",
-      memoNumber:1234567
-    }
+      memoNumber: 1234567,
+    },
   ];
-  
 
   return (
     <>
-      <ScrollView className="flex-1 bg-black-700 p-4" showsVerticalScrollIndicator={false}>
-          <View>
-            
-
-            {
-              cashDeposit.map((diposit, index)=>(
-               <>
-                 <View className="flex flex-row justify-between m-2 items-center border border-rounded bg-black-200 p-4 rounded-full">
-                 <View>
-                  <Text className="text-primary text-lg">{diposit.companyName}</Text>
-                  <Text className="text-gray-200"> Memo:{diposit.memoNumber}</Text>
+      <ScrollView
+        className="flex-1 bg-black-700 p-4"
+        showsVerticalScrollIndicator={false}
+      >
+        <View>
+          {cashDeposit.map((diposit, index) => (
+            <>
+              <View className="flex flex-row justify-between m-2 items-center border border-rounded bg-black-200 p-4 rounded-full">
+                <View>
+                  <Text className="text-primary text-lg">
+                    {diposit.companyName}
+                  </Text>
+                  <Text className="text-gray-200">
+                    {" "}
+                    Memo:{diposit.memoNumber}
+                  </Text>
                 </View>
                 <View className="flex flex-col justify-end items-end">
-                <Text className="text-gray-200">{diposit.date}</Text>
-                <Text className="text-gray-200">{diposit.amount}</Text>
-                </View>     
-               
-                 </View>
-               </>
-
-              ))
-            }
-          </View>
-        <TouchableOpacity 
-        className="items-center p-4 bg-primary rounded-lg mt-4"
-        onPress={()=>router.push('/account/cashDeposit/Id')}
+                  <Text className="text-gray-200">{diposit.date}</Text>
+                  <Text className="text-gray-200">{diposit.amount}</Text>
+                </View>
+              </View>
+            </>
+          ))}
+        </View>
+        <TouchableOpacity
+          className="items-center p-4 bg-primary rounded-lg mt-4"
+          onPress={() => router.push("/account/cashDeposit/Id")}
         >
-
           <Text className="text-gray-200 font-bold text-lg">
-                Update Diposti
+            Update Diposti
           </Text>
-
         </TouchableOpacity>
       </ScrollView>
     </>

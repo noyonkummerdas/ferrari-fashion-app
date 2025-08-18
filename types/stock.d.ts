@@ -1,5 +1,5 @@
 interface Stock {
-  _id: string;
+  _id?: string;
   stock: number;
   note: string;
   openingStock: string;
