@@ -11,81 +11,68 @@ import {
   View,
 } from "react-native";
 
-import {
-  useGetCustomerByIdQuery,
-  useUpdateCustomerMutation,
-} from "@/store/api/customerApi";
+// import {
+//   useSupplierQuery,
+//   useUpdateSupplierMutation,
+// } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import profile from "../../assets/images/profile.jpg";
+import { StatusBar } from "expo-status-bar";
+// import profile from "@assets/images/profile.jpg";
 
-const updateCustomer = () => {
+const UpdateDiposit = () => {
   const { userInfo } = useGlobalContext();
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
   const { id } = useLocalSearchParams();
 
-  const [updateCustomer] = useUpdateCustomerMutation();
-
-  const [gender, setGender] = useState([
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Other", value: "Other" },
-  ]);
-  const [status, setStatus] = useState([
-    { label: "Active", value: "active" },
-    { label: "Inactive", value: "inactive" },
-  ]);
+  // const [updateSupplier] = useUpdateSupplierMutation();
 
   const colorScheme = useColorScheme();
-
   const navigation = useNavigation();
-  const { data, error, isLoading, isFetching, isSuccess, refetch } =
-    useGetCustomerByIdQuery({
-      id: id,
-      forceRefetch: true,
-    });
+  // const { data, error, isLoading, isFetching, isSuccess, refetch } =
+  //   useSupplierQuery({
+  //     _id: id,
+  //     // aamarId,
+  //     forceRefetch: true,
+  //   });
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
         <View className="me-4">
-          <TouchableOpacity
-            onPress={() => router.back()}
-            className="flex flex-row justify-center items-center gap-2"
-          >
-            <Ionicons name="arrow-back" size={24} color="white" />
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </TouchableOpacity>
         </View>
       ),
-      title: "Update Customer",
+      title: "Update Diposit",
       //@ts-ignore
       headerStyle: {
-        backgroundColor: `#000000`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
+        backgroundColor: `#000000`,
       },
       //@ts-ignore
-      headerTintColor: `#ffffff`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTintColor: `#ffffff`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
-      headerTitleAlign: "left",
+      headerTitleAlign: "center",
       headerShown: true,
     });
-  }, [navigation]);
+  }, [navigation, isPhoto]);
 
   const [form, setForm] = useState({
     name: "",
-    email: "",
+    memo: "",
+    code: "",
+    company: "",
     address: "",
     phone: "",
-    photo: "",
-    balance: "",
-    company: "",
     status: "active",
     warehouse: warehouse,
   });
 
-  // console.log("CUSTOMER DATA", form);
+  console.log("SUPPLIER DATA", form);
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -104,104 +91,97 @@ const updateCustomer = () => {
     }
   };
 
-  useEffect(() => {
-    setForm({
-      ...form,
-      _id: id,
-      name: data?.name || "",
-      email: data?.email || "",
-      // code: data?.code || "",
-      company: data?.company || "",
-      phone: data?.phone || "",
-      photo: "",
-      address: data?.address || "",
-      balance: data?.balance || "",
-      status: data?.status || "active",
-    });
-  }, [data, isSuccess]);
+  // useEffect(() => {
+  //   setForm({
+  //     ...form,
+  //     _id: id,
+  //     name: data?.name || "",
+  //     // code: data?.code || "",
+  //     email: data?.email || "",
+  //     company: data?.company || "",
+  //     phone: data?.phone || "",
+  //     photo: "",
+  //     address: data?.address || "",
+  //     // balance: data?.balance || "",
+  //     status: data?.status || "active",
+  //   });
+  // }, [data, isSuccess]);
 
-  useEffect(() => {
-    refetch();
-  }, [id]);
-  // console.log("FORM DATA",data)
-  // console.log("ID",data)
+  // useEffect(() => {
+  //   refetch();
+  // }, [id]);
+  // console.log("FORM DATA",form)
+  // console.log("ID",data)/
 
-  const handleCreateCustomer = async () => {
+  const handleUpdareSupplier = async () => {
     try {
-      const response = await updateCustomer(form).unwrap();
-      console.log("Customer Update successfully:", response);
+      const response = await updateDiposit(form).unwrap();
+      console.log("Supplier Update successfully:", response);
       router.back();
     } catch (error) {
-      console.error("Error adding customer:", error);
+      console.error("Error adding Supplier:", error);
     }
   };
 
   return (
-    <ScrollView className="flex-1 bg-dark p-6">
-      <View>
+    <ScrollView className="flex-1 bg-dark p-6 mt-2">
+      <StatusBar style="light" backgroundColor="#000000" />
+      {/* <View>
         <TouchableOpacity
           onPress={pickImage}
           className="flex justify-center items-center mb-2"
         >
           <Image source={profile} className="w-32 h-32 rounded-full" />
         </TouchableOpacity>
-      </View>
+      </View> */}
 
-      <Text className="text-white text-md font-regular">Customer name</Text>
+      <Text className="text-white text-md font-regular">Company name</Text>
       <TextInput
-        placeholder="Customer Name"
+        placeholder="Company Name"
         value={form.name}
         onChangeText={(value) => handleInputChange("name", value)}
         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <Text className="text-white text-md font-regular">Phone </Text>
+      <Text className="text-white text-md font-regular">Memo Number </Text>
 
       <TextInput
-        placeholder="Phone no"
+        placeholder="Memo number"
         value={form.phone}
         onChangeText={(value) => handleInputChange("phone", value)}
         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-
-      <Text className="text-white text-md font-regular">Email </Text>
+      <Text className="text-white text-md font-regular">Amount </Text>
       <TextInput
-        placeholder="Email"
-        value={form.email}
-        onChangeText={(value) => handleInputChange("email", value)}
-        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
-      />
-      <Text className="text-white text-md font-regular">Company name </Text>
-      <TextInput
-        placeholder="Company name"
-        value={form.company}
-        onChangeText={(value) => handleInputChange("company", value)}
-        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
-      />
-      <Text className="text-white text-md font-regular">Address </Text>
-      <TextInput
-        placeholder="Address"
+        placeholder="Amount"
         value={form.address}
         onChangeText={(value) => handleInputChange("address", value)}
         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <Text className="text-white text-md font-regular">Opening balance </Text>
+      <Text className="text-white text-md font-regular">Note </Text>
+      <TextInput
+        placeholder="Note"
+        value={form.address}
+        onChangeText={(value) => handleInputChange("address", value)}
+        className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
+      />
+      {/* <Text className="text-white text-md font-regular">Opening balance </Text>
       <TextInput
         placeholder="Opening balance"
         value={form.balance}
         onChangeText={(value) => handleInputChange("balance", value)}
         className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
-      />
+      /> */}
 
       <TouchableOpacity
-        onPress={handleCreateCustomer}
+        onPress={handleUpdareSupplier}
         className="h-14 justify-center items-center rounded-full bg-primary mt-4"
       >
         <Text className="text-dark text-center text-lg font-pmedium">
-          Update Customer
+          Update Diposit
         </Text>
       </TouchableOpacity>
     </ScrollView>
   );
 };
 
-export default updateCustomer;
+export default UpdateDiposit;
