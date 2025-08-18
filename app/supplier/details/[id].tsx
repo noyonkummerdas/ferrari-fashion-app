@@ -11,7 +11,7 @@ const CustomerDetails = () => {
 
   const { data, isLoading, error, refetch } = useSupplierQuery({ _id: id });
 
-  console.log("DATA::", id, data);
+  // console.log("DATA::", id, data);
 
   useEffect(() => {
     refetch();
@@ -58,19 +58,30 @@ const CustomerDetails = () => {
   return (
     <>
       <ScrollView>
-        <View className=" px-4">
+        <View className=" px-4 space-y-2">
           {/* {data.map((customer) => ( */}
           <View key={data?._id} className="mb-4">
             {/* <Text className="text-lg font-bold text-white">{data?.name}</Text> */}
             <View className="flex flex-row ">
+              <Ionicons name="business-outline" size={18} color={"#fdb714"} />
+              <Text className="text-gray-200 text-lg ms-2">
+                {data?.company}
+              </Text>
+            </View>
+            <View className="flex flex-row ">
               <Ionicons
                 name="phone-portrait-sharp"
-                size={20}
+                size={18}
                 color={"#fdb714"}
               />
-              <Text className="text-gray-200 text-[18px] ">{data?.phone}</Text>
+              <Text className="text-gray-200 text-[18px] ms-2">
+                {data?.phone}
+              </Text>
             </View>
-            <Text className="text-gray-400  p-1">{data?.address}</Text>
+            <View className="flex flex-row ">
+              <Ionicons name="location-outline" size={16} color={"#fdb714"} />
+              <Text className="text-gray-400  p-1 ms-2">{data?.address}</Text>
+            </View>
           </View>
           {/* ))} */}
         </View>

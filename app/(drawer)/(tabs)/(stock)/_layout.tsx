@@ -39,7 +39,7 @@ export default function StockLayout() {
         }}
       />
       <Stack.Screen
-        name="update-stock"
+        name="update/[id]"
         options={{
           title: "Update Stock",
           headerShown: true,

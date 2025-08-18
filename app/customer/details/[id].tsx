@@ -24,15 +24,6 @@ const CustomerDetails = () => {
     refetch();
   }, [id]);
 
-  // const arrayCustomersd = [
-  //   {
-  //     id: 1,
-  //     name: "MANISHANKAR VAKTA ",
-  //     email: "john.doe@example.com",
-  //     phone: "01687233969",
-  //     address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230",
-  //   },
-  // ];
   useLayoutEffect(() => {
     navigation.setOptions({
       title: `${data?.name || "Customer Details"}`,
@@ -75,18 +66,21 @@ const CustomerDetails = () => {
     <>
       <ScrollView className="bg-dark">
         <StatusBar style="light" backgroundColor="#1f2937" />
-        <View className="bg-dark p-4">
-          <View key={data?._id} className="mb-2">
-            <View className="flex flex-row ">
-              <Ionicons
-                name="phone-portrait-sharp"
-                size={20}
-                color={"#fdb714"}
-              />
-              <Text className="text-gray-200 text-[18px] ">{data?.phone}</Text>
-            </View>
-            <Text className="text-gray-400  p-1">{data?.company}</Text>
-            <Text className="text-gray-400  p-1">{data?.address}</Text>
+        <View key={data?._id} className="mb-4 px-6 space-x-2">
+          {/* <Text className="text-lg font-bold text-white">{data?.name}</Text> */}
+          <View className="flex flex-row ">
+            <Ionicons name="business-outline" size={18} color={"#fdb714"} />
+            <Text className="text-gray-200 text-lg ms-2">{data?.company}</Text>
+          </View>
+          <View className="flex flex-row ">
+            <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
+            <Text className="text-gray-200 text-[18px] ms-2">
+              {data?.phone}
+            </Text>
+          </View>
+          <View className="flex flex-row ">
+            <Ionicons name="location-outline" size={16} color={"#fdb714"} />
+            <Text className="text-gray-400  p-1 ms-2">{data?.address}</Text>
           </View>
         </View>
 
@@ -142,7 +136,7 @@ const CustomerDetails = () => {
             </Text>
           </View>
         </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+        <View className="bg-black-200 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
           <Text className="text-white text-xl">Due Sale</Text>
           <View className="flex flex-row justify-between items-center">
             <Text className="text-white text-lg me-2">
@@ -157,7 +151,7 @@ const CustomerDetails = () => {
             </Text>
           </View>
         </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+        <View className="bg-black-200 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
           <Text className="text-white text-xl">Due Sale</Text>
           <View className="flex flex-row justify-between items-center">
             <Text className="text-white text-lg me-2">

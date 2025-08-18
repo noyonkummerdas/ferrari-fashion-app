@@ -5,7 +5,7 @@ interface StockListItemProps {
   id: string;
   style: string;
   code: string;
-  openingStock: number;
+  currentStock: number;
   photo: string;
   onPress?: () => void;
 }
@@ -14,7 +14,8 @@ export const StockListItem: React.FC<StockListItemProps> = ({
   id,
   style,
   code,
-  openingStock,
+  // openingStock,
+  currentStock,
   photo,
   onPress,
 }) => {
@@ -43,7 +44,7 @@ export const StockListItem: React.FC<StockListItemProps> = ({
 
       {/* Price */}
       <View className="items-end">
-        <Text className="text-primary text-lg font-pbold">{openingStock}</Text>
+        <Text className="text-primary text-lg font-pbold">{currentStock}</Text>
       </View>
     </TouchableOpacity>
   );

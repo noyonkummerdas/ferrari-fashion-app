@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
@@ -16,7 +15,9 @@ import {
   useSupplierQuery,
   useUpdateSupplierMutation,
 } from "@/store/api/supplierApi";
+import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
+import { StatusBar } from "expo-status-bar";
 import profile from "../../assets/images/profile.jpg";
 
 const UpdateSupplier = () => {
@@ -27,16 +28,6 @@ const UpdateSupplier = () => {
   const { id } = useLocalSearchParams();
 
   const [updateSupplier] = useUpdateSupplierMutation();
-
-  const [gender, setGender] = useState([
-    { label: "Male", value: "Male" },
-    { label: "Female", value: "Female" },
-    { label: "Other", value: "Other" },
-  ]);
-  const [status, setStatus] = useState([
-    { label: "Active", value: "active" },
-    { label: "Inactive", value: "inactive" },
-  ]);
 
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
@@ -49,21 +40,20 @@ const UpdateSupplier = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      // <View className='me-4' >
-      //     <TouchableOpacity onPress={()=>setIsPhoto(!isPhoto)} className='flex flex-row justify-center items-center gap-2'>
-      //       <Ionicons name={isPhoto ? "image-sharp" : "image-outline"} size={24}  color="#f2652d" />
-      //       <Text className='text-primary text-xl font-pmedium'>Photo</Text>
-      //     </TouchableOpacity>
-      // </View>
-      // ),
+      headerLeft: () => (
+        <View className="me-4">
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
+        </View>
+      ),
       title: "Update Supplier",
       //@ts-ignore
       headerStyle: {
-        backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+        backgroundColor: `#000000`,
       },
       //@ts-ignore
-      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTintColor: `#ffffff`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
       headerTitleAlign: "left",
@@ -79,11 +69,10 @@ const UpdateSupplier = () => {
     address: "",
     phone: "",
     status: "active",
-    aamarId: aamarId,
     warehouse: warehouse,
   });
 
-  console.log("CUSTOMER DATA", form);
+  console.log("SUPPLIER DATA", form);
 
   const handleInputChange = (field, value) => {
     setForm({ ...form, [field]: value });
@@ -113,7 +102,7 @@ const UpdateSupplier = () => {
       phone: data?.phone || "",
       photo: "",
       address: data?.address || "",
-      balance: data?.balance || "",
+      // balance: data?.balance || "",
       status: data?.status || "active",
     });
   }, [data, isSuccess]);
@@ -136,6 +125,7 @@ const UpdateSupplier = () => {
 
   return (
     <ScrollView className="flex-1 bg-dark p-6">
+      <StatusBar style="light" backgroundColor="#000000" />
       <View>
         <TouchableOpacity
           onPress={pickImage}
@@ -182,13 +172,13 @@ const UpdateSupplier = () => {
         onChangeText={(value) => handleInputChange("address", value)}
         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
-      <Text className="text-white text-md font-regular">Opening balance </Text>
+      {/* <Text className="text-white text-md font-regular">Opening balance </Text>
       <TextInput
         placeholder="Opening balance"
         value={form.balance}
         onChangeText={(value) => handleInputChange("balance", value)}
         className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
-      />
+      /> */}
 
       <TouchableOpacity
         onPress={handleUpdareSupplier}

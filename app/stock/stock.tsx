@@ -1,6 +1,5 @@
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useInventoriesQuery } from "@/store/api/inventoryApi";
 import { Ionicons, SimpleLineIcons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
