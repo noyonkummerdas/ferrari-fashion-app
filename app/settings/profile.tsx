@@ -1,28 +1,61 @@
-import { useGlobalContext } from "@/context/GlobalProvider";
-import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
-import React from "react";
-import {
-  SafeAreaView,
-  ScrollView,
-  Text,
-  TouchableOpacity,
-  View
-} from "react-native";
+import { CustomDrawerToggleButton } from '@/components';
+import { Colors } from '@/constants/Colors';
+import { useGlobalContext } from '@/context/GlobalProvider';
+import { useAddWarehouseMutation } from '@/store/api/warehouseApi'; // ✅ change to your actual import
+import { Ionicons } from '@expo/vector-icons';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { router, useNavigation } from 'expo-router';
+import React, { useLayoutEffect } from 'react';
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
 
-const Profile = () => {
-  const router = useRouter();
-  const { userInfo } = useGlobalContext();
+
+
+const profile = () => {
+  const colorScheme = useColorScheme();
+  const navigation = useNavigation();
+  const Drawer = createDrawerNavigator();
+ 
+
+  // ✅ RTK Query mutation hook
+  const [addWarehouse] = useAddWarehouseMutation();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Profile",
+      //@ts-ignore
+      headerStyle: {
+        backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      },
+       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+      //  headerRight: () => <View className="flex flex-row items-center">
+      //   <Link href="warehouse/warehouseEdit" className="text-white">
+      //    <View className="flex flex-row items-center">
+      //     <Ionicons name="add" size={24} color="gray" />
+      //     <Text className='text-gray-200 font-lg'>Add</Text>
+      //    </View>
+      //   </Link>
+      //  </View>,
+      //@ts-ignore
+      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
+      headerShadowVisible: true,
+      headerTitleAlign: "left",
+      headerShown: true,
+    });
+  }, [navigation]);
 
   const handleLogout = () => {
-    // Add logout logic here
     console.log("Logout pressed");
   };
 
   const handleEditProfile = () => {
-    // Add edit profile logic here
     console.log("Edit profile pressed");
+    // Example: navigate to edit profile screen
+    router.push("/user/edit");
   };
+ const { userInfo } = useGlobalContext();
+ 
+  
 
   return (
     <SafeAreaView className="bg-dark flex-1">
@@ -150,4 +183,4 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default profile;

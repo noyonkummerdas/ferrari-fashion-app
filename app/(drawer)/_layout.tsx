@@ -185,6 +185,28 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
       />
+      <DrawerItem
+        icon={({ size, color, focused }) => (
+          <TabIcon
+            pathname={pathname}
+            icon="wallet-outline"
+            iconAlt="wallet-outline"
+            color={color}
+            focused={["/account"]}
+          />
+        )}
+        label={"Accounts"}
+        labelStyle={[
+          styles.labelStyle,
+          {
+            color: pathname == "/account" ? "#ffffff" : "#ffffff",
+          },
+        ]}
+        style={{
+          backgroundColor: pathname == "/account" ? "#000000" : "#131313",
+        }}
+        onPress={() => router.push("/(drawer)/account")}
+      />
 
       <DrawerItem
         icon={({ size, color, focused }) => (
