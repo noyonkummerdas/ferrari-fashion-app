@@ -13,18 +13,15 @@ import {
 
 // Example slice reducer (you can replace this with your actual slice)
 import CustomerApi from "./api/customerApi";
+import stockApi from "./api/stockApi";
 import SupplierApi from "./api/supplierApi";
 import UserApi from "./api/userApi";
 
-import BrandApi from "./api/brandApi";
-import CategoryApi from "./api/categoryApi";
-import InventoryApi from "./api/inventoryApi";
 import ProductApi from "./api/productApi";
 import SaleApi from "./api/saleApi";
 import SettingApi from "./api/settingApi";
 import UploadApi from "./api/uploadApi";
 import WarehouseApi from "./api/warehouseApi";
-import { posReducer } from "./slice/posSlice";
 import settingReducer from "./slice/settingSlice";
 import userReducer from "./slice/userSlice";
 
@@ -36,18 +33,15 @@ const persistConfig = {
 
 const rootReducers = combineReducers({
   user: userReducer,
-  pos: posReducer,
   setting: settingReducer,
   [UserApi.reducerPath]: UserApi.reducer,
   [WarehouseApi.reducerPath]: WarehouseApi.reducer,
-  [CategoryApi.reducerPath]: CategoryApi.reducer,
   [CustomerApi.reducerPath]: CustomerApi.reducer,
   [SupplierApi.reducerPath]: SupplierApi.reducer,
   [ProductApi.reducerPath]: ProductApi.reducer,
-  [BrandApi.reducerPath]: BrandApi.reducer,
+  [stockApi.reducerPath]: stockApi.reducer,
   [SaleApi.reducerPath]: SaleApi.reducer,
   [SettingApi.reducerPath]: SettingApi.reducer,
-  [InventoryApi.reducerPath]: InventoryApi.reducer,
   [UploadApi.reducerPath]: UploadApi.reducer,
 });
 
@@ -62,11 +56,9 @@ export const store = configureStore({
       },
     }).concat([
       SaleApi.middleware,
-      InventoryApi.middleware,
       WarehouseApi.middleware,
-      CategoryApi.middleware,
       ProductApi.middleware,
-      BrandApi.middleware,
+      stockApi.middleware,
       CustomerApi.middleware,
       SupplierApi.middleware,
       UserApi.middleware,

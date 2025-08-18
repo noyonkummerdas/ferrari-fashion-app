@@ -79,10 +79,8 @@ const updateCustomer = () => {
     address: "",
     phone: "",
     photo: "",
-    balance: "",
     company: "",
     status: "active",
-    warehouse: warehouse,
   });
 
   // console.log("CUSTOMER DATA", form);
@@ -110,12 +108,10 @@ const updateCustomer = () => {
       _id: id,
       name: data?.name || "",
       email: data?.email || "",
-      // code: data?.code || "",
       company: data?.company || "",
       phone: data?.phone || "",
       photo: "",
       address: data?.address || "",
-      balance: data?.balance || "",
       status: data?.status || "active",
     });
   }, [data, isSuccess]);
@@ -183,13 +179,6 @@ const updateCustomer = () => {
         value={form.address}
         onChangeText={(value) => handleInputChange("address", value)}
         className="border bg-black-200 rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
-      />
-      <Text className="text-white text-md font-regular">Opening balance </Text>
-      <TextInput
-        placeholder="Opening balance"
-        value={form.balance}
-        onChangeText={(value) => handleInputChange("balance", value)}
-        className="border bg-black-200  rounded-full p-4 mb-3  mt-2 placeholder:text-gray-500 text-gray-200"
       />
 
       <TouchableOpacity

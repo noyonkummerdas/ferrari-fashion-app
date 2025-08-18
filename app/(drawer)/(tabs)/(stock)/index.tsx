@@ -72,7 +72,7 @@ const StockIndex = () => {
               style={item.style}
               code={item.code}
               photo={item.photo}
-              openingStock={item.openingStock}
+              currentStock={item.currentStock}
               onPress={() => handleItemPress(item._id)}
             />
           ))}
