@@ -107,43 +107,55 @@ const Accounts = () => {
         </View>
 
         <View className="flex-row mb-4">
-          <View className="flex-1 bg-black-200 rounded-xl p-4 h-28 mr-2 border border-gray-700">
-            <View className="flex-row items-center mb-2 px-1 justify-between">
+          {/* Payment */}
+          <TouchableOpacity 
+          onPress={() => router.push("/(account)/paymentList")}
+          className="flex-1 bg-black-200 rounded-xl p-4 h-28 mr-2 border border-gray-700">
+            <View className="flex-row items-center mb-2 px-1">
               <Ionicons name="cash" size={18} color="#60A5FA" />
               <Text className="text-gray-300">Payment</Text>
             </View>
             <Text className="text-white text-xl font-pbold">0.00</Text>
-          </View>
-          <View className="flex-1 bg-black-200 rounded-xl p-4 h-28 ml-2 border border-gray-700">
-            <View className="flex-row items-center mb-2 px-1 justify-between">
-              <Ionicons
-                name="checkmark-done-circle"
-                size={18}
-                color="#86EFAC"
-              />
-              <Text className="text-gray-300 ml-2">Payment Received</Text>
+          </TouchableOpacity>
+          
+          {/* Payment Received */}
+          <TouchableOpacity 
+            onPress={() => router.push("/(account)/paymentReceivedList")}
+          className="flex-1 bg-black-200 rounded-xl p-4 h-28 ml-2 border border-gray-700">
+            <View className="flex-row items-center mb-2 px-1 ">
+              <Ionicons name="checkmark-done-circle" size={18} color="#86EFAC" />
+              <Text className="text-gray-300">Payment Received</Text>
             </View>
             <Text className="text-white text-xl font-pbold">0.00</Text>
-          </View>
+          </TouchableOpacity>
         </View>
+          
         <View className="flex-row mb-4">
-          <View className="flex-1 bg-black-200 rounded-xl p-4 mr-2 h-28 border border-gray-700">
-            <View className="flex-row items-center mb-2 px-1 justify-between">
+          {/* Cash Out */}
+          <TouchableOpacity 
+          onPress={() => router.push("/(account)/cashOutList")}
+          className="flex-1 bg-black-200 rounded-xl p-4 h-28 mr-2 border border-gray-700">
+            <View className="flex-row items-center mb-2 px-1 ">
               <Ionicons name="arrow-up-circle" size={18} color="#F87171" />
-              <Text className="text-gray-300 ml-2">Cash Out</Text>
+              <Text className="text-gray-300">Cash Out</Text>
             </View>
             <Text className="text-white text-xl font-pbold">0.00</Text>
-          </View>
-          <View className="flex-1 bg-black-200 rounded-xl p-4 ml-2 h-28 border border-gray-700">
-            <View className="flex-row items-center mb-2 px-1 justify-between">
+          </TouchableOpacity>
+          
+          {/* Cash In */}
+          <TouchableOpacity 
+            onPress={() => router.push("/(account)/cashDepositList")}
+          className="flex-1 bg-black-200 rounded-xl p-4 h-28 ml-2 border border-gray-700">
+            <View className="flex-row items-center mb-2 px-1">
               <Ionicons name="arrow-down-circle" size={18} color="#34D399" />
-              <Text className="text-gray-300 ml-2">Cash In</Text>
+              <Text className="text-gray-300">Cash In</Text>
             </View>
             <Text className="text-white text-xl font-pbold">0.00</Text>
-          </View>
+          </TouchableOpacity>
         </View>
-      </View>
-    </ScrollView>
+          
+              </View>
+            </ScrollView>
   );
 };
 
