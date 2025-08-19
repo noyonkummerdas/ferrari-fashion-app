@@ -1,22 +1,9 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useProductQuery } from "@/store/api/productApi";
-import { useAddStockMutation } from "@/store/api/stockApi";
-import {
-  clearError,
-  clearSuccess,
-  resetStockItem,
-  setError,
-  setLoading,
-  setStockItem,
-  setStockType,
-  setSuccess,
-  updateCurrentStock,
-  updateNote,
-  updateStockQuantity,
-} from "@/store/slice/stockSlice";
+import { setStockItem } from "@/store/slice/stockSlice";
 import { RootState } from "@/store/store";
 import { MaterialIcons } from "@expo/vector-icons";
-import { router, useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
@@ -26,6 +13,7 @@ const StockDetails = () => {
   const { id } = useLocalSearchParams();
   const { userInfo } = useGlobalContext();
   const dispatch = useDispatch();
+  const pathname = usePathname();
 
   // Redux selectors
   const { stockItem, isLoading, error, success, successMessage } = useSelector(
@@ -33,7 +21,7 @@ const StockDetails = () => {
   );
 
   // API hooks
-  const [addStock] = useAddStockMutation();
+  // const [addStock] = useAddStockMutation(); // This line is removed
 
   const {
     data,
@@ -44,11 +32,16 @@ const StockDetails = () => {
     refetch,
   } = useProductQuery({
     _id: id,
+    forceRefetch: true,
   });
 
   useEffect(() => {
     refetch();
-  }, [id]);
+  }, [id, pathname]);
+
+  useEffect(() => {
+    refetch();
+  }, []);
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -64,9 +57,9 @@ const StockDetails = () => {
         }),
       );
     }
-  }, [data, isSuccess, id, userInfo.id, userInfo.warehouse, dispatch]);
+  }, [data, isSuccess]);
 
-  console.log("STOCK ITEM FROM REDUX:", stockItem);
+  // console.log("STOCK ITEM FROM REDUX:", stockItem);
 
   const productImage = require("../../../../assets/images/product.jpg");
 
@@ -77,109 +70,35 @@ const StockDetails = () => {
   // Stock operation functions
   const handleStockIn = () => {
     console.log("Opening Stock In");
-    dispatch(setStockType("stockIn"));
+    // setModalType("stockIn");
+    // dispatch(setStockType("stockIn"));
     dispatch(
       setStockItem({
         stock: 0,
         note: "",
         currentStock: data?.currentStock || 0,
+        openingStock: data?.currentStock || 0,
+        type: "stockIn",
       }),
     );
-    // TODO: Open modal or navigate to stock input screen
+    router.push(`/(drawer)/(tabs)/(stock)/stock-in?id=${id}`);
   };
 
   const handleStockOut = () => {
     console.log("Opening Stock Out");
-    dispatch(setStockType("stockOut"));
+    // setModalType("stockOut");
+    // dispatch(setStockType("stockOut"));
     dispatch(
       setStockItem({
         stock: 0,
         note: "",
         currentStock: data?.currentStock || 0,
+        openingStock: data?.currentStock || 0,
+        type: "stockOut",
       }),
     );
-    // TODO: Open modal or navigate to stock input screen
+    router.push(`/(drawer)/(tabs)/(stock)/stock-out?id=${id}`);
   };
-
-  const handleUpdateStockQuantity = (quantity: number) => {
-    dispatch(updateStockQuantity(quantity));
-    // Calculate new current stock based on type
-    if (stockItem.type === "stockIn") {
-      dispatch(
-        updateCurrentStock({
-          baseStock: data?.currentStock || 0,
-          operation: "add",
-        }),
-      );
-    } else if (stockItem.type === "stockOut") {
-      dispatch(
-        updateCurrentStock({
-          baseStock: data?.currentStock || 0,
-          operation: "subtract",
-        }),
-      );
-    }
-  };
-
-  const handleUpdateNote = (note: string) => {
-    dispatch(updateNote(note));
-  };
-
-  const handleSubmitStock = async () => {
-    if (!stockItem.stock || stockItem.stock <= 0) {
-      dispatch(setError("Please enter a valid stock quantity"));
-      return;
-    }
-    if (!stockItem.note.trim()) {
-      dispatch(setError("Please enter a note"));
-      return;
-    }
-
-    try {
-      dispatch(setLoading(true));
-      dispatch(clearError());
-
-      const stockData = {
-        _id: "",
-        product: id as string,
-        stock: stockItem.stock,
-        note: stockItem.note,
-        openingStock: (data?.currentStock || 0).toString(),
-        currentStock: stockItem.currentStock.toString(),
-        type: stockItem.type,
-        status: "active",
-        user: userInfo.id,
-        warehouse: userInfo.warehouse,
-      };
-
-      const result = await addStock(stockData).unwrap();
-      console.log("Stock created:", result);
-
-      dispatch(
-        setSuccess({
-          success: true,
-          message: `Stock ${stockItem.type === "stockIn" ? "added" : "removed"} successfully!`,
-        }),
-      );
-
-      // Reset stock item
-      dispatch(resetStockItem());
-
-      // Refetch product data to show updated stock
-      refetch();
-
-      // Clear success message after 3 seconds
-      setTimeout(() => {
-        dispatch(clearSuccess());
-      }, 3000);
-    } catch (error) {
-      console.error("Error submitting stock:", error);
-      dispatch(setError("Failed to submit stock. Please try again."));
-    } finally {
-      dispatch(setLoading(false));
-    }
-  };
-
   return (
     <View className="flex-1 bg-white">
       <StatusBar style="light" />
@@ -217,19 +136,6 @@ const StockDetails = () => {
       {/* Product Info Section */}
       <View className="bg-black flex-1 px-6 pt-8">
         {/* Success/Error Messages */}
-        {success && (
-          <View className="absolute top-4 left-6 right-6 z-20 bg-green-500 rounded-lg p-4 shadow-lg">
-            <Text className="text-white text-center font-bold">
-              {successMessage}
-            </Text>
-          </View>
-        )}
-
-        {error && (
-          <View className="absolute top-4 left-6 right-6 z-20 bg-red-500 rounded-lg p-4 shadow-lg">
-            <Text className="text-white text-center font-bold">{error}</Text>
-          </View>
-        )}
 
         {/* Title */}
         <Text className="text-white text-2xl font-pbold mb-8">
@@ -304,6 +210,7 @@ const StockDetails = () => {
           </View>
         </View>
       </View>
+      {/* StockModal is no longer rendered here */}
     </View>
   );
 };

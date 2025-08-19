@@ -1,12 +1,12 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Stock } from "../../types/stock";
-
 import { BASE_URL } from "../../constants/baseUrl";
 
-// console.log(BASE_URL);
+import { Stock } from "../../types/stock";
 
-export const stockApi = createApi({
-  reducerPath: "stockApi",
+// console.log("STOCK API", BASE_URL);
+
+export const StockApi = createApi({
+  reducerPath: "StockApi",
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   tagTypes: ["Stock"],
   endpoints: (builder) => ({
@@ -19,17 +19,16 @@ export const stockApi = createApi({
       query: ({ _id }) => `/stock/${_id}`,
       providesTags: ["Stock"],
     }),
-    addStock: builder.mutation<{}, Stock>({
-      query: (Stock) => ({
+    addStock: builder.mutation({
+      query: (stockData) => ({
         url: "/stock",
         method: "POST",
-        body: Stock,
+        body: stockData,
       }),
-      invalidatesTags: ["Stock"],
     }),
     updateStock: builder.mutation<{}, Stock>({
       query: ({ _id, ...rest }) => ({
-        url: `/Stock/${_id}`,
+        url: `/stock/${_id}`,
         method: "PUT",
         body: rest,
       }),
@@ -38,7 +37,7 @@ export const stockApi = createApi({
 
     deleteStock: builder.mutation<void, string>({
       query: (id) => ({
-        url: `/Stock/${id}`,
+        url: `/stock/${id}`,
         method: "DELETE",
       }),
       invalidatesTags: ["Stock"],
@@ -52,6 +51,6 @@ export const {
   useAddStockMutation,
   useUpdateStockMutation,
   useDeleteStockMutation,
-} = stockApi;
+} = StockApi;
 
-export default stockApi;
+export default StockApi;

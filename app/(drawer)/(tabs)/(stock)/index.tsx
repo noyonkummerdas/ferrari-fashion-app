@@ -2,7 +2,8 @@ import { SearchBar } from "@/components/SearchBar";
 import { StockListItem } from "@/components/StockListItem";
 import { useProductsQuery } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
+import { useIsFocused } from "@react-navigation/native";
+import { router, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import {
@@ -13,19 +14,24 @@ import {
 } from "react-native";
 
 const StockIndex = () => {
+  const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-
+  const pathname = usePathname();
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useProductsQuery({
       q: searchQuery || "all",
+      forceRefetch: true,
     });
 
   useEffect(() => {
     if (searchQuery) {
       refetch();
     }
-  }, [searchQuery]);
+    if (isFocused) {
+      refetch();
+    }
+  }, [searchQuery, isFocused]);
 
   // console.log("STOCK", data, error, isLoading, isFetching, isSuccess);
   const onRefresh = () => {
