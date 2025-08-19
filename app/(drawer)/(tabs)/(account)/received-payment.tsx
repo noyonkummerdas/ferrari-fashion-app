@@ -1,11 +1,17 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
-import { useCustomerListQuery } from "@/store/api/customerApi";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import {
+  useCustomerListQuery,
+  useCustomerQuery,
+} from "@/store/api/customerApi";
+import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  Alert,
   Platform,
   ScrollView,
   Text,
@@ -16,6 +22,8 @@ import {
 // import DropDownPicker from "react-native-dropdown-picker";
 
 const RecivedPayment = () => {
+  const { userInfo } = useGlobalContext();
+  const [createTransaction] = useAddTransactionMutation();
   const [q, setQ] = useState("all");
   const { data, isSuccess, isLoading, refetch } = useCustomerListQuery({
     q: q,
@@ -43,6 +51,44 @@ const RecivedPayment = () => {
   const [type, setType] = useState([{ label: "Select Customer", value: "" }]);
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  // Form state
+  const [formData, setFormData] = useState({
+    date: new Date(),
+    amount: 0,
+    note: "",
+    name: "",
+    customerId: "",
+    invoice: "",
+    photo: null as string | null,
+    type: "paymentReceived",
+    user: userInfo?.id,
+    warehouse: userInfo?.warehouse,
+    openingBalance: 0,
+    currentBalance: 0,
+    invoices: "",
+    status: "complete",
+  });
+
+  const {
+    data: customerData,
+    isSuccess: customerIsSuccess,
+    refetch: customerRefetch,
+  } = useCustomerQuery(formData.customerId);
+
+  useEffect(() => {
+    if (customerData && customerIsSuccess) {
+      setFormData((prev) => ({
+        ...prev,
+        openingBalance: customerData?.currentBalance ?? 0,
+        currentBalance: customerData?.currentBalance ?? 0,
+      }));
+    }
+  }, [customerData, customerIsSuccess]);
+
+  useEffect(() => {
+    customerRefetch();
+  }, [formData.customerId]);
 
   const handleDatePress = () => {
     console.log("Opening date picker");
@@ -95,31 +141,21 @@ const RecivedPayment = () => {
   }, [navigation]);
 
   const handleInputChange = (field: string, value: string) => {
-    if (
-      field === "amount" ||
-      field === "balanceAmount" ||
-      field === "newBalance"
-    ) {
+    if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({ ...prev, [field]: numValue }));
+      setFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+        currentBalance: customerData?.currentBalance
+          ? parseInt(customerData?.currentBalance) - numValue
+          : 0 - numValue,
+      }));
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
     }
   };
-
-  // Form state
-  const [formData, setFormData] = useState({
-    date: new Date(),
-    amount: 0,
-    note: "",
-    name: "",
-    type: "payment",
-    customerId: "",
-    invoice: "",
-    status: "completed",
-  });
 
   console.log("formData", formData);
 
@@ -128,15 +164,47 @@ const RecivedPayment = () => {
   ) => {
     setFormData((prev) => ({ ...prev, type }));
   };
-  const handleSubmit = () => {
-    console.log("Transaction Form Data:", formData);
-    // console.log("Photo URI:", formData.photo);
 
-    // Alert.alert(
-    //   "Success",
-    //   "Form data logged to console. Check console for details.",
-    //   [{ text: "OK" }],
-    // );
+  const handleSubmit = async () => {
+    console.log("Transaction Form Data:", formData);
+    console.log("Photo URI:", formData.photo);
+
+    try {
+      const response = await createTransaction(formData).unwrap();
+      console.log("Transaction created:", response);
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    }
+
+    Alert.alert(
+      "Success",
+      "Form data logged to console. Check console for details.",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            setFormData({
+              name: "",
+              user: userInfo?.id,
+              warehouse: userInfo?.warehouse,
+              amount: 0,
+              openingBalance: 0,
+              currentBalance: 0,
+              photo: "",
+              invoices: "",
+              note: "",
+              date: new Date(),
+              type: "paymentReceived",
+              status: "complete",
+              // supplierId: "",
+              invoice: "",
+              customerId: "",
+            });
+            router.back();
+          },
+        },
+      ],
+    );
   };
 
   return (

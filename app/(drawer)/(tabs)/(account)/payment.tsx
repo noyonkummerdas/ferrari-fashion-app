@@ -1,5 +1,7 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
@@ -22,11 +24,53 @@ const Payment = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
+  const { userInfo } = useGlobalContext();
+  const [createTransaction] = useAddTransactionMutation();
+  // const [supplier, setSupplier] = useState("");
 
   const [q, setQ] = useState("all");
   const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
     q: q,
   });
+
+  // Form state
+  const [formData, setFormData] = useState({
+    date: new Date(),
+    amount: 0,
+    // note: "",
+    photo: null as string | null,
+    supplierId: "",
+    invoice: "",
+    name: "",
+    note: "",
+    type: "payment",
+    user: userInfo?.id,
+    warehouse: userInfo?.warehouse,
+    openingBalance: 0,
+    currentBalance: 0,
+    invoices: "",
+    status: "complete",
+  });
+
+  const {
+    data: supplierData,
+    isSuccess: supplierIsSuccess,
+    refetch: supplierRefetch,
+  } = useSuppliersQuery(formData.supplierId);
+
+  useEffect(() => {
+    if (supplierData && supplierIsSuccess) {
+      setFormData((prev) => ({
+        ...prev,
+        openingBalance: supplierData?.currentBalance ?? 0,
+        currentBalance: supplierData?.currentBalance ?? 0,
+      }));
+    }
+  }, [supplierData, supplierIsSuccess]);
+
+  useEffect(() => {
+    supplierRefetch();
+  }, [formData.supplierId]);
 
   useEffect(() => {
     refetch();
@@ -72,14 +116,16 @@ const Payment = () => {
   }, [navigation]);
 
   const handleInputChange = (field: string, value: string) => {
-    if (
-      field === "amount" ||
-      field === "balanceAmount" ||
-      field === "newBalance"
-    ) {
+    if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({ ...prev, [field]: numValue }));
+      setFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+        currentBalance: supplierData?.currentBalance
+          ? parseInt(supplierData?.currentBalance) - numValue
+          : 0 - numValue,
+      }));
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -91,33 +137,53 @@ const Payment = () => {
     setShowDatePicker(true);
   };
 
-  // Form state
-  const [formData, setFormData] = useState({
-    date: new Date(),
-    amount: 0,
-    note: "",
-    photo: null as string | null,
-    supplierId: "",
-    invoice: "",
-    name: "",
-    type: "payment",
-  });
-
   const handleTypeChange = (
     type: "income" | "expense" | "payment" | "receipt",
   ) => {
     setFormData((prev) => ({ ...prev, type }));
   };
-  const handleSubmit = () => {
-    console.log("Transaction Form Data:", formData);
-    // console.log("Photo URI:", formData.photo);
 
-    // Alert.alert(
-    //   "Success",
-    //   "Form data logged to console. Check console for details.",
-    //   [{ text: "OK" }],
-    // );
+  const handleSubmit = async () => {
+    console.log("Transaction Form Data:", formData);
+    console.log("Photo URI:", formData.photo);
+
+    try {
+      const response = await createTransaction(formData).unwrap();
+      console.log("Transaction created:", response);
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    }
+
+    Alert.alert(
+      "Success",
+      "Form data logged to console. Check console for details.",
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            setFormData({
+              name: "",
+              user: userInfo?.id,
+              warehouse: userInfo?.warehouse,
+              amount: 0,
+              openingBalance: 0,
+              currentBalance: 0,
+              photo: "",
+              invoices: "",
+              note: "",
+              date: new Date(),
+              type: "payment",
+              status: "complete",
+              supplierId: "",
+              invoice: "",
+            });
+            router.back();
+          },
+        },
+      ],
+    );
   };
+
   const handlePhotoUpload = async () => {
     try {
       // Request permissions

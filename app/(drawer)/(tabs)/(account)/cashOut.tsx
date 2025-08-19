@@ -1,9 +1,12 @@
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useAddTransactionMutation } from "@/store/api/transactionApi";
+import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   Image,
@@ -18,6 +21,8 @@ import {
 const CashOut = () => {
   const router = useRouter();
   const navigation = useNavigation();
+  const { userInfo } = useGlobalContext();
+  const [createTransaction] = useAddTransactionMutation();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -26,13 +31,37 @@ const CashOut = () => {
     note: "",
     invoice: "",
     photo: null as string | null,
-    balanceAmount: 0,
-    newBalance: 0,
     type: "cashOut",
     status: "complete",
+    name: "",
+    user: userInfo?.id,
+    warehouse: userInfo?.warehouse,
+    openingBalance: 0,
+    currentBalance: 0,
+    invoices: "",
   });
 
   const [showDatePicker, setShowDatePicker] = useState(false);
+
+  const { data, isSuccess, isLoading, refetch } = useWarehouseQuery(
+    userInfo?.warehouse,
+  );
+
+  console.log(data);
+
+  useEffect(() => {
+    refetch();
+  }, [userInfo]);
+
+  useEffect(() => {
+    if (data && isSuccess) {
+      setFormData((prev) => ({
+        ...prev,
+        openingBalance: data?.currentBalance,
+        currentBalance: data?.currentBalance,
+      }));
+    }
+  }, [data, isSuccess]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -76,14 +105,14 @@ const CashOut = () => {
   };
 
   const handleInputChange = (field: string, value: string) => {
-    if (
-      field === "amount" ||
-      field === "balanceAmount" ||
-      field === "newBalance"
-    ) {
+    if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({ ...prev, [field]: numValue }));
+      setFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+        currentBalance: parseInt(data?.currentBalance) - numValue,
+      }));
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -181,14 +210,43 @@ const CashOut = () => {
     setFormData((prev) => ({ ...prev, photo: null }));
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     console.log("Transaction Form Data:", formData);
     console.log("Photo URI:", formData.photo);
+
+    try {
+      const response = await createTransaction(formData).unwrap();
+      console.log("Transaction created:", response);
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    }
 
     Alert.alert(
       "Success",
       "Form data logged to console. Check console for details.",
-      [{ text: "OK" }],
+      [
+        {
+          text: "OK",
+          onPress: () => {
+            setFormData({
+              name: "",
+              user: userInfo?.id,
+              warehouse: userInfo?.warehouse,
+              amount: 0,
+              openingBalance: 0,
+              currentBalance: 0,
+              photo: "",
+              invoices: "",
+              note: "",
+              date: new Date(),
+              type: "cashOut",
+              status: "complete",
+              invoice: "",
+            });
+            router.back();
+          },
+        },
+      ],
     );
   };
 
@@ -207,6 +265,17 @@ const CashOut = () => {
         className="flex-1 px-6 pt-4"
         showsVerticalScrollIndicator={false}
       >
+        {/* Name Input */}
+        <View className="mb-4">
+          <Text className="text-gray-300 text-lg font-medium">Name</Text>
+          <TextInput
+            className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
+            value={formData.name}
+            onChangeText={(value) => handleInputChange("name", value)}
+            placeholder="Enter name"
+            placeholderTextColor="#9CA3AF"
+          />
+        </View>
         {/* Date Input */}
         <View className="mb-4">
           <Text className="text-gray-300 text-lg font-medium">Date</Text>
