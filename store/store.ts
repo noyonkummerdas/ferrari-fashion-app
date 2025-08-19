@@ -13,11 +13,12 @@ import {
 
 // Example slice reducer (you can replace this with your actual slice)
 import CustomerApi from "./api/customerApi";
+import ProductApi from "./api/productApi";
 import StockApi from "./api/stockApi";
 import SupplierApi from "./api/supplierApi";
+import TransactionApi from "./api/transactionApi";
 import UserApi from "./api/userApi";
 
-import ProductApi from "./api/productApi";
 import SaleApi from "./api/saleApi";
 import SettingApi from "./api/settingApi";
 import UploadApi from "./api/uploadApi";
@@ -43,6 +44,7 @@ const rootReducers = combineReducers({
   [ProductApi.reducerPath]: ProductApi.reducer,
   [StockApi.reducerPath]: StockApi.reducer,
   [SaleApi.reducerPath]: SaleApi.reducer,
+  [TransactionApi.reducerPath]: TransactionApi.reducer,
   [SettingApi.reducerPath]: SettingApi.reducer,
   [UploadApi.reducerPath]: UploadApi.reducer,
 });
@@ -60,6 +62,7 @@ export const store = configureStore({
       SaleApi.middleware,
       WarehouseApi.middleware,
       ProductApi.middleware,
+      TransactionApi.middleware,
       StockApi.middleware,
       CustomerApi.middleware,
       SupplierApi.middleware,
