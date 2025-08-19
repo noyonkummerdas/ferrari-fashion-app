@@ -153,7 +153,7 @@ const PaymentList = () => {
                         </View>
                         <View className="flex flex-row items-center justify-between">
                             <Text className="text-md text-gray-200">Invoice: {item.invoice}</Text>
-                            <Text className="text-lg text-primary">{item.amount}</Text>
+                            <Text className="text-lg text-primary">{item.amount} <Text className="text-white">BDT</Text></Text>
                         </View>
                 </TouchableOpacity>
           </View>

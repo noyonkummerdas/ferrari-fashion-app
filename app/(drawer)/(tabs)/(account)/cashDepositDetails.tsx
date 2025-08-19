@@ -98,7 +98,7 @@ const cashDepositDetails = () => {
                     <Text className="text-base font-medium text-primary">{item.name}</Text>
                     <View className="flex flex-row items-center justify-between">
                     <Text className="text-sm text-gray-200">{item.date}</Text>
-                    <Text className="text-lg text-primary">{item.amount}</Text>
+                    <Text className="text-lg text-primary">{item.amount} <Text className="text-white">BDT</Text></Text>
                     </View>
           </View>
         ))}
