@@ -1,3 +1,4 @@
+import { Colors } from "@/constants/Colors";
 import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
@@ -12,7 +13,7 @@ import {
   View,
 } from "react-native";
 
-const CashDepositDetails = () => {
+const PaymentDetails = () => {
   const { _id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
@@ -33,7 +34,7 @@ const CashDepositDetails = () => {
           </TouchableOpacity>
         </View>
       ),
-      title: "Transaction Details",
+      title: "Payment Details",
       headerStyle: {
         backgroundColor: "#1f2937",
       },
@@ -49,9 +50,7 @@ const CashDepositDetails = () => {
     return (
       <View className="flex-1 bg-dark justify-center items-center">
         <ActivityIndicator size="large" color="#3b82f6" />
-        <Text className="text-white mt-4 text-lg">
-          Loading transaction details...
-        </Text>
+        <Text className="text-white mt-4 text-lg">Loading transaction details...</Text>
       </View>
     );
   }
@@ -92,10 +91,10 @@ const CashDepositDetails = () => {
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "deposit":
-        return "text-green-400";
-      case "withdrawal":
+      case "payment":
         return "text-red-400";
+      case "paymentReceived":
+        return "text-green-400";
       default:
         return "text-blue-400";
     }
@@ -103,10 +102,10 @@ const CashDepositDetails = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "deposit":
-        return "add-circle";
-      case "withdrawal":
+      case "payment":
         return "remove-circle";
+      case "paymentReceived":
+        return "add-circle";
       default:
         return "swap-horizontal";
     }
@@ -115,7 +114,7 @@ const CashDepositDetails = () => {
   return (
     <ScrollView className="flex-1 bg-dark">
       {/* Header Card */}
-      <View className="mx-4 mt-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6">
+      <View className="mx-4 mt-6 bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center">
             <View className="w-12 h-12 bg-white/20 rounded-full items-center justify-center mr-3">
@@ -168,9 +167,9 @@ const CashDepositDetails = () => {
 
         <View className="space-y-4">
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
-            <Text className="text-gray-300 text-base">Name</Text>
+            <Text className="text-gray-300 text-base">Supplier</Text>
             <Text className="text-white text-base font-medium">
-              {data.name || "N/A"}
+              {data.supplierId?.name || data.name || "N/A"}
             </Text>
           </View>
 
@@ -224,11 +223,8 @@ const CashDepositDetails = () => {
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Amount</Text>
-            <Text
-              className={`text-base font-medium ${data.type === "deposit" ? "text-green-400" : "text-red-400"}`}
-            >
-              {data.type === "deposit" ? "+" : "-"}৳
-              {data.amount?.toLocaleString()}
+            <Text className="text-red-400 text-base font-medium">
+              -৳{data.amount?.toLocaleString()}
             </Text>
           </View>
 
@@ -298,4 +294,4 @@ const CashDepositDetails = () => {
   );
 };
 
-export default CashDepositDetails;
+export default PaymentDetails;

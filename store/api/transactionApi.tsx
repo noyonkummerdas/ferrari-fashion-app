@@ -17,6 +17,11 @@ export const TransactionApi = createApi({
       query: (_id) => `/transaction/${_id}`,
       providesTags: ["Transaction"],
     }),
+    TransactionList: builder.query<Transaction, any>({
+      query: ({ warehouse, type, date }) =>
+        `/transaction/list/${warehouse}/${type}/${date}`,
+      providesTags: ["Transaction"],
+    }),
     TransactionByCustomer: builder.query<Transaction[], any>({
       query: ({ startDate, endDate, customerId }) =>
         `/transaction/byCustomer/${startDate}/${endDate}/?id=${customerId}`,
@@ -51,6 +56,7 @@ export const TransactionApi = createApi({
 export const {
   useTransactionsQuery,
   useTransactionQuery,
+  useTransactionListQuery,
   useTransactionByCustomerQuery,
   useAddTransactionMutation,
   useUpdateTransactionMutation,
