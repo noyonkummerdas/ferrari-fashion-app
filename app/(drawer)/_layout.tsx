@@ -209,7 +209,7 @@ const CustomDrawerComponent = (props: any) => {
         style={{
           backgroundColor: pathname == "/sales" ? "#000000" : "#131313",
         }}
-        onPress={() => router.push("/(drawer)/sales/salesList")}
+        onPress={() => router.push("/(drawer)/sales")}
       />
       <DrawerItem
         icon={({ size, color, focused }) => (

@@ -419,7 +419,7 @@ const createPurchase = () => {
               activeOpacity={0.8}
             >
               <Text className="text-black text-center font-bold text-lg">
-                Payment
+                Purchase
               </Text>
             </TouchableOpacity>
           </ScrollView>

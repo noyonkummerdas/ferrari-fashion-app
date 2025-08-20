@@ -4,6 +4,7 @@ import { Colors } from "@/constants/Colors";
 import { router, useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
 import { useColorScheme } from "react-native";
+import { addDays, format, isToday, subDays } from "date-fns";
 import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
 const SalesList = () => {
      const colorScheme = useColorScheme();
@@ -14,7 +15,7 @@ const SalesList = () => {
           headerRight: () => (
             <View className="me-4 bg-dark">
               <TouchableOpacity
-                onPress={() => router.push("/Sales/createDueSales")}
+                onPress={() => router.push("/sales/createDueSelas")}
                 className="flex flex-row justify-center items-center gap-2"
               >
                 <Ionicons name="person-add" size={18} color="#ffffff" />
@@ -22,7 +23,7 @@ const SalesList = () => {
               </TouchableOpacity>
             </View>
           ),
-          title: "Due Sales",
+          title: "Sales",
           //@ts-ignore
           headerStyle: {
             backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
@@ -36,10 +37,100 @@ const SalesList = () => {
           headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
         });
       }, [navigation]);
+
+
+      const data =[
+        {
+          name:'Noyon Das',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
+
+          
+        },
+        {
+          name:'Abdul khan Malek',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
+
+          
+        },
+        {
+          name:'Madu',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
+
+          
+        },
+        {
+          name:'Jadu',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
+
+          
+        },
+        {
+          name:'Korim',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'farrari-city'
+
+          
+        },
+        {
+          name:'Rohim',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'fararri-fashion'
+
+          
+        },
+      ]
+
+      
+
   return (
-    <View>
-      <Text className="text-gray-200">Sales list </Text>
-    </View>
+      <>
+
+    <FlatList
+    data={data}                           // 
+    keyExtractor={(item) => item.id}      // 
+    renderItem={({ item }) => (
+      
+      <TouchableOpacity 
+      onPress={()=>router.push({pathname:'/data',params:{item}})}
+      >
+      //
+      <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
+        <View className="flex-col">
+        <Text className="text-primary font-bold text-lg">{item.name}</Text>
+        <Text className="text-primary text-bsed">{item.company}</Text>
+        </View>
+        <View className="flex-col items-end">
+        <Text className="text-gray-200">{item.date}</Text>
+          <Text className="text-primary ">{item.amount} <Text className="text-gray-200">BDT</Text></Text>
+        </View>
+
+      </View>
+      </TouchableOpacity>
+    )}
+  />
+  </>
   );
 };
 
