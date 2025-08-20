@@ -12,7 +12,7 @@ import {
   View,
 } from "react-native";
 
-const CashDepositDetails = () => {
+const PaymentReceivedDetails = () => {
   const { _id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
@@ -33,7 +33,7 @@ const CashDepositDetails = () => {
           </TouchableOpacity>
         </View>
       ),
-      title: "Transaction Details",
+      title: "Payment Received Details",
       headerStyle: {
         backgroundColor: "#1f2937",
       },
@@ -86,15 +86,15 @@ const CashDepositDetails = () => {
       case "failed":
         return "text-red-400";
       default:
-        return "text-gray-400";
+        return "text-dark";
     }
   };
 
   const getTypeColor = (type: string) => {
     switch (type) {
-      case "deposit":
+      case "paymentReceived":
         return "text-green-400";
-      case "withdrawal":
+      case "payment":
         return "text-red-400";
       default:
         return "text-blue-400";
@@ -103,9 +103,9 @@ const CashDepositDetails = () => {
 
   const getTypeIcon = (type: string) => {
     switch (type) {
-      case "deposit":
+      case "paymentReceived":
         return "add-circle";
-      case "withdrawal":
+      case "payment":
         return "remove-circle";
       default:
         return "swap-horizontal";
@@ -115,7 +115,7 @@ const CashDepositDetails = () => {
   return (
     <ScrollView className="flex-1 bg-dark">
       {/* Header Card */}
-      <View className="mx-4 mt-6 bg-gradient-to-r from-blue-600 to-blue-700 rounded-2xl p-6">
+      <View className="mx-4 mt-6 bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-6">
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center">
             <View className="w-12 h-12 bg-white/20 rounded-full items-center justify-center mr-3">
@@ -168,9 +168,9 @@ const CashDepositDetails = () => {
 
         <View className="space-y-4">
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
-            <Text className="text-gray-300 text-base">Name</Text>
+            <Text className="text-gray-300 text-base">Customer</Text>
             <Text className="text-white text-base font-medium">
-              {data.name || "N/A"}
+              {data?.customerId?.name || "N/A"}
             </Text>
           </View>
 
@@ -224,11 +224,8 @@ const CashDepositDetails = () => {
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Amount</Text>
-            <Text
-              className={`text-base font-medium ${data.type === "deposit" ? "text-green-400" : "text-red-400"}`}
-            >
-              {data.type === "deposit" ? "+" : "-"}৳
-              {data.amount?.toLocaleString()}
+            <Text className="text-green-400 text-base font-medium">
+              +৳{data.amount?.toLocaleString()}
             </Text>
           </View>
 
@@ -298,4 +295,4 @@ const CashDepositDetails = () => {
   );
 };
 
-export default CashDepositDetails;
+export default PaymentReceivedDetails;

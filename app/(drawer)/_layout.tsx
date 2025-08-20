@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import profile from "../../assets/images/profile.jpg";
 // import * as globalCon from "@/context/GlobalProvider"
+import { StatusBar } from "expo-status-bar";
 import { useSelector } from "react-redux";
 import { useGlobalContext } from "../../context/GlobalProvider";
 
@@ -69,6 +70,7 @@ const CustomDrawerComponent = (props: any) => {
 
   return (
     <DrawerContentScrollView {...props}>
+      <StatusBar style="light" />
       <TouchableOpacity onPress={() => router.push("/")} className="mx-2 pe-3">
         <View className="flex flex-row gap-x-3 border-b items-center border-slate-400 pb-4 mb-2">
           <Image source={profile} className="h-14 w-14" />

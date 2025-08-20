@@ -29,7 +29,16 @@ const CashDepositDetails = () => {
     refetch();
   }, [userInfo]);
 
-  console.log(data);
+  useEffect(() => {
+    if (data && isSuccess) {
+      setFormData((prev) => ({
+        ...prev,
+        openingBalance: data?.currentBalance,
+        currentBalance: data?.currentBalance,
+      }));
+    }
+  }, [data, isSuccess]);
+
   const [createTransaction] = useAddTransactionMutation();
 
   // Form state
@@ -49,6 +58,8 @@ const CashDepositDetails = () => {
   });
 
   console.log("FD", formData);
+
+  console.log(data);
 
   useEffect(() => {
     if (data && isSuccess) {
