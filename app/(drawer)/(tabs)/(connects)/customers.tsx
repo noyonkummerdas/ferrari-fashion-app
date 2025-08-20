@@ -69,7 +69,7 @@ const Customers = () => {
       headerRight: () => (
         <View className="me-4 bg-dark">
           <TouchableOpacity
-            onPress={() => router.push("/customer/add-customer")}
+            onPress={() => router.push("/purchases/purchasesList")}
             className="flex flex-row justify-center items-center gap-2"
           >
             <Ionicons name="person-add" size={18} color="#ffffff" />
