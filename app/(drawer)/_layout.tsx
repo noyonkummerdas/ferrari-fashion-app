@@ -193,6 +193,50 @@ const CustomDrawerComponent = (props: any) => {
         icon={({ size, color, focused }) => (
           <TabIcon
             pathname={pathname}
+            icon="cart"
+            iconAlt="cart-outline"
+            color={color}
+            focused={["/sales"]}
+          />
+        )}
+        label={"Sales"}
+        labelStyle={[
+          styles.labelStyle,
+          {
+            color: pathname == "/sales" ? "#ffffff" : "#ffffff",
+          },
+        ]}
+        style={{
+          backgroundColor: pathname == "/sales" ? "#000000" : "#131313",
+        }}
+        onPress={() => router.push("/(drawer)/sales/salesList")}
+      />
+      <DrawerItem
+        icon={({ size, color, focused }) => (
+          <TabIcon
+            pathname={pathname}
+            icon="cart-outline"
+            iconAlt="cart-outline"
+            color={color}
+            focused={["/purchases"]}
+          />
+        )}
+        label={"Purchases"}
+        labelStyle={[
+          styles.labelStyle,
+          {
+            color: pathname == "/purchases" ? "#ffffff" : "#ffffff",
+          },
+        ]}
+        style={{
+          backgroundColor: pathname == "/purchases" ? "#000000" : "#131313",
+        }}
+        onPress={() => router.push("/(drawer)/purchases")}
+      />
+      <DrawerItem
+        icon={({ size, color, focused }) => (
+          <TabIcon
+            pathname={pathname}
             icon="wallet-outline"
             iconAlt="wallet-outline"
             color={color}
