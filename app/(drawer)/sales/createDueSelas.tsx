@@ -42,7 +42,7 @@ const createDueSelas = () => {
     amount: 0,
     // note: "",
     photo: null as string | null,
-    supplierId: "",
+    customer: "",
     invoice: "",
     name: "",
     note: "",
@@ -178,7 +178,7 @@ const createDueSelas = () => {
               date: new Date(),
               type: "payment",
               status: "complete",
-              supplierId: "",
+              customer: "",
               invoice: "",
             });
             router.back();
@@ -295,8 +295,8 @@ const createDueSelas = () => {
               </Text>
               <CustomDropdownWithSearch
                 data={type}
-                value={formData.supplierId}
-                placeholder="Select Supplier"
+                value={formData.customer}
+                placeholder="Select Customer"
                 onValueChange={(value: string) =>
                   handleInputChange("supplierId", value)
                 }
