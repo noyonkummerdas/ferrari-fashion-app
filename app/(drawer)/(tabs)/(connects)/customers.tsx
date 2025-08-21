@@ -105,7 +105,7 @@ const Customers = () => {
       <SafeAreaView className="bg-dark h-full">
         <View className="flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200">
           <TextInput
-            placeholder="Search Supplier"
+            placeholder="Search Customer..."
             className="placeholder:text-gray-100 flex-1 text-gray-300 "
             value={searchQuery}
             onChangeText={setSearchQuery}
