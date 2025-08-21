@@ -46,50 +46,11 @@ const Accounts = () => {
               {/* Top balances */}
 
      
-      {/* Row 1 */}
-      <View className="flex-row mb-4">
-        <TouchableOpacity
-          className="flex-1 bg-black-200 rounded-xl h-28 justify-center items-center mr-2"
-          activeOpacity={0.8}
-          onPress={() => router.push("/(account)/cashDeposit")}
-        >
-          <Ionicons name="wallet" size={28} color="#FDB714" />
-          <Text className="text-white text-base mt-2">Cash Deposit</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="flex-1 bg-black-200 rounded-xl h-28 justify-center items-center ml-2"
-          activeOpacity={0.8}
-          onPress={() => router.push("/(account)/cashOut")}
-        >
-          <Ionicons name="card" size={28} color="#FDB714" />
-          <Text className="text-white text-base mt-2">Cash Out</Text>
-        </TouchableOpacity>
-      </View>
-      {/* Row 2 */}
-      <View className="flex-row">
-        <TouchableOpacity
-          className="flex-1 bg-black-200 rounded-xl h-28 justify-center items-center mr-2"
-          activeOpacity={0.8}
-          onPress={() => router.push("/(account)/payment")}
-        >
-          <Ionicons name="cash" size={28} color="#FDB714" />
-          <Text className="text-white text-base mt-2">Payment</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          className="flex-1 bg-black-200 rounded-xl h-28 justify-center items-center ml-2"
-          activeOpacity={0.8}
-          onPress={() => router.push("/(account)/received-payment/")}
-        >
-          <Ionicons name="checkmark-done-circle" size={28} color="#FDB714" />
-          <Text className="text-white text-base mt-2">Received Payment</Text>
-        </TouchableOpacity>
-      </View>
+ 
 
       {/* Transactions Summary Cards */}
       <View className="mt-4">
-        <Text className="text-white text-lg font-pbold mb-4 mt-2">
+        <Text className="text-white text-lg font-pbold mb-4">
           Transactions
         </Text>
 
@@ -158,6 +119,53 @@ const Accounts = () => {
             <Text className="text-white text-xl font-pbold ms-2">0.00</Text>
           </TouchableOpacity>
         </View>
+
+      <Text className="text-lg text-gray-300 pb-4 mt-4 font-pbold "> Payment Section</Text>
+
+     {/* Row 1 */}
+     <View className="flex-row mb-4">
+        <TouchableOpacity
+          className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
+          activeOpacity={0.8}
+          onPress={() => router.push("/(account)/cashDeposit")}
+        >
+          <Ionicons name="wallet" size={28} color="#FDB714" />
+          <Text className="text-white text-base mt-2">Cash Deposit</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center ml-2"
+          activeOpacity={0.8}
+          onPress={() => router.push("/(account)/cashOut")}
+        >
+          <Ionicons name="card" size={28} color="#FDB714" />
+          <Text className="text-white text-base mt-2">Cash Out</Text>
+        </TouchableOpacity>
+      </View>
+      {/* Row 2 */}
+      <View className="flex-row">
+        <TouchableOpacity
+          className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
+          activeOpacity={0.8}
+          onPress={() => router.push("/(account)/payment")}
+        >
+          <Ionicons name="cash" size={28} color="#FDB714" />
+          <Text className="text-white text-base mt-2">Payment</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center ml-2"
+          activeOpacity={0.8}
+          onPress={() => router.push("/(account)/received-payment/")}
+        >
+          <Ionicons name="checkmark-done-circle" size={28} color="#FDB714" />
+          <Text className="text-white text-base mt-2">Received Payment</Text>
+        </TouchableOpacity>
+      </View>
+
+
+
+
           
               </View>
             </ScrollView>

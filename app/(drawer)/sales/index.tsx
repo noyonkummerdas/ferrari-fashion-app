@@ -2,11 +2,13 @@ import { CustomDrawerToggleButton } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { router, useNavigation } from "expo-router";
-import React, { useLayoutEffect } from "react";
-import { useColorScheme } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import { TextInput, useColorScheme } from "react-native";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
+import { useCustomerListQuery } from "@/store/api/customerApi";
 const SalesList = () => {
+  const [searchQuery, setSearchQuery] = useState("");
      const colorScheme = useColorScheme();
 
     const navigation = useNavigation();
@@ -38,74 +40,95 @@ const SalesList = () => {
         });
       }, [navigation]);
 
+      const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    useCustomerListQuery({
+      q: searchQuery || "all",
+      forceRefetch: true,
+    });
 
-      const data =[
-        {
-          name:'Noyon Das',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion'
+  const resetData = () => {
+    setSearchQuery("");
+    refetch();
+  };
 
-          
-        },
-        {
-          name:'Abdul khan Malek',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion'
 
-          
-        },
-        {
-          name:'Madu',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion'
+      // const data =[
+      //   {
+      //     name:'Noyon Das',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion'
 
           
-        },
-        {
-          name:'Jadu',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion'
+      //   },
+      //   {
+      //     name:'Abdul khan Malek',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion'
 
           
-        },
-        {
-          name:'Korim',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'farrari-city'
+      //   },
+      //   {
+      //     name:'Madu',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion'
 
           
-        },
-        {
-          name:'Rohim',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'fararri-fashion'
+      //   },
+      //   {
+      //     name:'Jadu',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion'
 
           
-        },
-      ]
+      //   },
+      //   {
+      //     name:'Korim',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'farrari-city'
+
+          
+      //   },
+      //   {
+      //     name:'Rohim',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'fararri-fashion'
+
+          
+      //   },
+      // ]
 
       
 
   return (
       <>
+
+      <View className="flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200">
+          <TextInput
+            placeholder="Search Supplier"
+            className="placeholder:text-gray-100 flex-1 text-gray-300 "
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
+        </View>
 
     <FlatList
     data={data}                           // 
@@ -113,13 +136,13 @@ const SalesList = () => {
     renderItem={({ item }) => (
       
       <TouchableOpacity 
-      onPress={()=>router.push({pathname:'/data',params:{item}})}
+      // onPress={()=>router.push({pathname:'/data',params:{item}})}
       >
       //
       <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
         <View className="flex-col">
         <Text className="text-primary font-bold text-lg">{item.name}</Text>
-        <Text className="text-primary text-bsed">{item.company}</Text>
+        <Text className="text-gray-300 text-bsed">{item.company}</Text>
         </View>
         <View className="flex-col items-end">
         <Text className="text-gray-200">{item.date}</Text>

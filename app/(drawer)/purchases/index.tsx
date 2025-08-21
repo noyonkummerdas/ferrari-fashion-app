@@ -16,9 +16,72 @@ const data = [
     date:'12-12-2012',
     amount:10000,
     note:'Note some this',
-    photo: require('../assets/images/sample.png')
+    // photo: require('../assets/images/sample.png')
 
-  }
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
 ]
 
 const PurchasesList = () => {
@@ -53,9 +116,6 @@ const PurchasesList = () => {
         });
       }, [navigation]);
 
-
-
-
   return (
     <>
     <StatusBar style="light" />
@@ -65,7 +125,7 @@ const PurchasesList = () => {
     renderItem={({ item }) => (
       
       <TouchableOpacity 
-      onPress={()=>router.push({pathname:'/data',params:{item}})}
+      // onPress={()=>router.push({pathname:'/data',params:{item}})}
       >
       //
       <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
