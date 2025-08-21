@@ -102,7 +102,7 @@ const createDueSelas = () => {
     navigation.setOptions({
       headerLeft: () => (
         <View className="flex flex-row me-4">
-          <TouchableOpacity onPress={() => router.back('')}>
+          <TouchableOpacity onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={24} color="#ffffff" />
           </TouchableOpacity>
         </View>

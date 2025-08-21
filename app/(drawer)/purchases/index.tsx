@@ -3,8 +3,24 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { router, useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
-import { useColorScheme } from "react-native";
+import { StatusBar, useColorScheme } from "react-native";
 import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
+
+
+
+
+const data = [
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    photo: require('../assets/images/sample.png')
+
+  }
+]
+
 const PurchasesList = () => {
      const colorScheme = useColorScheme();
 
@@ -36,10 +52,48 @@ const PurchasesList = () => {
           headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
         });
       }, [navigation]);
+
+
+
+
   return (
-    <View>
-      <Text className="text-gray-200">Purchases List</Text>
-    </View>
+    <>
+    <StatusBar style="light" />
+    <FlatList
+    data={data}                           // 
+    keyExtractor={(item) => item.id}      // 
+    renderItem={({ item }) => (
+      
+      <TouchableOpacity 
+      onPress={()=>router.push({pathname:'/data',params:{item}})}
+      >
+      //
+      <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
+        <View className="flex-col">
+        <View className="flex-row items-center">
+        <Image 
+              source={{ uri: item.photo }}
+              className="w-16 h-16 rounded-lg"
+              resizeMode="cover"
+            />
+            <View>
+              <Text className="text-primary text-lg ">{item.name}</Text>
+              <Text className="text-gray-200 text-sm"> Invoice: {item.invoice}</Text>
+            </View>
+        </View>
+        </View>
+        
+        <View className="flex-col items-end">
+
+        <Text className="text-gray-200">{item.date}</Text>
+          <Text className="text-primary ">{item.amount} <Text className="text-gray-200">BDT</Text></Text>
+        </View>
+
+      </View>
+      </TouchableOpacity>
+    )}
+  />
+  </>
   );
 };
 
