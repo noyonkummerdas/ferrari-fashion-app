@@ -7,8 +7,9 @@ import { TextInput, useColorScheme } from "react-native";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
 import { useCustomerListQuery } from "@/store/api/customerApi";
+import { ScrollView } from "react-native-gesture-handler";
 const SalesList = () => {
-  const [searchQuery, setSearchQuery] = useState("");
+  // const [searchQuery, setSearchQuery] = useState("");
      const colorScheme = useColorScheme();
 
     const navigation = useNavigation();
@@ -40,80 +41,80 @@ const SalesList = () => {
         });
       }, [navigation]);
 
-      const { data, error, isLoading, isFetching, isSuccess, refetch } =
-    useCustomerListQuery({
-      q: searchQuery || "all",
-      forceRefetch: true,
-    });
+    //   const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    // useCustomerListQuery({
+    //   q: searchQuery || "all",
+    //   forceRefetch: true,
+    // });
 
-  const resetData = () => {
-    setSearchQuery("");
-    refetch();
-  };
+  // const resetData = () => {
+  //   setSearchQuery("");
+  //   refetch();
+  // };
 
 
-      // const data =[
-      //   {
-      //     name:'Noyon Das',
-      //     invoice: 'INV 012',
-      //     amount: 20000,
-      //     note: 'This is the first transction ',
-      //     date: '12-12-2012',
-      //     company:'Sahabag fashion'
-
-          
-      //   },
-      //   {
-      //     name:'Abdul khan Malek',
-      //     invoice: 'INV 012',
-      //     amount: 20000,
-      //     note: 'This is the first transction ',
-      //     date: '12-12-2012',
-      //     company:'Sahabag fashion'
+      const data =[
+        {
+          name:'Noyon Das',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
 
           
-      //   },
-      //   {
-      //     name:'Madu',
-      //     invoice: 'INV 012',
-      //     amount: 20000,
-      //     note: 'This is the first transction ',
-      //     date: '12-12-2012',
-      //     company:'Sahabag fashion'
+        },
+        {
+          name:'Abdul khan Malek',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
 
           
-      //   },
-      //   {
-      //     name:'Jadu',
-      //     invoice: 'INV 012',
-      //     amount: 20000,
-      //     note: 'This is the first transction ',
-      //     date: '12-12-2012',
-      //     company:'Sahabag fashion'
+        },
+        {
+          name:'Madu',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
 
           
-      //   },
-      //   {
-      //     name:'Korim',
-      //     invoice: 'INV 012',
-      //     amount: 20000,
-      //     note: 'This is the first transction ',
-      //     date: '12-12-2012',
-      //     company:'farrari-city'
+        },
+        {
+          name:'Jadu',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'Sahabag fashion'
 
           
-      //   },
-      //   {
-      //     name:'Rohim',
-      //     invoice: 'INV 012',
-      //     amount: 20000,
-      //     note: 'This is the first transction ',
-      //     date: '12-12-2012',
-      //     company:'fararri-fashion'
+        },
+        {
+          name:'Korim',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'farrari-city'
 
           
-      //   },
-      // ]
+        },
+        {
+          name:'Rohim',
+          invoice: 'INV 012',
+          amount: 20000,
+          note: 'This is the first transction ',
+          date: '12-12-2012',
+          company:'fararri-fashion'
+
+          
+        },
+      ]
 
       
 
@@ -122,21 +123,22 @@ const SalesList = () => {
 
       <View className="flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200">
           <TextInput
-            placeholder="Search Supplier"
+            placeholder="Search Customer"
             className="placeholder:text-gray-100 flex-1 text-gray-300 "
-            value={searchQuery}
-            onChangeText={setSearchQuery}
+            // value={searchQuery}
+            // onChangeText={setSearchQuery}
           />
           <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
         </View>
 
+    <ScrollView>
     <FlatList
-    data={data}                           // 
-    keyExtractor={(item) => item.id}      // 
+    data={data}                           
+    keyExtractor={(item) => item.id}      
     renderItem={({ item }) => (
       
       <TouchableOpacity 
-      // onPress={()=>router.push({pathname:'/data',params:{item}})}
+      onPress={()=>router.push('/sales/salesDetails')}
       >
       //
       <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
@@ -146,13 +148,16 @@ const SalesList = () => {
         </View>
         <View className="flex-col items-end">
         <Text className="text-gray-200">{item.date}</Text>
-          <Text className="text-primary ">{item.amount} <Text className="text-gray-200">BDT</Text></Text>
+          <Text className="text-primary ">{item.amount}
+             <Text className="text-gray-200">BDT</Text>
+           </Text>
         </View>
 
       </View>
       </TouchableOpacity>
     )}
   />
+    </ScrollView>
   </>
   );
 };

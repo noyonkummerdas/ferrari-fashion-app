@@ -16,11 +16,11 @@ import {
   Text,
   View,
 } from "react-native";
-import {
-  useChartSaleQuery,
-  useDashboardSaleQuery,
-  useLatestSaleQuery,
-} from "../../../store/api/saleApi";
+// import {
+//   useChartSaleQuery,
+//   useDashboardSaleQuery,
+//   useLatestSaleQuery,
+// } from "../../../store/api/saleApi";
 
 const screenWidth = Dimensions.get("window").width;
 const profile = require("../../../assets/images/profile.jpg");
@@ -37,54 +37,57 @@ export default function PosDashboard() {
   // console.log(userInfo);
 
   const [refreshing, setRefreshing] = useState(false);
+  const [data, setData] = useState([]);
+  const [chartSale, setChartSale] = useState([]);
+  const [latestSale, setlatestSale] = useState([]);
 
-  const { data, error, isLoading, isFetching, isSuccess, refetch } =
-    useDashboardSaleQuery({
-      startDate: startDate,
-      endDate: endDate,
-      warehouse,
-      aamarId,
-      forceRefetch: true,
-    });
+  // const { data, error, isLoading, isFetching, isSuccess, refetch } =
+  //   useDashboardSaleQuery({
+  //     startDate: startDate,
+  //     endDate: endDate,
+  //     warehouse,
+  //     aamarId,
+  //     forceRefetch: true,
+  //   });
 
-  const {
-    data: chartSale,
-    error: chartError,
-    isLoading: chartLoading,
-    isFetching: chartFetching,
-    isSuccess: chartSuccess,
-    refetch: chartRefetch,
-  } = useChartSaleQuery({
-    warehouse,
-    aamarId,
-    forceRefetch: true,
-  });
+  // const {
+  //   data: chartSale,
+  //   error: chartError,
+  //   isLoading: chartLoading,
+  //   isFetching: chartFetching,
+  //   isSuccess: chartSuccess,
+  //   refetch: chartRefetch,
+  // } = useChartSaleQuery({
+  //   warehouse,
+  //   aamarId,
+  //   forceRefetch: true,
+  // });
 
-  // console.log("Dashboaard", chartSale)
-  const {
-    data: latestSale,
-    error: latestError,
-    isLoading: latestLoading,
-    isFetching: latestFetching,
-    isSuccess: latestSuccess,
-    refetch: latestRefetch,
-  } = useLatestSaleQuery({
-    warehouse,
-    aamarId,
-    limit: 5,
-    forceRefetch: true,
-  });
+  // // console.log("Dashboaard", chartSale)
+  // const {
+  //   data: latestSale,
+  //   error: latestError,
+  //   isLoading: latestLoading,
+  //   isFetching: latestFetching,
+  //   isSuccess: latestSuccess,
+  //   refetch: latestRefetch,
+  // } = useLatestSaleQuery({
+  //   warehouse,
+  //   aamarId,
+  //   limit: 5,
+  //   forceRefetch: true,
+  // });
 
-  useEffect(() => {
-    chartRefetch();
-  }, [aamarId, warehouse]);
+  // useEffect(() => {
+  //   chartRefetch();
+  // }, [aamarId, warehouse]);
 
-  // console.log("DASHBOARD->latestSale::",chartSale,warehouse,aamarId)
+  // // console.log("DASHBOARD->latestSale::",chartSale,warehouse,aamarId)
 
-  useEffect(() => {
-    // console.log(data);
-    refetch();
-  }, [aamarId, warehouse]);
+  // useEffect(() => {
+  //   // console.log(data);
+  //   refetch();
+  // }, [aamarId, warehouse]);
 
   useEffect(() => {
     fetchUser();
@@ -106,16 +109,16 @@ export default function PosDashboard() {
     } else {
       setStartDate(format(new Date(), "MM-dd-yyyy"));
     }
-    refetch();
+    // refetch();
   };
 
   // Function to fetch updated data
   const onRefresh = () => {
     setRefreshing(true);
 
-    refetch();
-    chartRefetch();
-    latestRefetch();
+    // refetch();
+    // chartRefetch();
+    // latestRefetch();
     // Simulate fetching dashboard data
     setTimeout(() => {
       console.log("Dashboard data refreshed!");
@@ -124,7 +127,7 @@ export default function PosDashboard() {
   };
 
   useEffect(() => {
-    refetch();
+    // refetch();
   }, [startDate, endDate, warehouse, aamarId]);
 
   // Prepare stats data for grid

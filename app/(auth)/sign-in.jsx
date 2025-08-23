@@ -36,6 +36,7 @@ const SignIn = () => {
     if (form.email === "" || form.password === "") {
       Alert.alert("Error", "Please fill in all fields");
     } else {
+      console.log(form)
       setSubmitting(true);
       try {
         const result = await login({

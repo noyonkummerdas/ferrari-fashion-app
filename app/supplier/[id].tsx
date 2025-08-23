@@ -124,6 +124,7 @@ const UpdateSupplier = () => {
   };
 
   return (
+    <>
     <ScrollView className="flex-1 bg-dark p-6">
       <StatusBar style="light" backgroundColor="#000000" />
       <View>
@@ -189,6 +190,8 @@ const UpdateSupplier = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
+
+    </>
   );
 };
 

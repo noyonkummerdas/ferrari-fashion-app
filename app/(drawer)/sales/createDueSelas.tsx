@@ -1,8 +1,10 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useSuppliersQuery } from "@/store/api/supplierApi";
-import { useAddTransactionMutation } from "@/store/api/transactionApi";
+import { useCustomerListQuery, useGetCustomerByIdQuery } from "@/store/api/customerApi";
+import { useAddSaleMutation, useAllSaleQuery,} from "@/store/api/saleApi";
+// import { useSuppliersQuery } from "@/store/api/supplierApi";
+// import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
@@ -26,67 +28,77 @@ const createDueSelas = () => {
   const router = useRouter();
    const colorScheme = useColorScheme();
   const navigation = useNavigation();
-  const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
-  // const [createTransaction] = useAddTransactionMutation();
-  // const [supplier, setSupplier] = useState("");
-
   const [q, setQ] = useState("all");
-  const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
+  const [customer, setCustomer] = useState([{ label: "Select Customer", value: "" }]);
+
+  const { data, isSuccess, isLoading, refetch } = useCustomerListQuery({
     q: q,
   });
-
-  // Form state
-  const [formData, setFormData] = useState({
-    date: new Date(),
-    amount: 0,
-    // note: "",
-    photo: null as string | null,
-    customer: "",
-    invoice: "",
-    name: "",
-    note: "",
-    type: "payment",
-    user: userInfo?.id,
-    warehouse: userInfo?.warehouse,
-    openingBalance: 0,
-    currentBalance: 0,
-    invoices: "",
-    status: "complete",
-  });
-
-  const {
-    data: supplierData,
-    isSuccess: supplierIsSuccess,
-    refetch: supplierRefetch,
-  } = useSuppliersQuery(formData.supplierId);
-
-  useEffect(() => {
-    if (supplierData && supplierIsSuccess) {
-      setFormData((prev) => ({
-        ...prev,
-        openingBalance: supplierData?.currentBalance ?? 0,
-        currentBalance: supplierData?.currentBalance ?? 0,
-      }));
-    }
-  }, [supplierData, supplierIsSuccess]);
-
-  useEffect(() => {
-    supplierRefetch();
-  }, [formData.supplierId]);
 
   useEffect(() => {
     refetch();
   }, [q]);
+
+  // console.log("q, data", q, data);
+
   useEffect(() => {
     if (data && isSuccess) {
-      const supplierOptions = data.map((item) => ({
+      const customerOptions = data.map((item) => ({
         label: item.name,
         value: item._id || item.id,
       }));
-      setType(supplierOptions);
+      setCustomer(customerOptions);
     }
   }, [data, isSuccess]);
+  // Form state
+  const [formData, setFormData] = useState({
+    invoceId:'',
+    date: new Date(),
+    amount: 0,
+    note: "",
+    // photo: null as string | null,
+    customerId: "",
+    invoice: "",
+    name: "",
+    // type: "due",
+    user: userInfo?.id,
+    warehouse: userInfo?.warehouse,
+    invoices: "",
+    status: "complete",
+  });
+  console.log('set form', formData)
+
+
+  // useEffect(() => {
+  //   if (salseData && salseIsSuccess) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       openingBalance: salseData?.currentBalance ?? 0,
+  //       currentBalance: salseData?.currentBalance ?? 0,
+  //     }));
+  //   }
+  // }, [salseData, slaseIsSuccess]);
+  
+
+  // useEffect(() => {
+  //   salseRefetch();
+  // }, [formData.salseId]);
+
+  // useEffect(() => {
+  //   refetch();
+  // }, [q]);
+
+
+  // useEffect(() => {
+  //   if (data && isSuccess) {
+  //     const salseOptions = data.map((item) => ({
+  //       label: item.name,
+  //       value: item._id || item.id,
+  //     }));
+  //     setType(salseOptions);
+  //   }
+  // }, [data, isSuccess]);
 
   // date formatting
   const today = new Date();
@@ -118,167 +130,44 @@ const createDueSelas = () => {
       headerShown: true,
     });
   }, [navigation]);
+  // const handleDateChange = (event: any, selectedDate?: Date) => {
+  //   if (selectedDate) {
+  //     setFormData((prev) => ({ ...prev, date: selectedDate }));
+  //   }
+  //   setShowDatePicker(false);
+  // };
+  
 
-   const handleInputChange = (field: string, value: string) => {
-    if (field === "amount") {
-      // Convert string to number for numeric fields
-      const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => {
+      const updated = {
         ...prev,
-        [field]: numValue,
-        currentBalance: supplierData?.currentBalance
-          ? parseInt(supplierData?.currentBalance) - numValue
-          : 0 - numValue,
-      }));
-    } else {
-      // Handle string fields normally
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    }
+        [field]: field === "amount" ? parseInt(value) || 0 : value
+      };
+      console.log("Updated Form Data:", updated);
+      return updated;
+    });
   };
+  
 
   const handleDatePress = () => {
-    console.log("Opening date picker");
-    setShowDatePicker(true);
+  //   console.log("Opening date picker");
+  //   setShowDatePicker(true);
+  // };
+
+  // const handleTypeChange = (
+    // type: "income" | "expense" | "payment" | "receipt",
+  // ) => {
+    // setFormData((prev) => ({ ...prev, type }));
   };
 
-  const handleTypeChange = (
-    type: "income" | "expense" | "payment" | "receipt",
-  ) => {
-    setFormData((prev) => ({ ...prev, type }));
-  };
 
+  const [createSale] = useAddSaleMutation()
   const handleSubmit = async () => {
     console.log("Transaction Form Data:", formData);
-    console.log("Photo URI:", formData.photo);
-
-    try {
-      const response = await createTransaction(formData).unwrap();
-      console.log("Transaction created:", response);
-    } catch (error) {
-      console.error("Error creating transaction:", error);
-    }
-
-    Alert.alert(
-      "Success",
-      "Form data logged to console. Check console for details.",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            setFormData({
-              name: "",
-              user: userInfo?.id,
-              warehouse: userInfo?.warehouse,
-              amount: 0,
-              openingBalance: 0,
-              currentBalance: 0,
-              photo: "",
-              invoices: "",
-              note: "",
-              date: new Date(),
-              type: "payment",
-              status: "complete",
-              customer: "",
-              invoice: "",
-            });
-            router.back();
-          },
-        },
-      ],
-    );
+    const sales = await createSale(formData)
+    console.log(sales)
   };
-
-  const handlePhotoUpload = async () => {
-    try {
-      // Request permissions
-      const { status } =
-        await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission Required",
-          "Sorry, we need camera roll permissions to upload photos.",
-          [{ text: "OK" }],
-        );
-        return;
-      }
-
-      // Launch image picker
-      const result = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets && result.assets[0]) {
-        const selectedImage = result.assets[0];
-        setFormData((prev) => ({ ...prev, photo: selectedImage.uri }));
-        console.log("Photo selected:", selectedImage.uri);
-      }
-    } catch (error) {
-      console.error("Error picking image:", error);
-      Alert.alert("Error", "Failed to pick image. Please try again.", [
-        { text: "OK" },
-      ]);
-    }
-  };
-
-  const handleCameraCapture = async () => {
-    try {
-      // Request camera permissions
-      const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-      if (status !== "granted") {
-        Alert.alert(
-          "Permission Required",
-          "Sorry, we need camera permissions to take photos.",
-          [{ text: "OK" }],
-        );
-        return;
-      }
-
-      // Launch camera
-      const result = await ImagePicker.launchCameraAsync({
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 0.8,
-      });
-
-      if (!result.canceled && result.assets && result.assets[0]) {
-        const capturedImage = result.assets[0];
-        setFormData((prev) => ({ ...prev, photo: capturedImage.uri }));
-        console.log("Photo captured:", capturedImage.uri);
-      }
-    } catch (error) {
-      console.error("Error capturing image:", error);
-      Alert.alert("Error", "Failed to capture image. Please try again.", [
-        { text: "OK" },
-      ]);
-    }
-  };
-
-  const showPhotoOptions = () => {
-    Alert.alert("Photo Upload", "Choose how you want to add a photo", [
-      {
-        text: "Camera",
-        onPress: handleCameraCapture,
-      },
-      {
-        text: "Gallery",
-        onPress: handlePhotoUpload,
-      },
-      {
-        text: "Cancel",
-        style: "cancel",
-      },
-    ]);
-  };
-
-  const removePhoto = () => {
-    setFormData((prev) => ({ ...prev, photo: null }));
-  };
-
   return (
     <>
       <ScrollView>
@@ -288,20 +177,20 @@ const createDueSelas = () => {
             className="flex-1 px-6 pt-4"
             showsVerticalScrollIndicator={false}
           >
-            {/* Supplier Input */}
-            <View className="mb-4">
+         
+         <View className="mb-4">
               <Text className="text-gray-300 text-lg font-medium">
                 Customer
               </Text>
               <CustomDropdownWithSearch
-                data={type}
-                value={formData.customer}
-                placeholder="Select Customer"
+                data={customer}
+                value={formData.customerId}
+                placeholder="Select customer ...."
                 onValueChange={(value: string) =>
-                  handleInputChange("supplierId", value)
+                  handleInputChange("CustomerId", value)
                 }
                 onSearchChange={(query: string) => setQ(query)}
-                searchPlaceholder="Search suppliers..."
+                searchPlaceholder="Search Customer..."
               />
             </View>
 
@@ -360,58 +249,6 @@ const createDueSelas = () => {
                 keyboardType="numeric"
               />
             </View>
-
-            {/* Photo Upload */}
-            <View className="mb-4">
-              <Text className="text-gray-300 text-lg font-medium">
-                Invoice Photo
-              </Text>
-
-              {formData.photo ? (
-                <View className="border border-black-200 bg-black-200 rounded-lg p-4">
-                  <Image
-                    source={{ uri: formData.photo }}
-                    className="w-full h-48 rounded-lg mb-3"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-row gap-3">
-                    <TouchableOpacity
-                      className="flex-1 bg-red-600 p-3 rounded-lg"
-                      onPress={removePhoto}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-white text-center font-medium">
-                        Remove Photo
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      className="flex-1 bg-primary p-3 rounded-lg"
-                      onPress={showPhotoOptions}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-black text-center font-medium">
-                        Change Photo
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  className="border border-black-200 bg-black-200 rounded-lg p-6 flex-col justify-center items-center"
-                  onPress={showPhotoOptions}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="camera" size={32} color="#FDB714" />
-                  <Text className="text-white text-lg mt-2 font-medium">
-                    Upload Photo
-                  </Text>
-                  <Text className="text-gray-400 text-sm mt-1 text-center">
-                    Tap to select an image from your gallery
-                  </Text>
-                </TouchableOpacity>
-              )}
-            </View>
-
             {/* Submit Button */}
             <TouchableOpacity
               className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
