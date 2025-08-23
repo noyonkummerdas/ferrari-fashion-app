@@ -60,7 +60,8 @@ const SalesList = () => {
           amount: 20000,
           note: 'This is the first transction ',
           date: '12-12-2012',
-          company:'Sahabag fashion'
+          company:'Sahabag fashion',
+          "status": "complete"
 
           
         },
@@ -70,7 +71,8 @@ const SalesList = () => {
           amount: 20000,
           note: 'This is the first transction ',
           date: '12-12-2012',
-          company:'Sahabag fashion'
+          company:'Sahabag fashion',
+          "status": "complete"
 
           
         },
@@ -80,7 +82,8 @@ const SalesList = () => {
           amount: 20000,
           note: 'This is the first transction ',
           date: '12-12-2012',
-          company:'Sahabag fashion'
+          company:'Sahabag fashion',
+          "status": "complete"
 
           
         },
@@ -90,7 +93,8 @@ const SalesList = () => {
           amount: 20000,
           note: 'This is the first transction ',
           date: '12-12-2012',
-          company:'Sahabag fashion'
+          company:'Sahabag fashion',
+          "status": "complete"
 
           
         },
@@ -100,7 +104,8 @@ const SalesList = () => {
           amount: 20000,
           note: 'This is the first transction ',
           date: '12-12-2012',
-          company:'farrari-city'
+          company:'farrari-city',
+          "status": "complete"
 
           
         },
@@ -110,7 +115,8 @@ const SalesList = () => {
           amount: 20000,
           note: 'This is the first transction ',
           date: '12-12-2012',
-          company:'fararri-fashion'
+          company:'fararri-fashion',
+          "status": "complete"
 
           
         },
@@ -133,27 +139,29 @@ const SalesList = () => {
 
     
         <FlatList
-  data={data}
-  keyExtractor={(_, index) => index.toString()}
-  renderItem={({ item }) => (
-    <TouchableOpacity
-      className="ms-4 me-4 mt-4"
-      activeOpacity={0.6} // lower = more fade
-      onPress={() => console.log('Clicked item:', item)}
-    >
-      <View className="flex-row justify-between p-4 bg-black-200 rounded-lg items-center">
-        <View className="flex-col">
-          <Text className="text-primary font-bold text-lg">{item.name}</Text>
-          <Text className="text-gray-300 text-bsed">{item.company}</Text>
-        </View>
-        <View className="flex-col items-end">
-          <Text className="text-gray-200">{item.date}</Text>
-          <Text>
-            <Text className="text-primary">{item.amount}</Text>
-            <Text className="text-gray-200"> BDT</Text>
-          </Text>
-        </View>
-      </View>
+         data={data}
+         keyExtractor={(_, index) => index.toString()}
+         renderItem={({ item }) => (
+           <TouchableOpacity
+             className="ms-4 me-4 mt-4"
+             activeOpacity={0.6} // lower = more fade
+             onPress={() => console.log('Clicked item:', item)}
+           >
+             <View className="flex-row justify-between p-4 bg-black-200 rounded-lg items-center">
+               <View className="flex-col">
+                 <Text className="text-primary font-bold text-lg">{item.name}</Text>
+                 <Text className="text-gray-200 text-">{item.date}</Text>
+                
+               </View>
+               <View className="flex-col items-end">
+               <Text className="text-gray-300 text-bsed">INV: {item.invoice}</Text>
+                
+                 <Text>
+                   <Text className="text-primary">{item.amount}</Text>
+                   <Text className="text-gray-200"> BDT</Text>
+                 </Text>
+               </View>
+             </View>
     </TouchableOpacity>
   )}
 />
