@@ -131,16 +131,14 @@ const SalesList = () => {
           <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
         </View>
 
-    <ScrollView>
+    
     <FlatList
     data={data}                           
-    keyExtractor={(item) => item.id}      
+    keyExtractor={(_, index) => index.toString()}
+   
     renderItem={({ item }) => (
       
-      <TouchableOpacity 
-      onPress={()=>router.push('/sales/salesDetails')}
-      >
-      //
+      
       <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
         <View className="flex-col">
         <Text className="text-primary font-bold text-lg">{item.name}</Text>
@@ -148,16 +146,16 @@ const SalesList = () => {
         </View>
         <View className="flex-col items-end">
         <Text className="text-gray-200">{item.date}</Text>
-          <Text className="text-primary ">{item.amount}
+        <Text>
+          <Text className="text-primary ">{item.amount}</Text>
              <Text className="text-gray-200">BDT</Text>
            </Text>
         </View>
 
       </View>
-      </TouchableOpacity>
     )}
   />
-    </ScrollView>
+
   </>
   );
 };
