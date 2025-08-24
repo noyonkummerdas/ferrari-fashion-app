@@ -9,7 +9,7 @@ import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
 import { useCustomerListQuery } from "@/store/api/customerApi";
 import { ScrollView } from "react-native-gesture-handler";
 const SalesList = () => {
-  // const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
      const colorScheme = useColorScheme();
 
     const navigation = useNavigation();
@@ -41,86 +41,86 @@ const SalesList = () => {
         });
       }, [navigation]);
 
-    //   const { data, error, isLoading, isFetching, isSuccess, refetch } =
-    // useCustomerListQuery({
-    //   q: searchQuery || "all",
-    //   forceRefetch: true,
-    // });
+      const { data, error, isLoading, isFetching, isSuccess, refetch } =
+    useCustomerListQuery({
+      q: searchQuery || "all",
+      forceRefetch: true,
+    });
 
-  // const resetData = () => {
-  //   setSearchQuery("");
-  //   refetch();
-  // };
+  const resetData = () => {
+    setSearchQuery("");
+    refetch();
+  };
 
 
-      const data =[
-        {
-          name:'Noyon Das',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion',
-          "status": "complete"
-
-          
-        },
-        {
-          name:'Abdul khan Malek',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion',
-          "status": "complete"
+      // const data =[
+      //   {
+      //     name:'Noyon Das',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion',
+      //     "status": "complete"
 
           
-        },
-        {
-          name:'Madu',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion',
-          "status": "complete"
+      //   },
+      //   {
+      //     name:'Abdul khan Malek',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion',
+      //     "status": "complete"
 
           
-        },
-        {
-          name:'Jadu',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'Sahabag fashion',
-          "status": "complete"
+      //   },
+      //   {
+      //     name:'Madu',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion',
+      //     "status": "complete"
 
           
-        },
-        {
-          name:'Korim',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'farrari-city',
-          "status": "complete"
+      //   },
+      //   {
+      //     name:'Jadu',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'Sahabag fashion',
+      //     "status": "complete"
 
           
-        },
-        {
-          name:'Rohim',
-          invoice: 'INV 012',
-          amount: 20000,
-          note: 'This is the first transction ',
-          date: '12-12-2012',
-          company:'fararri-fashion',
-          "status": "complete"
+      //   },
+      //   {
+      //     name:'Korim',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'farrari-city',
+      //     "status": "complete"
 
           
-        },
-      ]
+      //   },
+      //   {
+      //     name:'Rohim',
+      //     invoice: 'INV 012',
+      //     amount: 20000,
+      //     note: 'This is the first transction ',
+      //     date: '12-12-2012',
+      //     company:'fararri-fashion',
+      //     "status": "complete"
+
+          
+      //   },
+      // ]
 
       
 
@@ -131,13 +131,12 @@ const SalesList = () => {
           <TextInput
             placeholder="Search Customer"
             className="placeholder:text-gray-100 flex-1 text-gray-300 "
-            // value={searchQuery}
-            // onChangeText={setSearchQuery}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
           />
-          <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
+          <Ionicons name="search-outline" size={24} color={"primary"} />
         </View>
-
-    
+  
         <FlatList
          data={data}
          keyExtractor={(_, index) => index.toString()}
@@ -145,17 +144,16 @@ const SalesList = () => {
            <TouchableOpacity
              className="ms-4 me-4 mt-4"
              activeOpacity={0.6} // lower = more fade
-             onPress={() => router.push('/sales/salesDetails')}
+             onPress={() => console.log('Clicked item:', item)}
            >
              <View className="flex-row justify-between p-4 bg-black-200 rounded-lg items-center">
                <View className="flex-col">
                  <Text className="text-primary font-bold text-lg">{item.name}</Text>
                  <Text className="text-gray-200 text-">{item.date}</Text>
-                
                </View>
                <View className="flex-col items-end">
-               <Text className="text-gray-300 text-bsed">INV: {item.invoice}</Text>
                 
+                 <Text className="text-gray-300 text-bsed">INV: {item.invoice}</Text>
                  <Text>
                    <Text className="text-primary">{item.amount}</Text>
                    <Text className="text-gray-200"> BDT</Text>

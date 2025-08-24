@@ -2,8 +2,8 @@ import { CustomDrawerToggleButton } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { router, useNavigation } from "expo-router";
-import React, { useLayoutEffect } from "react";
-import { StatusBar, useColorScheme } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import { StatusBar, TextInput, useColorScheme } from "react-native";
 import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
 
 
@@ -86,6 +86,10 @@ const data = [
 
 const PurchasesList = () => {
      const colorScheme = useColorScheme();
+     const [searchQuery, setSearchQuery] = useState("");
+     
+     
+
 
     const navigation = useNavigation();
       useLayoutEffect(() => {
@@ -118,6 +122,16 @@ const PurchasesList = () => {
 
   return (
     <>
+
+<View className="flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200">
+     <TextInput
+       placeholder="Search Supplire"
+       className="placeholder:text-gray-100 flex-1 text-gray-300 "
+       value={searchQuery}
+       onChangeText={setSearchQuery}
+     />
+     <Ionicons name="search-outline" size={24} color={"primary"} />
+   </View>
     <FlatList
     data={data}                           // 
     keyExtractor={(_, index) => index.toString()}    // 

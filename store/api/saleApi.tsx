@@ -10,7 +10,7 @@ export const SaleApi = createApi({
     // Fetch all sales by date range
     allSale: builder.query<Sale[], { startDate: string; endDate: string; warehouse: string; aamarId: string }>({
       query: ({ startDate, endDate, warehouse, aamarId }) =>
-        `/sale/by-Date/${startDate}/${endDate}/${warehouse}/${aamarId}`,
+        `/sale`,///by-Date/${startDate}/${endDate}/${warehouse}/${aamarId}`,
       providesTags: ["Sale"],
     }),
 

@@ -115,8 +115,8 @@ const createDueSelas = () => {
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="white" />
-        </TouchableOpacity>
+            <Ionicons name="arrow-back" size={24} color="#ffffff" />
+          </TouchableOpacity>
         </View>
       ),
       title: "Sales",
@@ -136,6 +136,8 @@ const createDueSelas = () => {
   //   }
   //   setShowDatePicker(false);
   // };
+  
+
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => {
       const updated = {
@@ -201,7 +203,7 @@ const createDueSelas = () => {
                 activeOpacity={0.7}
               >
                 <Text className="text-white text-lg">
-                  {formattedDateString}
+                  {formattedDate.day}
                 </Text>
                 <Ionicons name="calendar" size={24} color="#FDB714" />
               </TouchableOpacity>
