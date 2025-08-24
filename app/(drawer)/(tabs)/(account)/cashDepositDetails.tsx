@@ -35,7 +35,7 @@ const CashDepositDetails = () => {
       ),
       title: "Transaction Details",
       headerStyle: {
-        backgroundColor: "#1f2937",
+        backgroundColor: "#000000",
       },
       headerTintColor: "#ffffff",
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },

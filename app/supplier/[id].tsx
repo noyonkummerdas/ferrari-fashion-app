@@ -136,7 +136,7 @@ const UpdateSupplier = () => {
         </TouchableOpacity>
       </View>
 
-      <Text className="text-white text-md font-regular">Customer name</Text>
+      <Text className="text-white text-md font-regular">Supplire name</Text>
       <TextInput
         placeholder="Customer Name"
         value={form.name}

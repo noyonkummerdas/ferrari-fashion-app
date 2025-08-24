@@ -145,7 +145,7 @@ const SalesList = () => {
            <TouchableOpacity
              className="ms-4 me-4 mt-4"
              activeOpacity={0.6} // lower = more fade
-             onPress={() => console.log('Clicked item:', item)}
+             onPress={() => router.push('/sales/salesDetails')}
            >
              <View className="flex-row justify-between p-4 bg-black-200 rounded-lg items-center">
                <View className="flex-col">

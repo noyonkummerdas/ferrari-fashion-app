@@ -1,6 +1,7 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useAddPurchaseMutation } from "@/store/api/purchasApi";
 import { useSuppliersQuery } from "@/store/api/supplierApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
@@ -26,7 +27,7 @@ const createPurchase = () => {
   const router = useRouter();
    const colorScheme = useColorScheme();
   const navigation = useNavigation();
-  const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
+  const [supplier, setSupplier] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
   // const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
@@ -54,6 +55,7 @@ const createPurchase = () => {
     invoices: "",
     status: "complete",
   });
+  console.log('formdata : ', formData)
 
   const {
     data: supplierData,
@@ -84,7 +86,7 @@ const createPurchase = () => {
         label: item.name,
         value: item._id || item.id,
       }));
-      setType(supplierOptions);
+      setSupplier(supplierOptions);
     }
   }, [data, isSuccess]);
 
@@ -147,45 +149,47 @@ const createPurchase = () => {
     setFormData((prev) => ({ ...prev, type }));
   };
 
+   
+  const [createPurchase]= useAddPurchaseMutation()
   const handleSubmit = async () => {
-    console.log("Transaction Form Data:", formData);
+    console.log("Purchase Form Data:", formData);
     console.log("Photo URI:", formData.photo);
 
     try {
-      const response = await createTransaction(formData).unwrap();
-      console.log("Transaction created:", response);
+      const response = await createPurchase(formData).unwrap();
+      console.log("Purchase created:", response);
     } catch (error) {
-      console.error("Error creating transaction:", error);
+      console.error("Error creating Purchase:", error);
     }
 
-    Alert.alert(
-      "Success",
-      "Form data logged to console. Check console for details.",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            setFormData({
-              name: "",
-              user: userInfo?.id,
-              warehouse: userInfo?.warehouse,
-              amount: 0,
-              openingBalance: 0,
-              currentBalance: 0,
-              photo: "",
-              invoices: "",
-              note: "",
-              date: new Date(),
-              type: "payment",
-              status: "complete",
-              supplierId: "",
-              invoice: "",
-            });
-            router.back();
-          },
-        },
-      ],
-    );
+    // Alert.alert(
+    //   "Success",
+    //   "Form data logged to console. Check console for details.",
+    //   [
+    //     {
+    //       text: "OK",
+    //       onPress: () => {
+    //         setFormData({
+    //           name: "",
+    //           user: userInfo?.id,
+    //           warehouse: userInfo?.warehouse,
+    //           amount: 0,
+    //           openingBalance: 0,
+    //           currentBalance: 0,
+    //           photo: "",
+    //           invoices: "",
+    //           note: "",
+    //           date: new Date(),
+    //           type: "payment",
+    //           status: "complete",
+    //           supplierId: "",
+    //           invoice: "",
+    //         });
+    //         router.back();
+    //       },
+    //     },
+    //   ],
+    // );
   };
 
   const handlePhotoUpload = async () => {
@@ -294,7 +298,7 @@ const createPurchase = () => {
                 Supplier
               </Text>
               <CustomDropdownWithSearch
-                data={type}
+                data={supplier}
                 value={formData.supplierId}
                 placeholder="Select Supplier"
                 onValueChange={(value: string) =>

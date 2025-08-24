@@ -118,24 +118,20 @@ const PurchasesList = () => {
 
   return (
     <>
-    <StatusBar style="light" />
     <FlatList
     data={data}                           // 
-    keyExtractor={(item) => item.id}      // 
+    keyExtractor={(_, index) => index.toString()}    // 
     renderItem={({ item }) => (
-      
-      <TouchableOpacity 
-      // onPress={()=>router.push({pathname:'/data',params:{item}})}
-      >
-      //
+      <TouchableOpacity
+      className=""
+      activeOpacity={0.6} // lower = more fade
+      onPress={() => console.log('Clicked item:',)}
+    >
+
       <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
         <View className="flex-col">
         <View className="flex-row items-center">
-        <Image 
-              source={{ uri: item.photo }}
-              className="w-16 h-16 rounded-lg"
-              resizeMode="cover"
-            />
+        
             <View>
               <Text className="text-primary text-lg ">{item.name}</Text>
               <Text className="text-gray-200 text-sm"> Invoice: {item.invoice}</Text>
@@ -148,7 +144,6 @@ const PurchasesList = () => {
         <Text className="text-gray-200">{item.date}</Text>
           <Text className="text-primary ">{item.amount} <Text className="text-gray-200">BDT</Text></Text>
         </View>
-
       </View>
       </TouchableOpacity>
     )}

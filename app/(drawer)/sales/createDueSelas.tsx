@@ -115,8 +115,8 @@ const createDueSelas = () => {
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
-          </TouchableOpacity>
+          <Ionicons name="arrow-back" size={24} color="white" />
+        </TouchableOpacity>
         </View>
       ),
       title: "Sales",
@@ -136,8 +136,6 @@ const createDueSelas = () => {
   //   }
   //   setShowDatePicker(false);
   // };
-  
-
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => {
       const updated = {
