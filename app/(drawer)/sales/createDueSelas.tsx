@@ -1,26 +1,23 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useCustomerListQuery, useGetCustomerByIdQuery } from "@/store/api/customerApi";
-import { useAddSaleMutation, useAllSaleQuery,} from "@/store/api/saleApi";
+import { useCustomerListQuery } from "@/store/api/customerApi";
+import { useAddSaleMutation } from "@/store/api/saleApi";
 // import { useSuppliersQuery } from "@/store/api/supplierApi";
 // import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Alert,
-  Image,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 
 const CreateDueSelas = () => {
@@ -57,12 +54,12 @@ const CreateDueSelas = () => {
     amount: 0,
     note: "",
     customerId: "",
-    invoice: "",
-    name: "",
+    // invoice: "",
+    // name: "",
     // type: "due",
     user: userInfo?.id,
     warehouse: userInfo?.warehouse,
-    invoices: "",
+    // invoices: "",
     status: "complete",
 
   });
@@ -230,8 +227,8 @@ const CreateDueSelas = () => {
               <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-                value={formData.invoice.toString()}
-                onChangeText={(value) => handleInputChange("invoice", value)}
+                value={formData.invoiceId.toString()}
+                onChangeText={(value) => handleInputChange("invoiceId", value)}
                 placeholder="Enter invoice"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"

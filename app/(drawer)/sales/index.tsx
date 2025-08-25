@@ -1,15 +1,17 @@
 import { CustomDrawerToggleButton } from "@/components";
-import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useAllSaleQuery } from "@/store/api/saleApi";
+import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
-import { TextInput, useColorScheme, View, Text, TouchableOpacity, FlatList } from "react-native";
-import { useAllSaleQuery } from "@/store/api/saleApi";
+import { FlatList, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
 const SalesList = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo } = useGlobalContext();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,9 +40,15 @@ const SalesList = () => {
   }, [navigation]);
 
   const { data, refetch } = useAllSaleQuery({
-    q: searchQuery || "all",
+    // q: searchQuery || "all",
+    startDate: new Date().toISOString(),
+    warehouse: userInfo?.warehouse,
     forceRefetch: true,
   });
+
+  console.log(data)
+
+  // console.log(userInfo);
 
   return (
     <View className="flex-1">

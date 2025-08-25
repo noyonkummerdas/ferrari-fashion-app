@@ -1,6 +1,6 @@
+import { Sale } from "@/types/sale";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from '../../constants/baseUrl';
-import { Sale } from "@/types/sale";
 
 export const SaleApi = createApi({
   reducerPath: "SaleApi",
@@ -9,8 +9,8 @@ export const SaleApi = createApi({
   endpoints: (builder) => ({
     // Fetch all sales by date range
     allSale: builder.query<Sale[], { startDate: string; endDate: string; warehouse: string; aamarId: string }>({
-      query: ({ startDate, endDate, warehouse, aamarId }) =>
-        `/sale`,///by-Date/${startDate}/${endDate}/${warehouse}/${aamarId}`,
+      query: ({ startDate, warehouse }) =>
+        `/sale/list/${warehouse}/${startDate}`,
       providesTags: ["Sale"],
     }),
 

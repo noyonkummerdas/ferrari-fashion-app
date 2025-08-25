@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../constants/baseUrl";
-import { User } from "../../models/userModel";
+import { User } from "../../types/user";
 
 // console.log("BASE_URL",BASE_URL)
 export const UserApi = createApi({
