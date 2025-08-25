@@ -151,7 +151,7 @@ const PaymentList = () => {
             <Text className="text-white text-lg me-2">{formattedDate.day}</Text>
             <Text className="text-primary text-lg">
               {formattedDate.month}
-            </Text>{" "}
+            </Text>
             <Text className="text-white text-lg ml-2">
               {formattedDate.year}
             </Text>

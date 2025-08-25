@@ -102,7 +102,7 @@ const AddSupplier = () => {
           <Image source={profile} className="w-40 h-40 rounded-full" />
         </TouchableOpacity>
       </View>
-      <Text className="text-white text-md font-regular">Customer name</Text>
+      <Text className="text-white text-md font-regular">Supplire name</Text>
       <TextInput
         placeholder="Customer Name"
         value={form.name}
@@ -152,7 +152,7 @@ const AddSupplier = () => {
         className="h-14 justify-center items-center rounded-full bg-primary mt-2"
       >
         <Text className="text-black-200 text-center text-md font-regular">
-          Add Customer
+          Add Supplire
         </Text>
       </TouchableOpacity>
     </ScrollView>

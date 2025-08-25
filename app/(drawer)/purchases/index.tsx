@@ -2,11 +2,94 @@ import { CustomDrawerToggleButton } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "@/constants/Colors";
 import { router, useNavigation } from "expo-router";
-import React, { useLayoutEffect } from "react";
-import { useColorScheme } from "react-native";
+import React, { useLayoutEffect, useState } from "react";
+import { StatusBar, TextInput, useColorScheme } from "react-native";
 import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
+
+
+
+
+const data = [
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+  {
+    name:'Ashok',
+    invoice:'INV 101',
+    date:'12-12-2012',
+    amount:10000,
+    note:'Note some this',
+    // photo: require('../assets/images/sample.png')
+
+  },
+]
+
 const PurchasesList = () => {
      const colorScheme = useColorScheme();
+     const [searchQuery, setSearchQuery] = useState("");
+     
+     
+
 
     const navigation = useNavigation();
       useLayoutEffect(() => {
@@ -36,10 +119,50 @@ const PurchasesList = () => {
           headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
         });
       }, [navigation]);
+
   return (
-    <View>
-      <Text className="text-gray-200">Purchases List</Text>
-    </View>
+    <>
+
+<View className="flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200">
+     <TextInput
+       placeholder="Search Supplire"
+       className="placeholder:text-gray-100 flex-1 text-gray-300 "
+       value={searchQuery}
+       onChangeText={setSearchQuery}
+     />
+     <Ionicons name="search-outline" size={24} color={"primary"} />
+   </View>
+    <FlatList
+    data={data}                           // 
+    keyExtractor={(_, index) => index.toString()}    // 
+    renderItem={({ item }) => (
+      <TouchableOpacity
+      className=""
+      activeOpacity={0.6} // lower = more fade
+      onPress={() => console.log('Clicked item:',)}
+    >
+
+      <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
+        <View className="flex-col">
+        <View className="flex-row items-center">
+        
+            <View>
+              <Text className="text-primary text-lg ">{item.name}</Text>
+              <Text className="text-gray-200 text-sm"> Invoice: {item.invoice}</Text>
+            </View>
+        </View>
+        </View>
+        
+        <View className="flex-col items-end">
+
+        <Text className="text-gray-200">{item.date}</Text>
+          <Text className="text-primary ">{item.amount} <Text className="text-gray-200">BDT</Text></Text>
+        </View>
+      </View>
+      </TouchableOpacity>
+    )}
+  />
+  </>
   );
 };
 

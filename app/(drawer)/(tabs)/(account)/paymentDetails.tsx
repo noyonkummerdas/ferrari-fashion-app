@@ -36,7 +36,7 @@ const PaymentDetails = () => {
       ),
       title: "Payment Details",
       headerStyle: {
-        backgroundColor: "#1f2937",
+        backgroundColor: "dark",
       },
       headerTintColor: "#ffffff",
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
