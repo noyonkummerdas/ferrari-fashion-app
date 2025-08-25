@@ -23,7 +23,7 @@ import {
   View,
 } from "react-native";
 
-const createDueSelas = () => {
+const CreateDueSelas = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const router = useRouter();
    const colorScheme = useColorScheme();
@@ -38,9 +38,8 @@ const createDueSelas = () => {
 
   useEffect(() => {
     refetch();
-  }, [q]);
+  }, [q])
 
-  // console.log("q, data", q, data);
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -53,11 +52,10 @@ const createDueSelas = () => {
   }, [data, isSuccess]);
   // Form state
   const [formData, setFormData] = useState({
-    invoceId:'',
+    invoiceId:'',
     date: new Date(),
     amount: 0,
     note: "",
-    // photo: null as string | null,
     customerId: "",
     invoice: "",
     name: "",
@@ -66,39 +64,9 @@ const createDueSelas = () => {
     warehouse: userInfo?.warehouse,
     invoices: "",
     status: "complete",
+
   });
-  console.log('set form', formData)
-
-
-  // useEffect(() => {
-  //   if (salseData && salseIsSuccess) {
-  //     setFormData((prev) => ({
-  //       ...prev,
-  //       openingBalance: salseData?.currentBalance ?? 0,
-  //       currentBalance: salseData?.currentBalance ?? 0,
-  //     }));
-  //   }
-  // }, [salseData, slaseIsSuccess]);
-  
-
-  // useEffect(() => {
-  //   salseRefetch();
-  // }, [formData.salseId]);
-
-  // useEffect(() => {
-  //   refetch();
-  // }, [q]);
-
-
-  // useEffect(() => {
-  //   if (data && isSuccess) {
-  //     const salseOptions = data.map((item) => ({
-  //       label: item.name,
-  //       value: item._id || item.id,
-  //     }));
-  //     setType(salseOptions);
-  //   }
-  // }, [data, isSuccess]);
+  // console.log('saleData', data)
 
   // date formatting
   const today = new Date();
@@ -108,8 +76,6 @@ const createDueSelas = () => {
     year: today.getFullYear(),
   };
   const formattedDateString =`${formattedDate.day} ${formattedDate.month}, ${formattedDate.year}`;
-;
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
@@ -130,12 +96,7 @@ const createDueSelas = () => {
       headerShown: true,
     });
   }, [navigation]);
-  // const handleDateChange = (event: any, selectedDate?: Date) => {
-  //   if (selectedDate) {
-  //     setFormData((prev) => ({ ...prev, date: selectedDate }));
-  //   }
-  //   setShowDatePicker(false);
-  // };
+ 
   
 
   const handleInputChange = (field: string, value: string) => {
@@ -144,30 +105,56 @@ const createDueSelas = () => {
         ...prev,
         [field]: field === "amount" ? parseInt(value) || 0 : value
       };
-      console.log("Updated Form Data:", updated);
       return updated;
     });
   };
+
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (selectedDate) {
+      setFormData((prev) => ({ ...prev, date: selectedDate }));
+    }
+    setShowDatePicker(false);
+  };
+  
   
 
   const handleDatePress = () => {
-  //   console.log("Opening date picker");
-  //   setShowDatePicker(true);
-  // };
-
-  // const handleTypeChange = (
-    // type: "income" | "expense" | "payment" | "receipt",
-  // ) => {
-    // setFormData((prev) => ({ ...prev, type }));
+    setShowDatePicker(true);
   };
+  
 
-
+  
   const [createSale] = useAddSaleMutation()
+
   const handleSubmit = async () => {
-    console.log("Transaction Form Data:", formData);
-    const sales = await createSale(formData)
-    console.log(sales)
+    console.log("sale Form Data:", formData);
+    const sales = await createSale(formData);
+    console.log("SALE RESPONSE",JSON.stringify(sales, null, 2));
   };
+
+  // const handleSubmit = async () => {
+  //   try {
+  //     const payload = {
+  //       ...formData,
+  //       date: formData.date instanceof Date 
+  //         ? formData.date.toISOString().split("T")[0] 
+  //         : formData.date,
+  //     };
+  
+  //     console.log("🚀 Final Sale Payload:", payload);
+  
+  //     const sales = await createSale(payload).unwrap();
+  //     console.log("✅ SALE RESPONSE", sales);
+  
+  //     Alert.alert("Success", "Sale created successfully!");
+  //     router.back();
+  //   } catch (error) {
+  //     console.log("❌ Sale API Error:", error);
+  //     Alert.alert("Error", "Something went wrong!");
+  //   }
+  // };
+  
+
   return (
     <>
       <ScrollView>
@@ -184,10 +171,10 @@ const createDueSelas = () => {
               </Text>
               <CustomDropdownWithSearch
                 data={customer}
-                value={formData.customerId}
+                value={formData?.customerId}
                 placeholder="Select customer ...."
                 onValueChange={(value: string) =>
-                  handleInputChange("CustomerId", value)
+                  handleInputChange("customerId", value)
                 }
                 onSearchChange={(query: string) => setQ(query)}
                 searchPlaceholder="Search Customer..."
@@ -221,6 +208,7 @@ const createDueSelas = () => {
                 keyboardType="numeric"
               />
             </View>
+            
 
             {/* Note Input */}
             <View className="mb-4">
@@ -321,4 +309,5 @@ const createDueSelas = () => {
   );
 };
 
-export default createDueSelas;
+export default CreateDueSelas;
+
