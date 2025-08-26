@@ -54,12 +54,8 @@ const CreateDueSelas = () => {
     amount: 0,
     note: "",
     customerId: "",
-    // invoice: "",
-    // name: "",
-    // type: "due",
     user: userInfo?.id,
     warehouse: userInfo?.warehouse,
-    // invoices: "",
     status: "complete",
 
   });
@@ -128,28 +124,6 @@ const CreateDueSelas = () => {
     const sales = await createSale(formData);
     console.log("SALE RESPONSE",JSON.stringify(sales, null, 2));
   };
-
-  // const handleSubmit = async () => {
-  //   try {
-  //     const payload = {
-  //       ...formData,
-  //       date: formData.date instanceof Date 
-  //         ? formData.date.toISOString().split("T")[0] 
-  //         : formData.date,
-  //     };
-  
-  //     console.log("🚀 Final Sale Payload:", payload);
-  
-  //     const sales = await createSale(payload).unwrap();
-  //     console.log("✅ SALE RESPONSE", sales);
-  
-  //     Alert.alert("Success", "Sale created successfully!");
-  //     router.back();
-  //   } catch (error) {
-  //     console.log("❌ Sale API Error:", error);
-  //     Alert.alert("Error", "Something went wrong!");
-  //   }
-  // };
   
 
   return (

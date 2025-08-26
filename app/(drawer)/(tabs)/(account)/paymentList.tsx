@@ -25,7 +25,6 @@ const PaymentList = () => {
   // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
-  const [tempDate, setTempDate] = useState(new Date());
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -66,7 +65,6 @@ const PaymentList = () => {
 
   useEffect(() => {
     if (data) {
-      // Handle different possible response structures
       if (Array.isArray(data)) {
         setPaymentList(data);
       } else if (
@@ -85,7 +83,7 @@ const PaymentList = () => {
   //date formatting
   const formattedDate = {
     day: currentDay.getDate(),
-    month: currentDay.toLocaleString("en-US", { month: "long" }), // e.g. August
+    month: currentDay.toLocaleString("en-US", { month: "long" }),
     year: currentDay.getFullYear(),
   };
 
@@ -109,7 +107,6 @@ const PaymentList = () => {
   };
 
   const openDatePicker = () => {
-    setTempDate(currentDay);
     setShowDatePicker(true);
   };
 
@@ -117,27 +114,15 @@ const PaymentList = () => {
     if (Platform.OS === "android") {
       setShowDatePicker(false);
     }
-
     if (selectedDate) {
-      setTempDate(selectedDate);
+      setCurrentDay(selectedDate); // ✅ Direct update
     }
-  };
-
-  const confirmDateSelection = () => {
-    setCurrentDay(tempDate);
-    setShowDatePicker(false);
-  };
-
-  const cancelDateSelection = () => {
-    setTempDate(currentDay);
-    setShowDatePicker(false);
   };
 
   console.log("SUMMARY", (data as any)?.summary);
   return (
     <ScrollView>
       {/* calendar */}
-
       <View className="mt-2 mb-2">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg mx-4">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
@@ -178,50 +163,15 @@ const PaymentList = () => {
       </View>
 
       {/* Date Picker Modal */}
-      <Modal visible={showDatePicker} transparent={true} animationType="fade">
-        <View className="flex-1 bg-black/70 justify-center items-center">
-          <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
-            <View className="flex-row justify-between items-center mb-6">
-              <Text className="text-white text-xl font-semibold">
-                Select Date
-              </Text>
-              <TouchableOpacity onPress={cancelDateSelection}>
-                <Ionicons name="close" size={24} color="#666" />
-              </TouchableOpacity>
-            </View>
-
-            <DateTimePicker
-              value={tempDate}
-              mode="date"
-              display={Platform.OS === "ios" ? "spinner" : "default"}
-              onChange={handleDateChange}
-              maximumDate={new Date()}
-              textColor="#ffffff"
-              style={{
-                backgroundColor: "transparent",
-                width: Platform.OS === "ios" ? "100%" : "auto",
-              }}
-            />
-
-            {Platform.OS === "ios" && (
-              <View className="flex-row justify-end gap-2 space-x-3 mt-6">
-                <TouchableOpacity
-                  onPress={cancelDateSelection}
-                  className="px-6 py-3 rounded-lg bg-gray-600"
-                >
-                  <Text className="text-white font-semibold">Cancel</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={confirmDateSelection}
-                  className="px-6 py-3 rounded-lg bg-primary"
-                >
-                  <Text className="text-black font-semibold">Confirm</Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </View>
-        </View>
-      </Modal>
+      {showDatePicker && (
+        <DateTimePicker
+          value={currentDay}   // ✅ always show selected date
+          mode="date"
+          display={Platform.OS === "ios" ? "spinner" : "default"}
+          onChange={handleDateChange}
+          maximumDate={new Date()}
+        />
+      )}
 
       <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-3 py-2 mt-2 mx-4">
         <TextInput
