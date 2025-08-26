@@ -100,7 +100,7 @@ const PurchasesList = () => {
                 onPress={() => router.push("/purchases/create-purchase")}
                 className="flex flex-row justify-center items-center gap-2"
               >
-                <Ionicons name="person-add" size={18} color="#ffffff" />
+                <Ionicons name="bag-add" size={20} color="#ffffff" />
                 <Text className="text-white text-xl font-pmedium">Add</Text>
               </TouchableOpacity>
             </View>
@@ -123,14 +123,14 @@ const PurchasesList = () => {
   return (
     <>
 
-<View className="flex flex-row justify-between border boder-gray-200 rounded-full h-14 items-center px-5 m-2 bg-black-200">
+<View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
      <TextInput
        placeholder="Search Supplire"
        className="placeholder:text-gray-100 flex-1 text-gray-300 "
        value={searchQuery}
        onChangeText={setSearchQuery}
      />
-     <Ionicons name="search-outline" size={24} color={"primary"} />
+     <Ionicons name="search-outline" size={24} color={"gray"} />
    </View>
     <FlatList
     data={data}                           // 
