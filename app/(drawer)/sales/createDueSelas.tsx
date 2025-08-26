@@ -120,10 +120,30 @@ const CreateDueSelas = () => {
   const [createSale] = useAddSaleMutation()
 
   const handleSubmit = async () => {
-    console.log("sale Form Data:", formData);
-    const sales = await createSale(formData);
-    console.log("SALE RESPONSE",JSON.stringify(sales, null, 2));
+    // Validation: ensure customer is selected
+    // if (!formData.customerId) {
+    //   alert("Please select a customer before submitting");
+    //   return;
+    // }
+  
+    // if (!formData.amount || formData.amount <= 0) {
+    //   alert("Please enter a valid amount");
+    //   return;
+    // }
+  
+    try {
+      const sales = await createSale(formData);
+      console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
+      alert("Sale created successfully!");
+      // Optionally, reset form
+    } catch (err) {
+      console.log("Error creating sale:", err);
+      alert("Error creating sale. Check console for details.");
+    }
   };
+  
+
+
   
 
   return (
@@ -213,6 +233,7 @@ const CreateDueSelas = () => {
               className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
               onPress={handleSubmit}
               activeOpacity={0.8}
+              
             >
               <Text className="text-black text-center font-bold text-lg">
                 Sales
