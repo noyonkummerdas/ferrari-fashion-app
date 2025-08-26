@@ -21,7 +21,7 @@ const SalesList = () => {
             onPress={() => router.push("/sales/createDueSelas")}
             className="flex flex-row justify-center items-center gap-2"
           >
-            <Ionicons name="person-add" size={18} color="#ffffff" />
+            <Ionicons name="cart-outline" size={24} color="#ffffff" />
             <Text className="text-white text-xl font-medium">Add</Text>
           </TouchableOpacity>
         </View>
@@ -46,7 +46,7 @@ const SalesList = () => {
     forceRefetch: true,
   });
 
-  console.log(data)
+  // console.log(data)
 
   // console.log(userInfo);
 
