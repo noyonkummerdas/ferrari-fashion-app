@@ -174,37 +174,39 @@ const RecivedPayment = () => {
       console.log("Transaction created:", response);
     } catch (error) {
       console.error("Error creating transaction:", error);
+      Alart.alart('Fill the Input ')
     }
+    router.back()
 
-    Alert.alert(
-      "Success",
-      "Form data logged to console. Check console for details.",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            setFormData({
-              name: "",
-              user: userInfo?.id,
-              warehouse: userInfo?.warehouse,
-              amount: 0,
-              openingBalance: 0,
-              currentBalance: 0,
-              photo: "",
-              invoices: "",
-              note: "",
-              date: new Date(),
-              type: "paymentReceived",
-              status: "complete",
-              // supplierId: "",
-              invoice: "",
-              customerId: "",
-            });
-            router.back();
-          },
-        },
-      ],
-    );
+    // Alert.alert(
+    //   "Success",
+    //   "Form data logged to console. Check console for details.",
+    //   [
+    //     {
+    //       text: "OK",
+    //       onPress: () => {
+    //         setFormData({
+    //           name: "",
+    //           user: userInfo?.id,
+    //           warehouse: userInfo?.warehouse,
+    //           amount: 0,
+    //           openingBalance: 0,
+    //           currentBalance: 0,
+    //           photo: "",
+    //           invoices: "",
+    //           note: "",
+    //           date: new Date(),
+    //           type: "paymentReceived",
+    //           status: "complete",
+    //           // supplierId: "",
+    //           invoice: "",
+    //           customerId: "",
+    //         });
+    //         router.back();
+    //       },
+    //     },
+    //   ],
+    // );
   };
 
   return (
