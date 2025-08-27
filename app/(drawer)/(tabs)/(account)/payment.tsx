@@ -149,39 +149,39 @@ const Payment = () => {
 
     try {
       const response = await createTransaction(formData).unwrap();
-      console.log("Transaction created:", response);
+      // console.log("Transaction created:", response);
     } catch (error) {
-      console.error("Error creating transaction:", error);
+      // console.error("Error creating transaction:", error);
     }
-
-    Alert.alert(
-      "Success",
-      "Form data logged to console. Check console for details.",
-      [
-        {
-          text: "OK",
-          onPress: () => {
-            setFormData({
-              name: "",
-              user: userInfo?.id,
-              warehouse: userInfo?.warehouse,
-              amount: 0,
-              openingBalance: 0,
-              currentBalance: 0,
-              photo: "",
-              invoices: "",
-              note: "",
-              date: new Date(),
-              type: "payment",
-              status: "complete",
-              supplierId: "",
-              invoice: "",
-            });
-            router.back();
-          },
-        },
-      ],
-    );
+    router.back();
+    // Alert.alert(
+    //   "Success",
+    //   "Form data logged to console. Check console for details.",
+    //   [
+    //     {
+    //       text: "OK",
+    //       onPress: () => {
+    //         setFormData({
+    //           name: "",
+    //           user: userInfo?.id,
+    //           warehouse: userInfo?.warehouse,
+    //           amount: 0,
+    //           openingBalance: 0,
+    //           currentBalance: 0,
+    //           photo: "",
+    //           invoices: "",
+    //           note: "",
+    //           date: new Date(),
+    //           type: "payment",
+    //           status: "complete",
+    //           supplierId: "",
+    //           invoice: "",
+    //         });
+    //         router.back();
+    //       },
+    //     },
+    //   ],
+    // );
   };
 
   const handlePhotoUpload = async () => {

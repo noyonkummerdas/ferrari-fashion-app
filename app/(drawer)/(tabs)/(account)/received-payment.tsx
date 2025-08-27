@@ -173,8 +173,8 @@ const RecivedPayment = () => {
       const response = await createTransaction(formData).unwrap();
       console.log("Transaction created:", response);
     } catch (error) {
-      console.error("Error creating transaction:", error);
-      Alart.alart('Fill the Input ')
+      // console.error("Error creating transaction:", error);
+     
     }
     router.back()
 
