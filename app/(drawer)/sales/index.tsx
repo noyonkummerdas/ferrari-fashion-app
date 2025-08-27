@@ -45,12 +45,6 @@ const SalesList = () => {
 
   // // API call - only if userInfo exists
   const { data, isSuccess, isError, refetch } = useAllSaleQuery({ warehouse: userInfo?.warehouse, startDate: "08-26-2025" });
-  console.log("Raw API response:", data, isSuccess, isError);
-  // console.log("Sales array:", data?.sales || data?.data || []);
-
-  // console.log(userInfo)
-
-  // useEffect
 
   useEffect(()=>{
     refetch()
@@ -86,14 +80,6 @@ const SalesList = () => {
   const openDatePicker = () => {
     setShowDatePicker(true);
   };
-
-
-  // const salesList = Array.isArray(data?.data) ? data.data : data?.data ? [data.data] : [];
-
-  // // Filter by search query
-  // const filteredSales = salesList.filter((item) =>
-  //   item.customerId?.name?.toLowerCase().includes(searchQuery.toLowerCase())
-  // );
  
   return (
     <View className="flex-1 bg-dark">
@@ -159,7 +145,8 @@ const SalesList = () => {
           <TouchableOpacity
             className="ml-4 mr-4 mt-4"
             activeOpacity={0.6}
-            onPress={() => console.log("Clicked item:", item)}
+            onPress={() => router.push(`/sales/${item._id}`)}
+
           >
             <View className="flex-row justify-between p-4 bg-black-200 rounded-lg items-center">
               <View className="flex-col">

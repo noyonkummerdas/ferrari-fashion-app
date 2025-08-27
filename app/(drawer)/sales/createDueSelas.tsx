@@ -134,8 +134,8 @@ const CreateDueSelas = () => {
   
     try {
       const sales = await createSale(formData);
-      console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
-      alert("Sale created successfully!");
+      // console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
+      // alert("Sale created successfully!");
 
 
 
@@ -157,7 +157,7 @@ const CreateDueSelas = () => {
 
     } catch (err) {
       console.log("Error creating sale:", err);
-      alert("Error creating sale. Check console for details.");
+      // alert("Error creating sale. Check console for details.");
     }
 
     router.back()
