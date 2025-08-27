@@ -136,10 +136,10 @@ const SalesList = () => {
         <Ionicons name="search-outline" size={24} color="gray" />
       </View>
 
-{data?.sales?.length > 0 ?
+{data?.length > 0 ?
 
       (<FlatList
-        data={data?.sales}
+        data={data}
         keyExtractor={(item, index) => item._id || index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity

@@ -22,7 +22,7 @@ const SalesDetails = () => {
 
   console.log('error',data, isSuccess, error)
 
-  console.log("sale data:",data);
+  // console.log("sale data:",data);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -45,7 +45,7 @@ const SalesDetails = () => {
     });
   }, [navigation]);
 
-  if (isLoading || !sale) {
+  if (isLoading || !data) {
     return (
       <View className="flex-1 bg-dark justify-center items-center">
         <ActivityIndicator size="large" color="#3b82f6" />
@@ -102,21 +102,21 @@ const SalesDetails = () => {
         <View className="flex-row items-center justify-between mb-4">
           <View className="flex-row items-center">
             <View className="w-12 h-12 bg-white/20 rounded-full items-center justify-center mr-3">
-              <Ionicons name={getTypeIcon(sale.type)} size={24} color="#ffffff" />
+              <Ionicons name={getTypeIcon(data?.type)} size={24} color="#ffffff" />
             </View>
             <View>
               <Text className="text-white text-lg font-semibold capitalize">
-                {sale.type}
+                {data?.type}
               </Text>
               <Text className="text-white/80 text-sm">
-                Transaction #{sale.code}
+                Transaction #{data?.code}
               </Text>
             </View>
           </View>
           <View className="items-end">
             <Text className="text-white/80 text-sm">Amount</Text>
             <Text className="text-white text-2xl font-bold">
-              ৳{sale.amount?.toLocaleString()}
+              ৳{data?.amount?.toLocaleString()}
             </Text>
           </View>
         </View>
@@ -124,14 +124,14 @@ const SalesDetails = () => {
         <View className="flex-row justify-between items-center">
           <View className="bg-white/20 rounded-lg px-3 py-2">
             <Text className="text-white/80 text-xs">Status</Text>
-            <Text className={`text-white font-semibold capitalize ${getStatusColor(sale.status)}`}>
-              {sale.status}
+            <Text className={`text-white font-semibold capitalize ${getStatusColor(data?.status)}`}>
+              {data?.status}
             </Text>
           </View>
           <View className="bg-white/20 rounded-lg px-3 py-2">
             <Text className="text-white/80 text-xs">Date</Text>
             <Text className="text-white font-semibold">
-              {sale.date && format(new Date(sale.date), "dd MMM yyyy")}
+              {data?.date && format(new Date(data?.date), "dd MMM yyyy")}
             </Text>
           </View>
         </View>
@@ -145,33 +145,33 @@ const SalesDetails = () => {
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Customer</Text>
             <Text className="text-white text-base font-medium">
-              {sale.customerId?.name || "N/A"}
+              {data?.customerId?.name || "N/A"}
             </Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Code</Text>
-            <Text className="text-white text-base font-medium font-mono">{sale.code}</Text>
+            <Text className="text-white text-base font-medium font-mono">{data?.code}</Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Date & Time</Text>
             <Text className="text-white text-base font-medium">
-              {sale.date && format(new Date(sale.date), "dd MMM yyyy, h:mm a")}
+              {data?.date && format(new Date(data?.date), "dd MMM yyyy, h:mm a")}
             </Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Type</Text>
-            <Text className={`text-base font-medium capitalize ${getTypeColor(sale.type)}`}>
-              {sale.type}
+            <Text className={`text-base font-medium capitalize ${getTypeColor(data?.type)}`}>
+              {data?.type}
             </Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Status</Text>
-            <Text className={`text-base font-medium capitalize ${getStatusColor(sale.status)}`}>
-              {sale.status}
+            <Text className={`text-base font-medium capitalize ${getStatusColor(data?.status)}`}>
+              {data?.status}
             </Text>
           </View>
         </View>
@@ -185,43 +185,43 @@ const SalesDetails = () => {
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Opening Balance</Text>
             <Text className="text-white text-base font-medium">
-              ৳{sale.openingBalance?.toLocaleString()}
+              ৳{data?.openingBalance?.toLocaleString()}
             </Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Amount</Text>
             <Text className="text-red-400 text-base font-medium">
-              -৳{sale.amount?.toLocaleString()}
+              -৳{data?.amount?.toLocaleString()}
             </Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3">
             <Text className="text-white text-lg font-semibold">New Balance</Text>
             <Text className="text-white text-lg font-bold">
-              ৳{sale.currentBalance?.toLocaleString()}
+              ৳{data?.currentBalance?.toLocaleString()}
             </Text>
           </View>
         </View>
       </View>
 
       {/* Additional Information */}
-      {(sale.note || sale.invoice) && (
+      {(data?.note || data?.invoice) && (
         <View className="mx-4 mt-6 bg-black-200 rounded-2xl p-6 mb-6">
           <Text className="text-white text-xl font-semibold mb-4">Additional Information</Text>
 
-          {sale.note && (
+          {data?.note && (
             <View className="mb-4">
               <Text className="text-gray-300 text-base mb-2">Note</Text>
-              <Text className="text-white text-base bg-gray-700 rounded-lg p-3">{sale.note}</Text>
+              <Text className="text-white text-base bg-gray-700 rounded-lg p-3">{data?.note}</Text>
             </View>
           )}
 
-          {sale.invoice && (
+          {data?.invoice && (
             <View className="mb-4">
               <Text className="text-gray-300 text-base mb-2">Invoice Reference</Text>
               <Text className="text-white text-base bg-gray-700 rounded-lg p-3 font-mono">
-                {sale.invoice}
+                {data?.invoice}
               </Text>
             </View>
           )}

@@ -26,6 +26,7 @@ import WarehouseApi from "./api/warehouseApi";
 import settingReducer from "./slice/settingSlice";
 import stockReducer from "./slice/stockSlice";
 import userReducer from "./slice/userSlice";
+import PurchaseApi from "./api/purchasApi";
 
 const persistConfig = {
   key: "root",
@@ -47,6 +48,7 @@ const rootReducers = combineReducers({
   [TransactionApi.reducerPath]: TransactionApi.reducer,
   [SettingApi.reducerPath]: SettingApi.reducer,
   [UploadApi.reducerPath]: UploadApi.reducer,
+  [PurchaseApi.reducerPath]: PurchaseApi.reducer,
 });
 
 const persistedReducer = persistReducer(persistConfig, rootReducers);
@@ -69,6 +71,7 @@ export const store = configureStore({
       UserApi.middleware,
       SettingApi.middleware,
       UploadApi.middleware,
+      PurchaseApi.middleware,
     ]),
 });
 
