@@ -33,7 +33,7 @@ const PruchasesDetails = () => {
           </TouchableOpacity>
         </View>
       ),
-      title: "Sales Details",
+      title: "Purchases Details",
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
       },

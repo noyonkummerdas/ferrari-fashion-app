@@ -117,7 +117,7 @@ const PurchasesList = () => {
               </TouchableOpacity>
             </View>
           ),
-          title: "Purchases Details",
+          title: "Purchases",
           //@ts-ignore
           headerStyle: {
             backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
