@@ -50,9 +50,6 @@ const createPurchase = () => {
     type: "payment",
     user: userInfo?.id,
     warehouse: userInfo?.warehouse,
-    openingBalance: 0,
-    currentBalance: 0,
-    invoices: "",
     status: "complete",
   });
   console.log('formdata : ', formData)
@@ -152,12 +149,12 @@ const createPurchase = () => {
    
   const [createPurchase]= useAddPurchaseMutation()
   const handleSubmit = async () => {
-    console.log("Purchase Form Data:", formData);
-    console.log("Photo URI:", formData.photo);
+    // console.log("Purchase Form Data:", formData);
+    // console.log("Photo URI:", formData.photo);
 
     try {
       const response = await createPurchase(formData).unwrap();
-      console.log("Purchase created:", response);
+      // console.log("Purchase created:", response);
     } catch (error) {
       console.error("Error creating Purchase:", error);
     }

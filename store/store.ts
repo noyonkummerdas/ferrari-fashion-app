@@ -18,7 +18,6 @@ import StockApi from "./api/stockApi";
 import SupplierApi from "./api/supplierApi";
 import TransactionApi from "./api/transactionApi";
 import UserApi from "./api/userApi";
-
 import SaleApi from "./api/saleApi";
 import SettingApi from "./api/settingApi";
 import UploadApi from "./api/uploadApi";
