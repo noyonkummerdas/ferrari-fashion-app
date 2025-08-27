@@ -136,7 +136,25 @@ const CreateDueSelas = () => {
       const sales = await createSale(formData);
       console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
       alert("Sale created successfully!");
+
+
+
+
       // Optionally, reset form
+      setFormData({
+        invoiceId: '',
+        date: new Date(),
+        amount: 0,
+        note: "",
+        customerId: "",
+        user: userInfo?.id,
+        warehouse: userInfo?.warehouse,
+        status: "complete",
+      });
+
+
+
+
     } catch (err) {
       console.log("Error creating sale:", err);
       alert("Error creating sale. Check console for details.");
