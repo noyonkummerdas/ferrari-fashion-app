@@ -202,7 +202,7 @@ const CreateDueSelas = () => {
                 activeOpacity={0.7}
               >
                 <Text className="text-white text-lg">
-                  {formattedDate.day}
+                  {formattedDateString}
                 </Text>
                 <Ionicons name="calendar" size={24} color="#FDB714" />
               </TouchableOpacity>

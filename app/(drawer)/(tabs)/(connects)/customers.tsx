@@ -37,7 +37,7 @@ const Customers = () => {
   // const [stockData, setStockData] = useState<Customer[]>([])
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
-  const [customer, setCustomer] = useState<Customer[]>([]);
+  const [customer, setCustomers] = useState<Customer[]>([]);
 
   // console.log("CUSTOMER DATA", customer);
   // useInventoriesQuery
@@ -46,7 +46,7 @@ const Customers = () => {
       q: searchQuery || "all",
       forceRefetch: true,
     });
-
+    console.log('Customer data:', data)
   const resetData = () => {
     setSearchQuery("");
     refetch();
@@ -96,6 +96,11 @@ const Customers = () => {
     refetch();
   }, [searchQuery]);
 
+  useEffect(() => {
+    if (data) {
+      setCustomers(data);
+    }
+  }, [data]);
   // console.log("DATA::", data);
 
   return (
@@ -155,7 +160,7 @@ const Customers = () => {
         </ScrollView> */}
 
         <ScrollView>
-          {data?.map((cdata, index) => (
+          {customer?.map((cdata, index) => (
             <TouchableOpacity
               key={index}
               onPress={() => router.push(`/customer/details/${cdata._id}`)}

@@ -6,7 +6,7 @@ import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { Link, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Text, TextInput, useColorScheme, View } from "react-native";
+import { ScrollView, Text, TextInput, useColorScheme, View } from "react-native";
 
 const Warehouse = () => {
   const colorScheme = useColorScheme();
@@ -59,50 +59,10 @@ const Warehouse = () => {
     });
   }, [navigation]);
 
-  // const warehouse = [
-  //   {
-  //     id: 1,
-  //     name: "Factory",
-  //     address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230",
-  //     capacity: 1000,
-  //     // Add more properties as needed
-  //     manager: "Manager 1",
-  //     contact: "123-456-7890",
-  //     type: "factory",
-  //     status: "Active",
-  //   },
-  //   {
-  //     id: 2,
-  //     name: "Embro",
-  //     address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230",
-  //     capacity: 2000,
-  //     status: "Active",
-  //     contact: "123-456-7890",
-  //     type: "factory",
-  //   },
-  //   {
-  //     id: 3,
-  //     name: "Ferrari City",
-  //     address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230",
-  //     capacity: 3000,
-  //     status: "Active",
-  //     contact: "123-456-7890",
-  //     type: "outlet",
-  //   },
-  //   {
-  //     id: 4,
-  //     name: "Ferrari Sahabag",
-  //     address: "House 06, Road 27, Sector 27, Uttara, Dhaka 1230",
-  //     capacity: 3000,
-  //     status: "Active",
-  //     contact: "123-456-7890",
-  //     type: "outlet",
-  //   },
-  // ];
-
   return (
     <View className="flex-1 bg-dark m-4">
       {/* Search bar */}
+      
       <View className="flex flex-row justify-between mb-4 items-center h-12 w-full px-4 bg-black-200 rounded-full p-2 mx-auto">
         <TextInput
           placeholder="Search Warehouse"
@@ -111,7 +71,7 @@ const Warehouse = () => {
         />
         <Ionicons name="search" size={18} color="#fdb714" />
       </View>
-
+      <ScrollView>
       {/* Warehouse list */}
       {warehouse?.map((wh) => (
         <Link
@@ -146,6 +106,7 @@ const Warehouse = () => {
           </View>
         </Link>
       ))}
+      </ScrollView>
       <StatusBar style="light" />
     </View>
   );
