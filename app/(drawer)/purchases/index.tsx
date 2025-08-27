@@ -117,7 +117,7 @@ const PurchasesList = () => {
               </TouchableOpacity>
             </View>
           ),
-          title: "Purchases",
+          title: "Purchases Details",
           //@ts-ignore
           headerStyle: {
             backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
@@ -146,12 +146,13 @@ const PurchasesList = () => {
    </View>
     <FlatList
     data={data}                           // 
-    keyExtractor={(_, index) => index.toString()}    // 
+    keyExtractor={(item, index) => item._id || index.toString()}    // 
     renderItem={({ item }) => (
       <TouchableOpacity
       className=""
       activeOpacity={0.6} // lower = more fade
-      onPress={() => console.log('Clicked item:',)}
+      onPress={() => router.push(`/purchases/${item._id}`)}
+
     >
 
       <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">

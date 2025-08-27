@@ -1,0 +1,31 @@
+import { Stack } from "expo-router";
+
+export default function SalesLayout() {
+  return (
+    <Stack>
+      {/* Sales List */}
+      <Stack.Screen
+        name="index"
+        options={{
+          headerShown: false, // তোমার custom header কাজ করবে
+        }}
+      />
+
+      {/* Create Sale */}
+      <Stack.Screen
+        name="create"
+        options={{
+          headerShown: false, // এখানেও চাইলে custom বানাতে পারো
+        }}
+      />
+
+      {/* Sale Details */}
+      <Stack.Screen
+        name="[id]"
+        options={{
+          headerShown: false, // এখানেও custom রাখো
+        }}
+      />
+    </Stack>
+  );
+}

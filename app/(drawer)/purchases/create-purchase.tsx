@@ -159,6 +159,8 @@ const createPurchase = () => {
       console.error("Error creating Purchase:", error);
     }
 
+        router.back()
+
     // Alert.alert(
     //   "Success",
     //   "Form data logged to console. Check console for details.",
