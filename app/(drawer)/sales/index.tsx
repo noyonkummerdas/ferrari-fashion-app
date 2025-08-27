@@ -18,7 +18,7 @@ const SalesList = () => {
       headerRight: () => (
         <View className="mr-4 bg-gray-900">
           <TouchableOpacity
-            onPress={() => router.push("/sales/createDueSelas")}
+           onPress={() => router.push('/sales/createDueSelas')}
             className="flex flex-row justify-center items-center gap-2"
           >
             <Ionicons name="cart-outline" size={20} color="#ffffff" />

@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { router } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Platform,
@@ -74,8 +75,8 @@ const CreateDueSelas = () => {
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
-          </TouchableOpacity>
+         <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
         </View>
       ),
       title: "Sales",
@@ -140,6 +141,8 @@ const CreateDueSelas = () => {
       console.log("Error creating sale:", err);
       alert("Error creating sale. Check console for details.");
     }
+
+    router.back()
   };
   
 
