@@ -109,7 +109,7 @@ const SalesDetails = () => {
                 {data?.type}
               </Text>
               <Text className="text-white/80 text-sm">
-                Transaction #{data?.code}
+                Transaction #{data?.invoiceId}
               </Text>
             </View>
           </View>
@@ -151,7 +151,7 @@ const SalesDetails = () => {
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Code</Text>
-            <Text className="text-white text-base font-medium font-mono">{data?.code}</Text>
+            <Text className="text-white text-base font-medium font-mono">{data?.invoiceId}</Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
@@ -161,12 +161,12 @@ const SalesDetails = () => {
             </Text>
           </View>
 
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
+          {/* <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Type</Text>
             <Text className={`text-base font-medium capitalize ${getTypeColor(data?.type)}`}>
               {data?.type}
             </Text>
-          </View>
+          </View> */}
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Status</Text>
@@ -182,12 +182,12 @@ const SalesDetails = () => {
         <Text className="text-white text-xl font-semibold mb-4">Balance Information</Text>
 
         <View className="space-y-4">
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
+          {/* <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Opening Balance</Text>
             <Text className="text-white text-base font-medium">
               ৳{data?.openingBalance?.toLocaleString()}
             </Text>
-          </View>
+          </View> */}
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Amount</Text>
@@ -206,7 +206,7 @@ const SalesDetails = () => {
       </View>
 
       {/* Additional Information */}
-      {(data?.note || data?.invoice) && (
+      {(data?.note || data?.invoiceId) && (
         <View className="mx-4 mt-6 bg-black-200 rounded-2xl p-6 mb-6">
           <Text className="text-white text-xl font-semibold mb-4">Additional Information</Text>
 
@@ -217,11 +217,11 @@ const SalesDetails = () => {
             </View>
           )}
 
-          {data?.invoice && (
+          {data?.invoiceId && (
             <View className="mb-4">
               <Text className="text-gray-300 text-base mb-2">Invoice Reference</Text>
               <Text className="text-white text-base bg-gray-700 rounded-lg p-3 font-mono">
-                {data?.invoice}
+                {data?.invoiceId}
               </Text>
             </View>
           )}
@@ -234,7 +234,7 @@ const SalesDetails = () => {
           onPress={() => router.back()}
           className="bg-black-200 py-4 rounded-xl items-center"
         >
-          <Text className="text-white text-lg font-semibold">Back to Transactions</Text>
+          <Text className="text-white text-lg font-semibold">Back to Sales List</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

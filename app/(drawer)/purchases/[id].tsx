@@ -109,7 +109,7 @@ const PruchasesDetails = () => {
                 {data?.type}
               </Text>
               <Text className="text-white/80 text-sm">
-                Transaction #{data?.code}
+                Transaction #{data?.poId}
               </Text>
             </View>
           </View>
@@ -131,7 +131,8 @@ const PruchasesDetails = () => {
           <View className="bg-white/20 rounded-lg px-3 py-2">
             <Text className="text-white/80 text-xs">Date</Text>
             <Text className="text-white font-semibold">
-              {data?.date && format(new Date(data?.date), "dd MMM yyyy")}
+            {data?.formatedDate && format(new Date(data.formatedDate), "dd MMM yyyy, h:mm a")}
+
             </Text>
           </View>
         </View>
@@ -143,30 +144,30 @@ const PruchasesDetails = () => {
 
         <View className="space-y-4">
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
-            <Text className="text-gray-300 text-base">Customer</Text>
+            <Text className="text-gray-300 text-base">supplire</Text>
             <Text className="text-white text-base font-medium">
-              {data?.customerId?.name || "N/A"}
+              {data?.supplierId.name || "N/A"}
             </Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Code</Text>
-            <Text className="text-white text-base font-medium font-mono">{data?.code}</Text>
+            <Text className="text-white text-base font-medium font-mono">{data?.poId}</Text>
           </View>
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Date & Time</Text>
             <Text className="text-white text-base font-medium">
-              {data?.date && format(new Date(data?.date), "dd MMM yyyy, h:mm a")}
+            {data?.formatedDate && format(new Date(data?.formatedDate), "dd MMM yyyy")}
             </Text>
           </View>
 
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
+          {/* <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Type</Text>
             <Text className={`text-base font-medium capitalize ${getTypeColor(data?.type)}`}>
               {data?.type}
             </Text>
-          </View>
+          </View> */}
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Status</Text>
@@ -182,12 +183,12 @@ const PruchasesDetails = () => {
         <Text className="text-white text-xl font-semibold mb-4">Balance Information</Text>
 
         <View className="space-y-4">
-          <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
+          {/* <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Opening Balance</Text>
             <Text className="text-white text-base font-medium">
               ৳{data?.openingBalance?.toLocaleString()}
             </Text>
-          </View>
+          </View> */}
 
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Amount</Text>
@@ -199,14 +200,14 @@ const PruchasesDetails = () => {
           <View className="flex-row justify-between items-center py-3">
             <Text className="text-white text-lg font-semibold">New Balance</Text>
             <Text className="text-white text-lg font-bold">
-              ৳{data?.currentBalance?.toLocaleString()}
+              ৳{data?.amount?.toLocaleString()}
             </Text>
           </View>
         </View>
       </View>
 
       {/* Additional Information */}
-      {(data?.note || data?.invoice) && (
+      {(data?.note || data?.poId) && (
         <View className="mx-4 mt-6 bg-black-200 rounded-2xl p-6 mb-6">
           <Text className="text-white text-xl font-semibold mb-4">Additional Information</Text>
 
@@ -217,11 +218,11 @@ const PruchasesDetails = () => {
             </View>
           )}
 
-          {data?.invoice && (
+          {data?.poId && (
             <View className="mb-4">
               <Text className="text-gray-300 text-base mb-2">Invoice Reference</Text>
               <Text className="text-white text-base bg-gray-700 rounded-lg p-3 font-mono">
-                {data?.invoice}
+                {data?.poId}
               </Text>
             </View>
           )}
@@ -234,7 +235,7 @@ const PruchasesDetails = () => {
           onPress={() => router.back()}
           className="bg-black-200 py-4 rounded-xl items-center"
         >
-          <Text className="text-white text-lg font-semibold">Back to Transactions</Text>
+          <Text className="text-white text-lg font-semibold">Back to Purchases</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

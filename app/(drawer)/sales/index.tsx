@@ -1,4 +1,5 @@
 import { CustomDrawerToggleButton } from "@/components";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAllSaleQuery } from "@/store/api/saleApi";
@@ -6,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import { addDays, format, isToday, subDays } from "date-fns";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { FlatList, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import { FlatList, Modal, Platform, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
 const SalesList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -15,7 +16,7 @@ const SalesList = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-  const [saleList, setSaletList] = useState<any[]>([]);
+  const [tempDate, setTempDate] = useState(new Date());
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,19 +45,32 @@ const SalesList = () => {
   }, [navigation]);
 
   // // API call - only if userInfo exists
-  const { data, isSuccess, isError, refetch } = useAllSaleQuery({ warehouse: userInfo?.warehouse, startDate: "08-26-2025" });
+  const { data, isSuccess, isError, refetch } = useAllSaleQuery({ warehouse: userInfo?.warehouse, startDate: format(currentDay, "MM-dd-yyyy"), });
 
+  console.log(currentDay)
   useEffect(()=>{
     refetch()
   },[userInfo?.warehouse])
 
-  
-  //date formatting
-  const formattedDate = {
-    day: currentDay.getDate(),
-    month: currentDay.toLocaleString("en-US", { month: "long" }),
-    year: currentDay.getFullYear(),
-  };
+
+  const [saleList, setSaleList] = useState<any[]>([]);
+  useEffect(() => {
+    if (data) {
+      // Handle different possible response structures
+      if (Array.isArray(data)) {
+        setSaleList(data);
+      } else if (
+        data &&
+        typeof data === "object" &&
+        "transactions" in data &&
+        Array.isArray((data as any).transactions)
+      ) {
+        setSaleList((data as any).transactions);
+      } else {
+        setSaleList([]);
+      }
+    }
+  }, [data, isSuccess]);
 
   const [search, setSearch] = useState("");
   const filteredList =saleList.filter(
@@ -66,21 +80,49 @@ const SalesList = () => {
       item?.date?.includes(search),
   );
 
-  // Date navigation functions
-  const goToPreviousDay = () => {
-    setCurrentDay((prev) => subDays(prev, 1));
+  const formattedDate = {
+    day: currentDay.getDate(),
+    month: currentDay.toLocaleString("en-US", { month: "long" }), // e.g. August
+    year: currentDay.getFullYear(),
   };
 
-  const goToNextDay = () => {
-    if (!isToday(currentDay)) {
-      setCurrentDay((prev) => addDays(prev, 1));
-    }
-  };
+    // Date navigation functions
+const goToPreviousDay = () => {
+  setCurrentDay((prev) => subDays(prev, 1));
+};
 
-  const openDatePicker = () => {
-    setShowDatePicker(true);
-  };
- 
+const goToNextDay = () => {
+  if (!isToday(currentDay)) {
+    setCurrentDay((prev) => addDays(prev, 1));
+  }
+};
+
+const openDatePicker = () => {
+  setTempDate(currentDay);
+  setShowDatePicker(true);
+};
+
+const handleDateChange = (event: any, selectedDate?: Date) => {
+  if (Platform.OS === "android") {
+    setShowDatePicker(false);
+  }
+
+  if (selectedDate) {
+    setTempDate(selectedDate);
+  }
+};
+
+const confirmDateSelection = () => {
+  setCurrentDay(tempDate);
+  setShowDatePicker(false);
+};
+
+const cancelDateSelection = () => {
+  setTempDate(currentDay);
+  setShowDatePicker(false);
+};
+
+
   return (
     <View className="flex-1 bg-dark">
 
@@ -122,7 +164,53 @@ const SalesList = () => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+             </View>
+
+     {/* Date Picker Modal */}
+     <Modal visible={showDatePicker} transparent={true} animationType="fade">
+        <View className="flex-1 bg-black/70 justify-center items-center">
+          <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
+            <View className="flex-row justify-between items-center mb-6">
+              <Text className="text-white text-xl font-semibold">
+                Select Date
+              </Text>
+              <TouchableOpacity onPress={cancelDateSelection}>
+                <Ionicons name="close" size={24} color="#666" />
+              </TouchableOpacity>
+            </View>
+
+            <DateTimePicker
+              value={tempDate}
+              mode="date"
+              display={Platform.OS === "ios" ? "spinner" : "default"}
+              onChange={handleDateChange}
+              maximumDate={new Date()}
+              textColor="#ffffff"
+              style={{
+                backgroundColor: "transparent",
+                width: Platform.OS === "ios" ? "100%" : "auto",
+              }}
+            />
+
+            {Platform.OS === "ios" && (
+              <View className="flex-row justify-end gap-2 space-x-3 mt-6">
+                <TouchableOpacity
+                  onPress={cancelDateSelection}
+                  className="px-6 py-3 rounded-lg bg-gray-600"
+                >
+                  <Text className="text-white font-semibold">Cancel</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  onPress={confirmDateSelection}
+                  className="px-6 py-3 rounded-lg bg-primary"
+                >
+                  <Text className="text-black font-semibold">Confirm</Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </View>
+        </View>
+      </Modal>
 
       {/* Search Bar */}
       <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">

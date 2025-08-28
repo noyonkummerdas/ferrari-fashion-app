@@ -52,7 +52,7 @@ const createPurchase = () => {
     warehouse: userInfo?.warehouse,
     status: "complete",
   });
-  console.log('formdata : ', formData)
+  // console.log('formdata : ', formData)
 
   const {
     data: supplierData,
@@ -148,48 +148,72 @@ const createPurchase = () => {
 
    
   const [createPurchase]= useAddPurchaseMutation()
-  const handleSubmit = async () => {
-    // console.log("Purchase Form Data:", formData);
-    // console.log("Photo URI:", formData.photo);
+  // const handleSubmit = async () => {
+  //   // console.log("Purchase Form Data:", formData);
+  //   // console.log("Photo URI:", formData.photo);
 
+  //   try {
+  //     const formData = {
+  //       invoice,
+  //       amount,
+  //       supplierId,
+  //       date: format(new Date(), "yyyy-MM-dd"), 
+  //     };
+    
+  //     await createPurchase(formData);
+
+  //     const response = await createPurchase(formData).unwrap();
+  //     console.log("Purchase created:", response);
+  //   } catch (error) {
+  //     console.error("Error creating Purchase:", error);
+  //   }
+
+  //       router.back()
+
+  //   // Alert.alert(
+  //   //   "Success",
+  //   //   "Form data logged to console. Check console for details.",
+  //   //   [
+  //   //     {
+  //   //       text: "OK",
+  //   //       onPress: () => {
+  //   //         setFormData({
+  //   //           name: "",
+  //   //           user: userInfo?.id,
+  //   //           warehouse: userInfo?.warehouse,
+  //   //           amount: 0,
+  //   //           openingBalance: 0,
+  //   //           currentBalance: 0,
+  //   //           photo: "",
+  //   //           invoices: "",
+  //   //           note: "",
+  //   //           date: new Date(),
+  //   //           type: "payment",
+  //   //           status: "complete",
+  //   //           supplierId: "",
+  //   //           invoice: "",
+  //   //         });
+  //   //         router.back();
+  //   //       },
+  //   //     },
+  //   //   ],
+  //   // );
+  // };
+  const handleSubmit = async () => {
     try {
-      const response = await createPurchase(formData).unwrap();
-      // console.log("Purchase created:", response);
+      const payload = {
+        ...formData,
+        poId: formData.invoice, // যদি backend poId expect করে
+      };
+      const response = await createPurchase(payload).unwrap();
+      refetch();
+      router.back();
+      console.log("Purchase created:", response);
     } catch (error) {
       console.error("Error creating Purchase:", error);
     }
-
-        router.back()
-
-    // Alert.alert(
-    //   "Success",
-    //   "Form data logged to console. Check console for details.",
-    //   [
-    //     {
-    //       text: "OK",
-    //       onPress: () => {
-    //         setFormData({
-    //           name: "",
-    //           user: userInfo?.id,
-    //           warehouse: userInfo?.warehouse,
-    //           amount: 0,
-    //           openingBalance: 0,
-    //           currentBalance: 0,
-    //           photo: "",
-    //           invoices: "",
-    //           note: "",
-    //           date: new Date(),
-    //           type: "payment",
-    //           status: "complete",
-    //           supplierId: "",
-    //           invoice: "",
-    //         });
-    //         router.back();
-    //       },
-    //     },
-    //   ],
-    // );
   };
+  
 
   const handlePhotoUpload = async () => {
     try {
