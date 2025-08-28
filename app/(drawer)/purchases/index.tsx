@@ -168,9 +168,6 @@ const PurchasesList = () => {
     }
   }, [data, isSuccess]);
      
-     
-
-
     const navigation = useNavigation();
       useLayoutEffect(() => {
         navigation.setOptions({
@@ -276,7 +273,7 @@ const PurchasesList = () => {
         
         <View className="flex-col items-end">
 
-        <Text className="text-gray-200 text-lg"> INV: {item?.invoiceId}</Text>
+        <Text className="text-gray-200 text-lg"> INV: {item?.invoice}</Text>
           <Text className="text-primary ">{item?.amount} <Text className="text-gray-200">BDT</Text></Text>
         </View>
       </View>

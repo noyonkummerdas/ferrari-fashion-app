@@ -20,7 +20,7 @@ const SalesDetails = () => {
 
   const { data, isLoading, error, isSuccess } = useSaleQuery(id as string);
 
-  console.log('error',data, isSuccess, error)
+  // console.log('error',data, isSuccess, error)
 
   // console.log("sale data:",data);
 

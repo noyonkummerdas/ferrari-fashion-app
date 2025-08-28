@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { usePurchaseQuery } from "@/store/api/purchasApi";
 import { Ionicons } from "@expo/vector-icons";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
 import {
@@ -20,7 +20,7 @@ const PruchasesDetails = () => {
 
   const { data, isLoading, error, isSuccess } = usePurchaseQuery(id as string);
 
-  console.log('error',data, isSuccess, error)
+  // console.log('error',data, isSuccess, error)
 
   // console.log("sale data:",data);
 
@@ -131,7 +131,7 @@ const PruchasesDetails = () => {
           <View className="bg-white/20 rounded-lg px-3 py-2">
             <Text className="text-white/80 text-xs">Date</Text>
             <Text className="text-white font-semibold">
-            {data?.formatedDate && format(new Date(data.formatedDate), "dd MMM yyyy, h:mm a")}
+            {data?.formatedDate && format(new Date(data?.formatedDate), "dd MMM yyyy, h:mm a")}
 
             </Text>
           </View>
