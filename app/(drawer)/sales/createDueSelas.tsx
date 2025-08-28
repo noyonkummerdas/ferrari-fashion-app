@@ -9,6 +9,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import { router } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Platform,
@@ -74,8 +75,8 @@ const CreateDueSelas = () => {
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.back()}>
-            <Ionicons name="arrow-back" size={24} color="#ffffff" />
-          </TouchableOpacity>
+         <Ionicons name="arrow-back" size={24} color="#fff" />
+        </TouchableOpacity>
         </View>
       ),
       title: "Sales",
@@ -133,13 +134,33 @@ const CreateDueSelas = () => {
   
     try {
       const sales = await createSale(formData);
-      console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
-      alert("Sale created successfully!");
+      // console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
+      // alert("Sale created successfully!");
+
+
+
+
       // Optionally, reset form
+      setFormData({
+        invoiceId: '',
+        date: new Date(),
+        amount: 0,
+        note: "",
+        customerId: "",
+        user: userInfo?.id,
+        warehouse: userInfo?.warehouse,
+        status: "complete",
+      });
+
+
+
+
     } catch (err) {
       console.log("Error creating sale:", err);
-      alert("Error creating sale. Check console for details.");
+      // alert("Error creating sale. Check console for details.");
     }
+
+    router.back()
   };
   
 
@@ -181,7 +202,7 @@ const CreateDueSelas = () => {
                 activeOpacity={0.7}
               >
                 <Text className="text-white text-lg">
-                  {formattedDate.day}
+                  {formattedDateString}
                 </Text>
                 <Ionicons name="calendar" size={24} color="#FDB714" />
               </TouchableOpacity>

@@ -16,9 +16,10 @@ const CustomerDetails = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  // console.log(id)
 
   const { data, isLoading, error, refetch } = useGetCustomerByIdQuery({ id });
-  // console.log(data);÷
+  // console.log(data);
 
   useEffect(() => {
     refetch();
@@ -95,7 +96,7 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
           </View>
@@ -128,7 +129,7 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg m-2">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
             <Text className="text-primary font-bold">
@@ -143,7 +144,7 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
             <Text className="text-primary font-bold">
@@ -158,7 +159,7 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
             <Text className="text-primary font-bold">
@@ -176,7 +177,37 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
+              <Text className="text-white text-lg ">{formattedDate.year}</Text>
+            </Text>
+            <Text className="text-primary font-bold">
+            12345<Text className="text-white">BDT</Text>
+            </Text>
+          </View>
+        </View>
+        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+          <Text className="text-white text-xl">Received Payment</Text>
+          <View className="flex flex-row justify-between items-center">
+            <Text className="text-white text-lg me-2">
+              {formattedDate.day}
+              <Text className="text-primary text-lg">
+                {formattedDate.month}
+              </Text>
+              <Text className="text-white text-lg ">{formattedDate.year}</Text>
+            </Text>
+            <Text className="text-primary font-bold">
+            12345 <Text className="text-white">BDT</Text>
+            </Text>
+          </View>
+        </View>
+        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+          <Text className="text-white text-xl">Received Payment</Text>
+          <View className="flex flex-row justify-between items-center">
+            <Text className="text-white text-lg me-2">
+              {formattedDate.day}
+              <Text className="text-primary text-lg">
+                {formattedDate.month}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
             <Text className="text-primary font-bold">
@@ -191,7 +222,7 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
             <Text className="text-primary font-bold">
@@ -206,41 +237,11 @@ const CustomerDetails = () => {
               {formattedDate.day}
               <Text className="text-primary text-lg">
                 {formattedDate.month}
-              </Text>{" "}
+              </Text>
               <Text className="text-white text-lg ">{formattedDate.year}</Text>
             </Text>
             <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
+            12345<Text className="text-white">BDT</Text>
             </Text>
           </View>
         </View>

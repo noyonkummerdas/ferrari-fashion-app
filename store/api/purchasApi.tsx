@@ -1,7 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Purchase } from "../../models/purchasModel";
+
 
 import { BASE_URL } from '../../constants/baseUrl';
+import Purchase from "@/types/purchase";
 
 // console.log(BASE_URL)
 
@@ -15,7 +16,7 @@ export const PurchaseApi = createApi({
       providesTags: ["Purchase"],
     }),
     PurchasesDW: builder.query<Purchase[], any>({
-      query: (warehouse) => `/purchase/grnwh/${warehouse}`,
+      query: ({warehouse,date}) => `/purchase/list/${warehouse}/${date}`,
       providesTags: ["Purchase"],
     }),
     WeeklyPurchases: builder.query<Purchase[], void>({
