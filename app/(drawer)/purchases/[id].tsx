@@ -19,6 +19,7 @@ const PruchasesDetails = () => {
   const navigation = useNavigation();
 
   const { data, isLoading, error, isSuccess } = usePurchaseQuery(id as string);
+  console.log('details data', data, isLoading, isSuccess)
 
   // console.log('error',data, isSuccess, error)
 
@@ -131,7 +132,7 @@ const PruchasesDetails = () => {
           <View className="bg-white/20 rounded-lg px-3 py-2">
             <Text className="text-white/80 text-xs">Date</Text>
             <Text className="text-white font-semibold">
-            {data?.formatedDate && format(new Date(data?.formatedDate), "dd MMM yyyy, h:mm a")}
+            {data?.createdAt && format(new Date(data?.createdAt), "dd MMM yyyy, h:mm a")}
 
             </Text>
           </View>
@@ -158,7 +159,7 @@ const PruchasesDetails = () => {
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Date & Time</Text>
             <Text className="text-white text-base font-medium">
-            {data?.formatedDate && format(new Date(data?.formatedDate), "dd MMM yyyy")}
+            {data?.createdAt && format(new Date(data?.createdAt), "dd MMM yyyy")}
             </Text>
           </View>
 
