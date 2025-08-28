@@ -47,7 +47,7 @@ const updateCustomer = () => {
       id: id,
       forceRefetch: true,
     });
-    console.log('customer id data:' ,data)
+    // console.log('customer id data:' ,data)
 
   useLayoutEffect(() => {
     navigation.setOptions({

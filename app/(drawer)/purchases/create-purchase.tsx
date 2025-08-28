@@ -136,7 +136,7 @@ const createPurchase = () => {
   };
 
   const handleDatePress = () => {
-    console.log("Opening date picker");
+    // console.log("Opening date picker");
     setShowDatePicker(true);
   };
 

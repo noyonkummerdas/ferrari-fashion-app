@@ -47,7 +47,7 @@ const SalesList = () => {
   // // API call - only if userInfo exists
   const { data, isSuccess, isError, refetch } = useAllSaleQuery({ warehouse: userInfo?.warehouse, startDate: format(currentDay, "MM-dd-yyyy"), });
 
-  console.log(currentDay)
+  // console.log(currentDay)
   useEffect(()=>{
     refetch()
   },[userInfo?.warehouse])
