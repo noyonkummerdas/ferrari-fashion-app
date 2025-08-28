@@ -25,7 +25,7 @@ const updateCustomer = () => {
   const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
   const { id } = useLocalSearchParams();
-  console.log("Customer ID:", id);
+  // console.log("Customer ID:", id);
 
   const [updateCustomer] = useUpdateCustomerMutation();
 
@@ -47,6 +47,7 @@ const updateCustomer = () => {
       id: id,
       forceRefetch: true,
     });
+    console.log('customer id data:' ,data)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -69,7 +70,7 @@ const updateCustomer = () => {
       headerTintColor: `#ffffff`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
-      headerTitleAlign: "left",
+      headerTitleAlign: "center",
       headerShown: true,
     });
   }, [navigation]);
@@ -133,7 +134,7 @@ const updateCustomer = () => {
       console.log("Customer Update successfully:", response);
       router.back();
     } catch (error) {
-      console.error("Error adding customer:", error);
+      // console.error("Error adding customer:", error);
     }
   };
 

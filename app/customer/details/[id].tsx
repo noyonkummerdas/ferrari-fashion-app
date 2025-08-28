@@ -16,9 +16,10 @@ const CustomerDetails = () => {
   const navigation = useNavigation();
   const router = useRouter();
   const { id } = useLocalSearchParams();
+  // console.log(id)
 
   const { data, isLoading, error, refetch } = useGetCustomerByIdQuery({ id });
-  // console.log(data);÷
+  // console.log(data);
 
   useEffect(() => {
     refetch();
