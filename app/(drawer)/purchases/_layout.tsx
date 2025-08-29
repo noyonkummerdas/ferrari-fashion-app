@@ -2,6 +2,7 @@ import { Stack } from "expo-router";
 
 export default function SalesLayout() {
   return (
+    
     <Stack
     screenOptions={{
       headerStyle: {
@@ -13,12 +14,14 @@ export default function SalesLayout() {
         color: "#ffffff",
       },
     }}
-  >
+  
+    >
       {/* Sales List */}
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false, // তোমার custom header কাজ করবে
+          title: "Purchases List",
+            
         }}
       />
 
@@ -26,7 +29,7 @@ export default function SalesLayout() {
       <Stack.Screen
         name="create"
         options={{
-          headerShown: false, // এখানেও চাইলে custom বানাতে পারো
+          title: "Create Purchases",
         }}
       />
 
@@ -34,7 +37,7 @@ export default function SalesLayout() {
       <Stack.Screen
         name="[id]"
         options={{
-          headerShown: false, // এখানেও custom রাখো
+          title: "Purchases Details",
         }}
       />
     </Stack>

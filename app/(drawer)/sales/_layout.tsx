@@ -20,7 +20,8 @@ export default function SalesLayout() {
       <Stack.Screen
         name="index"
         options={{
-          headerShown: false, // তোমার custom header কাজ করবে
+          title: "Sales List",
+            
         }}
       />
 
@@ -28,7 +29,7 @@ export default function SalesLayout() {
       <Stack.Screen
         name="create"
         options={{
-          headerShown: false, // এখানেও চাইলে custom বানাতে পারো
+          title: "Create Sales",
         }}
       />
 
@@ -36,7 +37,7 @@ export default function SalesLayout() {
       <Stack.Screen
         name="[id]"
         options={{
-          headerShown: false, // এখানেও custom রাখো
+          title: "Sales Details",
         }}
       />
     </Stack>
