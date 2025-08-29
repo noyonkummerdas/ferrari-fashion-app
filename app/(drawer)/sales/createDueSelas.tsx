@@ -318,6 +318,8 @@ const CreateDueSelas = () => {
           )}
         </View>
       </ScrollView>
+
+      <StatusBar style="light" />
       </>
   );
 };

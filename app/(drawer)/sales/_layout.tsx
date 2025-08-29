@@ -2,7 +2,20 @@ import { Stack } from "expo-router";
 
 export default function SalesLayout() {
   return (
-    <Stack>
+    
+    <Stack
+    screenOptions={{
+      headerStyle: {
+        backgroundColor: "#000000",
+      },
+      headerTintColor: "dark",
+      headerTitleStyle: {
+        fontWeight: "bold",
+        color: "#ffffff",
+      },
+    }}
+  
+    >
       {/* Sales List */}
       <Stack.Screen
         name="index"

@@ -7,6 +7,7 @@ import React, { useLayoutEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
+  StatusBar,
   Text,
   TouchableOpacity,
   useColorScheme,
@@ -96,6 +97,7 @@ const SalesDetails = () => {
   };
 
   return (
+    <>
     <ScrollView className="flex-1 bg-dark">
       {/* Header Card */}
       <View className="mx-4 mt-6 bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-6">
@@ -238,6 +240,8 @@ const SalesDetails = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    <StatusBar style="light" />
+    </>
   );
 };
 
