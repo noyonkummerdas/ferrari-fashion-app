@@ -201,6 +201,8 @@ const PurchasesList = () => {
       </TouchableOpacity>
     )}
   />
+
+<StatusBar style="light" />
   </>
   );
 };
