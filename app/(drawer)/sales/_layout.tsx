@@ -8,7 +8,7 @@ export default function SalesLayout() {
       headerStyle: {
         backgroundColor: "#000000",
       },
-      headerTintColor: "dark",
+      headerTintColor: "#ffffff",
       headerTitleStyle: {
         fontWeight: "bold",
         color: "#ffffff",
