@@ -109,6 +109,7 @@ const Report = () => {
 
   const totals = useMemo(() => {
     const sales = list.filter((x) => x.module === "Sales").reduce((s, x) => s + x.amount, 0);
+    console.log('salse:', sales)
     const purchases = list.filter((x) => x.module === "Purchases").reduce((s, x) => s + x.amount, 0);
     const paymentsReceived = list.filter((x) => x.module === "Accounts" && x.status === "received").reduce((s, x) => s + x.amount, 0);
     const balance = sales - purchases; // simplify for prototype
@@ -147,7 +148,7 @@ const Report = () => {
       </View>
 
       {/* Module Filter */}
-      <View className="px-4">
+      {/* <View className="px-4">
         <FlatList
           data={MODULES as unknown as string[]}
           keyExtractor={(m) => m}
@@ -163,14 +164,23 @@ const Report = () => {
             );
           }}
         />
-      </View>
+      </View> */}
 
       {/* Summary Cards */}
-      <View className="px-4 mt-2 grid grid-cols-2 gap-3">
-        <SummaryCard label="Sales" value={totals.sales} suffix="BDT" />
+      <View className="px-4 mt-2 flex flex-row flex-wrap gap-3">
+       
+        <View className="w-[250px]">
+        <SummaryCard  label="Sales" value={totals.sales} suffix="BDT" />
+        </View>
+        <View>
         <SummaryCard label="Purchases" value={totals.purchases} suffix="BDT" />
+        </View>
+        <View>
         <SummaryCard label="Payments Received" value={totals.paymentsReceived} suffix="BDT" />
+        </View>
+        <View>
         <SummaryCard label="Balance" value={totals.balance} suffix="BDT" />
+        </View>
       </View>
 
       {/* List Header */}
