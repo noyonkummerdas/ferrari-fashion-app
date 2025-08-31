@@ -2,33 +2,72 @@ import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { addDays, format, isToday, subDays } from "date-fns";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { addDays, format, formatDate, isToday, subDays } from "date-fns";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import {
   ScrollView,
   Text,
-  Modal,
   Platform,
+  Modal,
   TouchableOpacity,
   useColorScheme,
   View,
+  FlatList,
+  RefreshControl,
 } from "react-native";
+
+
+
+
+
+const saledata =[
+  {
+    id:1,
+    date: {formatDate},
+    newSale:290000
+  },
+  {
+    id:2,
+    date: {formatDate},
+    newSale:3000000
+  },
+  {
+    id:3,
+    date: {formatDate},
+    newSale:670000
+  },
+  {
+    id:4,
+    date: {formatDate},
+    newSale:890000
+  },
+  {
+    id:5,
+    date: {formatDate},
+    newSale:290000
+  },
+  {
+    id:6,
+    date: {formatDate},
+    newSale:790000,
+  },
+
+]
 
 const CustomerDetails = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const router = useRouter();
   const { id } = useLocalSearchParams();
-  // console.log(id)
     const [paymentList, setPaymentList] = useState<any[]>([]);
+    const [refreshing, setRefreshing] = useState(false);
     const [currentDay, setCurrentDay] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState(new Date());
   
 
   const { data, isLoading, error, refetch, isSuccess } = useGetCustomerByIdQuery({ id });
-  // console.log(data);
 
   useEffect(() => {
     refetch();
@@ -84,22 +123,22 @@ const CustomerDetails = () => {
   }, [navigation, data]);
 
   //date formatting
-  const [depositList, setDepositList] = useState<any[]>([]);
+  const [customerDetails, setCustomerDetails] = useState<any[]>([]);
 
   useEffect(() => {
     if (data) {
       // Handle different possible response structures
       if (Array.isArray(data)) {
-        setDepositList(data);
+        setCustomerDetails(data);
       } else if (
         data &&
         typeof data === "object" &&
         "transactions" in data &&
         Array.isArray((data as any).transactions)
       ) {
-        setDepositList((data as any).transactions);
+        setCustomerDetails((data as any).transactions);
       } else {
-        setDepositList([]);
+        setCustomerDetails([]);
       }
     }
   }, [data, isSuccess]);
@@ -113,7 +152,7 @@ const CustomerDetails = () => {
   };
 
   const [search, setSearch] = useState("");
-  const filteredList = depositList.filter(
+  const filteredList = customerDetails.filter(
     (item) =>
       item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
       item?.amount?.toString()?.includes(search) ||
@@ -156,10 +195,17 @@ const CustomerDetails = () => {
     setShowDatePicker(false);
   };
 
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    // এখানে API call বা অন্য refresh logic যাবে
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 1000); // demo delay
+  }, []);
+  
 
   return (
     <>
-      <ScrollView className="bg-dark">
         <StatusBar style="light" backgroundColor="#1f2937" />
         <View key={data?._id} className="mb-4 px-6 space-x-2">
           {/* <Text className="text-lg font-bold text-white">{data?.name}</Text> */}
@@ -282,7 +328,45 @@ const CustomerDetails = () => {
           </View>
         </View>
 
-        {/* Due sell generat part */}
+
+
+
+        //due sale flatlist 
+
+
+        {/* <FlatList
+      data={saledata}
+      keyExtractor={(item) => item.id.toString()}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
+      contentContainerStyle={{ padding: 10 }}
+      renderItem={({ item }) => (
+        <View
+          style={{
+            backgroundColor: "#1f2937",
+            padding: 15,
+            marginBottom: 10,
+            borderRadius: 8,
+          }}
+        >
+          <Text style={{ color: "#fff", fontSize: 16 }}>
+            Date: {item.date}
+          </Text>
+          <Text style={{ color: "#fdb714", fontSize: 18, fontWeight: "bold" }}>
+            New Sale: {item.newSale.toLocaleString()} BDT
+          </Text>
+        </View>
+      )}
+      ListEmptyComponent={
+        <Text style={{ textAlign: "center", marginTop: 20, color: "#aaa" }}>
+          No data available
+        </Text>
+      }
+    /> */}
+
+
+        Due sell generat part
         <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
           <Text className="text-white text-xl">Due Sale</Text>
           <View className="flex flex-row justify-between items-center">
@@ -329,7 +413,7 @@ const CustomerDetails = () => {
           </View>
         </View>
 
-        {/* Recived payment recived generat part */}
+        Recived payment recived generat part
 
         <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
           <Text className="text-white text-xl">Received Payment</Text>
@@ -421,7 +505,6 @@ const CustomerDetails = () => {
           </View>
         </View>
       ))}
-      </ScrollView>
     </>
   );
 };
