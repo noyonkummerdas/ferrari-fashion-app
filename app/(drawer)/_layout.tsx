@@ -278,7 +278,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/user")}
       />
-      {/* <DrawerItem
+      <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
             pathname={pathname}
@@ -297,7 +297,7 @@ const CustomDrawerComponent = (props: any) => {
           backgroundColor: pathname === "/reports" ? "#000000" : "#131313",
         }}
         onPress={() => router.push("/(drawer)/reports")}
-      /> */}
+      />
       {/* <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon

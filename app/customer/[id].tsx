@@ -25,7 +25,8 @@ const updateCustomer = () => {
   const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
   const { id } = useLocalSearchParams();
-  // console.log("Customer ID:", id);
+
+  console.log("Customer ID:", id);
 
   const [updateCustomer] = useUpdateCustomerMutation();
 
