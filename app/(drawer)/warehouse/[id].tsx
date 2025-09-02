@@ -60,7 +60,7 @@ const WarehouseEdit = () => {
       headerTitleAlign: "center",
       headerShown: true,
     });
-  }, [navigation]);
+  }, [navigation, data]);
 
   const [form, setForm] = useState({
     name: "",
