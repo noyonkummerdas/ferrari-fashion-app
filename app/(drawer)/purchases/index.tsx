@@ -1,13 +1,11 @@
 import { CustomDrawerToggleButton } from "@/components";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { usePurchasesDWQuery } from "@/store/api/purchasApi";
 import { Ionicons } from "@expo/vector-icons";
-import { Colors } from "@/constants/Colors";
+import { addDays, format, isToday, subDays } from "date-fns";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Platform, StatusBar, TextInput, useColorScheme } from "react-native";
-import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
-import { usePurchasesDWQuery, usePurchaseSupplierQuery } from "@/store/api/purchasApi";
-import { useGlobalContext } from "@/context/GlobalProvider";
-import { addDays, format, isToday, subDays } from "date-fns";
+import { FlatList, Platform, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 const PurchasesList = () => {
      const colorScheme = useColorScheme();
      const { userInfo } = useGlobalContext();
@@ -106,7 +104,7 @@ const PurchasesList = () => {
           title: "Purchases",
           //@ts-ignore
           headerStyle: {
-            backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+            backgroundColor: `#000000`,
           },
           //@ts-ignore
           headerTintColor: `#ffffff`,
