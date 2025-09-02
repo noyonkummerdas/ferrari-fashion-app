@@ -4,7 +4,7 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useLayoutEffect, useMemo, useState, useCallback } from "react";
-import {  View, Text, TouchableOpacity, Modal, Platform, FlatList, RefreshControl } from "react-native";
+import {  View, Text, TouchableOpacity, Modal, Platform, FlatList, RefreshControl, ScrollView } from "react-native";
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, isSameDay, isWithinInterval, startOfDay, endOfDay } from "date-fns";
@@ -39,13 +39,13 @@ const MOCK_TX = [
   { id: "tx5", date: "2025-08-28", module: "Supplier", ref: "SUP-999", amount: 220000, status: "paid" },
   { id: "tx6", date: "2025-08-31", module: "Warehouse", ref: "STK-33", amount: 0, status: "moved" },
   { id: "tx7", date: "2025-08-31", module: "Customer", ref: "CUST-19", amount: 0, status: "updated" },
+  { id: "tx7", date: "2025-08-31", module: "Stock", ref: "CUST-19", amount: 0, status: "updated" },
 ];
 
 const MODULES = [
   "All",
   "Supplier",
   "Customer",
-  "Dashboard",
   "Warehouse",
   "Sales",
   "Purchases",
@@ -68,14 +68,19 @@ const Report = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      // headerRight: () => (
-      // <View className='me-4' >
-      //     <TouchableOpacity onPress={()=>setIsPhoto(!isPhoto)} className='flex flex-row justify-center items-center gap-2'>
-      //       <Ionicons name={isPhoto ? "image-sharp" : "image-outline"} size={24}  color="#f2652d" />
-      //       <Text className='text-primary text-xl font-pmedium'>Photo</Text>
-      //     </TouchableOpacity>
-      // </View>
-      // ),
+      headerRight: () => (
+      <View className='me-4 flex flex-row justify-center items-center gap-2' >
+          <TouchableOpacity onPress={()=>console.log("download")} className='flex flex-row justify-center items-center gap-2'>
+            <Ionicons name="download-outline" size={24} color="#ffffff" />
+
+            {/* <Text className='text-primary text-xl font-pmedium'>Photo</Text> */}
+          </TouchableOpacity>
+          <TouchableOpacity onPress={()=>console.log("print")} className='flex flex-row justify-center items-center gap-2'>
+            <Ionicons name="print-outline" size={24} color="#ffffff" />
+          
+          </TouchableOpacity>
+      </View>
+      ),
       title: "Report",
       //@ts-ignore
       headerStyle: {
@@ -108,12 +113,14 @@ const Report = () => {
   }, [fromDate, toDate, module]);
 
   const totals = useMemo(() => {
-    const sales = list.filter((x) => x.module === "Sales").reduce((s, x) => s + x.amount, 0);
-    console.log('salse:', sales)
+    const stock =list.filter((x)=>x.module === 'stock').reduce((s, x) => s + x.amount, 0)
+    const sales =list.filter((x)=>x.module === 'sales').reduce((s, x) => s + x.amount, 0)
     const purchases = list.filter((x) => x.module === "Purchases").reduce((s, x) => s + x.amount, 0);
     const paymentsReceived = list.filter((x) => x.module === "Accounts" && x.status === "received").reduce((s, x) => s + x.amount, 0);
     const balance = sales - purchases; // simplify for prototype
-    return { sales, purchases, paymentsReceived, balance };
+    const customer = list.filter((x) => x.module === "Customer").reduce((s, x) => s + x.amount, 0);
+    const supplier = list.filter((x) => x.module === "Supplier").reduce((s, x) => s + x.amount, 0);
+      return { sales, purchases, paymentsReceived, balance, stock, customer, supplier  };
   }, [list]);
 
   const onRefresh = useCallback(() => {
@@ -132,6 +139,7 @@ const Report = () => {
   };
 
   return (
+    <ScrollView>
     <View className="flex-1 bg-zinc-900">
       {/* Header */}
       <View className="px-4 pt-4 pb-3 flex-row items-center justify-between">
@@ -165,31 +173,125 @@ const Report = () => {
           }}
         />
       </View> */}
+       {/* Stock */}
+       <View className="px-4 mt-2 flex  flex-wrap gap-2">
+        <View className="flex flex-col justify-center items-start bg-black-200 rounded-2xl p-4">
+          <Text className="text-white text-lg font-lg">Stock Status By Warehouse</Text>
+        </View>
+       {/* Stock In and Stock Out */}
+        <View className="flex flex-row justify-between">
+        <View className="p-2 w-1/2 ">
+        <SummaryCard  label="Stock In" value={totals.stock} suffix="BDT" className="gap-2" />
+        </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Stock Out" value={totals.balance} suffix="BDT" className="gap-2" />
+        </View>
+        </View>
 
-      {/* Summary Cards */}
-      <View className="px-4 mt-2 flex flex-row flex-wrap gap-3">
-       
-        <View className="w-[250px]">
-        <SummaryCard  label="Sales" value={totals.sales} suffix="BDT" />
+
+        {/* Total Quantity and Total Amount */}
+       <View className="flex flex-row justify-between">
+       <View className="p-2 w-1/2 ">
+        <SummaryCard label="Total Quantity" value={totals.customer} suffix="BDT" className="gap-2" />
         </View>
-        <View>
-        <SummaryCard label="Purchases" value={totals.purchases} suffix="BDT" />
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Total Amount" value={totals.supplier} suffix="BDT" className="gap-2" />
         </View>
-        <View>
-        <SummaryCard label="Payments Received" value={totals.paymentsReceived} suffix="BDT" />
+       </View>
+      </View>
+       {/* Customers */}
+       <View className="px-4 mt-2 flex  flex-wrap gap-2">
+        <View className="flex flex-row justify-between  items-cneter bg-black-200 rounded-2xl p-4">
+          <Text className="text-white text-lg font-lg">Top Customers</Text>
+          <Ionicons name="chevron-down" size={24} color="#ffffff" />
         </View>
-        <View>
-        <SummaryCard label="Balance" value={totals.balance} suffix="BDT" />
+       {/* Total Customers and Due Sales */}
+        <View className="flex flex-row justify-between">
+        <View className="p-2 w-1/2 ">
+        <SummaryCard  label="Total Customers" value={totals.stock} suffix="Person" className="gap-2" />
         </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Due Sales" value={totals.balance} suffix="Count" className="gap-2" />
+     
+        </View>
+        </View>
+
+
+        {/* Recevied Payment and Total Amount */}
+       <View className="flex flex-row justify-between">
+       <View className="p-2 w-1/2 ">
+        <SummaryCard label="Recevied Payment" value={totals.customer} suffix="BDT" className="gap-2" />
+        </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Total Sales" value={totals.supplier} suffix="BDT" className="gap-2" />
+        </View>
+       </View>
+      </View>
+       <View className="px-4 mt-2 flex  flex-wrap gap-2">
+        <View className="flex flex-row justify-between  items-cneter bg-black-200 rounded-2xl p-4">
+          <Text className="text-white text-lg font-lg">Top Suppliers</Text>
+          <Ionicons name="chevron-down" size={24} color="#ffffff" />
+        </View>
+       {/* Total Customers and Due Sales */}
+        <View className="flex flex-row justify-between">
+        <View className="p-2 w-1/2 ">
+        <SummaryCard  label="Total Supplire" value={totals.stock} suffix="Person" className="gap-2" />
+        </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Purchases" value={totals.purchases} suffix="BDT" className="gap-2" />
+     
+        </View>
+        </View>
+
+
+        {/* Recevied Payment and Total Amount */}
+       <View className="flex flex-row justify-between">
+       <View className="p-2 w-1/2 ">
+        <SummaryCard label="Payment" value={totals.customer} suffix="BDT" className="gap-2" />
+        </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Total Amount" value={totals.supplier} suffix="BDT" className="gap-2" />
+        </View>
+       </View>
       </View>
 
+
+      {/* Summary Cards */}
+
+      <View className="px-4 mt-2 flex  flex-wrap gap-2">
+        {/* <View className="flex flex-col justify-center items-start bg-black-200 rounded-2xl p-4">
+          <Text className="text-white text-lg font-lg">Sales</Text>
+        </View> */}
+       {/* Sales */}
+        {/* <View className="flex flex-row justify-between">
+        <View className="p-2 w-1/2 ">
+        <SummaryCard  label="Sales" value={totals.sales} suffix="BDT" className="gap-2" />
+        </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Purchases" value={totals.purchases} suffix="BDT" className="gap-2" />
+        </View>
+        </View> */}
+
+
+        {/* Payments Received */}
+       {/* <View className="flex flex-row justify-between">
+       <View className="p-2 w-1/2 ">
+        <SummaryCard label="Payments Received" value={totals.paymentsReceived} suffix="BDT" className="gap-2" />
+        </View>
+        <View className="p-2 w-1/2 ">
+        <SummaryCard label="Balance" value={totals.balance} suffix="BDT" className="gap-2" />
+        </View>
+       </View> */}
+      </View>
+
+     
       {/* List Header */}
       <View className="px-4 mt-4">
-        <Text className="text-white/80 mb-2">Transactions ({list.length})</Text>
+        <Text className="text-white/80 mb-2 font-pbold">Transactions ({list.length})</Text>
       </View>
 
       {/* Transactions List */}
-      <FlatList
+      {/* <FlatList
         data={list}
         keyExtractor={(item) => item.id}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -208,7 +310,7 @@ const Report = () => {
             <Text className="text-xs text-zinc-400 mt-1">Status: {item.status}</Text>
           </View>
         )}
-      />
+      /> */}
 
       {/* Date Pickers */}
       <Modal visible={!!showPicker.which} transparent animationType="fade">
@@ -238,10 +340,11 @@ const Report = () => {
         </View>
       </Modal>
     </View>
+    </ScrollView>
   );
 }
 
-function SummaryCard({ label, value, suffix }: { label: string; value: number; suffix?: string }) {
+function SummaryCard({ label, value, suffix, className }: { label: string; value: number; suffix?: string; className ?: string }) {
   return (
     <View className="bg-zinc-800 rounded-2xl p-4">
       <Text className="text-zinc-300 text-sm mb-1">{label}</Text>
