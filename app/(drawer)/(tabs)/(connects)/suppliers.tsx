@@ -1,4 +1,4 @@
-import { Colors } from "@/constants/Colors";
+ import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useLayoutEffect, useState } from "react";

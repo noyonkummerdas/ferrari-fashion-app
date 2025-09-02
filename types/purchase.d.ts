@@ -2,7 +2,6 @@ export interface Purchase {
     invoiceId: string;
     poId?: string;
     amount: number;
-    // saleId?: string;
     date: Date;
     amount: number;
     note: string;

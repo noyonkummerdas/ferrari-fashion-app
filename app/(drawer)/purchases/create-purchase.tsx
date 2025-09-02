@@ -507,6 +507,8 @@ const createPurchase = () => {
           )}
         </View>
       </ScrollView>
+      <StatusBar style="light" />
+      
       </>
   );
 };

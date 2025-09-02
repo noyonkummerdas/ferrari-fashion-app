@@ -8,85 +8,6 @@ import { View, Text, TouchableOpacity, FlatList, Image } from "react-native";
 import { usePurchasesDWQuery, usePurchaseSupplierQuery } from "@/store/api/purchasApi";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { addDays, format, isToday, subDays } from "date-fns";
-
-
-
-
-// const data = [
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-//   {
-//     name:'Ashok',
-//     invoice:'INV 101',
-//     date:'12-12-2012',
-//     amount:10000,
-//     note:'Note some this',
-//     // photo: require('../assets/images/sample.png')
-
-//   },
-// ]
-
 const PurchasesList = () => {
      const colorScheme = useColorScheme();
      const { userInfo } = useGlobalContext();
@@ -99,7 +20,7 @@ const PurchasesList = () => {
 
 
      const { data, isSuccess, isError, refetch } = usePurchasesDWQuery({ warehouse: userInfo?.warehouse, date: format(currentDay, "MM-dd-yyyy"), });
-     console.log('data', data, isSuccess, isError)
+    //  console.log('data', data, isSuccess, isError)
 
      useEffect(()=>{
        refetch()
@@ -273,13 +194,15 @@ const PurchasesList = () => {
         
         <View className="flex-col items-end">
 
-        <Text className="text-gray-200 text-lg"> INV: {item?.invoice}</Text>
+        <Text className="text-gray-200 text-md"> INV: {item?.invoice}</Text>
           <Text className="text-primary ">{item?.amount} <Text className="text-gray-200">BDT</Text></Text>
         </View>
       </View>
       </TouchableOpacity>
     )}
   />
+
+<StatusBar style="light" />
   </>
   );
 };

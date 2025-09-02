@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import { addDays, format, isToday, subDays } from "date-fns";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { FlatList, Modal, Platform, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import { FlatList, Modal, Platform, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
 const SalesList = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -124,6 +124,7 @@ const cancelDateSelection = () => {
 
 
   return (
+    <>
     <View className="flex-1 bg-dark">
 
             {/* calendar */}
@@ -265,6 +266,9 @@ const cancelDateSelection = () => {
 
 }
     </View>
+
+<StatusBar style="light" />
+</>
   );
 };
 
