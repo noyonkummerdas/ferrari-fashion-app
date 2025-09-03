@@ -31,7 +31,7 @@ export const DashboardCard: React.FC<DashboardCardProps> = ({
     >
       <View className="flex-1">
         <Text className={`${textColor} text-sm opacity-80 mb-1`}>{title}</Text>
-        <Text className={`${textColor} text-2xl font-pbold`}>{value}</Text>
+        <Text className={`${textColor} text-xl font-psemibold`}>{value}</Text>
       </View>
       <View className="bg-primary/10 p-3 rounded-lg">
         <Ionicons name={iconName} size={24} color={iconColor} />

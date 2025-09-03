@@ -13,19 +13,20 @@ import {
 
 // Example slice reducer (you can replace this with your actual slice)
 import CustomerApi from "./api/customerApi";
+import DashboarApi from "./api/dashbordApi";
 import ProductApi from "./api/productApi";
+import PurchaseApi from "./api/purchasApi";
+import SaleApi from "./api/saleApi";
+import SettingApi from "./api/settingApi";
 import StockApi from "./api/stockApi";
 import SupplierApi from "./api/supplierApi";
 import TransactionApi from "./api/transactionApi";
-import UserApi from "./api/userApi";
-import SaleApi from "./api/saleApi";
-import SettingApi from "./api/settingApi";
 import UploadApi from "./api/uploadApi";
+import UserApi from "./api/userApi";
 import WarehouseApi from "./api/warehouseApi";
 import settingReducer from "./slice/settingSlice";
 import stockReducer from "./slice/stockSlice";
 import userReducer from "./slice/userSlice";
-import PurchaseApi from "./api/purchasApi";
 
 const persistConfig = {
   key: "root",
@@ -38,6 +39,7 @@ const rootReducers = combineReducers({
   setting: settingReducer,
   stock: stockReducer,
   [UserApi.reducerPath]: UserApi.reducer,
+  [DashboarApi.reducerPath]: DashboarApi.reducer,
   [WarehouseApi.reducerPath]: WarehouseApi.reducer,
   [CustomerApi.reducerPath]: CustomerApi.reducer,
   [SupplierApi.reducerPath]: SupplierApi.reducer,
@@ -61,6 +63,7 @@ export const store = configureStore({
       },
     }).concat([
       SaleApi.middleware,
+      DashboarApi.middleware,
       WarehouseApi.middleware,
       ProductApi.middleware,
       TransactionApi.middleware,

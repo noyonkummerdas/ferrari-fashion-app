@@ -13,6 +13,7 @@ interface PaymentChartProps {
 }
 
 export const PaymentChart: React.FC<PaymentChartProps> = ({ data }) => {
+  // console.log(data);
   // Default data for last 7 days
   const defaultData = {
     labels: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
@@ -89,7 +90,7 @@ export const PaymentChart: React.FC<PaymentChartProps> = ({ data }) => {
         fromZero={false}
       />
 
-      <View className="flex-row justify-between mt-4">
+      {/* <View className="flex-row justify-between mt-4">
         <View className="flex-1 items-center">
           <Text className="text-gray-400 text-xs mb-1">Total Payments</Text>
           <Text className="text-primary text-lg font-pbold">৳365k</Text>
@@ -102,7 +103,7 @@ export const PaymentChart: React.FC<PaymentChartProps> = ({ data }) => {
           <Text className="text-gray-400 text-xs mb-1">Difference</Text>
           <Text className="text-white text-lg font-pbold">৳52k</Text>
         </View>
-      </View>
+      </View> */}
     </View>
   );
 };
