@@ -70,19 +70,19 @@ const Report = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
-      <View className='me-4 flex flex-row justify-center items-center gap-2' >
-          <TouchableOpacity onPress={()=>console.log("download")} className='flex flex-row justify-center items-center gap-2'>
-            <Ionicons name="download-outline" size={24} color="#ffffff" />
+      // headerRight: () => (
+      // <View className='me-4 flex flex-row justify-center items-center gap-2' >
+      //     <TouchableOpacity onPress={()=>console.log("download")} className='flex flex-row justify-center items-center gap-2'>
+      //       <Ionicons name="download-outline" size={24} color="#ffffff" />
 
-            {/* <Text className='text-primary text-xl font-pmedium'>Photo</Text> */}
-          </TouchableOpacity>
-          <TouchableOpacity onPress={()=>console.log("print")} className='flex flex-row justify-center items-center gap-2'>
-            <Ionicons name="print-outline" size={24} color="#ffffff" />
+      //       {/* <Text className='text-primary text-xl font-pmedium'>Photo</Text> */}
+      //     </TouchableOpacity>
+      //     <TouchableOpacity onPress={()=>console.log("print")} className='flex flex-row justify-center items-center gap-2'>
+      //       <Ionicons name="print-outline" size={24} color="#ffffff" />
           
-          </TouchableOpacity>
-      </View>
-      ),
+      //     </TouchableOpacity>
+      // </View>
+      // ),
       title: "Report",
       //@ts-ignore
       headerStyle: {
@@ -139,6 +139,14 @@ const Report = () => {
   //   if (showPicker.which === "from") setFromDate(startOfDay(selected));
   //   if (showPicker.which === "to") setToDate(endOfDay(selected));
   // };
+
+  // const reportItems = [
+  //   { name: "Sales", icon: "cart", route: "/(drawer)/reports/salesReport", color: "bg-yellow-500" },
+  //   { name: "Product", icon: "cube", route: "/(drawer)/reports/productReport", color: "bg-blue-500" },
+  //   { name: "Customer", icon: "people", route: "/(drawer)/reports/customerReport", color: "bg-green-500" },
+  //   { name: "Supplier", icon: "business", route: "/(drawer)/reports/supplireReports", color: "bg-pink-500" },
+  //   { name: "Account", icon: "wallet", route: "/(drawer)/reports/accountsReport", color: "bg-purple-500" },
+  // ];
 
 
   return (
@@ -365,62 +373,110 @@ const Report = () => {
   //       );
   //     }}
   //   />
-  // </View>
+  // </View>'
 
   <ScrollView>
     {/**stock */}
-    <View>
+    <View className="" >
+      {/* <View>
+        <Text className="text-gray-200 text-2xl ms-2">Repoting Dashbord</Text>
+      </View> */}
       <TouchableOpacity 
       onPress={()=>router.push('/(drawer)/reports/salesReport')}
-      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
-        <Ionicons name="cart" size={24} color="#fdb714" />
-        <Text className="text-gray-200 text-2xl">Sales </Text>
-        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-center justify-between">
+
+
+       <View className=" flex-col">
+       
+       <Text className="text-gray-200 text-2xl font-pbold ms-2">Sales</Text> 
+       <Text className="text-gray-200 text-lg ms-2">Report</Text>
+       <Ionicons className="bg-primary p-2 rounded-full text-center w-[100px]" name="return-down-forward" size={24} color="#fff" />       
+       </View>
+       <Ionicons name="cart" size={50} color="#fdb714" />
       </TouchableOpacity>
     </View>
     {/**Product */}
-    <View>
+    <View className="">
       <TouchableOpacity 
       onPress={()=>router.push('/(drawer)/reports/productReport')}
-      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
-        <Ionicons name="cube" size={24} color="#fdb714" />
-        <Text className="text-gray-200 text-2xl">Product</Text>
-        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-center justify-between">
+        <View className="flex-col">
+        
+        <Text className="text-gray-200 text-2xl  font-pbold ms-2">Products</Text>
+        <Text className="text-gray-200 text-lg ms-2">Report</Text>
+        <Ionicons className="bg-primary p-2 flex text-center w-[100px] rounded-full" name="return-down-forward" size={30} color="#fff" />     
+        </View>
+        <Ionicons name="cube" size={50} color="#fdb714" />
+       
       </TouchableOpacity>
     </View>
     {/**Customer */}
-    <View>
+    <View className="">
       <TouchableOpacity 
       onPress={()=>router.push('/(drawer)/reports/customerReport')}
-      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
-        <Ionicons name="people" size={24} color="#fdb714" />
-        <Text className="text-gray-200 text-2xl">Custoemr  </Text>
-        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-center justify-between">
+       <View className="flex-col">
+       
+       <Text className="text-gray-200 text-2xl ms-2 font-pbold">Custoemr  </Text>
+       <Text className="text-gray-200 text-lg ms-2">Report  </Text>
+       <Ionicons className="bg-primary p-2 flex text-center w-[100px] rounded-full" name="return-down-forward" size={30} color="#fff" />  
+       </View>
+       <Ionicons name="person" size={50} color="#fdb714" />
       </TouchableOpacity>
     </View>
     {/**Supplire */}
-    <View>
+    <View className="">
       <TouchableOpacity 
-      onPress={()=>router.push('/(drawer)/reports/supplireReports')}
-      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
-        <Ionicons name="business" size={24} color="#fdb714" />
-        <Text className="text-gray-200 text-2xl">Supplire</Text>
-        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
+      onPress={()=>router.push('/(drawer)/reports/supplireReport')}
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-center justify-between">
+        <View className="flex-col">
+       
+        <Text className="text-gray-200 text-2xl  font-pbold ms-2">Supplire</Text>
+        <Text className="text-gray-200 text-lg ms-2">Report</Text>
+        <Ionicons className="bg-primary p-2 flex text-center w-[100px] rounded-full" name="return-down-forward" size={30} color="#fff" /> 
+        </View>
+        <Ionicons name="people" size={50} color="#fdb714" />
       </TouchableOpacity>
     </View>
     {/**Account*/}
-    <View>
+    <View className="">
       <TouchableOpacity 
       onPress={()=>router.push('/(drawer)/reports/accountsReport')}
-      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
-        <View className="flex-row items-center">
-        <Ionicons name="wallet" size={24} color="#fdb714" />
-        <Text className="text-gray-200 text-2xl ms-2">Account</Text>
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-center justify-between">
+        <View className="flex-col ">
+       
+        <Text className="text-gray-200 text-2xl ms-2 font-pbold">Accounts</Text>
+        <Text className="text-gray-200 text-lg ms-2">Report</Text>
+        <Ionicons className="bg-primary p-2 flex text-center w-[100px] rounded-full" name="return-down-forward" size={30} color="#fff" /> 
         </View>
-        <Ionicons name="chevron-forward-sharp" size={24} color="#ffffff" />      </TouchableOpacity>
+        <Ionicons name="wallet" size={50} color="#fdb714" />   
+        </TouchableOpacity>
     </View>
   </ScrollView>
   
+//   <ScrollView className="flex-1 p-4 bg-zinc-900">
+//   {/* Page Header */}
+//   <Text className="text-white text-3xl font-bold mb-6">Reports Dashboard</Text>
+
+//   {/* Cards Grid */}
+//   <View className="flex flex-wrap justify-between">
+//     {reportItems.map((item, index) => (
+//       <TouchableOpacity
+//         key={index}
+//         onPress={() => router.push(item.route)}
+//         className={`w-full sm:w-[48%] mb-4 p-4 rounded-2xl flex-row items-center justify-between shadow-lg ${item.color}`}
+//       >
+//         <View className="flex-row items-center">
+//           <View className="w-14 h-14 rounded-full bg-white/20 items-center justify-center">
+//             <Ionicons name={item.icon} size={28} color="#fff" />
+//           </View>
+//           <Text className="text-white text-2xl font-bold ms-4">{item.name}</Text>
+//         </View>
+//         <Ionicons name="chevron-forward-sharp" size={28} color="#fff" />
+//       </TouchableOpacity>
+//     ))}
+//   </View>
+// </ScrollView>
 
 
   )

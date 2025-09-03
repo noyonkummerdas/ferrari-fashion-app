@@ -35,7 +35,7 @@ const supplireReport = () => {
         //     </TouchableOpacity>
         //   ),
         });
-      }, [navigation, data]);
+      }, [navigation]);
   return (
     <View>
       <Text className='text-gray-200'>supplireReport</Text>
