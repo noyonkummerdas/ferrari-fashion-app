@@ -8,6 +8,7 @@ import {  View, Text, TouchableOpacity, Modal, Platform, FlatList, RefreshContro
 
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, isSameDay, isWithinInterval, startOfDay, endOfDay } from "date-fns";
+import { router } from "expo-router";
 
 
 const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
@@ -369,26 +370,54 @@ const Report = () => {
   <ScrollView>
     {/**stock */}
     <View>
-      <TouchableOpacity className="bg-black-200 p-2 rounded-lg mt-2">
-        <Text className="text-gray-200 text-lg">
-          Stock in 
-        </Text>
+      <TouchableOpacity 
+      onPress={()=>router.push('/(drawer)/reports/salesReport')}
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
+        <Ionicons name="cart" size={24} color="#fdb714" />
+        <Text className="text-gray-200 text-2xl">Sales </Text>
+        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
+      </TouchableOpacity>
+    </View>
+    {/**Product */}
+    <View>
+      <TouchableOpacity 
+      onPress={()=>router.push('/(drawer)/reports/productReport')}
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
+        <Ionicons name="cube" size={24} color="#fdb714" />
+        <Text className="text-gray-200 text-2xl">Product</Text>
+        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
       </TouchableOpacity>
     </View>
     {/**Customer */}
     <View>
-      <TouchableOpacity className="bg-black-200 p-2 rounded-lg mt-2 flex-row items-cneter justify-between">
-        <Text className="text-gray-200 text-lg"> Custoemr  </Text>
+      <TouchableOpacity 
+      onPress={()=>router.push('/(drawer)/reports/customerReport')}
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
+        <Ionicons name="people" size={24} color="#fdb714" />
+        <Text className="text-gray-200 text-2xl">Custoemr  </Text>
         <Ionicons name="arrow-forward" size={24} color="#ffffff" />
       </TouchableOpacity>
     </View>
     {/**Supplire */}
     <View>
-      <TouchableOpacity className="bg-black-200 p-2 rounded-lg mt-2">
-        <Text className="text-gray-200 text-lg">
-          Supplire
-        </Text>
+      <TouchableOpacity 
+      onPress={()=>router.push('/(drawer)/reports/supplireReports')}
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
+        <Ionicons name="business" size={24} color="#fdb714" />
+        <Text className="text-gray-200 text-2xl">Supplire</Text>
+        <Ionicons name="arrow-forward" size={24} color="#ffffff" />
       </TouchableOpacity>
+    </View>
+    {/**Account*/}
+    <View>
+      <TouchableOpacity 
+      onPress={()=>router.push('/(drawer)/reports/accountsReport')}
+      className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-cneter justify-between">
+        <View className="flex-row items-center">
+        <Ionicons name="wallet" size={24} color="#fdb714" />
+        <Text className="text-gray-200 text-2xl ms-2">Account</Text>
+        </View>
+        <Ionicons name="chevron-forward-sharp" size={24} color="#ffffff" />      </TouchableOpacity>
     </View>
   </ScrollView>
   
