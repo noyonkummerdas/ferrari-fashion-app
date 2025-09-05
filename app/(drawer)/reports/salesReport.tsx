@@ -173,7 +173,7 @@ console.log('salesReport',salesReport)
   // ]
 
   return (
-    <ScrollView className="flex-1 bg-dark p-4">
+    <ScrollView className="flex-1 bg-dark p-2">
      {/* {userInfo?.role === "admin" && ( */}
         <>
         <View className='flex-row items-center justify-evenly'>
@@ -188,20 +188,20 @@ console.log('salesReport',salesReport)
               value={selectedWarehouse}
               onChange={(item: any) => setSelectedWarehouse(item.value)}
               placeholderStyle={{ color: 'white' }}
-              style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, width: 130, height: 60,marginTop: 10 }}
+              style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, width: 180, height: 60,marginTop: 10 }}
               selectedTextStyle={{ color: 'white' }}
               itemTextStyle={{ color: 'black' }}
             />
           </View>
 
         <View className="flex-row gap-3 mt-3">
-        <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-3 ms-2 rounded-xl bg-black-200 flex-col">
+        <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 ms-2 rounded-xl bg-black-200 flex-col">
           <Text className='text-white'><Ionicons name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
-          <Text className="text-white with-opacity-50 w-[100px] text-sm"> {format(fromDate, "dd MMM yyyy")}</Text>
+          <Text className="text-white  text-sm"> {format(fromDate, "dd MMM yyyy")}</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-3 rounded-xl bg-black-200  flex-col">
-          <Text ><Ionicons className="flex-row justify-end text-end" name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
-          <Text className="text-white with-opacity-50 w-[100px] text-sm"> {format(toDate, "dd MMM yyyy")}</Text>
+        <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200  flex-col">
+          <Text className='flex-row justify-end items-end text-end' ><Ionicons className="flex-row justify-end items-center " name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
+          <Text className="text-white  text-sm"> {format(toDate, "dd MMM yyyy")}</Text>
         </TouchableOpacity>
       </View>
       </View>
