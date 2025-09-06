@@ -168,21 +168,25 @@ const customerReport = () => {
               </Text>
               
             </View>
-
-            <Text className="text-zinc-400 text-sm mt-1">
-              Last Purchase: {item.lastPurchase}
+            
+            <View className="flex-row justify-between">
+           <View>
+             <Text className="text-zinc-400 text-sm mt-1">
+              Last Sale: {item.lastPurchase}
             </Text>
 
-            <View className="flex-row justify-between mt-2">
               <Text className="text-gray-300 font-bold">
                 Sales: {item.totalSales.toLocaleString()} BDT
               </Text>
-              <Text className="text-green-400 font-bold">
+           </View>
+              <View>
+                <Text className="text-green-400 font-bold">
                 Paid: {item.paid.toLocaleString()} BDT
               </Text>
               <Text className="text-primary font-bold">
                 Due: {item.due.toLocaleString()} BDT
               </Text>
+              </View>
             </View>
           </View>
         )}
@@ -191,6 +195,4 @@ const customerReport = () => {
   )
 }
 
-export default customerReport
-
-const styles = StyleSheet.create({})
+export default customerReport;

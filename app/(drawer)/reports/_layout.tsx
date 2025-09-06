@@ -12,6 +12,7 @@ export default function ReportsLayout() {
           fontWeight: "bold",
           color: "#ffffff",
         },
+        headerTitleAlign: "center",
       }}
     >
       {/* Report List */}
@@ -59,6 +60,40 @@ export default function ReportsLayout() {
         name="AccountReport"
         options={{
           title: "Account Report",
+        }}
+      />
+
+      {/* New Accounts Screens */}
+
+      {/* Cash In Report */}
+      <Stack.Screen
+        name="cashIn"
+        options={{
+          title: "Cash In",
+        }}
+      />
+
+      {/* Cash Out Report */}
+      <Stack.Screen
+        name="cashOut"
+        options={{
+          title: "Cash Out",
+        }}
+      />
+
+      {/* Payment Report */}
+      <Stack.Screen
+        name="payment"
+        options={{
+          title: "Payment",
+        }}
+      />
+
+      {/* Payment Received Report */}
+      <Stack.Screen
+        name="paymentReceived"
+        options={{
+          title: "Payment Received",
         }}
       />
     </Stack>
