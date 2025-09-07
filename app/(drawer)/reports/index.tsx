@@ -487,14 +487,18 @@ const Report = () => {
         <Text className="text-gray-200 text-2xl font-pbold">Sales Report</Text>
 
         <View className="bg-black-200 p-4 rounded-lg mt-4">
-          <TouchableOpacity className="flex-row items-center">
+          <TouchableOpacity 
+          onPress={()=>router.push('/(drawer)/reports/salesReport/salesReport')}
+          className="flex-row items-center">
             <Ionicons name="cart-outline" size={28} color="#fdb714" />
-            <Text className="text-gray-200 text-lg ms-2">Total Sale</Text>
+            <Text className="text-gray-200 text-lg ms-2">Sales Report</Text>
           </TouchableOpacity>
         </View>
 
         <View className="bg-black-200 p-4 rounded-lg mt-4">
-          <TouchableOpacity className="flex-row items-center">
+          <TouchableOpacity 
+          onPress={()=>router.push('/(drawer)/reports/salesReport/ProductWiseSale')}
+          className="flex-row items-center">
             <Ionicons name="pricetag-outline" size={28} color="#fdb714" />
             <Text className="text-gray-200 text-lg ms-2">Product Wise Sale</Text>
           </TouchableOpacity>
@@ -505,14 +509,20 @@ const Report = () => {
 
       {/* Product Report */}
       <View className="p-2 rounded-lg mt-4">
-        <Text className="text-gray-200 text-2xl font-pbold">Product Report</Text>
+        <Text 
 
-        <TouchableOpacity className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4">
+        className="text-gray-200 text-2xl font-pbold">Product Report</Text>
+
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/productReport/currentStock')}
+        className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4">
           <Ionicons name="cube-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Current Stock</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4">
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/productReport/stockInOrStockOut')}
+        className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4">
           <Ionicons name="swap-horizontal-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Stock In or Stock Out</Text>
         </TouchableOpacity>
@@ -574,32 +584,38 @@ const Report = () => {
           <Ionicons name="wallet-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Account Balance</Text>
         </TouchableOpacity> */}
-         <TouchableOpacity className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
+         <TouchableOpacity 
+         onPress={()=>router.push('/(drawer)/reports/accountsReport/dipositReport')}
+         className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
           <Ionicons name="arrow-down-circle-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Deposit</Text>
         </TouchableOpacity>
                 
-        <TouchableOpacity className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/accountsReport/cashOutReport')}
+        className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
           <Ionicons name="arrow-up-circle-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Cashout</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/accountsReport/customerDueReport')}
+        className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
           <Ionicons name="document-text-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Customer Due Report</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4 ">
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/accountsReport/paymentReceivedReport')}
+        className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4 ">
           <Ionicons name="cash-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Payment Received</Text>
         </TouchableOpacity>
-        <TouchableOpacity className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/accountsReport/supplierWisePurchases')}
+        className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
           <Ionicons name="cart-outline" size={28} color="#fdb714" />
           <Text className="text-gray-200 text-lg ms-2">Supplier Wise Purchases</Text>
-        </TouchableOpacity>
-        <TouchableOpacity className="bg-black-200 flex-row rounded-lg p-4 items-center mt-4">
-          <Ionicons name="cash-outline" size={28} color="#fdb714" />
-          <Text className="text-gray-200 text-lg ms-2">Supplier Wise Payment</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
