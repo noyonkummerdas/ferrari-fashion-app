@@ -442,7 +442,7 @@ const Report = () => {
       className="bg-black-200 p-4 rounded-lg mt-4 flex-row items-center justify-between">
        <View className="flex-col">
        
-       <Text className="text-gray-200 text-2xl ms-2 font-pbold">Custoemr  </Text>
+       <Text className="text-gray-200 text-2xl ms-2 font-pbold">Customer </Text>
        <Text className="text-gray-200 text-lg ms-2">Report  </Text>
        <Ionicons className="bg-primary p-2 flex text-center w-[100px] rounded-full" name="return-down-forward" size={30} color="#fff" />  
        </View>

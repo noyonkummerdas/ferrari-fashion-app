@@ -6,6 +6,7 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { format } from 'date-fns';
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 
 
@@ -167,6 +168,31 @@ const customerReport = () => {
         </TouchableOpacity>
       </View>
       </View>
+      {/** Date Pickers */}
+      {showStartPicker && (
+        <DateTimePicker
+          value={fromDate}
+          mode="date"
+          display="default"
+          maximumDate={new Date()}
+          onChange={(e, selectedDate) => {
+            setShowStartPicker(false);
+            if (selectedDate) setFromDate(selectedDate);
+          }}
+        />
+      )}
+      {showEndPicker && (
+        <DateTimePicker
+          value={toDate}
+          mode="date"
+          display="default"
+          maximumDate={new Date()}
+          onChange={(e, selectedDate) => {
+            setShowEndPicker(false);
+            if (selectedDate) setToDate(selectedDate);
+          }}
+        />
+      )}
 
       {/* Summary Cards */}
       <View className="flex-row justify-between mb-4">
