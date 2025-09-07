@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-
+import DateTimePicker from "@react-native-community/datetimepicker";
 const received = [
   { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
   { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
@@ -90,6 +90,32 @@ export default function PaymentReceivedReport() {
                         <Text className="text-primary text-xl font-bold">3,25,000 BDT</Text>
                       </View>
                     </View>
+
+            {/** Date Picker */}
+              {showStartPicker && (
+        <DateTimePicker
+          value={fromDate}
+          mode="date"
+          display="default"
+          maximumDate={new Date()}
+          onChange={(e, selectedDate) => {
+            setShowStartPicker(false);
+            if (selectedDate) setFromDate(selectedDate);
+          }}
+        />
+      )}
+      {showEndPicker && (
+        <DateTimePicker
+          value={toDate}
+          mode="date"
+          display="default"
+          maximumDate={new Date()}
+          onChange={(e, selectedDate) => {
+            setShowEndPicker(false);
+            if (selectedDate) setToDate(selectedDate);
+          }}
+        />
+      )}
     {/** Payment Received Report */}
     <View className="flex-1 bg-dark p-2">
       {/* <Text className="text-white text-xl font-bold mb-4">Payment Received Report</Text> */}
