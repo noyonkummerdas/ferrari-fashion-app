@@ -1,8 +1,10 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { Dropdown } from "react-native-element-dropdown";
+import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 
 const cashOut = [
   { id: "co1", date: "2025-09-01", purpose: "Supplier Payment", amount: 7000 },
@@ -10,12 +12,56 @@ const cashOut = [
 ];
 
 export default function CashOutReport() {
-    const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(null);
+    
   const [cashOutReport, setCashOutReport] = useState<any>(null);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
+
+
+  const currentUser = {
+  role: "admin", // "admin" or "user"
+  warehouse: "w1",
+};
+  //warehouse api
+    const { data: userInfo } = { data: currentUser };
+    const { data: warehousesData } = useWarehousesQuery();
+    const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+
+    // warehouse  role
+      const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+        currentUser.role === "user" ? currentUser.warehouse : null
+      );
+      // Set warehouses after fetch
+      useEffect(() => {
+        if (warehousesData) {
+          setWarehouses(warehousesData);
+          if (currentUser.role === "admin" && warehousesData.length > 0) {
+            setSelectedWarehouse(warehousesData[0]._id);
+          }
+        }
+      }, [warehousesData]);
+
+      // filter data by  role, warehouse, date
+      // const filteredData = cashInData
+      //   ? cashInData.filter((item) => {
+      //       const itemDate = new Date(item.date);
+      //       const matchesDate =
+      //         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
+      //         (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
+      
+      //       const matchesWarehouse =
+      //         currentUser.role === "admin"
+      //           ? selectedWarehouse
+      //             ? item.warehouse === selectedWarehouse
+      //             : true
+      //           : item.warehouse === currentUser.warehouse;
+      
+      //       return matchesDate && matchesWarehouse;
+      //     })
+      //   : [];
+      
 
   return (
     <>
@@ -26,7 +72,7 @@ export default function CashOutReport() {
         
                     {/* <Text className="text-white ms-2 ">Select Warehouse</Text> */}
                   <Dropdown
-                      data={cashOutReport?.warehouses?.map(wh => ({ label: wh.name, value: wh._id })) || []}
+                     data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
                       labelField="label"
                       valueField="value"
                       placeholder="Select Warehouse"

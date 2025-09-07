@@ -1,8 +1,10 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
+import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 
 const received = [
   { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
@@ -18,12 +20,34 @@ const received = [
 ];
 
 export default function PaymentReceivedReport() {
-    const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(null);
       const [paymentReceivedReport, setPaymentReceivedReport] = useState<any>(null);
       const [showStartPicker, setShowStartPicker] = useState(false);
       const [showEndPicker, setShowEndPicker] = useState(false);
       const [fromDate, setFromDate] = useState<Date>(new Date());
       const [toDate, setToDate] = useState<Date>(new Date());
+
+       const currentUser = {
+  role: "admin", // "admin" or "user"
+  warehouse: "w1",
+};
+  //warehouse api
+    const { data: userInfo } = { data: currentUser };
+    const { data: warehousesData } = useWarehousesQuery();
+    const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+
+    // warehouse  role
+      const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+        currentUser.role === "user" ? currentUser.warehouse : null
+      );
+      // Set warehouses after fetch
+      useEffect(() => {
+        if (warehousesData) {
+          setWarehouses(warehousesData);
+          if (currentUser.role === "admin" && warehousesData.length > 0) {
+            setSelectedWarehouse(warehousesData[0]._id);
+          }
+        }
+      }, [warehousesData]);
   return (
     <>
         <View className='flex-row items-center justify-between -2 mb-4'>
@@ -31,7 +55,7 @@ export default function PaymentReceivedReport() {
         
                     {/* <Text className="text-white ms-2 ">Select Warehouse</Text> */}
                   <Dropdown
-                      data={paymentReceivedReport?.warehouses?.map(wh => ({ label: wh.name, value: wh._id })) || []}
+                     data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
                       labelField="label"
                       valueField="value"
                       placeholder="Select Warehouse"
