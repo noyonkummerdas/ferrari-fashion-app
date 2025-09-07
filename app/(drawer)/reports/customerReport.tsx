@@ -7,12 +7,6 @@ import { format } from 'date-fns';
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 import DateTimePicker from "@react-native-community/datetimepicker";
-
-
-
-
-
-
 const data =[
     {
         name:'niloy howlader',
