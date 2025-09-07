@@ -1,9 +1,11 @@
 import { FlatList, StyleSheet, Text, TouchableOpacity, useColorScheme, View } from 'react-native'
-import React, { useLayoutEffect, useState } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { router, useNavigation } from 'expo-router';
 import { Dropdown } from 'react-native-element-dropdown';
 import { format } from 'date-fns';
+import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 
 
 
@@ -67,7 +69,6 @@ const customers = [
   },
 ];
 const customerReport = () => {
-      const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(null);
   const [customerReport, setCustomerReport] = useState<any>(null);
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
@@ -75,6 +76,29 @@ const customerReport = () => {
   const [toDate, setToDate] = useState<Date>(new Date());
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+
+    const currentUser = {
+    role: "admin", // "admin" or "user"
+    warehouse: "w1",
+  };
+    
+    const { data: userInfo } = { data: currentUser };
+      const { data: warehousesData } = useWarehousesQuery();
+      const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+  
+      // warehouse  role
+        const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+          currentUser.role === "user" ? currentUser.warehouse : null
+        );
+        // Set warehouses after fetch
+        useEffect(() => {
+          if (warehousesData) {
+            setWarehouses(warehousesData);
+            if (currentUser.role === "admin" && warehousesData.length > 0) {
+              setSelectedWarehouse(warehousesData[0]._id);
+            }
+          }
+        }, [warehousesData]);
   useLayoutEffect(() => {
     navigation.setOptions({
       title: `${data?.name || "Customer Report"}`,
@@ -119,7 +143,7 @@ const customerReport = () => {
 
             {/* <Text className="text-white ms-2 ">Select Warehouse</Text> */}
           <Dropdown
-              data={customerReport?.warehouses?.map(wh => ({ label: wh.name, value: wh._id })) || []}
+              data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
               labelField="label"
               valueField="value"
               placeholder="Select Warehouse"

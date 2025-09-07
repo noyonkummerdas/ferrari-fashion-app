@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { useNavigation, router } from "expo-router";
-import { useCashInTransactionQuery } from "@/store/api/transactionApi";
+import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 
 // Logged-in user example
 const currentUser = {
@@ -34,10 +34,8 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
 
-const { data: cashInData, isLoading, refetch } = useCashInTransactionQuery({
-  warehouses: selectedWarehouse,
-  date: formatDateString(fromDate),
-});
+const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
+console.log("CashInData:", cashInData);
 
  useEffect(()=>{
     refetch()

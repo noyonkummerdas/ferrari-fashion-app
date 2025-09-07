@@ -20,7 +20,7 @@ const received = [
 ];
 
 export default function PaymentReceivedReport() {
-      const [paymentReceivedReport, setPaymentReceivedReport] = useState<any>(null);
+      // const [paymentReceivedReport, setPaymentReceivedReport] = useState<any>(null);
       const [showStartPicker, setShowStartPicker] = useState(false);
       const [showEndPicker, setShowEndPicker] = useState(false);
       const [fromDate, setFromDate] = useState<Date>(new Date());
@@ -35,6 +35,14 @@ export default function PaymentReceivedReport() {
     const { data: warehousesData } = useWarehousesQuery();
     const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
+
+  //ADD Api
+//     const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+//     const { data: paymentReceivedData, isLoading, refetch } = usePaymentReceivedTransactionQuery({
+//   warehouses: selectedWarehouse,
+//   date: formatDateString(fromDate),
+// });
+
     // warehouse  role
       const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
         currentUser.role === "user" ? currentUser.warehouse : null
@@ -48,6 +56,27 @@ export default function PaymentReceivedReport() {
           }
         }
       }, [warehousesData]);
+      // Filter data by role, warehouse, and date
+  // const filteredData = paymentReceivedData
+  // ? paymentReceivedData.filter((item) => {
+  //     const itemDate = new Date(item.date);
+  //     const matchesDate =
+  //       (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
+  //       (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
+
+  //     const matchesWarehouse =
+  //       currentUser.role === "admin"
+  //         ? selectedWarehouse
+  //           ? item.warehouse === selectedWarehouse
+  //           : true
+  //         : item.warehouse === currentUser.warehouse;
+
+  //     return matchesDate && matchesWarehouse;
+  //   })
+  // : [];
+
+
+      
   return (
     <>
         <View className='flex-row items-center justify-between -2 mb-4'>

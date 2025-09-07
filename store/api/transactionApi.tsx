@@ -50,6 +50,8 @@ export const TransactionApi = createApi({
       }),
       invalidatesTags: ["Transaction"],
     }),
+
+    // new to cashIn report
     cashInTransaction: builder.query<Transaction[], { warehouse: string; date?: string }>({
   query: ({ warehouse, date }) => `/transaction/list/${warehouse}/deposit/${date || ""}`,
   providesTags: ["Transaction"],

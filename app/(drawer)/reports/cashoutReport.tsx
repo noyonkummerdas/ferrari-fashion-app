@@ -1,7 +1,7 @@
 import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useEffect, useState } from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { format } from "date-fns";
+import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { Dropdown } from "react-native-element-dropdown";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
@@ -25,6 +25,12 @@ export default function CashOutReport() {
   role: "admin", // "admin" or "user"
   warehouse: "w1",
 };
+// const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+//   const { data: cashOutData, isLoading, refetch } = useCashOutTransactionQuery({
+//     warehouses: selectedWarehouse,
+//     date: formatDateString(fromDate),
+//   });
+
   //warehouse api
     const { data: userInfo } = { data: currentUser };
     const { data: warehousesData } = useWarehousesQuery();
@@ -44,24 +50,25 @@ export default function CashOutReport() {
         }
       }, [warehousesData]);
 
-      // filter data by  role, warehouse, date
-      // const filteredData = cashInData
-      //   ? cashInData.filter((item) => {
-      //       const itemDate = new Date(item.date);
-      //       const matchesDate =
-      //         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-      //         (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-      
-      //       const matchesWarehouse =
-      //         currentUser.role === "admin"
-      //           ? selectedWarehouse
-      //             ? item.warehouse === selectedWarehouse
-      //             : true
-      //           : item.warehouse === currentUser.warehouse;
-      
-      //       return matchesDate && matchesWarehouse;
-      //     })
-      //   : [];
+     // Filter data by role, warehouse, and date
+      //  const filteredData = cashOutData
+      //  ? cashOutData.filter((item) => {
+      //      const itemDate = new Date(item.date);
+      //      const matchesDate =
+      //        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
+      //        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
+     
+      //      const matchesWarehouse =
+      //        currentUser.role === "admin"
+      //          ? selectedWarehouse
+      //            ? item.warehouse === selectedWarehouse
+      //            : true
+      //          : item.warehouse === currentUser.warehouse;
+     
+      //      return matchesDate && matchesWarehouse;
+      //    })
+      //  : [];
+     
       
 
   return (

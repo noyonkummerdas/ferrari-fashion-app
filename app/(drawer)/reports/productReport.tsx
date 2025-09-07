@@ -1,8 +1,10 @@
 import { StyleSheet, Text, useColorScheme, TouchableOpacity, View } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from 'expo-router';
 import { router } from 'expo-router';
+import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 
 
 const data =[
@@ -13,6 +15,32 @@ const data =[
 const productReport = () => {
     const colorScheme = useColorScheme();
     const navigation = useNavigation();
+
+
+
+    
+      const currentUser = {
+      role: "admin", // "admin" or "user"
+      warehouse: "w1",
+    };
+      
+      const { data: userInfo } = { data: currentUser };
+        const { data: warehousesData } = useWarehousesQuery();
+        const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+    
+        // warehouse  role
+          const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+            currentUser.role === "user" ? currentUser.warehouse : null
+          );
+          // Set warehouses after fetch
+          useEffect(() => {
+            if (warehousesData) {
+              setWarehouses(warehousesData);
+              if (currentUser.role === "admin" && warehousesData.length > 0) {
+                setSelectedWarehouse(warehousesData[0]._id);
+              }
+            }
+          }, [warehousesData]);
     useLayoutEffect(() => {
         navigation.setOptions({
           title:'Product Report',
