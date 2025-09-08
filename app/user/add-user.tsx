@@ -214,9 +214,10 @@ const AddUser = () => {
         </View>
       </View>
 
-      <TouchableOpacity
+
+       <TouchableOpacity
         onPress={handleCreateUser}
-        className="h-14 justify-center items-center rounded-full bg-primary mt-2"
+        className="h-14 w-full justify-center items-center rounded-full bg-primary mt-2"
       >
         <Text className="text-white text-center text-md font-pmedium">
           Add User

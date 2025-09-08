@@ -28,16 +28,6 @@ const currentStock = [
   { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
   { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
   { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
 ];
 export default function CurrentStockReport() {
   const navigation = useNavigation();
@@ -139,7 +129,7 @@ console.log("CashInData:", cashInData);
   : [];
 
   return (
-    <View className="bg-dark p-2">
+    <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
         {currentUser.role === "admin" && (
@@ -226,19 +216,19 @@ console.log("CashInData:", cashInData);
       /> */}
 
       <ScrollView>
-        <View className="flex-1 h-20">
-          {
-            currentStock.map((item, index) => (
-              <View key={index} className="bg-black-200 p-4 rounded-xl mb-3">
-                <Text className="text-white font-semibold">{item.name}</Text>
-                <View className="flex-row justify-between mt-2">
-                  <Text className="text-gray-400">Warehouse: {item.warehouse}</Text>
-                  <Text className="text-green-400 font-bold">Stock: {item.stock}</Text>
-                </View>
+        <View>
+        {
+          currentStock.map((item, index) => (
+            <View key={index} className="bg-black-200 p-4 rounded-xl mb-3">
+              <Text className="text-white font-semibold">{item.name}</Text>
+              <View className="flex-row justify-between mt-2">
+                <Text className="text-gray-400">Warehouse: {item.warehouse}</Text>
+                <Text className="text-green-400 font-bold">Stock: {item.stock}</Text>
               </View>
-            ))
-          }
-        </View>
+            </View>
+          ))
+        }
+      </View>
       </ScrollView>
     </View>
   );
