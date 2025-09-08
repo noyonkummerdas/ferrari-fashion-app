@@ -15,6 +15,11 @@ const currentUser = {
   warehouse: "w1",
 };
 
+
+const supplirePurcheseData = [
+    {id: '1', name: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
+    {id: '2', name: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+];
 const supplierWisePurchases = [
     {id: '1', source: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
@@ -79,7 +84,7 @@ console.log("CashInData:", cashInData);
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Supplier Payment Report",
+      title: "Supplier Purchese Report",
       headerTitleAlign: "center",
       headerStyle: { backgroundColor: "#000000" },
       headerTintColor: "#ffffff",
@@ -120,7 +125,7 @@ console.log("CashInData:", cashInData);
   : [];
 
   return (
-    <View className="flex-1 bg-dark p-2">
+    <View className=" bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
         {currentUser.role === "admin" && (
@@ -180,7 +185,7 @@ console.log("CashInData:", cashInData);
       {/* Summary */}
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Cash In</Text>
+          <Text className="text-zinc-300 text-sm">Supplier Total Purchases</Text>
           <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
@@ -206,7 +211,20 @@ console.log("CashInData:", cashInData);
         )}
       />
 
-      
+
+
+      <View>
+        {
+          supplierWisePurchases.map(item => (
+            <View key={item.id} className="bg-black-200 p-4 rounded-xl mb-3">
+              <Text className="text-gray-200 font-semibold">{item.name}</Text>
+              <View className="flex-row justify-between mt-2">
+                <Text className="text-gray-400">{item.date}</Text>
+                <Text className="text-gray-200 font-bold"><Text className="text-primary">{item.amount.toLocaleString()}</Text> BDT</Text>
+              </View>
+            </View>
+          ))}
+      </View>
     </View>
   );
 }

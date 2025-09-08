@@ -129,7 +129,7 @@ console.log("CashInData:", cashInData);
   : [];
 
   return (
-    <View className="flex-1 bg-dark p-2">
+    <View className=" bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
         {currentUser.role === "admin" && (
@@ -187,9 +187,9 @@ console.log("CashInData:", cashInData);
       )}
 
       {/* Summary */}
-      <View className="flex-1 mb-4">
+      <View className=" mb-4">
         <View className="bg-black-200 p-4 rounded-lg w-full mb-4">
-          <Text className="text-zinc-300 text-sm">Total Product</Text>
+          <Text className="text-zinc-300 text-sm">Total Product stock</Text>
           <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
         </View>
         {/* <View className="bg-black-200 p-4 rounded-2xl w-[48%]">

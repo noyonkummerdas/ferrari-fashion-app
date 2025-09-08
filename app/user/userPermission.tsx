@@ -153,10 +153,6 @@ export default function PermissionsScreen() {
               />
               <Text className="text-yellow-400 text-xl font-bold">{mod.name}</Text>
                </View>
-
-
-
-
                <View className="flex-row gap-2 items-center text-center">  
                 <Text className="text-white text-lg"> Edit</Text>
                 <Text className="text-white text-lg"> View</Text>
@@ -168,9 +164,9 @@ export default function PermissionsScreen() {
             {mod.subModules.map((sub) => {
               const perm = permissions[sub.id] || { canView: false, canEdit: false, canDelete: false };
               return (
-                <View key={sub.id} className="flex-row justify-between items-center p-2 border-b border-gray-600">
+                <View key={sub.id} className="flex-row justify-between items-center p-2 border-b border-gray-600 w-full">
                   <Text className="text-white text-lg">{sub.name}</Text>
-                  <View className="flex-row gap-3 items-center justify-between">
+                  <View className="flex-row gap-3 w-full items-center justify-between">
                     <Checkbox value={perm.canView} onValueChange={(v) => togglePermission(sub.id, "canView", v)} color={perm.canView ? "#fdb714" : undefined} />
                     <Checkbox value={perm.canCreate} onValueChange={(v) => togglePermission(sub.id, "canCreate", v)} color={perm.canCreate ? "#fdb714" : undefined} />
 
