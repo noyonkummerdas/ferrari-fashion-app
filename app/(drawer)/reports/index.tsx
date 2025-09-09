@@ -524,7 +524,13 @@ const Report = () => {
         onPress={()=>router.push('/(drawer)/reports/productReport/stockInOrStockOut')}
         className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4">
           <Ionicons name="swap-horizontal-outline" size={28} color="#fdb714" />
-          <Text className="text-gray-200 text-lg ms-2">Stock In or Stock Out</Text>
+          <Text className="text-gray-200 text-lg ms-2">Stock In</Text>
+        </TouchableOpacity>
+        <TouchableOpacity 
+        onPress={()=>router.push('/(drawer)/reports/productReport/stockOut')}
+        className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4">
+          <Ionicons name="swap-horizontal-outline" size={28} color="#fdb714" />
+          <Text className="text-gray-200 text-lg ms-2">Stock Out</Text>
         </TouchableOpacity>
 
         {/* <TouchableOpacity className="bg-black-200 rounded-lg p-4 flex-row items-center mt-4 ">

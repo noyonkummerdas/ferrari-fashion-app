@@ -74,7 +74,7 @@ console.log("CashInData:", cashInData);
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Stock In Report",
+      title: "Stock In or Stock Out Report",
       headerTitleAlign: "center",
       headerStyle: { backgroundColor: "#000000" },
       headerTintColor: "#ffffff",

@@ -29,9 +29,65 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
-    // fromDate:new Date('09-25-2025')
+    fromDate:'09-25-2025',
 
-   }
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    fromDate:'09-25-2025',
+
+   },
   ]
 const ProductWiseSale = () => {
   const [fromDate, setFromDate] = useState<Date>(new Date());
@@ -253,16 +309,22 @@ const ProductWiseSale = () => {
 
         <ScrollView>
         {/**product wise sale */}
-        <View className="mt-4 p-4 bg-black-200 rounded-xl ">
+        <View className="mt-4 rounded-xl">
         {/* <Text className='text-gray-300 font-bold text-lg'>Product based sale</Text> */}
         {
           saleProductDetails.map((product, idx) => (
-            <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-              <Text className="text-gray-200">{product.name}</Text>
-              {/* <Text>{product.fromDate}</Text> */}
+            <View key={idx} className="flex-row bg-black-200 justify-between py-2 mb-2 p-2 rounded-lg ">
+              <View className='flex-col'>
+                <Text className="text-white text-lg"> Product : {product.name}</Text>
+              <Text className='text-gray-300'> Date : {product.fromDate}</Text>
+              
+              </View>
 
-              <Text className='text-gray-200'> Quentaty : <Text className='text-primary'>{product.qty}</Text></Text>
+              <View className='flex-col items-center justify-end'>
+              
+              <Text className='text-gray-200'>  <Text className='text-primary'>{product.qty}</Text> : Qty </Text>
               <Text className="text-gray-200"><Text className='text-primary ms-2'>{product.amount}</Text>  BDT</Text>
+              </View>
             </View>
           ))}
         </View>
