@@ -28,6 +28,7 @@ interface Transaction {
    {
     qty:200,
     name:'Zines',
+    code:'11092',
     amount:'2000',
     fromDate:'09-25-2025',
 
@@ -36,6 +37,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -43,6 +45,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -50,6 +53,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -57,6 +61,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -64,6 +69,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -71,6 +77,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -78,6 +85,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -85,6 +93,7 @@ interface Transaction {
     qty:200,
     name:'Zines',
     amount:'2000',
+    code:'11092',
     fromDate:'09-25-2025',
 
    },
@@ -313,18 +322,20 @@ const ProductWiseSale = () => {
         {/* <Text className='text-gray-300 font-bold text-lg'>Product based sale</Text> */}
         {
           saleProductDetails.map((product, idx) => (
-            <View key={idx} className="flex-row bg-black-200 justify-between py-2 mb-2 p-2 rounded-lg ">
-              <View className='flex-col'>
-                <Text className="text-white text-lg"> Product : {product.name}</Text>
-              <Text className='text-gray-300'> Date : {product.fromDate}</Text>
-              
+            
+            <View key={idx} className="bg-black-200 justify-between py-2 p-2 mb-2 rounded-lg ">
+              <Text className="text-white text-xl">Product : {product.name}</Text>
+             <View className='flex-row justify-between'>
+               <View className='flex-col '>
+              <Text className='text-gray-200'>Code : {product.code}</Text>
+              <Text className='text-gray-300'>Date : {product.fromDate}</Text>
               </View>
 
               <View className='flex-col items-center justify-end'>
-              
               <Text className='text-gray-200'>  <Text className='text-primary'>{product.qty}</Text> : Qty </Text>
               <Text className="text-gray-200"><Text className='text-primary ms-2'>{product.amount}</Text>  BDT</Text>
               </View>
+             </View>
             </View>
           ))}
         </View>
