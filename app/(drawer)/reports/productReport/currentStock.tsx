@@ -223,7 +223,7 @@ console.log("CashInData:", cashInData);
               <Text className="text-white font-semibold">{item.name}</Text>
               <View className="flex-row justify-between mt-2">
                 <Text className="text-gray-400">Warehouse: {item.warehouse}</Text>
-                <Text className="text-green-400 font-bold">Stock: {item.stock}</Text>
+                <Text className="text-gray-200 font-bold">Stock:<Text className="text-primary"> {item.stock}</Text></Text>
               </View>
             </View>
           ))

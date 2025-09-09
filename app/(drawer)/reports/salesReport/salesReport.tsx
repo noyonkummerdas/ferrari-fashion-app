@@ -337,7 +337,7 @@ const SalesReport = () => {
       {/**total sale*/}
       <View className="mt-4 p-4 bg-black-200 rounded-xl ">
         <Text className='text-gray-300 font-bold text-lg'>Total Sale </Text>
-        <Text className='text-gray-300'>Amount : 12000000</Text>
+        <Text className='text-gray-300'>Amount : <Text className='text-primary'>12000000</Text></Text>
         </View>
 
         <ScrollView>

@@ -25,102 +25,13 @@ interface Transaction {
   items?: any[];
 }
   const saleProductDetails =[
-    {
-      name: "Hudie ",
-      balance: 150000
-    },
-    {
-      name: "T- Shirt",
-      balance: 128000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
-    {
-      name: "Jeans Pant",
-      balance: 23000
-    },
-    {
-      name: "Frog",
-      balance: 100000
-    },
+   {
+    qty:200,
+    name:'Zines',
+    amount:'2000',
+    // fromDate:new Date('09-25-2025')
+
+   }
   ]
 const ProductWiseSale = () => {
   const [fromDate, setFromDate] = useState<Date>(new Date());
@@ -337,7 +248,7 @@ const ProductWiseSale = () => {
       {/**total sale*/}
       <View className="mt-4 p-4 bg-black-200 rounded-xl ">
         <Text className='text-gray-300 font-bold text-lg'>Product Sale </Text>
-        <Text className='text-gray-300'>Amount : 12000000</Text>
+        <Text className='text-gray-300'>Amount :<Text className='text-primary'> 12000000</Text></Text>
         </View>
 
         <ScrollView>
@@ -348,7 +259,10 @@ const ProductWiseSale = () => {
           saleProductDetails.map((product, idx) => (
             <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
               <Text className="text-gray-200">{product.name}</Text>
-              <Text className="text-gray-200"><Text className='text-primary'>{product.balance?.toLocaleString()}</Text> BDT</Text>
+              {/* <Text>{product.fromDate}</Text> */}
+
+              <Text className='text-gray-200'> Quentaty : <Text className='text-primary'>{product.qty}</Text></Text>
+              <Text className="text-gray-200"><Text className='text-primary ms-2'>{product.amount}</Text>  BDT</Text>
             </View>
           ))}
         </View>

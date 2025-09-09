@@ -128,7 +128,7 @@ export default function PermissionsScreen() {
 
   return (
     <View className="flex-1 p-4 bg-dark">
-      <Dropdown
+      {/* <Dropdown
         data={users.map((u) => ({ label: u.name, value: u.id }))}
         labelField="label"
         valueField="value"
@@ -138,7 +138,7 @@ export default function PermissionsScreen() {
         style={{ backgroundColor: "#1f1f1f", padding: 10, borderRadius: 8, marginBottom: 20 }}
         selectedTextStyle={{ color: "white" }}
         placeholderStyle={{ color: "gray" }}
-      />
+      /> */}
 
       <ScrollView>
         {modules.map((mod) => (
@@ -166,7 +166,7 @@ export default function PermissionsScreen() {
               return (
                 <View key={sub.id} className="flex-row justify-between items-center p-2 border-b border-gray-600 w-full">
                   <Text className="text-white text-lg">{sub.name}</Text>
-                  <View className="flex-row gap-3 w-full items-center justify-between">
+                  <View className="flex-row gap-3 w-[48%] items-center justify-between">
                     <Checkbox value={perm.canView} onValueChange={(v) => togglePermission(sub.id, "canView", v)} color={perm.canView ? "#fdb714" : undefined} />
                     <Checkbox value={perm.canCreate} onValueChange={(v) => togglePermission(sub.id, "canCreate", v)} color={perm.canCreate ? "#fdb714" : undefined} />
 
