@@ -23,6 +23,12 @@ const supplirePurcheseData = [
 const supplierWisePurchases = [
     {id: '1', source: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
+    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
 ];
 
 export default function SupplierPaymentReport() {
@@ -217,7 +223,7 @@ console.log("CashInData:", cashInData);
         {
           supplierWisePurchases.map(item => (
             <View key={item.id} className="bg-black-200 p-4 rounded-xl mb-3">
-              <Text className="text-gray-200 font-semibold">{item.name}</Text>
+              <Text className="text-white text-xl">{item.source}</Text>
               <View className="flex-row justify-between mt-2">
                 <Text className="text-gray-400">{item.date}</Text>
                 <Text className="text-gray-200 font-bold"><Text className="text-primary">{item.amount.toLocaleString()}</Text> BDT</Text>

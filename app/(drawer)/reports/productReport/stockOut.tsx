@@ -14,6 +14,50 @@ const currentUser = {
   role: "admin", // "admin" or "user"
   warehouse: "w1",
 };
+const stockInReport =[
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+  {
+    name:'Zines',
+    stock: 28,
+    date: '09-09-25',
+
+  },
+]
 
 export default function CashInReport() {
   const navigation = useNavigation();
@@ -115,7 +159,7 @@ console.log("CashInData:", cashInData);
   : [];
 
   return (
-    <View className="flex-1 bg-dark p-2">
+    <View className=" bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
         {currentUser.role === "admin" && (
@@ -173,17 +217,17 @@ console.log("CashInData:", cashInData);
       )}
 
       {/* Summary */}
-      <View className="flex-row justify-between mb-4">
-        <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Stock In</Text>
+      <View className=" mb-4">
+        <View className="bg-black-200 p-4 rounded-2xl">
+          <Text className="text-zinc-300 text-sm">Total Stock Out</Text>
           <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
         </View>
-        <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
+        {/* <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
             {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
           </Text>
-        </View>
+        </View> */}
       </View>
 
       {/* List */}
@@ -200,6 +244,19 @@ console.log("CashInData:", cashInData);
           </View>
         )}
       />
+      <View>
+              {
+                 stockInReport.map((data)=>(
+                  <View className="bg-black-200 p-4 rounded-lg mb-2">
+                    <Text className="text-white text-lg">Name : {data.name}</Text>
+                    <View className="flex-row justify-between">
+                      <Text className="text-white ">Date : {data.date}</Text>
+                    <Text className="text-white">Stock Out : <Text className="text-primary">{data.stock}</Text></Text>
+                    </View>
+                  </View>
+                 ))
+              }
+            </View>
     </View>
   );
 }
