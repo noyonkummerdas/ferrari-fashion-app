@@ -170,8 +170,8 @@ const PurchasesList = () => {
      <Ionicons name="search-outline" size={24} color={"gray"} />
    </View>
     <FlatList
-    data={data}                           // 
-    keyExtractor={(item, index) => item._id || index.toString()}    // 
+    data={data}                           
+    keyExtractor={(item, index) => item._id || index.toString()}
     renderItem={({ item }) => (
       <TouchableOpacity
       className=""
