@@ -8,7 +8,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
-
+import { StatusBar } from "expo-status-bar";
 // Logged-in user example
 const currentUser = {
   role: "admin", // "admin" or "user"
@@ -115,6 +115,8 @@ console.log("CashInData:", cashInData);
   : [];
 
   return (
+    <>
+     <StatusBar style="light" backgroundColor="white" />
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
@@ -201,5 +203,6 @@ console.log("CashInData:", cashInData);
         )}
       />
     </View>
+    </>
   );
 }

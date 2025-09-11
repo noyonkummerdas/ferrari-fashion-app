@@ -12,6 +12,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, startOfDay, endOfDay } from "date-fns";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
+    import { StatusBar } from "expo-status-bar";
+
 
 interface Transaction {
   _id: string;
@@ -237,6 +239,7 @@ const ProductWiseSale = () => {
 
   return (
     <>
+     <StatusBar style="light" backgroundColor="white" />
     <View className='bg-dark flex-1 p-2'>
     
      {userInfo?.role === "admin" && (
