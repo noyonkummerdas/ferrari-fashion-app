@@ -75,7 +75,7 @@ const Warehouse = () => {
       {/* Warehouse list */}
       {warehouse?.map((wh) => (
         <Link
-          href={`/warehouse/${wh._id}`}
+          href={`/warehouse/details/${wh?._id}`}
           key={wh._id}
           className="p-4 mb-3 rounded-lg bg-black-200 border-zinc-800 items-center flex  justify-between"
         >
