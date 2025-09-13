@@ -7,7 +7,7 @@ const DashbordApi = createApi({
   tagTypes: ["Dashbord"],
   endpoints: (builder) => ({
     dashbord: builder.query<any , any>({
-      query: ({date}) => `/dashboard/byDate/${date}`,
+      query: ({date,warehouse}) => `/dashboard/byDate/${warehouse}/${date}`,
     }),
   }),
 });

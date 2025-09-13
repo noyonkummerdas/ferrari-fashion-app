@@ -131,18 +131,18 @@ const CustomDrawerComponent = (props: any) => {
             icon="archive"
             iconAlt="archive-outline"
             color={color}
-            focused={["/stock"]}
+            focused={["/stocks"]}
           />
         )}
         label={"Stock"}
         labelStyle={[
           styles.labelStyle,
-          { color: pathname === "/stock" ? "#ffffff" : "#ffffff" },
+          { color: pathname === "/stocks" ? "#ffffff" : "#ffffff" },
         ]}
         style={{
-          backgroundColor: pathname === "/stock" ? "#000000" : "#131313",
+          backgroundColor: pathname === "/stocks" ? "#000000" : "#131313",
         }}
-        onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
+        onPress={() => router.push("/(drawer)/(tabs)/(stock)/stocks")}
       />
       <DrawerItem
         icon={({ size, color, focused }) => (

@@ -18,7 +18,7 @@ const PurchasesList = () => {
 
 
      const { data, isSuccess, isError, refetch } = usePurchasesDWQuery({ warehouse: userInfo?.warehouse, date: format(currentDay, "MM-dd-yyyy"), });
-    //  console.log('data', data, isSuccess, isError)
+     console.log('data', data, isSuccess, isError)
 
      useEffect(()=>{
        refetch()
