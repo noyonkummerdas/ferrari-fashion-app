@@ -1,11 +1,12 @@
+import { CustomDrawerToggleButton } from "@/components";
 import { SearchBar } from "@/components/SearchBar";
 import { StockListItem } from "@/components/StockListItem";
 import { useProductsQuery } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
-import { router, usePathname } from "expo-router";
+import { router, useNavigation, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   RefreshControl,
   ScrollView,
@@ -41,6 +42,24 @@ const StockIndex = () => {
       setRefreshing(false);
     }, 1500);
   };
+
+  const navigation = useNavigation();
+      useLayoutEffect(() => {
+        navigation.setOptions({
+          title: "Stocks",
+          //@ts-ignore
+          headerStyle: {
+            backgroundColor: `#000000`,
+          },
+          //@ts-ignore
+          headerTintColor: `#ffffff`,
+          headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
+          headerShadowVisible: false,
+          headerTitleAlign: "center",
+          headerShown: true,
+          headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+        });
+      }, [navigation]);
 
   const handleItemPress = (id) => {
     // console.log("Selected item:", item);

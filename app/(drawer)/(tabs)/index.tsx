@@ -32,24 +32,29 @@ export default function PosDashboard() {
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
-  const aamarId = userInfo?.aamarId;
-  const warehouse = userInfo?.warehouse;
-  // console.log("AamarID::",userInfo?.aamarId)
+  const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
+  const type = userInfo?.type
+  console.log("AamarID::",userInfo)
 
-  const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery({ date: startDate } as any);
+  const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery({ warehouse: warehouse, date: startDate, type: type } as any);
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 
   const [refreshing, setRefreshing] = useState(false);
-  const [data, setData] = useState([]);
-  const [chartSale, setChartSale] = useState([]);
-  const [latestSale, setlatestSale] = useState([]);
 
-  
+  useEffect(() => {
+    setWarehouse(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
+  }, [type]);
 
   useEffect(() => {
     fetchUser();
   }, []);
+  
+  useEffect(() => {
+    fetchUser();
+  }, [warehouse]);
+
+
 
   const handleSelectDay = (day: number) => {
     const today = new Date();
@@ -85,8 +90,8 @@ export default function PosDashboard() {
   };
 
   useEffect(() => {
-    // refetch();
-  }, [startDate, endDate, warehouse, aamarId]);
+    refetch();
+  }, [startDate, warehouse]);
 
 
   interface StatItemProps {

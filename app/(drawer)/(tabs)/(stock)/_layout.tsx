@@ -17,7 +17,7 @@ export default function StockLayout() {
       }}
     >
       <Stack.Screen
-        name="index"
+        name="stocks"
         options={{
           title: "Stock Management",
           headerShown: true,

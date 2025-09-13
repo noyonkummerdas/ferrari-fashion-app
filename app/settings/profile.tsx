@@ -1,4 +1,3 @@
-import { CustomDrawerToggleButton } from '@/components';
 import { Colors } from '@/constants/Colors';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { useAddWarehouseMutation } from '@/store/api/warehouseApi'; // ✅ change to your actual import
@@ -24,9 +23,13 @@ const profile = () => {
       title: "Profile",
       //@ts-ignore
       headerStyle: {
-        backgroundColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+        backgroundColor: `#000000`,
       },
-       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+       headerLeft: () => <TouchableOpacity onPress={() => router.back()}>
+        <View>
+          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        </View>
+       </TouchableOpacity>,
       //  headerRight: () => <View className="flex flex-row items-center">
       //   <Link href="warehouse/warehouseEdit" className="text-white">
       //    <View className="flex flex-row items-center">
