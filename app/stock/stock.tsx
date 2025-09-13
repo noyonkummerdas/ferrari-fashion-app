@@ -96,16 +96,17 @@ const Stock = () => {
   }, [searchQuery]);
 
   return (
-    <SafeAreaView className="bg-dark h-full">
-      <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 mb-2 bg-gray-200">
-        <TextInput
-          placeholder="Search Stock"
-          className="flex-1"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-        />
-        <Ionicons name="search-outline" size={24} />
-      </View>
+    <SafeAreaView className= " flex-1 bg-dark h-full">
+       <View className="flex flex-row justify-between border rounded-full h-14 items-center px-5 m-2 bg-black-200">
+          <TextInput
+            placeholder="Search Customer..."
+            placeholderTextColor="#9ca3af"
+            className="flex-1 text-gray-300"
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
+          <Ionicons name="search-outline" size={24} color={"#"} />
+        </View>
 
       <ScrollView>
         {stockData?.length > 0 &&
