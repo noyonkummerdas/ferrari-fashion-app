@@ -32,8 +32,7 @@ export default function PosDashboard() {
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
-  const aamarId = userInfo?.aamarId;
-  const warehouse = userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all";
+  const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
   const type = userInfo?.type
   console.log("AamarID::",userInfo)
 
@@ -43,11 +42,17 @@ export default function PosDashboard() {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  
+  useEffect(() => {
+    setWarehouse(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
+  }, [type]);
 
   useEffect(() => {
     fetchUser();
   }, []);
+  
+  useEffect(() => {
+    fetchUser();
+  }, [warehouse]);
 
 
 
