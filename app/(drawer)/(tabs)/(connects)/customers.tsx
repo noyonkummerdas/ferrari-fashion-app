@@ -93,7 +93,7 @@ const Customers = () => {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#1f2937" />
+      <StatusBar style="light" backgroundColor="white" />
 
       <SafeAreaView className="bg-dark flex-1">
         {/* 🔍 Search Box */}

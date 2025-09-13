@@ -2,6 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  Alert,
   Image,
   ScrollView,
   Text,
@@ -87,6 +88,16 @@ const updateUser = () => {
           </TouchableOpacity>
         </View>
       ),
+      headerRight: () => (
+              <TouchableOpacity
+                onPress={() => router.push('/user/userPermission')}
+                className="me-4"
+              >
+                <Text className="text-black bg-primary rounded-lg ms-2 p-2 text-semibold">Permission</Text>
+                {/* <Ionicons name="create-outline" size={28} color="white" /> */}
+
+              </TouchableOpacity>
+            ),
       title: "Update User",
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,

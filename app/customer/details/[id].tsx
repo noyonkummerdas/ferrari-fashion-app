@@ -21,39 +21,39 @@ import {
 
 
 
-const saledata =[
-  {
-    id:1,
-    date: {formatDate},
-    newSale:290000
-  },
-  {
-    id:2,
-    date: {formatDate},
-    newSale:3000000
-  },
-  {
-    id:3,
-    date: {formatDate},
-    newSale:670000
-  },
-  {
-    id:4,
-    date: {formatDate},
-    newSale:890000
-  },
-  {
-    id:5,
-    date: {formatDate},
-    newSale:290000
-  },
-  {
-    id:6,
-    date: {formatDate},
-    newSale:790000,
-  },
+// const saledata =[
+//   {
+//     id:1,
+//     date: {formatDate},
+//     newSale:290000
+//   },
+//   {
+//     id:2,
+//     date: {formatDate},
+//     newSale:3000000
+//   },
+//   {
+//     id:3,
+//     date: {formatDate},
+//     newSale:670000
+//   },
+//   {
+//     id:4,
+//     date: {formatDate},
+//     newSale:890000
+//   },
+//   {
+//     id:5,
+//     date: {formatDate},
+//     newSale:290000
+//   },
+//   {
+//     id:6,
+//     date: {formatDate},
+//     newSale:790000,
+//   },
 
-]
+// ]
 
 const CustomerDetails = () => {
   const colorScheme = useColorScheme();
