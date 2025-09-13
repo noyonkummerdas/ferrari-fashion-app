@@ -59,14 +59,6 @@ const WarehouserDetails = () => {
     (t) => t.date === format(currentDay, "yyyy-MM-dd")
   );
 
-  const totalStockIn = dayTransactions
-    .filter((t) => t.type === "stock-in")
-    .reduce((sum, t) => sum + t.quantity, 0);
-
-  const totalStockOut = dayTransactions
-    .filter((t) => t.type === "stock-out")
-    .reduce((sum, t) => sum + t.quantity, 0);
-
   const formattedDate = {
     day: currentDay.getDate(),
     month: currentDay.toLocaleString("en-US", { month: "long" }),
@@ -151,7 +143,8 @@ const WarehouserDetails = () => {
         </View>
       </View>
 
-      <View className="mt-2 mb-2 p-2">
+      {/* 🔹 Date navigation */}
+      <View className="mt-4 p-2">
         <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -174,14 +167,19 @@ const WarehouserDetails = () => {
         </View>
       </View>
 
+      {/* 🔹 Balance Section */}
       <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto">
-        <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
-          <Text className="text-white text-xl">Stock In Today</Text>
-          <Text className="text-primary font-bold text-center text-xl">{totalStockIn}</Text>
+        <View className="flex bg-black-200 items-center justify-center p-10 text-center rounded-lg m-1">
+          <Text className="text-white text-xl">Opening Balance</Text>
+          <Text className="text-primary font-bold text-center text-xl">
+            {data?.openingBalance ?? 0}
+          </Text>
         </View>
-        <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
-          <Text className="text-white text-xl">Stock Out Today</Text>
-          <Text className="text-primary font-bold text-center text-xl">{totalStockOut}</Text>
+        <View className="flex bg-black-200 items-center justify-center p-10 text-center rounded-lg m-1">
+          <Text className="text-white text-xl">Current Balance</Text>
+          <Text className="text-primary font-bold text-center text-xl">
+            {data?.currentBalance ?? 0}
+          </Text>
         </View>
       </View>
     </View>
@@ -194,18 +192,20 @@ const WarehouserDetails = () => {
     <>
       <StatusBar style="light" backgroundColor="#1f2937" />
       <FlatList
-        data={dayTransactions.filter(t => t.type === "stock-in" || t.type === "stock-out")}
+        data={dayTransactions}
         keyExtractor={(item, index) => index.toString()}
         renderItem={({ item }) => (
           <View className="bg-black p-4 rounded-lg mt-4 mx-4 h-20 flex justify-between">
-            <Text className="text-white text-xl">{item.type === "stock-in" ? "Stock In" : "Stock Out"}</Text>
+            <Text className="text-white text-xl">{item.type}</Text>
             <View className="flex flex-row justify-between items-center">
-              <Text className="text-white text-lg">{formattedDate.day} <Text className="text-primary">{formattedDate.month}</Text> {formattedDate.year}</Text>
+              <Text className="text-white text-lg">
+                {formattedDate.day} <Text className="text-primary">{formattedDate.month}</Text> {formattedDate.year}
+              </Text>
               <Text className="text-primary font-bold">{item.quantity} <Text className="text-white">PCS</Text></Text>
             </View>
           </View>
         )}
-        ListEmptyComponent={<Text className="text-center text-gray-400 mt-4">No stock transactions available</Text>}
+        ListEmptyComponent={<Text className="text-center text-gray-400 mt-4">No transactions available</Text>}
         ListHeaderComponent={renderHeader}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
