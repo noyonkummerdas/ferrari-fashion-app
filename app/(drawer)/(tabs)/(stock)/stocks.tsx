@@ -2,7 +2,7 @@ import { CustomDrawerToggleButton } from "@/components";
 import { SearchBar } from "@/components/SearchBar";
 import { StockListItem } from "@/components/StockListItem";
 import { useProductsQuery } from "@/store/api/productApi";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { router, useNavigation, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
@@ -10,8 +10,10 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   RefreshControl,
   ScrollView,
+  TextInput,
   TouchableOpacity,
   View,
+  Text,
 } from "react-native";
 
 const StockIndex = () => {
@@ -44,22 +46,33 @@ const StockIndex = () => {
   };
 
   const navigation = useNavigation();
-      useLayoutEffect(() => {
-        navigation.setOptions({
-          title: "Stocks",
-          //@ts-ignore
-          headerStyle: {
-            backgroundColor: `#000000`,
-          },
-          //@ts-ignore
-          headerTintColor: `#ffffff`,
-          headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
-          headerShadowVisible: false,
-          headerTitleAlign: "center",
-          headerShown: true,
-          headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-        });
-      }, [navigation]);
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Stocks",
+      //@ts-ignore
+      headerStyle: {
+        backgroundColor: `#000000`,
+      },
+      //@ts-ignore
+      headerTintColor: `#ffffff`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
+      headerShadowVisible: false,
+      headerTitleAlign: "center",
+      headerShown: true,
+      headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+      headerRight: () => (
+        <View className="me-4">
+          <TouchableOpacity
+            onPress={() => router.push("/(drawer)/(tabs)/(stock)/add-stock")}
+            className="flex flex-row justify-center items-center gap-2"
+          >
+            <MaterialIcons name="inventory" size={22} color="#ffffff" />
+            <Text className="text-gray-200 text-lg" >Add</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+    });
+  }, [navigation]);
 
   const handleItemPress = (id) => {
     // console.log("Selected item:", item);
@@ -73,6 +86,19 @@ const StockIndex = () => {
 
   return (
     <View className="flex-1 bg-dark">
+
+         {/* Search Bar */}
+         <View className="flex flex-row justify-between border rounded-full h-14 items-center px-2 m-2 bg-black-200">
+          <TextInput
+            placeholder="Search by name code"
+            placeholderTextColor="#9ca3af"
+            value={searchQuery}
+            className="fle2x-1 text-gray-300"
+            onChangeText={setSearchQuery}
+          />
+          <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
+        </View>
+
       <ScrollView
         className="flex-1 p-4"
         refreshControl={
@@ -80,12 +106,7 @@ const StockIndex = () => {
         }
         showsVerticalScrollIndicator={false}
       >
-        {/* Search Bar */}
-        <SearchBar
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          placeholder="Search products by name or code..."
-        />
+       
         {/* <Text className="text-red-500">TEST</Text> */}
 
         {/* Stock List */}
@@ -105,13 +126,13 @@ const StockIndex = () => {
       </ScrollView>
 
       {/* Floating Add Button */}
-      <TouchableOpacity
-        className="absolute bottom-6 right-6 bg-primary w-14 h-14 rounded-full items-center justify-center shadow-lg"
+      {/* <TouchableOpacity
+        className="absolute bottom-6 right-6 bg-primary w-14 h-14 rounded-full items-center justify-center"
         onPress={handleAddStock}
         activeOpacity={0.8}
       >
         <Ionicons name="add" size={28} color="#000000" />
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </View>
   );
 };

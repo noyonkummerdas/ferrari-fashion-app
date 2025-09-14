@@ -145,7 +145,7 @@ const Profile = () => {
       {data?.map((user) => (
         <TouchableOpacity
           key={user._id}
-          onPress={()=>router.push('/user/userDetails')}
+          onPress={() => router.push(`/user/${user._id}`)}
         >
           <View key={user.id} className="bg-black-200 rounded-lg p-4 mt-4">
 
