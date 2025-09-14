@@ -1,5 +1,4 @@
 import { CustomDrawerToggleButton } from "@/components";
-import { SearchBar } from "@/components/SearchBar";
 import { StockListItem } from "@/components/StockListItem";
 import { useProductsQuery } from "@/store/api/productApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -10,10 +9,10 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   RefreshControl,
   ScrollView,
+  Text,
   TextInput,
   TouchableOpacity,
   View,
-  Text,
 } from "react-native";
 
 const StockIndex = () => {
@@ -88,12 +87,12 @@ const StockIndex = () => {
     <View className="flex-1 bg-dark">
 
          {/* Search Bar */}
-         <View className="flex flex-row justify-between border rounded-full h-14 items-center px-2 m-2 bg-black-200">
+         <View className="flex flex-row justify-between border rounded-full h-14 items-center px-4 mx-4 my-2 bg-black-200">
           <TextInput
             placeholder="Search by name code"
             placeholderTextColor="#9ca3af"
             value={searchQuery}
-            className="fle2x-1 text-gray-300"
+            className="flex-1 text-gray-300"
             onChangeText={setSearchQuery}
           />
           <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />

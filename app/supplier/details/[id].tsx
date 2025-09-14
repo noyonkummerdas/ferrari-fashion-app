@@ -1,13 +1,13 @@
 import { useSupplierQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
-import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState,  } from "react";
-import { addDays, format, formatDate, isToday, subDays } from "date-fns";
-import { Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { addDays, format, isToday, subDays } from "date-fns";
+import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import React, { useEffect, useLayoutEffect, useState, } from "react";
+import { Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 
-const CustomerDetails = () => {
+const SupplierDetails = () => {
   const { id } = useLocalSearchParams();
   const router = useRouter();
   const navigation = useNavigation();
@@ -16,17 +16,17 @@ const CustomerDetails = () => {
   const [tempDate, setTempDate] = useState(new Date());
   const [supplireDetails, setSupplirDetails] =  useState<any[]>([]);
 
-  const { data, isLoading, error, refetch } = useSupplierQuery({ _id: id });
+  const { data, isLoading, error, refetch } = useSupplierQuery({ _id: id, date:currentDay });
 
-  // console.log("DATA::", id, data);
+  console.log("DATA::", id, data);
 
   useEffect(() => {
     refetch();
-  }, [id]);
+  }, [id, currentDay]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: `${data?.name || "Customer Details"}`,
+      title: `${data?.supplier?.name || "Supplier Details"}`,
       //@ts-ignore
       headerStyle: {
         backgroundColor: `#000000`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,
@@ -44,7 +44,7 @@ const CustomerDetails = () => {
       ),
       headerRight: () => (
         <TouchableOpacity
-          onPress={() => router.push(`/supplier/${id}`)}
+          onPress={() => router.push(`/supplier/${Array.isArray(id) ? id[0] : id}`)}
           className="flex flex-row items-center gap-2"
         >
           <Ionicons name="pencil-outline" size={24} color="white" />
@@ -106,17 +106,19 @@ const CustomerDetails = () => {
     setShowDatePicker(false);
   };
 
+  // console.log(data)
+
   return (
     <>
       <ScrollView>
         <View className=" px-4 space-y-2">
           {/* {data.map((customer) => ( */}
-          <View key={data?._id} className="mb-4">
-            {/* <Text className="text-lg font-bold text-white">{data?.name}</Text> */}
+          <View key={data?.supplier?._id} className="mb-4">
+            {/* <Text className="text-lg font-bold text-white">{data?.supplier?.name}</Text> */}
             <View className="flex flex-row ">
               <Ionicons name="business-outline" size={18} color={"#fdb714"} />
               <Text className="text-gray-200 text-lg ms-2">
-                {data?.company}
+                {data?.supplier?.company}
               </Text>
             </View>
             <View className="flex flex-row ">
@@ -126,12 +128,12 @@ const CustomerDetails = () => {
                 color={"#fdb714"}
               />
               <Text className="text-gray-200 text-[18px] ms-2">
-                {data?.phone}
+                {data?.supplier?.phone}
               </Text>
             </View>
             <View className="flex flex-row ">
               <Ionicons name="location-outline" size={16} color={"#fdb714"} />
-              <Text className="text-gray-400  p-1 ms-2">{data?.address}</Text>
+              <Text className="text-gray-400  p-1 ms-2">{data?.supplier?.address}</Text>
             </View>
           </View>
         </View>
@@ -228,144 +230,34 @@ const CustomerDetails = () => {
           <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg me-1">
             <Text className="text-white text-xl ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
-              {data?.balance} <Text className="text-white">BDT</Text>
+              {data?.supplier?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
           <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg ms-1">
             <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
-              38234 <Text className="text-white">BDT</Text>
+              {data?.supplier?.currentBalance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
         </View>
 
         {/* Due sell generat part */}
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
+       {data?.transaction?.map((item:any) => (
+        <View key={item?._id} className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+          <Text className="text-white text-xl">{item?.type}</Text>
           <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg -2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg m-2">
-                {formattedDate.month}
-              </Text>
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
+            <Text className="text-white text-md me-2">
+              {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
             </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
+            <Text className="text-primary text-lg font-bold">
+              {item?.amount} <Text className="text-white">BDT</Text>
             </Text>
           </View>
         </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-
-        {/* Recived payment recived generat part */}
-
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
-        <View className="bg-black-200 p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
-          <Text className="text-white text-xl">Received Payment</Text>
-          <View className="flex flex-row justify-between items-center">
-            <Text className="text-white text-lg me-2">
-              {formattedDate.day}
-              <Text className="text-primary text-lg">
-                {formattedDate.month}
-              </Text>{" "}
-              <Text className="text-white text-lg ">{formattedDate.year}</Text>
-            </Text>
-            <Text className="text-primary font-bold">
-              12345 <Text className="text-white">BDT</Text>
-            </Text>
-          </View>
-        </View>
+       ))}
       </ScrollView>
     </>
   );
 };
 
-export default CustomerDetails;
+export default SupplierDetails;

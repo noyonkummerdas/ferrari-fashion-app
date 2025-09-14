@@ -1,11 +1,11 @@
 import { CustomDrawerToggleButton } from "@/components";
-import DateTimePicker from "@react-native-community/datetimepicker";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAllSaleQuery } from "@/store/api/saleApi";
 import { Ionicons } from "@expo/vector-icons";
-import { router, useNavigation } from "expo-router";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
+import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Modal, Platform, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
@@ -45,12 +45,14 @@ const SalesList = () => {
   }, [navigation]);
 
   // // API call - only if userInfo exists
-  const { data, isSuccess, isError, refetch } = useAllSaleQuery({ warehouse: userInfo?.warehouse, startDate: format(currentDay, "MM-dd-yyyy"), });
+  const { data, isSuccess, isError, refetch } = useAllSaleQuery({ warehouse: userInfo?.warehouse as string, startDate: format(currentDay, "MM-dd-yyyy"), });
 
   // console.log(currentDay)
   useEffect(()=>{
     refetch()
   },[userInfo?.warehouse])
+
+  // console.log(data)
 
 
   const [saleList, setSaleList] = useState<any[]>([]);
@@ -240,16 +242,16 @@ const cancelDateSelection = () => {
             <View className="flex-row justify-between p-4 bg-black-200 rounded-lg items-center">
               <View className="flex-col">
                 <Text className="text-primary font-bold text-lg">
-                  {item.customerName || "Unknown"}
+                  {item?.customerName || "Unknown"}
                 </Text>
                 <Text className="text-gray-200 text-base">
-                  {new Date(item.formatedDate).toLocaleDateString()}
+                  {new Date(item?.formatedDate).toLocaleDateString()}
                 </Text>
               </View>
               <View className="flex-col items-end">
-                <Text className="text-gray-300 text-base">INV: {item.invoice}</Text>
+                <Text className="text-gray-300 text-base">INV: {item?.invoice}</Text>
                 <Text>
-                  <Text className="text-primary">{item.amount}</Text>
+                  <Text className="text-primary">{item?.amount}</Text>
                   <Text className="text-gray-200"> BDT</Text>
                 </Text>
               </View>
