@@ -2,8 +2,8 @@ import { DatePickerField } from "@/components/DatePickerField";
 import { ImageUploader } from "@/components/ImageUploader";
 import { useAddProductMutation } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import { router, useNavigation } from "expo-router";
+import React, { useLayoutEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -51,6 +51,21 @@ const AddStock = () => {
     console.log("Response:", response);
     router.back();
   };
+  const navigation = useNavigation();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "Add Stock",
+      headerStyle: { backgroundColor: "#000000" },
+      headerTintColor: "#ffffff",
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
+      headerTitleAlign: "center",
+      headerLeft: () => (
+        <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginLeft: 10 }}>
+          <Ionicons name="arrow-back" size={24} color="#ffffff" />
+        </TouchableOpacity>
+      ),
+    });
+  }, [navigation]);
 
   return (
     <ScrollView className="flex-1 bg-dark">
