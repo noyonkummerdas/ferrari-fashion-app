@@ -78,10 +78,10 @@ const StockIndex = () => {
          {/* Search Bar */}
          <View className="flex flex-row justify-between border rounded-full h-14 items-center px-2 m-2 bg-black-200">
           <TextInput
-            placeholder="Search Customer..."
+            placeholder="Search by name code"
             placeholderTextColor="#9ca3af"
             value={searchQuery}
-            className="flex-1 text-gray-300"
+            className="fle2x-1 text-gray-300"
             onChangeText={setSearchQuery}
           />
           <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
