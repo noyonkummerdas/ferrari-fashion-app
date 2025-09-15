@@ -96,7 +96,7 @@ const Stock = () => {
   }, [searchQuery]);
 
   return (
-    <SafeAreaView className= " flex-1 bg-dark h-full">
+    <SafeAreaView className= "bg-dark h-full">
        <View className="flex flex-row justify-between border rounded-full h-14 items-center px-5 m-2 bg-black-200">
           <TextInput
             placeholder="Search Customer..."
