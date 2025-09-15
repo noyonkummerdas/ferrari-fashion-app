@@ -7,14 +7,13 @@ import { addDays, format, isToday, subDays } from "date-fns";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Modal,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 
 const PaymentList = () => {
@@ -119,7 +118,7 @@ const PaymentList = () => {
     }
   };
 
-  console.log("SUMMARY", (data as any)?.summary);
+  // console.log("SUMMARY", (data as any)?.summary);
   return (
     <ScrollView>
       {/* calendar */}

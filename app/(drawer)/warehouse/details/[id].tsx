@@ -1,22 +1,22 @@
+import { Colors } from "@/constants/Colors";
 import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
-import { Link, useLocalSearchParams, useNavigation, useFocusEffect } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useLayoutEffect, useState, useCallback } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
+import { Link, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
+import { StatusBar } from "expo-status-bar";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import {
+  ActivityIndicator,
   FlatList,
-  Text,
-  Platform,
   Modal,
+  Platform,
+  RefreshControl,
+  Text,
   TouchableOpacity,
   useColorScheme,
   View,
-  RefreshControl,
-  ActivityIndicator,
 } from "react-native";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { Colors } from "@/constants/Colors";
 
 const WarehouserDetails = () => {
   const colorScheme = useColorScheme();
@@ -31,9 +31,12 @@ const WarehouserDetails = () => {
   const [tempDate, setTempDate] = useState(new Date());
 
   // Warehouse data fetching
-  const { data, isLoading, refetch, isSuccess } = useWarehouseQuery(id ?? "", { skip: !id, });
+  const { data, isLoading, refetch, isSuccess } = useWarehouseQuery({
+    _id: id,
+    date:currentDay
+  });
   
-  console.log('warehouse data', data)
+  // console.log('warehouse data', data)
 
   // Whenever data changes, update transactions
   useEffect(() => {
@@ -130,16 +133,16 @@ const WarehouserDetails = () => {
             ) : (
               <MaterialIcons name="storefront" size={22} color="#fdb714" className="me-2" />
             )}
-            <Text className="text-gray-200 text-lg">{data?.name}</Text>
+            <Text className="text-gray-200 text-lg">{data?.warehouse?.name}</Text>
           </View>
         </View>
         <View className="flex flex-row">
           <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
-          <Text className="text-gray-200 text-[18px] ms-2">{data?.phone}</Text>
+          <Text className="text-gray-200 text-[18px] ms-2">{data?.warehouse?.phone}</Text>
         </View>
         <View className="flex flex-row items-center">
           <Ionicons name="location-outline" size={18} color={"#fdb714"} />
-          <Text className="text-gray-400 p-1 ms-2">{data?.address}</Text>
+          <Text className="text-gray-400 p-1 ms-2">{data?.warehouse?.address}</Text>
         </View>
       </View>
 
@@ -172,13 +175,13 @@ const WarehouserDetails = () => {
         <View className="flex bg-black-200 items-center justify-center p-10 text-center rounded-lg m-1">
           <Text className="text-white text-xl">Opening Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
-            {data?.openingBalance ?? 0}
+            {data?.warehouse?.openingBalance ?? 0}
           </Text>
         </View>
         <View className="flex bg-black-200 items-center justify-center p-10 text-center rounded-lg m-1">
           <Text className="text-white text-xl">Current Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
-            {data?.currentBalance ?? 0}
+            {data?.warehouse?.currentBalance ?? 0}
           </Text>
         </View>
       </View>
@@ -192,16 +195,16 @@ const WarehouserDetails = () => {
     <>
       <StatusBar style="light" backgroundColor="#1f2937" />
       <FlatList
-        data={dayTransactions}
-        keyExtractor={(item, index) => index.toString()}
+        data={data?.transaction}
+        keyExtractor={(item, index) => item._id}
         renderItem={({ item }) => (
           <View className="bg-black p-4 rounded-lg mt-4 mx-4 h-20 flex justify-between">
             <Text className="text-white text-xl">{item.type}</Text>
             <View className="flex flex-row justify-between items-center">
-              <Text className="text-white text-lg">
-                {formattedDate.day} <Text className="text-primary">{formattedDate.month}</Text> {formattedDate.year}
+              <Text className="text-white text-md">
+              {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
               </Text>
-              <Text className="text-primary font-bold">{item.quantity} <Text className="text-white">PCS</Text></Text>
+              <Text className="text-primary text-lg font-bold">{item.amount} <Text className="text-white">BDT</Text></Text>
             </View>
           </View>
         )}

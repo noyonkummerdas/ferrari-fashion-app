@@ -47,7 +47,7 @@ const StockIndex = () => {
   const navigation = useNavigation();
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Stocks",
+      title: "Products",
       //@ts-ignore
       headerStyle: {
         backgroundColor: `#000000`,

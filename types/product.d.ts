@@ -1,11 +1,12 @@
 interface Product {
-  _id: string;
+  _id?: string;
   code: string;
   style: string;
   details: string;
   openingStock: number;
   currentStock: number;
-  photo: string;
+  warehouse?: string;
+  photo: string | null;
   status: string;
 }
 

@@ -1,9 +1,10 @@
 import { DatePickerField } from "@/components/DatePickerField";
 import { ImageUploader } from "@/components/ImageUploader";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddProductMutation } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -14,13 +15,26 @@ import {
 } from "react-native";
 
 const AddStock = () => {
+  const {userInfo} = useGlobalContext()
+  // console.log("userInfo", userInfo);
   const [formData, setFormData] = useState({
     style: "",
     code: "",
-    openingStock: "",
+    openingStock: 0,
+    currentStock: 0,
+    details: "",
+    status: "active",
     date: new Date().toISOString().split("T")[0], // Current date in YYYY-MM-DD format
+    warehouse: userInfo?.warehouse,
     photo: null,
   });
+
+  useEffect(() => {
+    setFormData((prev) => ({
+      ...prev,
+      warehouse: userInfo?.warehouse,
+    }));
+  }, [userInfo?.warehouse]);
 
   const [createProduct] = useAddProductMutation();
 
@@ -32,20 +46,17 @@ const AddStock = () => {
   };
 
   const handleSubmit = async () => {
+    console.log("userInfo", formData);
     // Validate required fields
     if (!formData.style || !formData.code || !formData.openingStock) {
       Alert.alert("Error", "Please fill in all required fields");
       return;
     }
 
-    // Console log all form data
-    // console.log("=== ADD STOCK FORM DATA ===");
-    // console.log("Style:", formData.style);
-    // console.log("Code:", formData.code);
-    // console.log("Quantity:", formData.openingStock);
-    // console.log("Date:", formData.date);
-    // console.log("Image URI:", formData.photo);
-    // // console.log("Complete Form Data:", formData);
+   
+
+    
+    // console.log("Complete Form Data:", formData);
     // console.log("============================");
     const response = await createProduct(formData);
     console.log("Response:", response);

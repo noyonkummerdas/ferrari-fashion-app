@@ -30,7 +30,7 @@ const StockOut = () => {
   // API hooks
   const [createStock] = useAddStockMutation();
 
-  console.log("stockItem", stockItem);
+  // console.log("stockItem", stockItem);
 
   useLayoutEffect(() => {
     navigation.setOptions({

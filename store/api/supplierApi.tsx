@@ -1,5 +1,5 @@
+import { Supplier } from "@/types/supplier";
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
-import { Supplier } from "../../models/supplierModel";
 
 import { BASE_URL } from "../../constants/baseUrl";
 
@@ -15,8 +15,8 @@ export const SupplierApi = createApi({
       query: ({ q }) => `/supplier/search/${q}`,
       providesTags: ["Supplier"],
     }),
-    Supplier: builder.query<string, Supplier>({
-      query: ({ _id }) => `/supplier/${_id}`,
+    Supplier: builder.query<any, { _id: string; date: string }>({
+      query: ({ _id, date }) => `/supplier/${_id}/${date}`,
       providesTags: ["Supplier"],
     }),
     addSupplier: builder.mutation<{}, Supplier>({
