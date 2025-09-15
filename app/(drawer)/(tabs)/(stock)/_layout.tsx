@@ -17,6 +17,14 @@ export default function StockLayout() {
       }}
     >
       <Stack.Screen
+        name="products"
+        options={{
+          title: "Stock Management",
+          headerShown: true,
+          headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+        }}
+      />
+      <Stack.Screen
         name="stocks"
         options={{
           title: "Stock Management",

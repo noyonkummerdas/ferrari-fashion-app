@@ -4,10 +4,8 @@ export interface StockItem {
   product: string;
   stock: number;
   note: string;
-  openingStock: number;
   type: string;
   status: string;
-  currentStock: number;
   user: string;
   warehouse: string;
 }
@@ -25,10 +23,8 @@ const initialState: StockState = {
     product: "",
     stock: 0,
     note: "",
-    openingStock: 0,
     type: "",
     status: "active",
-    currentStock: 0,
     user: "",
     warehouse: "",
   },
@@ -60,13 +56,6 @@ const stockSlice = createSlice({
     // Update stock quantity
     updateStockQuantity: (state, action: PayloadAction<number>) => {
       state.stockItem.stock = action.payload || 0;
-      if (state.stockItem.type === "stockIn") {
-        state.stockItem.currentStock =
-          state.stockItem.openingStock + action.payload;
-      } else {
-        state.stockItem.currentStock =
-          state.stockItem.openingStock - action.payload;
-      }
     },
 
     // Update note
@@ -75,23 +64,23 @@ const stockSlice = createSlice({
     },
 
     // Calculate and update current stock based on type
-    updateCurrentStock: (
-      state,
-      action: PayloadAction<{
-        baseStock: number;
-        operation: "add" | "subtract";
-      }>,
-    ) => {
-      const { baseStock, operation } = action.payload;
-      if (operation === "add") {
-        state.stockItem.currentStock = baseStock + state.stockItem.stock;
-      } else {
-        state.stockItem.currentStock = Math.max(
-          0,
-          baseStock - state.stockItem.stock,
-        );
-      }
-    },
+    // updateCurrentStock: (
+    //   state,
+    //   action: PayloadAction<{
+    //     baseStock: number;
+    //     operation: "add" | "subtract";
+    //   }>,
+    // ) => {
+    //   const { baseStock, operation } = action.payload;
+    //   // if (operation === "add") {
+    //   //   state.stockItem.currentStock = baseStock + state.stockItem.stock;
+    //   // } else {
+    //   //   state.stockItem.currentStock = Math.max(
+    //   //     0,
+    //   //     baseStock - state.stockItem.stock,
+    //   //   );
+    //   // }
+    // },
 
     // Set loading state
     setLoading: (state, action: PayloadAction<boolean>) => {
@@ -133,7 +122,7 @@ export const {
   setStockType,
   updateStockQuantity,
   updateNote,
-  updateCurrentStock,
+  // updateCurrentStock,
   setLoading,
   setError,
   setSuccess,

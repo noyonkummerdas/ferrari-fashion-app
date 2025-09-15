@@ -5,7 +5,7 @@ import {
   setError,
   setLoading,
   updateNote,
-  updateStockQuantity,
+  updateStockQuantity
 } from "@/store/slice/stockSlice";
 import { RootState } from "@/store/store";
 import { Ionicons } from "@expo/vector-icons";
@@ -16,10 +16,11 @@ import { Text, TextInput, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
 const StockIn = () => {
-  //   const { id } = useLocalSearchParams();
-  //   const { userInfo } = useGlobalContext();
+    // const { id } = useLocalSearchParams();
+    // const { userInfo } = useGlobalContext();
   const dispatch = useDispatch();
   const navigation = useNavigation();
+
 
   // Redux selectors
   const { stockItem, isLoading, error, success, successMessage } = useSelector(
@@ -58,7 +59,7 @@ const StockIn = () => {
   }, [navigation]);
 
   const handleSubmit = async () => {
-    // console.log("STOCK IN", stockItem);
+    console.log("STOCK IN", stockItem);
     if (!stockItem.stock || parseInt(stockItem.stock.toString()) <= 0) {
       dispatch(setError("Please enter a valid stock quantity"));
       return;
@@ -71,6 +72,7 @@ const StockIn = () => {
     try {
       dispatch(setLoading(true));
       dispatch(clearError());
+      // console.log("Stock item:", stockItem);
       const result = await createStock(stockItem).unwrap();
       console.log("Stock added:", result);
 

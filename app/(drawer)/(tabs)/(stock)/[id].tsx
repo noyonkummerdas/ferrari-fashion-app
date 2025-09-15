@@ -1,6 +1,6 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useProductQuery } from "@/store/api/productApi";
-import { setStockItem } from "@/store/slice/stockSlice";
+import { clearError, clearSuccess, resetStockItem, setStockItem } from "@/store/slice/stockSlice";
 import { RootState } from "@/store/store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams, usePathname } from "expo-router";
@@ -20,8 +20,6 @@ const StockDetails = () => {
     (state: RootState) => state.stock,
   );
 
-  // API hooks
-  // const [addStock] = useAddStockMutation(); // This line is removed
 
   const {
     data,
@@ -42,14 +40,17 @@ const StockDetails = () => {
   useEffect(() => {
     refetch();
   }, []);
+useEffect(() => {
+  dispatch(resetStockItem());
+  dispatch(clearError())
+  dispatch(clearSuccess())
+}, []);
 
   useEffect(() => {
     if (data && isSuccess) {
       dispatch(
         setStockItem({
           product: id as string,
-          openingStock: data?.currentStock || 0,
-          currentStock: data?.currentStock || 0,
           type: "",
           status: "active",
           user: userInfo.id,
@@ -59,7 +60,7 @@ const StockDetails = () => {
     }
   }, [data, isSuccess]);
 
-  // console.log("STOCK ITEM FROM REDUX:", stockItem);
+  console.log("STOCK ITEM FROM REDUX:", data?.stock);
 
   const productImage = require("../../../../assets/images/product.jpg");
 
@@ -76,8 +77,6 @@ const StockDetails = () => {
       setStockItem({
         stock: 0,
         note: "",
-        currentStock: data?.currentStock || 0,
-        openingStock: data?.currentStock || 0,
         type: "stockIn",
       }),
     );
@@ -92,8 +91,6 @@ const StockDetails = () => {
       setStockItem({
         stock: 0,
         note: "",
-        currentStock: data?.currentStock || 0,
-        openingStock: data?.currentStock || 0,
         type: "stockOut",
       }),
     );
@@ -180,6 +177,17 @@ const StockDetails = () => {
             </View>
           </View>
         </View>
+
+        {/* Stock History */}
+       
+          {data?.stock.length > 0 && (
+            data?.stock.map((item) => (
+              <View key={item._id} className="flex flex-row justify-between items-center">
+                <Text className="text-white text-lg">{item.warehouse.name}</Text>
+                <Text className="text-white text-lg">{item.currentStock}</Text>
+              </View>
+            ))
+          )}
 
         {/* Bottom Action Buttons */}
         <View className="absolute bottom-0 left-0 right-0 bg-black px-6 pb-8">
