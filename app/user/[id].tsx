@@ -2,13 +2,14 @@ import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  Alert,
   Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View
+  View,
 } from "react-native";
 
 import CustomDropdown from "@/components/CustomDropdown";
@@ -108,7 +109,7 @@ const updateUser = () => {
       headerTitleAlign: "center",
       headerShown: true,
     });
-  }, [navigation,id]);
+  }, [navigation]);
 
   const [form, setForm] = useState({
     _id: id as string,

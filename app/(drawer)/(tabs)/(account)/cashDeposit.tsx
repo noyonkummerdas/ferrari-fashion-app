@@ -20,6 +20,7 @@ const CashDepositDetails = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+const type = userInfo?.type
 
   const { data, isSuccess, isLoading, refetch } = useWarehouseQuery(
     userInfo?.warehouse,
