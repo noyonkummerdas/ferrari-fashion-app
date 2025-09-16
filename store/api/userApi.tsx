@@ -31,7 +31,7 @@ export const UserApi = createApi({
         method: "PUT",
         body: rest,
       }),
-      invalidatesTags: ["User"],
+      // invalidatesTags: ["User"],
     }),
     // new
 

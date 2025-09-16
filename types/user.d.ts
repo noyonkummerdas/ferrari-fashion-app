@@ -8,6 +8,7 @@ export interface User {
   photo?: string;
   phone?: string;
   status: 'active' | 'inactive' | string;
+  permissions?: any;
   warehouse?: string;
 }
 

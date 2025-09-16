@@ -1,80 +1,108 @@
-import React, { useEffect, useState, useLayoutEffect } from "react";
-import { View, Text, ScrollView, Alert, TouchableOpacity } from "react-native";
-import Checkbox from "expo-checkbox";
-import { Ionicons } from "@expo/vector-icons";
-import { router, useNavigation } from "expo-router";
-import { useUpdateUserMutation } from "@/store/api/userApi";
-import { useGlobalContext } from "@/context/GlobalProvider";
-import { useLocalSearchParams } from "expo-router";
+import { useUpdateUserMutation, useUserQuery } from "@/store/api/userApi";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { Alert, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
-// Types
-type SubModule = { id: string; name: string };
-type Module = { name: string; subModules: SubModule[] };
-type Permission = { canView: boolean; canEdit: boolean; canDelete: boolean; canCreate: boolean };
+type PermissionKey = 'visable' | 'view' | 'create' | 'edit' | 'delete';
 
-// Default permission
-const defaultPerm: Permission = {
-  canView: false,
-  canEdit: false,
-  canDelete: false,
-  canCreate: false,
-};
+type ModulePermission = Record<PermissionKey, boolean>;
 
-// Modules + SubModules
-const modules: Module[] = [
-  { name: "Stock", subModules: [{ id: "s1", name: "Stock In" }, { id: "s2", name: "Stock Out" }] },
-  {
-    name: "Accounts",
-    subModules: [
-      { id: "a1", name: "Cash In" },
-      { id: "a2", name: "Cash Out" },
-      { id: "a3", name: "Payment" },  
-      { id: "a4", name: "Payment Received" },
-    ],
-  },
-  { name: "Suppliers", subModules: [{ id: "sp1", name: "Supplier List" }] },
-  { name: "Customers", subModules: [{ id: "c1", name: "Customer List" }] },
-  { name: "Sales", subModules: [{ id: "sa1", name: "Sales Invoice" }] },
-  { name: "Purchases", subModules: [{ id: "p1", name: "Purchase Invoice" }] },
-  { name: "Users", subModules: [{ id: "u1m", name: "User Management" }] },
-  { name: "Reports", subModules: [{ id: "r1", name: "Report View" }] },
-];
-
-// Example fallback permissions (when API not available)
-const fallbackPermissions: { [subModuleId: string]: Permission } = {
-  s1: { canView: true, canEdit: false, canDelete: false, canCreate: true },
-  s2: { canView: true, canEdit: false, canDelete: false, canCreate: true },
-  a1: { canView: true, canEdit: false, canDelete: false, canCreate: true },
-  a2: { canView: true, canEdit: false, canDelete: false, canCreate: true },
-  a3: { canView: true, canEdit: false, canDelete: false, canCreate: true },
-  a4: { canView: true, canEdit: false, canDelete: false, canCreate: true },
-  sp1: { canView: true, canEdit: true, canDelete: false, canCreate: false },
-  c1: { canView: true, canEdit: true, canDelete: false, canCreate: false },
-  sa1: { canView: true, canEdit: true, canDelete: false, canCreate: true },
-  p1: { canView: true, canEdit: true, canDelete: false, canCreate: true },
-  u1m: { canView: true, canEdit: true, canDelete: false, canCreate: false },
-  r1: { canView: true, canEdit: true, canDelete: false, canCreate: false },
-};
+type PermissionsState = Record<string, ModulePermission>;
 
 export default function PermissionsScreen() {
   const navigation = useNavigation();
-  const { id } = useLocalSearchParams();
-  const { userInfo } = useGlobalContext();
-  const aamarId = userInfo?.aamarId;
-  const [selectedUser, setSelectedUser] = useState<string | null>('id');
-  const [permissions, setPermissions] = useState<{ [subModuleId: string]: Permission }>({});
-  const [moduleChecked, setModuleChecked] = useState<{ [moduleName: string]: boolean }>({});
+  const { id } = useLocalSearchParams() as { id: string };
 
+  const { data: userData, isSuccess, refetch: userDataRefetch } = useUserQuery({ _id: id });
 
-  // ✅ RTK Query mutation hook
-  const [updateUser, {data, isError, isLoading, isSuccess }] = useUpdateUserMutation();
-  // console.log('updateUser' , data)
-  console.log("isLoading:", isLoading);
-console.log("isSuccess:", isSuccess);
-console.log("isError:", isError);
-console.log("data:", data);
+  const [permissions, setPermissions] = useState<PermissionsState>({
+    stock: { visable: true, view: true, create: true, edit: false, delete: false },
+    accounts: { visable: true, view: true, create: true, edit: false, delete: false },
+    suppliers: { visable: true, view: true, create: false, edit: true, delete: false },
+    customers: { visable: true, view: true, create: false, edit: true, delete: false },
+    sales: { visable: true, view: true, create: true, edit: true, delete: false },
+    purchases: { visable: true, view: true, create: true, edit: true, delete: false },
+    users: { visable: true, view: true, create: true, edit: true, delete: false },
+    reports: { visable: true, view: true, create: false, edit: false, delete: false },
+  });
 
+  const [hasLocalChanges, setHasLocalChanges] = useState(false);
 
+  // Fetch user permissions
+  useEffect(() => {
+    userDataRefetch();
+  }, []);
+
+  // Only update from server if no local changes have been made
+  useEffect(() => {
+    if (userData?.permissions && typeof userData.permissions === "object" && !hasLocalChanges) {
+      console.log('Setting permissions from userData:', userData.permissions);
+      setPermissions(userData.permissions);
+    }
+  }, [isSuccess, userData, hasLocalChanges]);
+
+  // Toggle permission with proper state management
+  const togglePermission = (module: string, permissionType: PermissionKey) => {
+    console.log('Toggling:', module, permissionType);
+    console.log('Current value:', permissions[module]?.[permissionType]);
+    
+    setHasLocalChanges(true); // Mark that user has made changes
+    
+    setPermissions((prevPermissions) => {
+      // Check if module exists
+      if (!prevPermissions[module]) {
+        console.warn(`Module ${module} not found in permissions`);
+        return prevPermissions;
+      }
+      
+      // Check if permission type exists
+      if (!(permissionType in prevPermissions[module])) {
+        console.warn(`Permission ${permissionType} not found in module ${module}`);
+        return prevPermissions;
+      }
+      
+      const updatedPermissions = {
+        ...prevPermissions,
+        [module]: {
+          ...prevPermissions[module],
+          [permissionType]: !prevPermissions[module][permissionType],
+        },
+      };
+      
+      console.log(`Toggled ${module}.${permissionType}:`, 
+        prevPermissions[module][permissionType], 
+        '→', 
+        updatedPermissions[module][permissionType]
+      );
+      
+      return updatedPermissions;
+    });
+  };
+
+  // Save API mutation
+  const [updateUser] = useUpdateUserMutation();
+
+  async function savePermissions() {
+    console.log('Saving permissions:', permissions);
+    
+    try {
+      const res = await updateUser({
+        _id: id,
+        permissions,
+      }).unwrap();
+
+      console.log('Save response:', res);
+      setHasLocalChanges(false); // Reset local changes flag after successful save
+
+      Alert.alert("Success", "Permissions saved successfully!");
+    } catch (err: any) {
+      console.error('Save error:', err);
+      Alert.alert("Error", err.message || "Something went wrong");
+    }
+  }
+
+  // Header layout config
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "User Permissions",
@@ -89,141 +117,92 @@ console.log("data:", data);
       ),
       headerRight: () => (
         <TouchableOpacity onPress={savePermissions} className="me-4">
-          <Text className="text-gray-200 border border-gray-600 p-2 rounded-lg">
-            {isLoading ? "Saving..." : "Save"}
+          <Text className={`border px-4 py-1 rounded-lg ${
+            hasLocalChanges 
+              ? 'border-amber-400 text-amber-400' 
+              : 'border-gray-600 text-white'
+          }`}>
+            Save
           </Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation, permissions, isLoading]);
+  }, [navigation, hasLocalChanges]);
 
-  // Load permissions for user
+  const capitalize = (text: string) => text.charAt(0).toUpperCase() + text.slice(1);
+
+  const CheckBox = React.memo(({ checked }: { checked: boolean }) => {
+    return (
+      <View
+        className={`w-6 h-6 rounded border-2 ${
+          checked ? "bg-amber-400 border-amber-400" : "border-gray-400"
+        } items-center justify-center`}
+      >
+        {checked && <MaterialIcons name="check" size={16} color="black" />}
+      </View>
+    );
+  });
+
+  // Debug permissions changes
   useEffect(() => {
-    if (!selectedUser) return;
-
-    const permObj: { [subModuleId: string]: Permission } = {};
-    const modCheckedObj: { [moduleName: string]: boolean } = {};
-
-    modules.forEach((mod) => {
-      let allChecked = true;
-      mod.subModules.forEach((sub) => {
-        permObj[sub.id] = fallbackPermissions[sub.id] || { ...defaultPerm };
-        if (!permObj[sub.id].canView) allChecked = false;
-      });
-      modCheckedObj[mod.name] = allChecked;
-    });
-
-    setPermissions(permObj);
-    setModuleChecked(modCheckedObj);
-  }, [selectedUser]);
-
-  const togglePermission = (subModuleId: string, key: keyof Permission, value: boolean) => {
-    setPermissions((prev) => {
-      const prevPerm = prev[subModuleId] || { ...defaultPerm };
-      const updated = { ...prev, [subModuleId]: { ...prevPerm, [key]: value } };
-
-      // Update module checkbox
-      modules.forEach((mod) => {
-        if (mod.subModules.some((sub) => sub.id === subModuleId)) {
-          const allSubChecked = mod.subModules.every((sub) => updated[sub.id]?.canView);
-          setModuleChecked((prevMod) => ({ ...prevMod, [mod.name]: allSubChecked }));
-        }
-      });
-
-      return updated;
-    });
-  };
-
-  const toggleModule = (mod: Module) => {
-    const newValue = !moduleChecked[mod.name];
-    setPermissions((prev) => {
-      const updated = { ...prev };
-      mod.subModules.forEach((sub) => {
-        if (!updated[sub.id]) updated[sub.id] = { ...defaultPerm };
-        updated[sub.id].canView = newValue;
-      });
-      return updated;
-    });
-    setModuleChecked((prev) => ({ ...prev, [mod.name]: newValue }));
-  };
-
-  // ✅ Save permissions via RTK Query
-  async function savePermissions() {
-    if (!selectedUser) return Alert.alert("Error", "Please select a user.");
-
-    try {
-      const res= await updateUser({
-        id: selectedUser,
-        permissions: permissions,
-      }).unwrap();
-      console.log('Mutation response:' , res)
-
-      Alert.alert("Success", "Permissions saved successfully!");
-      console.log("Saved Permissions:", permissions);
-    } catch (err: any) {
-      console.error(err);
-      Alert.alert("Error", err.message || "Something went wrong");
-    }
-  }
+    console.log('Permissions state updated:', permissions);
+  }, [permissions]);
 
   return (
     <View className="flex-1 p-4 bg-dark">
-      <ScrollView>
-        {modules.map((mod) => (
-          <View key={mod.name} className="mb-4">
-            <View className="flex-row justify-between items-center mb-2 border-b border-gray-600 pb-1">
-              <View className="flex-row gap-3 items-center">
-                <Checkbox
-                  value={moduleChecked[mod.name] || false}
-                  onValueChange={() => toggleModule(mod)}
-                  color={moduleChecked[mod.name] ? "#fdb714" : undefined}
-                />
-                <Text className="text-yellow-400 text-xl font-bold">{mod.name}</Text>
-              </View>
-              <View className="flex-row gap-3 items-center text-center">
-                <Text className="text-white text-lg">View</Text>
-                <Text className="text-white text-lg">Create</Text>
-                <Text className="text-white text-lg">Edit</Text>
-                <Text className="text-white text-lg">Delete</Text>
+      <ScrollView className="p-1">
+        {Object.entries(permissions).map(([moduleKey, perms]) => (
+          <View key={moduleKey} className="mb-6 border-b border-gray-700 pb-4">
+            {/* Module title and visable */}
+            <View className="flex-row justify-between items-center mb-3">
+              <Text className="text-lg font-bold text-amber-400">
+                {capitalize(moduleKey)}
+              </Text>
+              <View className="flex-row items-center space-x-2">
+                <Text className="text-white text-sm mr-2">Show in Menu</Text>
+                <TouchableOpacity 
+                  onPress={() => {
+                    console.log('Visibility toggle pressed for:', moduleKey);
+                    togglePermission(moduleKey, "visable");
+                  }}
+                  style={{ padding: 8 }}
+                  activeOpacity={0.7}
+                >
+                  <CheckBox checked={perms.visable} />
+                </TouchableOpacity>
               </View>
             </View>
 
-            {mod.subModules.map((sub) => {
-              const perm = permissions[sub.id] || { ...defaultPerm };
-              return (
-                <View
-                  key={sub.id}
-                  className="flex-row justify-between items-center p-2 border-b border-gray-600 w-full"
-                >
-                  <Text className="text-white text-lg">{sub.name}</Text>
-                  <View className="flex-row gap-3 w-[45%] items-center justify-between">
-                    <Checkbox
-                      value={perm.canView}
-                      onValueChange={(v) => togglePermission(sub.id, "canView", v)}
-                      color={perm.canView ? "#fdb714" : undefined}
-                    />
-                    <Checkbox
-                      value={perm.canCreate}
-                      onValueChange={(v) => togglePermission(sub.id, "canCreate", v)}
-                      color={perm.canCreate ? "#fdb714" : undefined}
-                    />
-                    <Checkbox
-                      value={perm.canEdit}
-                      onValueChange={(v) => togglePermission(sub.id, "canEdit", v)}
-                      color={perm.canEdit ? "#fdb714" : undefined}
-                    />
-                    <Checkbox
-                      value={perm.canDelete}
-                      onValueChange={(v) => togglePermission(sub.id, "canDelete", v)}
-                      color={perm.canDelete ? "red" : undefined}
-                    />
-                  </View>
+            {/* Permission boxes */}
+            <View className="flex-row justify-between px-1">
+              {(["view", "create", "edit", "delete"] as PermissionKey[]).map((key) => (
+                <View key={key} className="items-center w-20">
+                  <Text className="text-white text-sm mb-1 capitalize">{key}</Text>
+                  <TouchableOpacity 
+                    onPress={() => {
+                      console.log('Permission toggle pressed for:', moduleKey, key);
+                      togglePermission(moduleKey, key);
+                    }}
+                    style={{ padding: 8 }}
+                    activeOpacity={0.7}
+                  >
+                    <CheckBox checked={perms[key]} />
+                  </TouchableOpacity>
                 </View>
-              );
-            })}
+              ))}
+            </View>
           </View>
         ))}
       </ScrollView>
+      
+      {/* Debug info - remove in production */}
+      {__DEV__ && hasLocalChanges && (
+        <View className="p-2 bg-gray-800 rounded">
+          <Text className="text-amber-400 text-xs">
+            Debug: Local changes detected
+          </Text>
+        </View>
+      )}
     </View>
   );
 }
