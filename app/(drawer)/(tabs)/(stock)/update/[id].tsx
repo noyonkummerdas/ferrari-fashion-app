@@ -65,7 +65,7 @@ const UpdateStock = () => {
           </TouchableOpacity>
         </View>
       ),
-      title: "Update Customer",
+      title: "Update Product",
       //@ts-ignore
       headerStyle: {
         backgroundColor: `#000000`, //`${Colors[colorScheme ?? "dark"].backgroundColor}`,

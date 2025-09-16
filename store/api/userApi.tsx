@@ -9,11 +9,11 @@ export const UserApi = createApi({
   tagTypes: ["User"],
   endpoints: (builder) => ({
     // new
-    Users: builder.query<User[], any>({
+    Users: builder.query<User[], void>({
       query: () => `/user`,
       providesTags: ["User"],
     }),
-    User: builder.query<User, string>({
+    User: builder.query<User, { _id: string }>({
       query: ({ _id }) => `/user/${_id}`,
       providesTags: ["User"],
     }),
@@ -35,7 +35,7 @@ export const UserApi = createApi({
     }),
     // new
 
-    UserDw: builder.query<User, string>({
+    UserDw: builder.query<User, void>({
       query: () => `/user/Dw`,
       providesTags: ["User"],
     }),
@@ -43,7 +43,7 @@ export const UserApi = createApi({
       query: (warehouse) => `/user/biller/${warehouse}`,
       providesTags: ["User"],
     }),
-    ManagerDw: builder.query<User, string>({
+    ManagerDw: builder.query<User, void>({
       query: () => `/user/manager`,
       providesTags: ["User"],
     }),

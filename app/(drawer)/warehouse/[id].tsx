@@ -69,6 +69,17 @@ const WarehouseEdit = () => {
     phone: "",
     status: "active",
   });
+  useEffect(() => {
+    if (data) {
+      setForm({
+        name: data.name || "",
+        address: data.address || "",
+        type: data.type || "outlet",
+        phone: data.phone || "",
+        status: data.status || "active",
+      });
+    }
+  }, [data]);
 
   // Warehouse type options for dropdown
   const warehouseTypes = [
