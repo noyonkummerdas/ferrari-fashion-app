@@ -2,14 +2,13 @@ import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Alert,
   Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 
 import CustomDropdown from "@/components/CustomDropdown";
@@ -91,7 +90,7 @@ const updateUser = () => {
       ),
       headerRight: () => (
               <TouchableOpacity
-                onPress={() => router.push('/user/permission/id')}
+                onPress={() => router.push(`/user/permission/${id}`)}
                 className="me-4"
               >
                 <Text className="text-black bg-primary rounded-lg ms-2 p-2 text-semibold">Permission</Text>
@@ -109,7 +108,7 @@ const updateUser = () => {
       headerTitleAlign: "center",
       headerShown: true,
     });
-  }, [navigation]);
+  }, [navigation,id]);
 
   const [form, setForm] = useState({
     _id: id as string,
