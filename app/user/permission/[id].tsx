@@ -3,6 +3,9 @@ import { View, Text, ScrollView, Alert, TouchableOpacity } from "react-native";
 import Checkbox from "expo-checkbox";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
+import { useUpdateUserMutation } from "@/store/api/userApi";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useLocalSearchParams } from "expo-router";
 
 // Types
 type SubModule = { id: string; name: string };
@@ -55,9 +58,22 @@ const fallbackPermissions: { [subModuleId: string]: Permission } = {
 
 export default function PermissionsScreen() {
   const navigation = useNavigation();
-  const [selectedUser, setSelectedUser] = useState<string | null>("user "); // default admin
+  const { id } = useLocalSearchParams();
+  const { userInfo } = useGlobalContext();
+  const aamarId = userInfo?.aamarId;
+  const [selectedUser, setSelectedUser] = useState<string | null>('id');
   const [permissions, setPermissions] = useState<{ [subModuleId: string]: Permission }>({});
   const [moduleChecked, setModuleChecked] = useState<{ [moduleName: string]: boolean }>({});
+
+
+  // ✅ RTK Query mutation hook
+  const [updateUser, {data, isError, isLoading, isSuccess }] = useUpdateUserMutation();
+  // console.log('updateUser' , data)
+  console.log("isLoading:", isLoading);
+console.log("isSuccess:", isSuccess);
+console.log("isError:", isError);
+console.log("data:", data);
+
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -73,11 +89,13 @@ export default function PermissionsScreen() {
       ),
       headerRight: () => (
         <TouchableOpacity onPress={savePermissions} className="me-4">
-          <Text className="text-gray-200 border border-gray-600 p-2 rounded-lg">Save</Text>
+          <Text className="text-gray-200 border border-gray-600 p-2 rounded-lg">
+            {isLoading ? "Saving..." : "Save"}
+          </Text>
         </TouchableOpacity>
       ),
     });
-  }, [navigation, permissions]);
+  }, [navigation, permissions, isLoading]);
 
   // Load permissions for user
   useEffect(() => {
@@ -89,7 +107,7 @@ export default function PermissionsScreen() {
     modules.forEach((mod) => {
       let allChecked = true;
       mod.subModules.forEach((sub) => {
-        permObj[sub.id] = selectedUser === "u1" ? { ...defaultPerm } : fallbackPermissions[sub.id] || { ...defaultPerm };
+        permObj[sub.id] = fallbackPermissions[sub.id] || { ...defaultPerm };
         if (!permObj[sub.id].canView) allChecked = false;
       });
       modCheckedObj[mod.name] = allChecked;
@@ -129,17 +147,16 @@ export default function PermissionsScreen() {
     setModuleChecked((prev) => ({ ...prev, [mod.name]: newValue }));
   };
 
+  // ✅ Save permissions via RTK Query
   async function savePermissions() {
     if (!selectedUser) return Alert.alert("Error", "Please select a user.");
 
     try {
-      const response = await fetch(`https://your-api.com/users/${selectedUser}/permissions`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(permissions),
-      });
-
-      if (!response.ok) throw new Error("Failed to save permissions");
+      const res= await updateUser({
+        id: selectedUser,
+        permissions: permissions,
+      }).unwrap();
+      console.log('Mutation response:' , res)
 
       Alert.alert("Success", "Permissions saved successfully!");
       console.log("Saved Permissions:", permissions);
@@ -174,7 +191,10 @@ export default function PermissionsScreen() {
             {mod.subModules.map((sub) => {
               const perm = permissions[sub.id] || { ...defaultPerm };
               return (
-                <View key={sub.id} className="flex-row justify-between items-center p-2 border-b border-gray-600 w-full">
+                <View
+                  key={sub.id}
+                  className="flex-row justify-between items-center p-2 border-b border-gray-600 w-full"
+                >
                   <Text className="text-white text-lg">{sub.name}</Text>
                   <View className="flex-row gap-3 w-[45%] items-center justify-between">
                     <Checkbox

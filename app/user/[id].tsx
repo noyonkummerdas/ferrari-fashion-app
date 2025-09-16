@@ -24,7 +24,8 @@ const updateUser = () => {
   // const { userInfo } = useGlobalContext();
   const { id } = useLocalSearchParams();
 
-  console.log("ID", id);
+
+  // console.log("ID", id);
 
   // const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
@@ -90,7 +91,7 @@ const updateUser = () => {
       ),
       headerRight: () => (
               <TouchableOpacity
-                onPress={() => router.push('/user/userPermission')}
+                onPress={() => router.push('/user/permission/id')}
                 className="me-4"
               >
                 <Text className="text-black bg-primary rounded-lg ms-2 p-2 text-semibold">Permission</Text>
