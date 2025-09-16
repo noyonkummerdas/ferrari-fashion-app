@@ -22,6 +22,9 @@ const CashOut = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+  
+  const type = userInfo?.type
+  
   const [createTransaction] = useAddTransactionMutation();
 
   // Form state
