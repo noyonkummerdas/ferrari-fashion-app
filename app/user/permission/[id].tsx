@@ -176,7 +176,7 @@ export default function PermissionsScreen() {
             {/* Permission boxes */}
             <View className="flex-row justify-between px-1">
               {(["view", "create", "edit", "delete"] as PermissionKey[]).map((key) => (
-                <View key={key} className="items-center w-20">
+                <View key={key} className="items-center w-22">
                   <Text className="text-white text-sm mb-1 capitalize">{key}</Text>
                   <TouchableOpacity 
                     onPress={() => {

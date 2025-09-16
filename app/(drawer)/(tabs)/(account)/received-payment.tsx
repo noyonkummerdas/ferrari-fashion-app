@@ -219,7 +219,7 @@ const RecivedPayment = () => {
         >
           {/* Type Input */}
           <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Supplier</Text>
+            <Text className="text-gray-300 text-lg font-medium">Customer</Text>
             <CustomDropdownWithSearch
               data={type}
               value={formData.customerId}
