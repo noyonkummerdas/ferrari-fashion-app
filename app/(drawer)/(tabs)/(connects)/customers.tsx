@@ -31,6 +31,7 @@ interface Customer {
 const Customers = () => {
   const router = useRouter();
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
