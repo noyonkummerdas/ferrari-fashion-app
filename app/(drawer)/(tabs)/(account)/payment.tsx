@@ -25,6 +25,7 @@ const Payment = () => {
   const navigation = useNavigation();
   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
+  
   const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
 

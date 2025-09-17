@@ -8,10 +8,13 @@ import { router } from "expo-router";
 import React, { useLayoutEffect } from "react";
 // import { useColorScheme } from "react-native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Accounts = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type
 
   useLayoutEffect(() => {
     navigation.setOptions({
