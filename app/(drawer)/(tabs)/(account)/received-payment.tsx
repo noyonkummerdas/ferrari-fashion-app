@@ -23,6 +23,7 @@ import {
 
 const RecivedPayment = () => {
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type
   const [createTransaction] = useAddTransactionMutation();
   const [q, setQ] = useState("all");
   const { data, isSuccess, isLoading, refetch } = useCustomerListQuery({
