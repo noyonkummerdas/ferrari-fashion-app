@@ -1,5 +1,6 @@
 import { CustomDrawerToggleButton } from "@/components";
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // ✅ change to your actual import
 import { WarehouseTypes } from "@/types/warehouse";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
@@ -11,6 +12,9 @@ import { ScrollView, Text, TextInput, useColorScheme, View } from "react-native"
 const Warehouse = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  
+  const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type
   const [warehouse, setWarehouse] = useState<WarehouseTypes[]>([]);
 
   // ✅ RTK Query mutation hook

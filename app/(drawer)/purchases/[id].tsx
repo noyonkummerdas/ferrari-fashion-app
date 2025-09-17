@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { usePurchaseQuery } from "@/store/api/purchasApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format, parseISO } from "date-fns";
@@ -18,6 +19,9 @@ const PruchasesDetails = () => {
   const { id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type
+
 
   const { data, isLoading, error, isSuccess } = usePurchaseQuery(id as string);
   console.log('details data', data, isLoading, isSuccess)

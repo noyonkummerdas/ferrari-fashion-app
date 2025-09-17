@@ -1,5 +1,6 @@
 import CustomDropdown from "@/components/CustomDropdown";
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddWarehouseMutation } from "@/store/api/warehouseApi"; // ✅ change to your actual import
 import { Ionicons } from "@expo/vector-icons";
 import { Link, router, useNavigation } from "expo-router";
@@ -18,11 +19,13 @@ import {
 const WarehouseEdit = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type
 
   // ✅ RTK Query mutation hook
   const [addWarehouse] = useAddWarehouseMutation();
 
-  useLayoutEffect(() => {
+  useLayoutEffect(() => { 
     navigation.setOptions({
       title: "Warehouse",
       //@ts-ignore
