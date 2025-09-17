@@ -29,6 +29,8 @@ const createPurchase = () => {
   const navigation = useNavigation();
   const [supplier, setSupplier] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type
+
   // const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
 
