@@ -20,6 +20,7 @@ import profile from "../../assets/images/profile.jpg";
 
 const AddCustomer = () => {
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type;
   const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
 

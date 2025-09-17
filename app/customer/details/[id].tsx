@@ -1,3 +1,4 @@
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,7 +26,8 @@ const CustomerDetails = () => {
     const [currentDay, setCurrentDay] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState(new Date());
-  
+    const { userInfo, fetchUser } = useGlobalContext();
+   const type = userInfo?.type;
 
   const { data, isLoading, error, refetch, isSuccess } = useGetCustomerByIdQuery({ 
     id, 
