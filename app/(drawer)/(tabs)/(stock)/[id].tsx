@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 const StockDetails = () => {
   const { id } = useLocalSearchParams();
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type
+
   const dispatch = useDispatch();
   const pathname = usePathname();
 

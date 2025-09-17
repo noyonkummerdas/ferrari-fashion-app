@@ -17,6 +17,8 @@ import {
 const AddStock = () => {
   const {userInfo} = useGlobalContext()
   // console.log("userInfo", userInfo);
+  const type = userInfo?.type//  permission
+
   const [formData, setFormData] = useState({
     style: "",
     code: "",

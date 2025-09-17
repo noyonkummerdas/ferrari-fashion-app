@@ -1,3 +1,4 @@
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddStockMutation } from "@/store/api/stockApi";
 import {
   clearError,
@@ -17,7 +18,9 @@ import { useDispatch, useSelector } from "react-redux";
 
 const StockIn = () => {
     // const { id } = useLocalSearchParams();
-    // const { userInfo } = useGlobalContext();
+    const { userInfo } = useGlobalContext();
+  const type = userInfo?.type//   permission defiend 
+
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
