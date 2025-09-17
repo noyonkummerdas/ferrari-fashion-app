@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
@@ -17,6 +18,9 @@ const PaymentDetails = () => {
   const { _id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+
+  const { userInfo,  } = useGlobalContext();
+  const type = userInfo?.type
 
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
