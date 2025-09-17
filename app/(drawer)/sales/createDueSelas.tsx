@@ -25,8 +25,11 @@ const CreateDueSelas = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const router = useRouter();
    const colorScheme = useColorScheme();
+  
+   
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type
   const [q, setQ] = useState("all");
   const [customer, setCustomer] = useState([{ label: "Select Customer", value: "" }]);
 

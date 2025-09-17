@@ -1,4 +1,5 @@
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useSaleQuery } from "@/store/api/saleApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
@@ -18,6 +19,8 @@ const SalesDetails = () => {
   const { id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type
 
   const { data, isLoading, error, isSuccess } = useSaleQuery(id as string);
 
