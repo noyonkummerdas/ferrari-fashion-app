@@ -18,7 +18,7 @@ import {
 
 const StockIndex = () => {
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  
 
   const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);

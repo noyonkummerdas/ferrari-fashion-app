@@ -20,7 +20,7 @@ const WarehouseEdit = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
 
   // ✅ RTK Query mutation hook
   const [addWarehouse] = useAddWarehouseMutation();

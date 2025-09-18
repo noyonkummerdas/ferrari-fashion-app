@@ -33,8 +33,7 @@ export default function PosDashboard() {
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
-  const type = userInfo?.type
-  console.log("AamarID::",userInfo)
+ 
 
   const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery({ warehouse: warehouse, date: startDate, type: type } as any);
 

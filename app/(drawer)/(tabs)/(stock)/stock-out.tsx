@@ -19,7 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 const StockOut = () => {
   const { id } = useLocalSearchParams();
   const { userInfo } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
 
   const dispatch = useDispatch();
   const navigation = useNavigation();

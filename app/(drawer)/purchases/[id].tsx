@@ -20,7 +20,7 @@ const PruchasesDetails = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
 
 
   const { data, isLoading, error, isSuccess } = usePurchaseQuery(id as string);

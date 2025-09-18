@@ -33,7 +33,7 @@ export default function PaymentReceivedReport() {
   const navigation = useNavigation();
   const { data: userInfo } = { data: currentUser };
  
-  const type = userInfo?.type
+  // const type = userInfo?.type
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 

@@ -9,7 +9,7 @@ import { FlatList, Platform, StatusBar, Text, TextInput, TouchableOpacity, useCo
 const PurchasesList = () => {
      const colorScheme = useColorScheme();
      const { userInfo } = useGlobalContext();
-     const type = userInfo?.type
+    //  const type = userInfo?.type
 
      const [searchQuery, setSearchQuery] = useState("");
 

@@ -7,12 +7,14 @@ import { addDays, format, isToday, subDays } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { } from "react-native";
 import {
   Modal,
   Platform,
   Text,
   TouchableOpacity,
-  View
+  View,
+  KeyboardAvoidingView 
 } from "react-native";
 
 
@@ -162,6 +164,11 @@ const CustomerDetails = () => {
 
   return (
     <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
         <StatusBar style="light" backgroundColor="#1f2937" />
         <View key={data?.customer?._id} className="mb-4 px-6 space-x-2">
           {/* <Text className="text-lg font-bold text-white">{data?.customer?.name}</Text> */}
@@ -297,6 +304,7 @@ const CustomerDetails = () => {
           </View>
         </View>
       ))}
+      </KeyboardAvoidingView> 
     </>
   );
 };

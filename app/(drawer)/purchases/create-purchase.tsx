@@ -13,6 +13,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
@@ -29,7 +30,7 @@ const createPurchase = () => {
   const navigation = useNavigation();
   const [supplier, setSupplier] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
 
   // const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
@@ -310,6 +311,11 @@ const createPurchase = () => {
 
   return (
     <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
       <ScrollView>
         <View className="flex-1 bg-dark">
           <StatusBar style="light" />
@@ -510,6 +516,7 @@ const createPurchase = () => {
         </View>
       </ScrollView>
       <StatusBar style="light" />
+      </KeyboardAvoidingView>
       
       </>
   );

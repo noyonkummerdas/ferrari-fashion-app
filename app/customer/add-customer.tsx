@@ -5,6 +5,7 @@ import React, { useLayoutEffect, useState } from "react";
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   ScrollView,
   Text,
   TextInput,
@@ -17,10 +18,11 @@ import { useAddCustomerMutation } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/images/profile.jpg";
+import { Platform } from "react-native";
 
 const AddCustomer = () => {
   const { userInfo } = useGlobalContext();
-  const type = userInfo?.type;
+  // const type = userInfo?.type;
   const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
 
@@ -117,6 +119,11 @@ const AddCustomer = () => {
   };
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
     <ScrollView className="flex-1 bg-dark p-4">
       <View>
         <TouchableOpacity
@@ -180,6 +187,7 @@ const AddCustomer = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

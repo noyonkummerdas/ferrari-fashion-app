@@ -22,7 +22,7 @@ const StockIndex = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useProductsQuery({
       q: searchQuery || "all",

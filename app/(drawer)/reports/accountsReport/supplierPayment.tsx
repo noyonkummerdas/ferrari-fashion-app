@@ -22,7 +22,7 @@ export default function SupplierPayment() {
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
   // const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type;
+  // const type = userInfo?.type;
 
   //   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
   const [fromDate, setFromDate] = useState<Date>(new Date());

@@ -4,7 +4,7 @@ import { useUsersQuery } from "@/store/api/userApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { StatusBar } from "expo-status-bar";
@@ -14,6 +14,7 @@ const Profile = () => {
   const colorScheme = useColorScheme();
   const [isSaved, setIsSaved] = useState(true);
   const [user, setUser] = useState([]);
+    const { userInfo } = useGlobalContext();
 
   const { data, isSuccess, isError, isLoading } = useUsersQuery({
     limit: 10,
@@ -81,7 +82,7 @@ const Profile = () => {
   }, [navigation, colorScheme, isSaved]);
 
   const router = useRouter();
-  const { userInfo } = useGlobalContext();
+
 
   const handleLogout = () => {
     // Add logout logic here
@@ -93,7 +94,7 @@ const Profile = () => {
     router.push("/user/add-user");
   };
 
-  // const userData = [
+
   //   {
   //     id: 1,
   //     name: "NK Noyon",
@@ -136,10 +137,9 @@ const Profile = () => {
 
   //   },
   //   // Add more user data as needed
-  // ];
-
+  // ]
   return (
-    <View>
+    <ScrollView className="flex-1 bg-dark ">
 
       <StatusBar style="light" backgroundColor="#1f2937" />
       {data?.map((user) => (
@@ -169,7 +169,7 @@ const Profile = () => {
           </View>
         </TouchableOpacity>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

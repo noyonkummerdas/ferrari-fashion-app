@@ -42,7 +42,7 @@ interface Customer {
 const Suppliers = ({}) => {
   const router = useRouter();
   const { userInfo } = useGlobalContext()
-  const type = userInfo?.type;
+
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   const colorScheme = useColorScheme();

@@ -20,7 +20,7 @@ const UpdateStock = () => {
   const navigation = useNavigation();
   const { id } = useLocalSearchParams();
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  
 
 
   // console.log(id);

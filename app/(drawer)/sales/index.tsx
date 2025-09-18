@@ -18,7 +18,7 @@ const SalesList = () => {
   const { userInfo } = useGlobalContext();
   const [tempDate, setTempDate] = useState(new Date());
   
-  const type = userInfo?.type
+  // const type = userInfo?.type
 
   useLayoutEffect(() => {
     navigation.setOptions({

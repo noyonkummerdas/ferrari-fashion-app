@@ -14,7 +14,7 @@ const Warehouse = () => {
   const navigation = useNavigation();
   
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
   const [warehouse, setWarehouse] = useState<WarehouseTypes[]>([]);
 
   // ✅ RTK Query mutation hook

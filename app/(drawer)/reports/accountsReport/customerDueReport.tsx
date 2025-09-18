@@ -88,7 +88,7 @@ export default function CashInReport() {
   const { data: userInfo } = { data: currentUser };
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
-  const type = userInfo?.type
+  // const type = userInfo?.type
   console.log(type)
 
   
