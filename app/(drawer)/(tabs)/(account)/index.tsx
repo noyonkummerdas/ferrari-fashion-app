@@ -52,7 +52,7 @@ const Accounts = () => {
  
 
       {/* Transactions Summary Cards */}
-      <View className="mt-4">
+      <View className="mt-2">
         <Text className="text-white text-lg font-pbold mb-4">
           Transactions
         </Text>
