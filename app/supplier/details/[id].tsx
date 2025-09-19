@@ -141,7 +141,7 @@ const SupplierDetails = () => {
       
 
         {/* calendar */}
-        <View className="mt-2 mb-2">
+        <View className="m-2 flex-1">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -226,15 +226,15 @@ const SupplierDetails = () => {
         </View>
       </Modal>
 
-        <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto ">
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg me-1">
-            <Text className="text-white text-xl ">Starting balance</Text>
+        <View className="flex flex-row justify-between items-center mt-4 mx-auto ">
+          <View className="flex bg-black-200 item-center justify-evely p-5 text-center rounded-lg me-1">
+            <Text className="text-white text-xl p-4 ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.supplier?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg ms-1">
-            <Text className="text-white text-xl">Current balance</Text>
+          <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg ms-1">
+            <Text className="text-white p-4 text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
               {data?.supplier?.currentBalance} <Text className="text-white">BDT</Text>
             </Text>
