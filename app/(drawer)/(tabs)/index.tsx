@@ -32,6 +32,7 @@ export default function PosDashboard() {
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type;
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
  
 

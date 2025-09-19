@@ -165,11 +165,6 @@ const Accounts = () => {
           <Text className="text-white text-base mt-2">Received Payment</Text>
         </TouchableOpacity>
       </View>
-
-
-
-
-          
               </View>
             </ScrollView>
   );
