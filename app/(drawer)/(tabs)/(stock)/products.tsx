@@ -63,7 +63,7 @@ const StockIndex = () => {
       headerTitleAlign: "center",
       headerShown: true,
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-      headerRight: () => (
+      headerRight: () => {!userInfo.permissions.users &&
         <View className="me-4">
           <TouchableOpacity
             onPress={() => router.push("/(drawer)/(tabs)/(stock)/add-stock")}
@@ -73,9 +73,9 @@ const StockIndex = () => {
             <Text className="text-gray-200 text-lg" >Add</Text>
           </TouchableOpacity>
         </View>
-      ),
+      },
     });
-  }, [navigation]);
+  }, [navigation, userInfo]);
 
   const handleItemPress = (id) => {
     // console.log("Selected item:", item);

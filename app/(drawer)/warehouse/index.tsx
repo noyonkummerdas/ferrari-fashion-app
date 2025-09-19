@@ -61,7 +61,7 @@ const Warehouse = () => {
       headerTitleAlign: "center",
       headerShown: true,
     });
-  }, [navigation]);
+  }, [navigation, userInfo?.permissions]);
 
   return (
     <View className="flex-1 bg-dark m-4">

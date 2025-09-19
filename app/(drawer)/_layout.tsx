@@ -40,7 +40,12 @@ const CustomDrawerComponent = (props: any) => {
   //   fade: true,
   // });
 
-  const userInfo = useSelector((state: any) => state.user);
+
+  // const userInfo = useSelector((state: any) => state.user);
+
+  const {userInfo} = useGlobalContext()
+
+  console.log(userInfo.permissions)
 
   const pathname = usePathname();
   const { loading, loggedIn, logout } = useGlobalContext();
@@ -48,7 +53,7 @@ const CustomDrawerComponent = (props: any) => {
   const segments = useSegments();
   const [isMounted, setIsMounted] = useState(false);
 
-  // console.log("userInfo", userInfo);
+  // console.log("userInfo", userInfo, );
 
   const checkLogin = () => {
     //@ts-ignore
@@ -104,26 +109,31 @@ const CustomDrawerComponent = (props: any) => {
         style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
         onPress={() => router.push("/(drawer)/(tabs)")}
       />
-      <DrawerItem
-        icon={({ color }) => (
-          <TabIcon
-            pathname={pathname}
-            icon="storefront"
-            iconAlt="storefront-outline"
-            color={color}
-            focused={["/warehouse"]}
+      {
+        userInfo.type === "admin"  &&
+          <DrawerItem
+            icon={({ color }) => (
+              <TabIcon
+                pathname={pathname}
+                icon="storefront"
+                iconAlt="storefront-outline"
+                color={color}
+                focused={["/warehouse"]}
+              />
+            )}
+            label={"Warehouse"}
+            labelStyle={[
+              styles.labelStyle,
+              { color: pathname === "/warehouse" ? "#ffffff" : "#ffffff" },
+            ]}
+            style={{
+              backgroundColor: pathname === "/warehouse" ? "#000000" : "#131313",
+            }}
+            onPress={() => router.push("/(drawer)/warehouse")}
           />
-        )}
-        label={"Warehouse"}
-        labelStyle={[
-          styles.labelStyle,
-          { color: pathname === "/warehouse" ? "#ffffff" : "#ffffff" },
-        ]}
-        style={{
-          backgroundColor: pathname === "/warehouse" ? "#000000" : "#131313",
-        }}
-        onPress={() => router.push("/(drawer)/warehouse")}
-      />
+      }
+      {userInfo.permissions.users &&
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -144,6 +154,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(stock)/products")}
       />
+      }
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
