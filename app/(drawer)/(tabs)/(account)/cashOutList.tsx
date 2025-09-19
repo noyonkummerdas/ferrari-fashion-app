@@ -39,7 +39,8 @@ const CashOutList = () => {
       ),
       title: "Cash Out List",
       headerStyle: {
-        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        // backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        backgroundColor : '#000000'
       },
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },

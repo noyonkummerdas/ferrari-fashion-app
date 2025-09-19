@@ -8,11 +8,14 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
+  Keyboard,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -187,7 +190,15 @@ const type = userInfo?.type
   };
 
   return (
-    <View className="flex-1 bg-dark">
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+    <ScrollView className="flex-1 bg-dark"
+    keyboardShouldPersistTaps="handled"
+    >
       <StatusBar style="light" />
       <ScrollView
         className="flex-1 px-6 pt-4"
@@ -311,7 +322,9 @@ const type = userInfo?.type
           </View>
         </View>
       )}
-    </View>
+    </ScrollView>
+    </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };
 

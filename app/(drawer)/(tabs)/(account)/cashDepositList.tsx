@@ -22,7 +22,7 @@ const CashDepositList = () => {
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
   
-  const type = userInfo?.type
+  // const type = userInfo?.type
   // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -39,7 +39,8 @@ const CashDepositList = () => {
       ),
       title: "Cash Deposit List",
       headerStyle: {
-        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        // backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        backgroundColor : '#000000'
       },
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
@@ -227,7 +228,7 @@ const CashDepositList = () => {
         </View>
       </Modal>
 
-      <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-3 py-2 mt-2">
+      <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-5 py-1 mt-2">
         <TextInput
           className="ml-2 flex-1 text-white"
           value={search}

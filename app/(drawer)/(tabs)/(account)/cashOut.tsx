@@ -10,6 +10,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   Image,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
@@ -50,7 +51,7 @@ const CashOut = () => {
     userInfo?.warehouse,
   );
 
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     refetch();
@@ -263,6 +264,12 @@ const CashOut = () => {
   };
 
   return (
+
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
     <View className="flex-1 bg-dark">
       <StatusBar style="light" />
       <ScrollView
@@ -451,6 +458,7 @@ const CashOut = () => {
         </View>
       )}
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

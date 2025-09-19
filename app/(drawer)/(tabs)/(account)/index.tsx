@@ -43,7 +43,7 @@ const Accounts = () => {
 
   return (
     <ScrollView
-      className="flex-1 bg-black-700 p-4 mt-2"
+      className="flex-1 bg-black-700  h-full"
       showsVerticalScrollIndicator={false}
     >
               {/* Top balances */}
