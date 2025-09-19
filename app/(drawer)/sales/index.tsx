@@ -23,7 +23,7 @@ const SalesList = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View className="mr-4 bg-gray-900">
+        <View className="mr-4">
           <TouchableOpacity
            onPress={() => router.push('/sales/createDueSelas')}
             className="flex flex-row justify-center items-center gap-2"

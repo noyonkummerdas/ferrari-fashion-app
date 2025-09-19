@@ -209,7 +209,7 @@ export default function PosDashboard() {
                title="Total Products"
                value={dashboardData?.productCount || 0}
                iconName="cube"
-               onPress={() => router.push("/(drawer)/(tabs)/(products)" as any)}
+               onPress={() => router.push("/(drawer)/(tabs)/(stock)" as any)}
                 />
               <StatItem 
               title="Stock Items"

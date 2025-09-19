@@ -144,7 +144,7 @@ const CashDepositList = () => {
       {/* calendar */}
 
       <View className="mt-2 mb-2">
-        <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
+        <View className="flex flex-row justify-between items-center bg-black-200 mx-4  p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
@@ -228,7 +228,7 @@ const CashDepositList = () => {
         </View>
       </Modal>
 
-      <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-5 py-1 mt-2">
+      <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-6 m-2 ">
         <TextInput
           className="ml-2 flex-1 text-white"
           value={search}

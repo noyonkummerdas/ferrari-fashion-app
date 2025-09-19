@@ -18,7 +18,7 @@ const SupplierDetails = () => {
 
   const { data, isLoading, error, refetch } = useSupplierQuery({ _id: id, date:currentDay });
 
-  console.log("DATA::", id, data);
+  // console.log("DATA::", id, data);
 
   useEffect(() => {
     refetch();
@@ -111,7 +111,7 @@ const SupplierDetails = () => {
   return (
     <>
       <ScrollView>
-        <View className=" px-4 space-y-2">
+        <View className=" px-4 py-4 space-y-2">
           {/* {data.map((customer) => ( */}
           <View key={data?.supplier?._id} className="mb-4">
             {/* <Text className="text-lg font-bold text-white">{data?.supplier?.name}</Text> */}
@@ -141,7 +141,7 @@ const SupplierDetails = () => {
       
 
         {/* calendar */}
-        <View className="m-2 flex-1">
+        <View className="m-2 p-2 flex-1">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -182,7 +182,7 @@ const SupplierDetails = () => {
 
       {/* Date Picker Modal */}
       <Modal visible={showDatePicker} transparent={true} animationType="fade">
-        <View className="flex-1 bg-black/70 justify-center items-center">
+        <View className="flex-1 bg-black/70 justify-center items-center m-2">
           <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
             <View className="flex-row justify-between items-center mb-6">
               <Text className="text-white text-xl font-semibold">
@@ -226,15 +226,15 @@ const SupplierDetails = () => {
         </View>
       </Modal>
 
-        <View className="flex flex-row justify-between items-center mt-4 mx-auto ">
+        <View className="flex-1 flex-row justify-between items-center mt-4 mx-auto  ">
           <View className="flex bg-black-200 item-center justify-evely p-5 text-center rounded-lg me-1">
-            <Text className="text-white text-xl p-4 ">Starting balance</Text>
+            <Text className="text-white text-xl p-3 ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.supplier?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
           <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg ms-1">
-            <Text className="text-white p-4 text-xl">Current balance</Text>
+            <Text className="text-white p-3 text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
               {data?.supplier?.currentBalance} <Text className="text-white">BDT</Text>
             </Text>

@@ -189,7 +189,7 @@ const CustomerDetails = () => {
         </View>
 
         {/* calendar */}
-        <View className="mt-2 m-2">
+        <View className="m-2 p-2">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -277,14 +277,14 @@ const CustomerDetails = () => {
 
       {/* balance section */}
         <View className="flex flex-row justify-between items-center m-2  mx-auto ">
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
-            <Text className="text-white text-xl ">Starting balance</Text>
+          <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg m-1">
+            <Text className="text-white text-xl p-3 ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.customer?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
-            <Text className="text-white text-xl">Current balance</Text>
+          <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg m-1">
+            <Text className="text-white p-3 text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
              {data?.customer?.currentBalance}<Text className="text-white">BDT</Text>
             </Text>

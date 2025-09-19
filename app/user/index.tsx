@@ -44,7 +44,7 @@ const Profile = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
+      headerRight: () => {userInfo.permissions.users &&
         <View className="flex flex-row me-4">
           <TouchableOpacity
             className="flex flex-row gap-2 items-center"
@@ -61,7 +61,7 @@ const Profile = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      ),
+      },
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.push("/")}>
@@ -76,7 +76,7 @@ const Profile = () => {
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
       headerShadowVisible: false,
-      headerTitleAlign: "left",
+      headerTitleAlign: "center",
       headerShown: true,
     });
   }, [navigation, colorScheme, isSaved]);
