@@ -126,7 +126,7 @@ const WarehouserDetails = () => {
 
   const renderHeader = () => (
     <View>
-      <View className="mb-4 p-4 space-x-2">
+      <View className=" p-4 space-x-2">
         <View className="flex flex-row">
           <View className="flex flex-row justify-center items-center mb-1">
             {data?.type === "factory" ? (
