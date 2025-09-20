@@ -19,9 +19,10 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import profile from "../../assets/images/profile.jpg";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const updateUser = () => {
-  // const { userInfo } = useGlobalContext();
+  const { userInfo } = useGlobalContext();
   const { id } = useLocalSearchParams();
 
 
@@ -89,7 +90,7 @@ const updateUser = () => {
           </TouchableOpacity>
         </View>
       ),
-      headerRight: () => (
+      headerRight: () => {userInfo.type === 'Admin' &&
               <TouchableOpacity
                 onPress={() => router.push(`/user/permission/${id}`)}
                 className="me-4"
@@ -98,7 +99,7 @@ const updateUser = () => {
                 {/* <Ionicons name="create-outline" size={28} color="white" /> */}
 
               </TouchableOpacity>
-            ),
+      },
       title: "Update User",
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,

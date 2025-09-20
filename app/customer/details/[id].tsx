@@ -68,7 +68,7 @@ const CustomerDetails = () => {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
+      headerRight: () => {!userInfo.permissions.customers.edit && 
         <TouchableOpacity
           onPress={() => router.push(`/customer/${id}`)}
           className="flex flex-row items-center gap-2"
@@ -76,7 +76,7 @@ const CustomerDetails = () => {
           <Ionicons name="pencil-outline" size={24} color="white" />
           <Text className="text-white text-lg">Edit</Text>
         </TouchableOpacity>
-      ),
+      },
     });
   }, [navigation, data]);
 
@@ -276,15 +276,15 @@ const CustomerDetails = () => {
 
 
       {/* balance section */}
-        <View className="flex flex-row justify-between items-center m-2  mx-auto ">
+        <View className="flex flex-row justify-evely items-center mx-auto ">
           <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg m-1">
-            <Text className="text-white text-xl p-3 ">Starting balance</Text>
+            <Text className="text-white text-xl ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.customer?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
           <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg m-1">
-            <Text className="text-white p-3 text-xl">Current balance</Text>
+            <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
              {data?.customer?.currentBalance}<Text className="text-white">BDT</Text>
             </Text>
@@ -293,7 +293,7 @@ const CustomerDetails = () => {
 
       {/* Due sell generat part */}
       {data?.transaction?.map((item:any) => (
-        <View key={item?._id} className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+        <View key={item?._id} className="bg-black-200 flex justify-between p-4 rounded-lg w-ful m-4">
           <Text className="text-white text-xl">{item?.type}</Text>
           <View className="flex flex-row justify-between items-center">
             <Text className="text-white text-md -2">

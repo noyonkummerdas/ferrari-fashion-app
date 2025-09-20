@@ -44,7 +44,7 @@ const Profile = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => {userInfo.permissions.users &&
+      headerRight: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity
             className="flex flex-row gap-2 items-center"
@@ -61,7 +61,7 @@ const Profile = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      },
+      ), // normal user dakta parba na
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.push("/")}>
