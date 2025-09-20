@@ -146,8 +146,9 @@ const Profile = () => {
         <TouchableOpacity
           key={user._id}
           onPress={() => router.push(`/user/${user._id}`)}
+          className=" p-2"
         >
-          <View key={user.id} className="bg-black-200 rounded-lg p-4 mt-4">
+          <View key={user.id} className="bg-black-200 rounded-lg mr-2 ms-2 mt-1 p-4">
 
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-full bg-orange-500 items-center justify-center mr-4">

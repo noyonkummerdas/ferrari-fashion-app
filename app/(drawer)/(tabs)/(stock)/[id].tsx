@@ -65,10 +65,12 @@ useEffect(() => {
   console.log("STOCK ITEM FROM REDUX:", data?.stock);
 
   const productImage = require("../../../../assets/images/product.jpg");
-
-  const handleEdit = () => {
+  let handleEdit ;
+ if(userInfo.type === "admin"){
+   handleEdit = () => {
     router.push(`/(drawer)/(tabs)/(stock)/update/${data?._id}`);
   };
+}
 
   // Stock operation functions
   const handleStockIn = () => {

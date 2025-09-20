@@ -63,7 +63,7 @@ const StockIndex = () => {
       headerTitleAlign: "center",
       headerShown: true,
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-      headerRight: () => {!userInfo.permissions.users &&
+      headerRight: () => {!userInfo?.permissions?.users?.create &&
         <View className="me-4">
           <TouchableOpacity
             onPress={() => router.push("/(drawer)/(tabs)/(stock)/add-stock")}
