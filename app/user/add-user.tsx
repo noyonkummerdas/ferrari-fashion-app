@@ -141,7 +141,7 @@ const AddUser = () => {
     
       <StatusBar style="dark" />
       <View>
-        <Text className = ' text-gray-200'> testing mode</Text>
+        
         <TouchableOpacity
           onPress={pickImage}
           className="flex justify-center items-center"

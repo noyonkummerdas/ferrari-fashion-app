@@ -90,7 +90,7 @@ const CustomDrawerComponent = (props: any) => {
           </View>
         </View>
       </TouchableOpacity>
-
+      {userInfo.type === 'admin' &&
       <DrawerItem
         icon={({ color }) => (
           <TabIcon
@@ -109,6 +109,7 @@ const CustomDrawerComponent = (props: any) => {
         style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
         onPress={() => router.push("/(drawer)/(tabs)")}
       />
+      }
       {
         userInfo.type === "admin"  &&
           <DrawerItem
@@ -132,7 +133,7 @@ const CustomDrawerComponent = (props: any) => {
             onPress={() => router.push("/(drawer)/warehouse")}
           />
       }
-      {userInfo.permissions.users &&
+      {userInfo?.permissions?.users &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -155,6 +156,9 @@ const CustomDrawerComponent = (props: any) => {
         onPress={() => router.push("/(drawer)/(tabs)/(stock)/products")}
       />
       }
+
+      {userInfo?.permissions?.suppliers.view &&
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -177,6 +181,9 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers")}
       />
+      }
+
+{userInfo?.permissions?.customers?.view &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -200,6 +207,9 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
       />
+      }
+      {userInfo?.permissions?.sales?.view &&
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -222,6 +232,9 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/sales")}
       />
+}
+{userInfo?.permissions?.purchases &&
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -244,6 +257,9 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/purchases")}
       />
+}
+{userInfo?.permissions?.account?.view &&
+
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -266,6 +282,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(account)")}
       />
+      }
+      {userInfo?.permissions?.users &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -289,6 +307,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/user")}
       />
+}
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
