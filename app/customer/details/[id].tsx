@@ -68,7 +68,7 @@ const CustomerDetails = () => {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => {!userInfo.permissions.customers.edit && 
+      headerRight: () => {userInfo.permissions.customers.edit && 
         <TouchableOpacity
           onPress={() => router.push(`/customer/${id}`)}
           className="flex flex-row items-center gap-2"
@@ -277,13 +277,13 @@ const CustomerDetails = () => {
 
       {/* balance section */}
         <View className="flex flex-row justify-evely items-center mx-auto ">
-          <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg m-1">
+          <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
             <Text className="text-white text-xl ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.customer?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
-          <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg m-1">
+          <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
             <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
              {data?.customer?.currentBalance}<Text className="text-white">BDT</Text>

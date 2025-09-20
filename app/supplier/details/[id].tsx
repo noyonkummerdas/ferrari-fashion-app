@@ -1,3 +1,4 @@
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useSupplierQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -15,6 +16,7 @@ const SupplierDetails = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [tempDate, setTempDate] = useState(new Date());
   const [supplireDetails, setSupplirDetails] =  useState<any[]>([]);
+  const userInfo = useGlobalContext()
 
   const { data, isLoading, error, refetch } = useSupplierQuery({ _id: id, date:currentDay });
 
@@ -42,7 +44,7 @@ const SupplierDetails = () => {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
+      headerRight: () => {userInfo.permissions?.suppliers?.edit && (
         <TouchableOpacity
           onPress={() => router.push(`/supplier/${Array.isArray(id) ? id[0] : id}`)}
           className="flex flex-row items-center gap-2"
@@ -50,7 +52,7 @@ const SupplierDetails = () => {
           <Ionicons name="pencil-outline" size={24} color="white" />
           <Text className="text-white text-lg">Edit</Text>
         </TouchableOpacity>
-      ),
+    )}
     });
   }, [navigation, data]);
 
@@ -226,16 +228,16 @@ const SupplierDetails = () => {
         </View>
       </Modal>
 
-        <View className="flex-1 flex-row justify-between items-center mt-4 mx-auto  ">
-          <View className="flex bg-black-200 item-center justify-evely p-5 text-center rounded-lg me-1">
-            <Text className="text-white text-xl p-3 ">Starting balance</Text>
+        <View className="flex flex-row justify-evely items-center mx-auto  ">
+          <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
+            <Text className="text-white text-xl ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.supplier?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
-          <View className="flex bg-black-200 item-center justify-center p-5 text-center rounded-lg ms-1">
-            <Text className="text-white p-3 text-xl">Current balance</Text>
-            <Text className="text-primary font-bold text-xl text-center">
+          <View className="flex bg-black-200 items-center justify-center p-5 w-[180px] text-center rounded-lg m-1">
+            <Text className="text-white  text-xl">Current balance</Text>
+            <Text className="text-primary font-bold text-lg text-center">
               {data?.supplier?.currentBalance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
