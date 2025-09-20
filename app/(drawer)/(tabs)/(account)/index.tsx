@@ -147,6 +147,7 @@ const Accounts = () => {
       </View>
       {/* Row 2 */}
       <View className="flex-row">
+        
         <TouchableOpacity
           className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
           activeOpacity={0.8}
