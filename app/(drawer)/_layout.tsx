@@ -258,7 +258,7 @@ const CustomDrawerComponent = (props: any) => {
         onPress={() => router.push("/(drawer)/purchases")}
       />
 }
-{userInfo?.permissions?.account?.view &&
+{userInfo?.permissions?.accounts?.view &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
