@@ -126,11 +126,11 @@ const AddUser = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : undefined}
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
-      style={{ flex: 1 }}
-    >
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === "ios" ? "padding" : undefined}
+    //   keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+    //   style={{ flex: 1 }}
+    // >
       <ScrollView 
         className="flex-1 bg-dark p-4 mx-auto w-full"
         keyboardShouldPersistTaps="handled"
@@ -238,7 +238,7 @@ const AddUser = () => {
           </Text>
         </TouchableOpacity>
       </ScrollView>
-    </KeyboardAvoidingView>
+    // </KeyboardAvoidingView>
   );
 };
 

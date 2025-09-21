@@ -44,7 +44,7 @@ const Profile = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => {userInfo.permissions.user &&
+      headerRight: () => {userInfo?.permissions?.users &&
         <View className="flex flex-row me-4">
           <TouchableOpacity
             className="flex flex-row gap-2 items-center"

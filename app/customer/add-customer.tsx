@@ -119,11 +119,11 @@ const AddCustomer = () => {
   };
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-dark"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-    >
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === "ios" ? "padding" : "height"}
+    //   className="flex-1 bg-dark"
+    //   keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    // >
     <ScrollView className="flex-1 bg-dark p-4">
       <View>
         <TouchableOpacity
@@ -187,7 +187,7 @@ const AddCustomer = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
-    </KeyboardAvoidingView>
+    // </KeyboardAvoidingView>
   );
 };
 
