@@ -17,11 +17,13 @@ const SalesList = () => {
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
   const [tempDate, setTempDate] = useState(new Date());
+  
+  // const type = userInfo?.type
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerRight: () => (
-        <View className="mr-4 bg-gray-900">
+        <View className="mr-4">
           <TouchableOpacity
            onPress={() => router.push('/sales/createDueSelas')}
             className="flex flex-row justify-center items-center gap-2"

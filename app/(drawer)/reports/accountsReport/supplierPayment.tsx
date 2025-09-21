@@ -21,8 +21,10 @@ export default function SupplierPayment() {
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
-  
-//   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
+  // const { userInfo, fetchUser } = useGlobalContext();
+  // const type = userInfo?.type;
+
+  //   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);

@@ -99,7 +99,8 @@ const WarehouserDetails = () => {
     navigation.setOptions({
       title: "Warehouse Details",
       headerStyle: {
-        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        // backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        backgroundColor: '#000000',
       },
       headerLeft: () => (
         <Link href="/warehouse" className="ms-2">
@@ -125,7 +126,7 @@ const WarehouserDetails = () => {
 
   const renderHeader = () => (
     <View>
-      <View className="mb-4 p-4 space-x-2">
+      <View className=" p-4 space-x-2">
         <View className="flex flex-row">
           <View className="flex flex-row justify-center items-center mb-1">
             {data?.type === "factory" ? (
@@ -147,7 +148,7 @@ const WarehouserDetails = () => {
       </View>
 
       {/* 🔹 Date navigation */}
-      <View className="mt-4 p-2">
+      <View className="m-2 flex-1">
         <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -171,15 +172,15 @@ const WarehouserDetails = () => {
       </View>
 
       {/* 🔹 Balance Section */}
-      <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto">
-        <View className="flex bg-black-200 items-center justify-center p-10 text-center rounded-lg m-1">
-          <Text className="text-white text-xl">Opening Balance</Text>
+      <View className="flex flex-row justify-evenly items-center mt-2 w-full ">
+        <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
+          <Text className="text-white text-xl p-3">Opening Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
             {data?.warehouse?.openingBalance ?? 0}
           </Text>
         </View>
-        <View className="flex bg-black-200 items-center justify-center p-10 text-center rounded-lg m-1">
-          <Text className="text-white text-xl">Current Balance</Text>
+        <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
+          <Text className="text-white text-xl p-3">Current Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
             {data?.warehouse?.currentBalance ?? 0}
           </Text>

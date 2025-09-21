@@ -15,9 +15,13 @@ import {
 } from "react-native";
 import { DatePickerField } from "../../../../../components/DatePickerField";
 import { ImageUploader } from "../../../../../components/ImageUploader";
+import { useGlobalContext } from "@/context/GlobalProvider";
 const UpdateStock = () => {
   const navigation = useNavigation();
   const { id } = useLocalSearchParams();
+  const { userInfo, fetchUser } = useGlobalContext();
+  
+
 
   // console.log(id);
   const { data, error, isLoading, isFetching, isSuccess, refetch } =

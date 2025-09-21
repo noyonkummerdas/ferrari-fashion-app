@@ -45,6 +45,8 @@ export default function CashOutReport() {
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+ 
+  // const type = userInfo?.type
 
 const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 

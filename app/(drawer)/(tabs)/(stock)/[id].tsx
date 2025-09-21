@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from "react-redux";
 const StockDetails = () => {
   const { id } = useLocalSearchParams();
   const { userInfo } = useGlobalContext();
+  
+
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -63,10 +65,12 @@ useEffect(() => {
   console.log("STOCK ITEM FROM REDUX:", data?.stock);
 
   const productImage = require("../../../../assets/images/product.jpg");
-
-  const handleEdit = () => {
+  let handleEdit ;
+ if(userInfo.type === "admin"){
+   handleEdit = () => {
     router.push(`/(drawer)/(tabs)/(stock)/update/${data?._id}`);
   };
+}
 
   // Stock operation functions
   const handleStockIn = () => {

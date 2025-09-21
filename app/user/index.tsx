@@ -4,7 +4,7 @@ import { useUsersQuery } from "@/store/api/userApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Text, TouchableOpacity, View } from "react-native";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { StatusBar } from "expo-status-bar";
@@ -14,6 +14,7 @@ const Profile = () => {
   const colorScheme = useColorScheme();
   const [isSaved, setIsSaved] = useState(true);
   const [user, setUser] = useState([]);
+    const { userInfo } = useGlobalContext();
 
   const { data, isSuccess, isError, isLoading } = useUsersQuery({
     limit: 10,
@@ -43,7 +44,7 @@ const Profile = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerRight: () => (
+      headerRight: () => {userInfo.permissions.user &&
         <View className="flex flex-row me-4">
           <TouchableOpacity
             className="flex flex-row gap-2 items-center"
@@ -60,7 +61,7 @@ const Profile = () => {
             </Text>
           </TouchableOpacity>
         </View>
-      ),
+      }, // normal user dakta parba na
       headerLeft: () => (
         <View className="flex flex-row me-4">
           <TouchableOpacity onPress={() => router.push("/")}>
@@ -75,13 +76,13 @@ const Profile = () => {
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
       headerShadowVisible: false,
-      headerTitleAlign: "left",
+      headerTitleAlign: "center",
       headerShown: true,
     });
   }, [navigation, colorScheme, isSaved]);
 
   const router = useRouter();
-  const { userInfo } = useGlobalContext();
+
 
   const handleLogout = () => {
     // Add logout logic here
@@ -93,7 +94,7 @@ const Profile = () => {
     router.push("/user/add-user");
   };
 
-  // const userData = [
+
   //   {
   //     id: 1,
   //     name: "NK Noyon",
@@ -136,18 +137,18 @@ const Profile = () => {
 
   //   },
   //   // Add more user data as needed
-  // ];
-
+  // ]
   return (
-    <View>
+    <ScrollView className="flex-1 bg-dark ">
 
       <StatusBar style="light" backgroundColor="#1f2937" />
       {data?.map((user) => (
         <TouchableOpacity
           key={user._id}
           onPress={() => router.push(`/user/${user._id}`)}
+          className=" p-2"
         >
-          <View key={user.id} className="bg-black-200 rounded-lg p-4 mt-4">
+          <View key={user.id} className="bg-black-200 rounded-lg mr-2 ms-2 mt-1 p-4">
 
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-full bg-orange-500 items-center justify-center mr-4">
@@ -169,7 +170,7 @@ const Profile = () => {
           </View>
         </TouchableOpacity>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

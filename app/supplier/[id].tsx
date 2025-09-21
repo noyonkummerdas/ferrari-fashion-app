@@ -56,7 +56,7 @@ const UpdateSupplier = () => {
       headerTintColor: `#ffffff`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
-      headerTitleAlign: "left",
+      headerTitleAlign: "center",
       headerShown: true,
     });
   }, [navigation, isPhoto]);

@@ -1,5 +1,6 @@
 import { CustomDrawerToggleButton } from "@/components";
 import { StockListItem } from "@/components/StockListItem";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useProductsQuery } from "@/store/api/productApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
@@ -16,6 +17,9 @@ import {
 } from "react-native";
 
 const StockIndex = () => {
+  const { userInfo, fetchUser } = useGlobalContext();
+  
+
   const isFocused = useIsFocused();
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -59,7 +63,7 @@ const StockIndex = () => {
       headerTitleAlign: "center",
       headerShown: true,
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-      headerRight: () => (
+      headerRight: () => {!userInfo?.permissions?.users?.create &&
         <View className="me-4">
           <TouchableOpacity
             onPress={() => router.push("/(drawer)/(tabs)/(stock)/add-stock")}
@@ -69,9 +73,9 @@ const StockIndex = () => {
             <Text className="text-gray-200 text-lg" >Add</Text>
           </TouchableOpacity>
         </View>
-      ),
+      },
     });
-  }, [navigation]);
+  }, [navigation, userInfo]);
 
   const handleItemPress = (id) => {
     // console.log("Selected item:", item);
@@ -105,8 +109,6 @@ const StockIndex = () => {
         }
         showsVerticalScrollIndicator={false}
       >
-       
-        {/* <Text className="text-red-500">TEST</Text> */}
 
         {/* Stock List */}
         {data?.length > 0 &&

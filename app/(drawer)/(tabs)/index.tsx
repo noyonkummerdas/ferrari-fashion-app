@@ -32,9 +32,9 @@ export default function PosDashboard() {
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type;
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
-  const type = userInfo?.type
-  console.log("AamarID::",userInfo)
+ 
 
   const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery({ warehouse: warehouse, date: startDate, type: type } as any);
 
@@ -209,7 +209,7 @@ export default function PosDashboard() {
                title="Total Products"
                value={dashboardData?.productCount || 0}
                iconName="cube"
-               onPress={() => router.push("/(drawer)/(tabs)/(products)" as any)}
+               onPress={() => router.push("/(drawer)/(tabs)/(stock)/products" )}
                 />
               <StatItem 
               title="Stock Items"
@@ -221,7 +221,7 @@ export default function PosDashboard() {
               title="Suppliers"
                value={dashboardData?.productCount || 0}
                iconName="people"
-               onPress={() => router.push("/(drawer)/(tabs)/(products)" as any)}
+               onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers" as any)}
                 />
               <StatItem 
                title="Customers"

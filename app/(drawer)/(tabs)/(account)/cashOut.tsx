@@ -9,8 +9,11 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
+  Dimensions,
   Image,
+  KeyboardAvoidingView,
   Platform,
+  SafeAreaView,
   ScrollView,
   Text,
   TextInput,
@@ -22,6 +25,9 @@ const CashOut = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+  
+  const type = userInfo?.type
+  
   const [createTransaction] = useAddTransactionMutation();
 
   // Form state
@@ -47,7 +53,7 @@ const CashOut = () => {
     userInfo?.warehouse,
   );
 
-  console.log(data);
+  // console.log(data);
 
   useEffect(() => {
     refetch();
@@ -260,12 +266,24 @@ const CashOut = () => {
   };
 
   return (
+
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
     <View className="flex-1 bg-dark">
       <StatusBar style="light" />
       <ScrollView
         className="flex-1 px-6 pt-4"
         showsVerticalScrollIndicator={false}
       >
+        <SafeAreaView
+          className=" flex-1 justify-center "
+          style={{
+            minHeight: Dimensions.get("window").height - 200,
+          }}
+        >
         {/* Name Input */}
         <View className="mb-4">
           <Text className="text-gray-300 text-lg font-medium">Name</Text>
@@ -393,7 +411,7 @@ const CashOut = () => {
             Create Transaction
           </Text>
         </TouchableOpacity>
-      </ScrollView>
+     
 
       {/* Date Picker Modal */}
       {showDatePicker && (
@@ -447,7 +465,10 @@ const CashOut = () => {
           </View>
         </View>
       )}
+      </SafeAreaView>
+       </ScrollView>
     </View>
+    </KeyboardAvoidingView>
   );
 };
 

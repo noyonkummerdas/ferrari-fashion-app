@@ -7,6 +7,8 @@ import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -17,6 +19,8 @@ import {
 const AddStock = () => {
   const {userInfo} = useGlobalContext()
   // console.log("userInfo", userInfo);
+  
+
   const [formData, setFormData] = useState({
     style: "",
     code: "",
@@ -79,6 +83,11 @@ const AddStock = () => {
   }, [navigation]);
 
   return (
+    // <KeyboardAvoidingView
+    //   behavior={Platform.OS === "ios" ? "padding" : "height"}
+    //   className="flex-1 bg-dark"
+    //   keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    // > 
     <ScrollView className="flex-1 bg-dark">
       <View className="">
         {/* Form */}
@@ -189,6 +198,7 @@ const AddStock = () => {
         </View>
       </View>
     </ScrollView>
+    // </KeyboardAvoidingView>
   );
 };
 

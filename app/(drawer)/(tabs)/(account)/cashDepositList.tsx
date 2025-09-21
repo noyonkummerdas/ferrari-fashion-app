@@ -21,7 +21,8 @@ const CashDepositList = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-
+  
+  // const type = userInfo?.type
   // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -38,7 +39,8 @@ const CashDepositList = () => {
       ),
       title: "Cash Deposit List",
       headerStyle: {
-        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        // backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        backgroundColor : '#000000'
       },
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
@@ -142,7 +144,7 @@ const CashDepositList = () => {
       {/* calendar */}
 
       <View className="mt-2 mb-2">
-        <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
+        <View className="flex flex-row justify-between items-center bg-black-200 mx-4  p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
@@ -226,7 +228,7 @@ const CashDepositList = () => {
         </View>
       </Modal>
 
-      <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-3 py-2 mt-2">
+      <View className="bg-zinc-800 mb-2 text-white h-14 rounded-full flex-row items-center px-6 m-2 ">
         <TextInput
           className="ml-2 flex-1 text-white"
           value={search}

@@ -1,5 +1,6 @@
 import { CustomDrawerToggleButton } from "@/components";
 import { StockListItem } from "@/components/StockListItem";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useProductsQuery } from "@/store/api/productApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
@@ -20,6 +21,8 @@ const StockIndex = () => {
   const [refreshing, setRefreshing] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const pathname = usePathname();
+  const { userInfo, fetchUser } = useGlobalContext();
+  // const type = userInfo?.type
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useProductsQuery({
       q: searchQuery || "all",

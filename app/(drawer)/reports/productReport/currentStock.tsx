@@ -34,6 +34,7 @@ const currentStock = [
 export default function CurrentStockReport() {
   const navigation = useNavigation();
   const { data: userInfo } = { data: currentUser };
+  // const type = userInfo?.type;
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 

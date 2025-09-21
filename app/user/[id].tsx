@@ -2,13 +2,14 @@ import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  Alert,
   Image,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View
+  View,
 } from "react-native";
 
 import CustomDropdown from "@/components/CustomDropdown";
@@ -18,9 +19,10 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import profile from "../../assets/images/profile.jpg";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const updateUser = () => {
-  // const { userInfo } = useGlobalContext();
+  const { userInfo } = useGlobalContext();
   const { id } = useLocalSearchParams();
 
 
@@ -88,7 +90,7 @@ const updateUser = () => {
           </TouchableOpacity>
         </View>
       ),
-      headerRight: () => (
+      headerRight: () => {userInfo.type === 'Admin' &&
               <TouchableOpacity
                 onPress={() => router.push(`/user/permission/${id}`)}
                 className="me-4"
@@ -97,7 +99,7 @@ const updateUser = () => {
                 {/* <Ionicons name="create-outline" size={28} color="white" /> */}
 
               </TouchableOpacity>
-            ),
+      },
       title: "Update User",
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
@@ -108,7 +110,7 @@ const updateUser = () => {
       headerTitleAlign: "center",
       headerShown: true,
     });
-  }, [navigation,id]);
+  }, [navigation]);
 
   const [form, setForm] = useState({
     _id: id as string,

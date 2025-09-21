@@ -4,6 +4,8 @@ import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Image,
+  KeyboardAvoidingView,
+  Platform,
   ScrollView,
   Text,
   TextInput,
@@ -22,7 +24,6 @@ import profile from "../../assets/images/profile.jpg";
 
 const AddUser = () => {
   const { userInfo } = useGlobalContext();
-  const aamarId = userInfo?.aamarId;
   // const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);
   const [warehouse, setWarehouse] = useState([
@@ -125,9 +126,22 @@ const AddUser = () => {
   };
 
   return (
-    <ScrollView className="flex-1 bg-dark p-4 mx-auto w-full">
-      <StatusBar style="light" />
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : undefined}
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 0}
+      style={{ flex: 1 }}
+    >
+      <ScrollView 
+        className="flex-1 bg-dark p-4 mx-auto w-full"
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+        contentContainerStyle={{ flexGrow: 1, paddingBottom: 50 }}
+        automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
+      >
+    
+      <StatusBar style="dark" />
       <View>
+        
         <TouchableOpacity
           onPress={pickImage}
           className="flex justify-center items-center"
@@ -215,15 +229,16 @@ const AddUser = () => {
       </View>
 
 
-       <TouchableOpacity
-        onPress={handleCreateUser}
-        className="h-14 w-full justify-center items-center rounded-full bg-primary mt-2"
-      >
-        <Text className="text-white text-center text-md font-pmedium">
-          Add User
-        </Text>
-      </TouchableOpacity>
-    </ScrollView>
+        <TouchableOpacity
+          onPress={handleCreateUser}
+          className="h-14 w-full justify-center items-center rounded-full bg-primary mt-2 mb-4"
+        >
+          <Text className="text-white text-center text-md font-pmedium">
+            Add User
+          </Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 

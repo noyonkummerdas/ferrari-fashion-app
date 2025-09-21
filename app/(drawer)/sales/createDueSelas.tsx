@@ -20,13 +20,17 @@ import {
   useColorScheme,
   View
 } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 
 const CreateDueSelas = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const router = useRouter();
    const colorScheme = useColorScheme();
+  
+   
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+  // const type = userInfo?.type
   const [q, setQ] = useState("all");
   const [customer, setCustomer] = useState([{ label: "Select Customer", value: "" }]);
 
@@ -169,6 +173,11 @@ const CreateDueSelas = () => {
 
   return (
     <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
       <ScrollView>
         <View className="flex-1 bg-dark">
           <StatusBar style="light" />
@@ -320,6 +329,7 @@ const CreateDueSelas = () => {
       </ScrollView>
 
       <StatusBar style="light" />
+      </KeyboardAvoidingView>
       </>
   );
 };

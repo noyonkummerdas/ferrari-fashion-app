@@ -87,6 +87,7 @@ const SignIn = () => {
             minHeight: Dimensions.get("window").height + 200,
           }}
         >
+          
           <View className="bg-dark px-8  pb-10 ">
             <View className="flex w-full justify-start items-center">
               <Image className="h-36 w-36" source={logo} />

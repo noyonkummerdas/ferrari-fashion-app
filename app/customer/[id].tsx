@@ -21,6 +21,7 @@ import profile from "../../assets/images/profile.jpg";
 
 const updateCustomer = () => {
   const { userInfo } = useGlobalContext();
+  // const type = userInfo?.type;
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   const [isPhoto, setIsPhoto] = useState(false);

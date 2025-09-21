@@ -1,5 +1,6 @@
 import CustomDropdown from "@/components/CustomDropdown";
 import { Colors } from "@/constants/Colors";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import {
   useUpdateWarehouseMutation,
   useWarehouseQuery,
@@ -21,6 +22,8 @@ import {
 const WarehouseEdit = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo, fetchUser } = useGlobalContext();
+  // const type = userInfo?.type
 
   const { id } = useLocalSearchParams();
 

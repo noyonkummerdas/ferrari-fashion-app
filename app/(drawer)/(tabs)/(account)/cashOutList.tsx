@@ -21,6 +21,7 @@ const CashOutList = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+  const type = userInfo?.type
 
   // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
@@ -38,7 +39,8 @@ const CashOutList = () => {
       ),
       title: "Cash Out List",
       headerStyle: {
-        backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        // backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
+        backgroundColor : '#000000'
       },
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },

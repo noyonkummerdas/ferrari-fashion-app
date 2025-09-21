@@ -8,10 +8,13 @@ import { router } from "expo-router";
 import React, { useLayoutEffect } from "react";
 // import { useColorScheme } from "react-native";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 const Accounts = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
+  const { userInfo, fetchUser } = useGlobalContext();
+  const type = userInfo?.type
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -40,7 +43,7 @@ const Accounts = () => {
 
   return (
     <ScrollView
-      className="flex-1 bg-black-700 p-4 mt-2"
+      className="flex-1 bg-black-700  h-full"
       showsVerticalScrollIndicator={false}
     >
               {/* Top balances */}
@@ -49,7 +52,7 @@ const Accounts = () => {
  
 
       {/* Transactions Summary Cards */}
-      <View className="mt-4">
+      <View className="mt-2">
         <Text className="text-white text-lg font-pbold mb-4">
           Transactions
         </Text>
@@ -144,6 +147,7 @@ const Accounts = () => {
       </View>
       {/* Row 2 */}
       <View className="flex-row">
+        
         <TouchableOpacity
           className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
           activeOpacity={0.8}
@@ -162,11 +166,6 @@ const Accounts = () => {
           <Text className="text-white text-base mt-2">Received Payment</Text>
         </TouchableOpacity>
       </View>
-
-
-
-
-          
               </View>
             </ScrollView>
   );

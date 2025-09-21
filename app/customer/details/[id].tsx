@@ -1,3 +1,4 @@
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
@@ -6,12 +7,14 @@ import { addDays, format, isToday, subDays } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
+import { } from "react-native";
 import {
   Modal,
   Platform,
   Text,
   TouchableOpacity,
-  View
+  View,
+  KeyboardAvoidingView 
 } from "react-native";
 
 
@@ -25,7 +28,8 @@ const CustomerDetails = () => {
     const [currentDay, setCurrentDay] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState(new Date());
-  
+    const { userInfo, fetchUser } = useGlobalContext();
+   const type = userInfo?.type;
 
   const { data, isLoading, error, refetch, isSuccess } = useGetCustomerByIdQuery({ 
     id, 
@@ -64,7 +68,7 @@ const CustomerDetails = () => {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
+      headerRight: () => {userInfo.permissions.customers.edit && 
         <TouchableOpacity
           onPress={() => router.push(`/customer/${id}`)}
           className="flex flex-row items-center gap-2"
@@ -72,7 +76,7 @@ const CustomerDetails = () => {
           <Ionicons name="pencil-outline" size={24} color="white" />
           <Text className="text-white text-lg">Edit</Text>
         </TouchableOpacity>
-      ),
+      },
     });
   }, [navigation, data]);
 
@@ -160,6 +164,11 @@ const CustomerDetails = () => {
 
   return (
     <>
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
         <StatusBar style="light" backgroundColor="#1f2937" />
         <View key={data?.customer?._id} className="mb-4 px-6 space-x-2">
           {/* <Text className="text-lg font-bold text-white">{data?.customer?.name}</Text> */}
@@ -180,7 +189,7 @@ const CustomerDetails = () => {
         </View>
 
         {/* calendar */}
-        <View className="mt-2 mb-2">
+        <View className="m-2 p-2">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -267,14 +276,14 @@ const CustomerDetails = () => {
 
 
       {/* balance section */}
-        <View className="flex flex-row justify-between items-center mt-4 w-[400px] mx-auto ">
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
+        <View className="flex flex-row justify-evely items-center mx-auto ">
+          <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
             <Text className="text-white text-xl ">Starting balance</Text>
             <Text className="text-primary font-bold text-center text-xl">
               {data?.customer?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
-          <View className="flex bg-black-200 item-center justify-center p-10 text-center rounded-lg m-1">
+          <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
             <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
              {data?.customer?.currentBalance}<Text className="text-white">BDT</Text>
@@ -284,7 +293,7 @@ const CustomerDetails = () => {
 
       {/* Due sell generat part */}
       {data?.transaction?.map((item:any) => (
-        <View key={item?._id} className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto">
+        <View key={item?._id} className="bg-black-200 flex justify-between p-4 rounded-lg w-ful m-4">
           <Text className="text-white text-xl">{item?.type}</Text>
           <View className="flex flex-row justify-between items-center">
             <Text className="text-white text-md -2">
@@ -295,6 +304,7 @@ const CustomerDetails = () => {
           </View>
         </View>
       ))}
+      </KeyboardAvoidingView> 
     </>
   );
 };

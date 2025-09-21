@@ -65,7 +65,8 @@
     "react-redux": "^9.2.0",
     "redux-persist": "^6.0.0",
     "tailwind-merge": "^3.3.1",
-    "vector-icons": "^0.1.0"
+    "vector-icons": "^0.1.0",
+    "expo-dev-client": "~5.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

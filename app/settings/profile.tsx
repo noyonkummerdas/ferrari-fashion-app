@@ -42,7 +42,7 @@ const profile = () => {
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
       headerShadowVisible: true,
-      headerTitleAlign: "left",
+      headerTitleAlign: "center",
       headerShown: true,
     });
   }, [navigation]);
@@ -72,7 +72,7 @@ const profile = () => {
       </View> */}
 
       {/* Profile Card */}
-      <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4 mt-10">
+      <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4">
         <View className="flex-row items-center">
           <View className="w-16 h-16 rounded-full bg-orange-500 items-center justify-center mr-4">
             <Ionicons name="person" size={32} color="#ffffff" />
