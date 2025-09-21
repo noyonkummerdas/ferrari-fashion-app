@@ -41,11 +41,11 @@ const CustomDrawerComponent = (props: any) => {
   // });
 
 
-  // const userInfo = useSelector((state: any) => state.user);
+  const userInfo = useSelector((state: any) => state.user);
 
-  const {userInfo} = useGlobalContext()
+  // const {userInfo} = useGlobalContext()
 
-  console.log(userInfo.permissions)
+  // console.log(userInfo.permissions)
 
   const pathname = usePathname();
   const { loading, loggedIn, logout } = useGlobalContext();
@@ -111,7 +111,7 @@ const CustomDrawerComponent = (props: any) => {
       />
       }
       {
-        userInfo.type === "admin"  &&
+        userInfo?.type === "admin"  &&
           <DrawerItem
             icon={({ color }) => (
               <TabIcon
@@ -122,7 +122,7 @@ const CustomDrawerComponent = (props: any) => {
                 focused={["/warehouse"]}
               />
             )}
-            label={"Warehouse"}
+            label={"Warehouse"} 
             labelStyle={[
               styles.labelStyle,
               { color: pathname === "/warehouse" ? "#ffffff" : "#ffffff" },
@@ -157,7 +157,7 @@ const CustomDrawerComponent = (props: any) => {
       />
       }
 
-      {userInfo?.permissions?.suppliers.view &&
+      {userInfo?.permissions?.suppliers?.view &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -308,7 +308,7 @@ const CustomDrawerComponent = (props: any) => {
         onPress={() => router.push("/user")}
       />
 }
-{userInfo.permissions.users && 
+{userInfo?.permissions?.users && 
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon

@@ -93,7 +93,7 @@ const UpdateStock = () => {
 
   const handleSubmit = async () => {
     // Validate required fields
-    if (!formData.style || !formData.code) {
+    if (!formData?.style || !formData?.code) {
       Alert.alert("Error", "Please fill in all required fields");
       return;
     }

@@ -90,7 +90,7 @@ const updateUser = () => {
           </TouchableOpacity>
         </View>
       ),
-      headerRight: () => {userInfo.type === 'Admin' &&
+      headerRight: () => {userInfo?.type === 'Admin' &&
               <TouchableOpacity
                 onPress={() => router.push(`/user/permission/${id}`)}
                 className="me-4"
