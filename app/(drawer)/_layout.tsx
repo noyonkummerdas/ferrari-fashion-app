@@ -157,7 +157,7 @@ const CustomDrawerComponent = (props: any) => {
       />
       }
 
-      {userInfo?.permissions?.suppliers?.view &&
+      {userInfo?.permissions?.suppliers &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -183,7 +183,7 @@ const CustomDrawerComponent = (props: any) => {
       />
       }
 
-{userInfo?.permissions?.customers?.view &&
+{userInfo?.permissions?.customers &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -208,7 +208,7 @@ const CustomDrawerComponent = (props: any) => {
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
       />
       }
-      {userInfo?.permissions?.sales?.view &&
+      {userInfo?.permissions?.salesnp &&
 
       <DrawerItem
         icon={({ size, color, focused }) => (

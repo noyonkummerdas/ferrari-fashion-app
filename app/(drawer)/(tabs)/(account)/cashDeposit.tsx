@@ -23,7 +23,7 @@ const CashDepositDetails = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-const type = userInfo?.type
+// const type = userInfo?.type
 
   const { data, isSuccess, isLoading, refetch } = useWarehouseQuery(
     userInfo?.warehouse,
@@ -196,14 +196,11 @@ const type = userInfo?.type
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-    <ScrollView className="flex-1 bg-dark"
-    keyboardShouldPersistTaps="handled"
+        <ScrollView className="flex-1 bg-dark"
+        keyboardShouldPersistTaps="handled"
     >
       <StatusBar style="light" />
-      <ScrollView
-        className="flex-1 px-6 pt-4"
-        showsVerticalScrollIndicator={false}
-      >
+
         {/* Name Input */}
         <View className="mb-4">
           <Text className="text-gray-300 text-lg font-medium">Name</Text>
@@ -268,7 +265,6 @@ const type = userInfo?.type
             Create Transaction
           </Text>
         </TouchableOpacity>
-      </ScrollView>
 
       {/* Date Picker Modal */}
       {showDatePicker && (

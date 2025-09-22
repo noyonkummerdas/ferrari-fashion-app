@@ -18,7 +18,7 @@ const CashDepositDetails = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo, fetchUser } = useGlobalContext();
-  const type = userInfo?.type
+  // const type = userInfo?.type
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
 
