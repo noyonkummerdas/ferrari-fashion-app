@@ -3,7 +3,7 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { addDays, format, isToday, subDays } from "date-fns";
+import { addMonths, format, isThisMonth, subMonths } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
@@ -25,7 +25,7 @@ const CustomerDetails = () => {
   const { id } = useLocalSearchParams();
     const [paymentList, setPaymentList] = useState<any[]>([]);
     const [refreshing, setRefreshing] = useState(false);
-    const [currentDay, setCurrentDay] = useState(new Date());
+    const [currentMonth, setCurrentMonth] = useState(new Date());  
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [tempDate, setTempDate] = useState(new Date());
     const { userInfo, fetchUser } = useGlobalContext();
@@ -33,21 +33,19 @@ const CustomerDetails = () => {
 
   const { data, isLoading, error, refetch, isSuccess } = useGetCustomerByIdQuery({ 
     id, 
-    date:format(currentDay, "MM-dd-yyyy")
+    date:format(currentMonth, "MM-dd-yyyy")
    });
-
-   console.log("customer details data:",data)
 
   useEffect(() => {
     refetch();
-  }, [id,currentDay]);
+  }, [id,currentMonth]);
   useEffect(() => {
     if (data?.transactions && Array.isArray(data.transactions)) {
       setPaymentList(data.transactions);
     }
   }, [data, isSuccess]);
-  const dayTransactions = paymentList.filter(
-    t => t.date === format(currentDay, "yyyy-MM-dd")
+  const monthTransactions = paymentList.filter(
+    t => t.date === format(currentMonth, "yyyy-MM-dd")
   );
 
   // console.log("DATA=>",data)
@@ -106,9 +104,9 @@ const CustomerDetails = () => {
   // console.log(depositList);
   //date formatting
   const formattedDate = {
-    day: currentDay.getDate(),
-    month: currentDay.toLocaleString("en-US", { month: "long" }), // e.g. August
-    year: currentDay.getFullYear(),
+    day: currentMonth.getDate(),
+    month: currentMonth.toLocaleString("en-US", { month: "long" }), // e.g. August
+    year: currentMonth.getFullYear(),
   };
 
   const [search, setSearch] = useState("");
@@ -120,18 +118,18 @@ const CustomerDetails = () => {
   );
 
   // Date navigation functions
-  const goToPreviousDay = () => {
-    setCurrentDay((prev) => subDays(prev, 30));
+  const goToPreviousMonth = () => {
+    setCurrentMonth((prev) => subMonths(prev, 1));
   };
 
-  const goToNextDay = () => {
-    if (!isToday(currentDay)) {
-      setCurrentDay((prev) => addDays(prev, 30));
+  const goToNextMonth = () => {
+    if (!isThisMonth(currentMonth)) {
+      setCurrentMonth((prev) => addMonths(prev, 1));
     }
   };
 
   const openDatePicker = () => {
-    setTempDate(currentDay);
+    setTempDate(currentMonth);
     setShowDatePicker(true);
   };
 
@@ -146,12 +144,12 @@ const CustomerDetails = () => {
   };
 
   const confirmDateSelection = () => {
-    setCurrentDay(tempDate);
+    setCurrentMonth(tempDate);
     setShowDatePicker(false);
   };
 
   const cancelDateSelection = () => {
-    setTempDate(currentDay);
+    setTempDate(currentMonth);
     setShowDatePicker(false);
   };
 
@@ -190,48 +188,33 @@ const CustomerDetails = () => {
           </View>
         </View>
 
-        {/* calendar */}
+       {/* ✅ Monthly calendar navigation */}
         <View className="m-2 p-2">
-        <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
-          {/* previous month  */}
-          <TouchableOpacity onPress={goToPreviousDay} className="p-2">
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
+          <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
+            {/* previous month  */}
+            <TouchableOpacity onPress={goToPreviousMonth} className="p-2">
+              <Ionicons name="arrow-back" size={24} color="white" />
+            </TouchableOpacity>
 
-          <TouchableOpacity
-            onPress={openDatePicker}
-            className="flex flex-row items-center px-4  rounded-lg"
-          >
-            <Text className="text-white text-lg me-2">{formattedDate.day}</Text>
-            <Text className="text-primary text-lg">
-              {formattedDate.month}
+            {/* current month */}
+            <Text className="text-white text-lg">
+              {format(currentMonth, "MMMM yyyy")}
             </Text>
-            <Text className="text-white text-lg ml-2">
-              {formattedDate.year}
-            </Text>
-            <Ionicons
-              name="calendar-outline"
-              size={20}
-              color="#fdb714"
-              className="ml-2"
-            />
-          </TouchableOpacity>
 
-
-          {/* this / next month  */} 
-          <TouchableOpacity
-            onPress={goToNextDay}
-            disabled={isToday(currentDay)}
-            className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
-          >
-            <Ionicons
-              name="arrow-forward"
-              size={24}
-              color={isToday(currentDay) ? "#666" : "white"}
-            />
-          </TouchableOpacity>
+            {/* next month  */} 
+            <TouchableOpacity
+              onPress={goToNextMonth}
+              disabled={isThisMonth(currentMonth)}
+              className={`p-2 ${isThisMonth(currentMonth) ? "opacity-50" : ""}`}
+            >
+              <Ionicons
+                name="arrow-forward"
+                size={24}
+                color={isThisMonth(currentMonth) ? "#666" : "white"}
+              />
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
 
       {/* Date Picker Modal */}
       <Modal visible={showDatePicker} transparent={true} animationType="fade">
