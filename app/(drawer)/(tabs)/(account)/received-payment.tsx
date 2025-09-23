@@ -12,6 +12,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
@@ -211,6 +212,13 @@ const RecivedPayment = () => {
 
   return (
     <>
+<KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+
+    
       <View className="flex-1 bg-dark">
         <StatusBar style="light" />
         <ScrollView
@@ -352,6 +360,7 @@ const RecivedPayment = () => {
           </View>
         )}
       </View>
+      </KeyboardAvoidingView>
     </>
   );
 };
