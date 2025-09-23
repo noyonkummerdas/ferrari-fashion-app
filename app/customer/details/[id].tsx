@@ -36,6 +36,8 @@ const CustomerDetails = () => {
     date:format(currentDay, "MM-dd-yyyy")
    });
 
+   console.log("customer details data:",data)
+
   useEffect(() => {
     refetch();
   }, [id,currentDay]);
@@ -68,7 +70,7 @@ const CustomerDetails = () => {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => {userInfo.permissions.customers.edit && 
+      headerRight: () => (
         <TouchableOpacity
           onPress={() => router.push(`/customer/${id}`)}
           className="flex flex-row items-center gap-2"
@@ -76,7 +78,7 @@ const CustomerDetails = () => {
           <Ionicons name="pencil-outline" size={24} color="white" />
           <Text className="text-white text-lg">Edit</Text>
         </TouchableOpacity>
-      },
+      ),
     });
   }, [navigation, data]);
 
@@ -119,12 +121,12 @@ const CustomerDetails = () => {
 
   // Date navigation functions
   const goToPreviousDay = () => {
-    setCurrentDay((prev) => subDays(prev, 1));
+    setCurrentDay((prev) => subDays(prev, 30));
   };
 
   const goToNextDay = () => {
     if (!isToday(currentDay)) {
-      setCurrentDay((prev) => addDays(prev, 1));
+      setCurrentDay((prev) => addDays(prev, 30));
     }
   };
 
@@ -191,6 +193,7 @@ const CustomerDetails = () => {
         {/* calendar */}
         <View className="m-2 p-2">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
+          {/* previous month  */}
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
@@ -214,6 +217,8 @@ const CustomerDetails = () => {
             />
           </TouchableOpacity>
 
+
+          {/* this / next month  */} 
           <TouchableOpacity
             onPress={goToNextDay}
             disabled={isToday(currentDay)}

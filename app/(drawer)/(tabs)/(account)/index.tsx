@@ -93,7 +93,7 @@ const Accounts = () => {
           className="flex-1 bg-black-200 rounded-xl p-4 h-28 ml-2 border border-gray-700">
             <View className="flex-row items-center mb-2 px-1 ">
               <Ionicons name="checkmark-done-circle" size={22} color="#fdb714" />
-              <Text className="text-gray-300 ms-2">Payment Received</Text>
+              <Text className="text-gray-300 ms-2"> Received</Text>
             </View>
             <Text className="text-white text-xl font-pbold ms-1">0.00</Text>
           </TouchableOpacity>

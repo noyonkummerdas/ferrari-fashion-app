@@ -133,7 +133,7 @@ const CustomDrawerComponent = (props: any) => {
             onPress={() => router.push("/(drawer)/warehouse")}
           />
       }
-      {userInfo?.permissions?.users &&
+      {/* {userInfo?.permissions?.users && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -155,9 +155,9 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(stock)/products")}
       />
-      }
+      {/* } */}
 
-      {userInfo?.permissions?.suppliers &&
+      {/* {userInfo?.permissions?.suppliers && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -181,9 +181,9 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers")}
       />
-      }
+      {/* } */}
 
-{userInfo?.permissions?.customers &&
+{/* {userInfo?.permissions?.customers && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -207,8 +207,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
       />
-      }
-      {userInfo?.permissions?.salesnp &&
+      {/* } */}
+      {/* {userInfo?.permissions?.sales && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -232,8 +232,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/sales")}
       />
-}
-{userInfo?.permissions?.users &&
+{/* } */}
+{/* {userInfo?.permissions?.users && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -257,8 +257,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/purchases")}
       />
-}
-{userInfo?.permissions?.users &&
+{/* } */}
+{/* {userInfo?.permissions?.users && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -282,8 +282,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/(tabs)/(account)")}
       />
-      }
-      {userInfo?.permissions?.users &&
+      {/* } */}
+      {/* {userInfo?.permissions?.users && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -307,8 +307,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/user")}
       />
-}
-{userInfo?.permissions?.users && 
+{/* } */}
+{/* {userInfo?.permissions?.users &&  */}
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -329,7 +329,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/reports")}
       />
-}
+{/* } */}
       {/* <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon

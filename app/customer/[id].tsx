@@ -3,6 +3,7 @@ import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Image,
+  KeyboardAvoidingView,
   ScrollView,
   Text,
   TextInput,
@@ -18,6 +19,7 @@ import {
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/images/profile.jpg";
+import { Platform } from "react-native";
 
 const updateCustomer = () => {
   const { userInfo } = useGlobalContext();
@@ -141,6 +143,11 @@ const updateCustomer = () => {
   };
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
     <ScrollView className="flex-1 bg-dark p-6">
       <View>
         <TouchableOpacity
@@ -205,6 +212,7 @@ const updateCustomer = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
