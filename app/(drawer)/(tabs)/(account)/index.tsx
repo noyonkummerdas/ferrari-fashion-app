@@ -56,7 +56,7 @@ const Accounts = () => {
         <Text className="text-white text-lg font-pbold mb-4">
           Transactions
         </Text>
-
+          {/* opening & current balance  */}
         <View className="flex-row mb-4 w-full">
           <View className="flex-1 bg-black-200 rounded-xl h-28 p-4 mr-2 ">
             <View className="flex-row items-center justify-between mb-2 px-1">
