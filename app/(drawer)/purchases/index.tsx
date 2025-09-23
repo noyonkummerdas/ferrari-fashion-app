@@ -2,208 +2,187 @@ import { CustomDrawerToggleButton } from "@/components";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { usePurchasesDWQuery } from "@/store/api/purchasApi";
 import { Ionicons } from "@expo/vector-icons";
-import { addDays, format, isToday, subDays } from "date-fns";
+import { format } from "date-fns";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { FlatList, Platform, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
+import { FlatList, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View, Modal } from "react-native";
+
 const PurchasesList = () => {
-     const colorScheme = useColorScheme();
-     const { userInfo } = useGlobalContext();
-    //  const type = userInfo?.type
+  const colorScheme = useColorScheme();
+  const { userInfo } = useGlobalContext();
 
-     const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
-     const [currentDay, setCurrentDay] = useState(new Date());
-     const [showDatePicker, setShowDatePicker] = useState(false);
-     const [tempDate, setTempDate] = useState(new Date());
+  const months = [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December"
+  ];
 
-
-
-     const { data, isSuccess, isError, refetch } = usePurchasesDWQuery({ warehouse: userInfo?.warehouse, date: format(currentDay, "MM-dd-yyyy"), });
-     console.log('data', data, isSuccess, isError)
-
-     useEffect(()=>{
-       refetch()
-     },[userInfo?.warehouse])
-
-     const formattedDate = {
-      day: currentDay.getDate(),
-      month: currentDay.toLocaleString("en-US", { month: "long" }), // e.g. August
-      year: currentDay.getFullYear(),
-    };
-
-      // Date navigation functions
-  const goToPreviousDay = () => {
-    setCurrentDay((prev) => subDays(prev, 1));
-  };
-
-  const goToNextDay = () => {
-    if (!isToday(currentDay)) {
-      setCurrentDay((prev) => addDays(prev, 1));
-    }
-  };
-
-  const openDatePicker = () => {
-    setTempDate(currentDay);
-    setShowDatePicker(true);
-  };
-
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    if (Platform.OS === "android") {
-      setShowDatePicker(false);
-    }
-
-    if (selectedDate) {
-      setTempDate(selectedDate);
-    }
-  };
-
-  const confirmDateSelection = () => {
-    setCurrentDay(tempDate);
-    setShowDatePicker(false);
-  };
-
-  const cancelDateSelection = () => {
-    setTempDate(currentDay);
-    setShowDatePicker(false);
-  };
-
-
-  const [purcheseList, setPurcheseList] = useState<any[]>([]);
+  const { data, isSuccess, isError, refetch } = usePurchasesDWQuery({
+    warehouse: userInfo?.warehouse,
+    date: format(currentDate, "MM-dd-yyyy"),
+  });
 
   useEffect(() => {
-    if (data) {
-      // Handle different possible response structures
-      if (Array.isArray(data)) {
-        setPurcheseList(data);
-      } else if (
-        data &&
-        typeof data === "object" &&
-        "transactions" in data &&
-        Array.isArray((data as any).transactions)
-      ) {
-        setPurcheseList((data as any).transactions);
-      } else {
-        setPurcheseList([]);
-      }
-    }
-  }, [data, isSuccess]);
-     
-    const navigation = useNavigation();
-      useLayoutEffect(() => {
-        navigation.setOptions({
-          headerRight: () => (
-            <View className="me-4 bg-dark">
-              <TouchableOpacity
-                onPress={() => router.push("/purchases/create-purchase")}
-                className="flex flex-row justify-center items-center gap-2"
-              >
-                <Ionicons name="bag-add" size={20} color="#ffffff" />
-                <Text className="text-white text-xl font-pmedium">Add</Text>
-              </TouchableOpacity>
-            </View>
-          ),
-          title: "Purchases",
-          //@ts-ignore
-          headerStyle: {
-            backgroundColor: `#000000`,
-          },
-          //@ts-ignore
-          headerTintColor: `#ffffff`,
-          headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
-          headerShadowVisible: false,
-          headerTitleAlign: "center",
-          headerShown: true,
-          headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-        });
-      }, [navigation]);
+    refetch();
+  }, [userInfo?.warehouse, currentDate]);
+
+  const formattedDate = {
+    month: currentDate.toLocaleString("en-US", { month: "long" }),
+    year: currentDate.getFullYear(),
+  };
+
+  const selectMonth = (monthIndex: number) => {
+    const newDate = new Date(currentDate.getFullYear(), monthIndex, 1);
+    setCurrentDate(newDate);
+    setShowDatePicker(false);
+  };
+
+  const goToPreviousMonth = () => {
+    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
+  };
+
+  const goToNextMonth = () => {
+    const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
+    if (nextMonth <= new Date()) setCurrentDate(nextMonth);
+  };
+
+  const navigation = useNavigation();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => (
+        <View className="me-4 bg-dark">
+          <TouchableOpacity
+            onPress={() => router.push("/purchases/create-purchase")}
+            className="flex flex-row justify-center items-center gap-2"
+          >
+            <Ionicons name="bag-add" size={20} color="#ffffff" />
+            <Text className="text-white text-xl font-pmedium">Add</Text>
+          </TouchableOpacity>
+        </View>
+      ),
+      title: "Purchases",
+      headerStyle: { backgroundColor: `#000000` },
+      headerTintColor: `#ffffff`,
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
+      headerShadowVisible: false,
+      headerTitleAlign: "center",
+      headerShown: true,
+      headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
+    });
+  }, [navigation]);
 
   return (
     <>
-           {/* calendar */}
-
-           <View className="mt-2 mb-2">
-        <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg">
-          <TouchableOpacity onPress={goToPreviousDay} className="p-2">
+      {/* Calendar */}
+      <View className="mt-2 mb-2">
+        <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
+          <TouchableOpacity onPress={goToPreviousMonth} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={openDatePicker}
-            className="flex flex-row items-center px-4  rounded-lg"
+            onPress={() => setShowDatePicker(true)}
+            className="flex flex-row items-center px-4 rounded-lg"
           >
-            <Text className="text-white text-lg me-2">{formattedDate.day}</Text>
-            <Text className="text-primary text-lg">
-              {formattedDate.month}
-            </Text>
-            <Text className="text-white text-lg ml-2">
-              {formattedDate.year}
-            </Text>
-            <Ionicons
-              name="calendar-outline"
-              size={20}
-              color="#fdb714"
-              className="ml-2"
-            />
+            <Text className="text-primary text-lg">{formattedDate.month}</Text>
+            <Text className="text-white text-lg ml-2">{formattedDate.year}</Text>
+            <Ionicons name="calendar-outline" size={20} color="#fdb714" className="ml-2" />
           </TouchableOpacity>
 
           <TouchableOpacity
-            onPress={goToNextDay}
-            disabled={isToday(currentDay)}
-            className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
+            onPress={goToNextMonth}
+            className={`p-2 ${currentDate >= new Date() ? "opacity-50" : ""}`}
+            disabled={currentDate >= new Date()}
           >
             <Ionicons
               name="arrow-forward"
               size={24}
-              color={isToday(currentDay) ? "#666" : "white"}
+              color={currentDate >= new Date() ? "#666" : "white"}
             />
           </TouchableOpacity>
         </View>
       </View>
-    <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
-     <TextInput
-       placeholder="Search Supplire"
-       className="placeholder:text-gray-100 flex-1 text-gray-300 "
-       value={searchQuery}
-       onChangeText={setSearchQuery}
-     />
-     <Ionicons name="search-outline" size={24} color={"gray"} />
-   </View>
-    <FlatList
-    data={data}                           
-    keyExtractor={(item, index) => item._id || index.toString()}
-    renderItem={({ item }) => (
-      <TouchableOpacity
-      className=""
-      activeOpacity={0.6} // lower = more fade
-      onPress={() => router.push(`/purchases/${item._id}`)}
 
-    >
-
-      <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
-        <View className="flex-col">
-        <View className="flex-row items-center">
-        
-            <View>
-              <Text className="text-primary text-lg ">{item?.supplierName}</Text>
-              <Text className="text-gray-200">{item?.formatedDate}</Text>
-              
-            </View>
-        </View>
-        </View>
-        
-        <View className="flex-col items-end">
-
-        <Text className="text-gray-200 text-md"> INV: {item?.invoice}</Text>
-          <Text className="text-primary ">{item?.amount} <Text className="text-gray-200">BDT</Text></Text>
-        </View>
+      {/* Search */}
+      <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
+        <TextInput
+          placeholder="Search Supplier"
+          className="placeholder:text-gray-100 flex-1 text-gray-300"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+        />
+        <Ionicons name="search-outline" size={24} color={"gray"} />
       </View>
-      </TouchableOpacity>
-    )}
-  />
 
-<StatusBar style="light" />
-  </>
+      {/* Purchases List */}
+      <FlatList
+        data={data}
+        keyExtractor={(item, index) => item._id || index.toString()}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            activeOpacity={0.6}
+            onPress={() => router.push(`/purchases/${item._id}`)}
+          >
+            <View className="flex-row justify-between p-4 bg-black-200 rounded-lg ms-4 me-4 mt-4 items-center">
+              <View className="flex-col">
+                <Text className="text-primary text-lg">{item?.supplierName}</Text>
+                <Text className="text-gray-200">{item?.formatedDate}</Text>
+              </View>
+
+              <View className="flex-col items-end">
+                <Text className="text-gray-200 text-md">INV: {item?.invoice}</Text>
+                <Text className="text-primary">{item?.amount} <Text className="text-gray-200">BDT</Text></Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        )}
+      />
+
+      {/* Month/Year Picker Modal */}
+      <Modal visible={showDatePicker} transparent animationType="fade">
+        <View className="flex-1 bg-black/70 justify-center items-center">
+          <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
+            <Text className="text-white text-xl font-semibold mb-4">Select Month</Text>
+
+            {/* Year Selector */}
+            <View className="flex flex-row justify-between mb-4">
+              <TouchableOpacity onPress={() => setCurrentDate(prev => new Date(prev.getFullYear() - 1, prev.getMonth(), 1))}>
+                <Ionicons name="arrow-back" size={24} color="white" />
+              </TouchableOpacity>
+              <Text className="text-white text-xl">{currentDate.getFullYear()}</Text>
+              <TouchableOpacity onPress={() => setCurrentDate(prev => new Date(prev.getFullYear() + 1, prev.getMonth(), 1))}>
+                <Ionicons name="arrow-forward" size={24} color="white" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Months Grid */}
+            <View className="flex flex-row flex-wrap justify-between">
+              {months.map((m, i) => (
+                <TouchableOpacity
+                  key={i}
+                  onPress={() => selectMonth(i)}
+                  className={`p-4 rounded-lg mb-2 w-[28%] ${currentDate.getMonth() === i ? "bg-primary" : "bg-black-300"}`}
+                >
+                  <Text className="text-white text-center">{m.slice(0, 3)}</Text>
+                </TouchableOpacity>
+              ))}
+            </View>
+
+            <TouchableOpacity
+              onPress={() => setShowDatePicker(false)}
+              className="mt-4 p-3 rounded-lg bg-gray-600"
+            >
+              <Text className="text-white text-center">Cancel</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
+
+      <StatusBar style="light" />
+    </>
   );
 };
 
