@@ -23,6 +23,8 @@ const PurchasesList = () => {
   const { data, isSuccess, isError, refetch } = usePurchasesDWQuery({
     warehouse: userInfo?.warehouse,
     date: format(currentDate, "MM-dd-yyyy"),
+    isDate: "month",
+     forceRefetch: true,
   });
 
   useEffect(() => {

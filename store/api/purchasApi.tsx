@@ -16,7 +16,7 @@ export const PurchaseApi = createApi({
       providesTags: ["Purchase"],
     }),
     PurchasesDW: builder.query<Purchase[], any>({
-      query: ({warehouse,date}) => `/purchase/list/${warehouse}/${date}`,
+      query: ({warehouse,date,isDate}) => `/purchase/list/byTime/${warehouse}/${date}/${isDate}`,
       providesTags: ["Purchase"],
     }),
     WeeklyPurchases: builder.query<Purchase[], void>({
