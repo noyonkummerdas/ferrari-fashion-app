@@ -48,9 +48,6 @@ const Accounts = () => {
     >
               {/* Top balances */}
 
-     
- 
-
       {/* Transactions Summary Cards */}
       <View className="mt-2">
         <Text className="text-white text-lg font-pbold mb-4">
@@ -111,20 +108,35 @@ const Accounts = () => {
             <Text className="text-white text-xl font-pbold ms-2">0.00</Text>
           </TouchableOpacity>
           
-          {/* Cash In */}
+          {/* Cash Deposit */}
           <TouchableOpacity 
             onPress={() => router.push("/(account)/cashDepositList")}
           className="flex-1 bg-black-200 rounded-xl p-4 h-28 ml-2 border border-gray-700">
             <View className="flex-row items-center mb-2 px-1">
               <Ionicons name="arrow-down-circle" size={22} color="#fdb714" />
-              <Text className="text-gray-300 ms-1 ">Cash In</Text>
+              <Text className="text-gray-300 ms-1 ">Cash deposit</Text>
             </View>
             <Text className="text-white text-xl font-pbold ms-2">0.00</Text>
           </TouchableOpacity>
         </View>
 
-      <Text className="text-lg text-gray-300 pb-4 mt-4 font-pbold "> Payment Section</Text>
+      
 
+     <TouchableOpacity 
+     onPress={() => router.push("/(account)/warehouseBalance")}
+     >
+      <View className="mt-2 flex-row bg-black-200 rounded-xl h-20 justify-center items-center border border-gray-700">
+        <Ionicons name="storefront-outline" size={24} color="#FDB714" />
+      <Text className="text-gray-200 text-lg p-2">
+          Warehouse Balance 
+        </Text>
+     </View>
+
+     </TouchableOpacity>
+
+        <View>
+          
+<Text className="text-lg text-gray-300 pb-4 mt-4 font-pbold "> Payment Section</Text>
      {/* Row 1 */}
      <View className="flex-row mb-4">
         <TouchableOpacity
@@ -166,6 +178,7 @@ const Accounts = () => {
           <Text className="text-white text-base mt-2">Received Payment</Text>
         </TouchableOpacity>
       </View>
+        </View>
               </View>
             </ScrollView>
   );
