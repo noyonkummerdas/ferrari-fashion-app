@@ -49,6 +49,8 @@ const SalesList = () => {
   const { data, isSuccess, refetch } = useAllSaleQuery({
     warehouse: userInfo?.warehouse as string,
     startDate: format(currentDay, "MM-dd-yyyy"),
+    isDate: "month",
+     forceRefetch: true,
   });
 
   useEffect(() => { refetch() }, [userInfo?.warehouse, currentDay]);
