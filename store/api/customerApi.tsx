@@ -20,7 +20,7 @@ export const CustomerApi = createApi({
       providesTags: ["Customer"],
     }),
     GetCustomerById: builder.query<Customer, any>({
-      query: ({ id,date }) => `/customer/${id}/${date}`,
+      query: ({ id,date,isDate }) => `/customer/byTime/${id}/${date}/${isDate}`,
       providesTags: ["Customer"],
     }),
     // new

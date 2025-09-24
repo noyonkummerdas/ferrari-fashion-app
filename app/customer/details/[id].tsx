@@ -17,7 +17,10 @@ const CustomerDetails = () => {
   const { data, refetch } = useGetCustomerByIdQuery({
     id,
     date: currentDate,
+    isDate:'month',
+    forceRefetch: true,
   });
+  console.log("customer data", data);
 
   useEffect(() => {
     refetch();
@@ -141,7 +144,7 @@ const CustomerDetails = () => {
         </View>
 
         {/* Transactions */}
-        {data?.transactions?.map((item: any) => (
+        {data?.transaction?.map((item: any) => (
           <View
             key={item?._id}
             className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto"
@@ -197,6 +200,9 @@ const CustomerDetails = () => {
             >
               <Text className="text-white text-center">Cancel</Text>
             </TouchableOpacity>
+            {data?.transactions?.length === 0 && (
+              <Text className="text-gray-500 text-center mt-4">No transactions found for this month.</Text>
+            )}
           </View>
         </View>
       </Modal>

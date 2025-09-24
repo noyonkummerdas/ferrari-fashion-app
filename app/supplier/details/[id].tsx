@@ -20,7 +20,7 @@ const SupplierDetails = () => {
     isDate: 'month',
     forceRefetch: true,
   });
- console.log("SINGLE SUPPLIER DATA", data);
+  console.log("SINGLE SUPPLIER DATA", data);
   useEffect(() => {
     refetch();
   }, [id, currentDate]);
