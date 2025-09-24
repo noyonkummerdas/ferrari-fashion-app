@@ -7,7 +7,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
 import { router } from "expo-router";
-import { StatusBar } from "expo-status-bar";
+
 import { useEffect, useState } from "react";
 import {
   Dimensions,
@@ -17,6 +17,7 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import { useColorScheme, StatusBar } from "react-native";
 // import {
 //   useChartSaleQuery,
 //   useDashboardSaleQuery,
@@ -28,6 +29,7 @@ const cardWidth = screenWidth * 0.4;
 const profile = require("../../../assets/images/profile.jpg");
 
 export default function PosDashboard() {
+    const scheme = useColorScheme(); // "light" or "dark"
   const [startDate, setStartDate] = useState(format(new Date(), "MM-dd-yyyy"));
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
@@ -141,6 +143,7 @@ export default function PosDashboard() {
   
   return (
     <>
+    
       <ScrollView
         className="flex-1 bg-black-700 p-4"
         refreshControl={
@@ -260,8 +263,10 @@ export default function PosDashboard() {
           </Text>
           <PaymentChart data={dashboardData?.chartData || {}} />
         </View>
-
-        <StatusBar style="light" />
+        <StatusBar
+                barStyle={scheme === "dark" ? "light-content" : "dark-content"}
+                backgroundColor={scheme === "dark" ? "#000000" : "#ffffff"}
+              />
       </ScrollView>
     </>
   );

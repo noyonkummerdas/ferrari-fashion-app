@@ -15,8 +15,8 @@ export const SupplierApi = createApi({
       query: ({ q }) => `/supplier/search/${q}`,
       providesTags: ["Supplier"],
     }),
-    Supplier: builder.query<any, { _id: string; date: string }>({
-      query: ({ _id, date }) => `/supplier/${_id}/${date}`,
+    Supplier: builder.query<any, { _id: string; date: string; isDate: string }>({
+      query: ({ _id, date, isDate }) => `/supplier/byTime/${_id}/${date}/${isDate}`,
       providesTags: ["Supplier"],
     }),
     addSupplier: builder.mutation<{}, Supplier>({

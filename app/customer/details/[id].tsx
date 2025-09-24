@@ -78,7 +78,7 @@ const CustomerDetails = () => {
     <>
       <ScrollView>
         {/* Customer Info */}
-        <View className="px-4 py-4 space-y-2">
+        <View className="px-4 space-y-2">
           <View key={data?.customer?._id} className="mb-4">
             <View className="flex flex-row ">
               <Ionicons name="business-outline" size={18} color={"#fdb714"} />
@@ -101,7 +101,6 @@ const CustomerDetails = () => {
             <TouchableOpacity onPress={goToPreviousMonth} className="p-2">
               <Ionicons name="arrow-back" size={24} color="white" />
             </TouchableOpacity>
-
             <TouchableOpacity
               onPress={() => setShowDatePicker(true)}
               className="flex flex-row items-center px-4 rounded-lg"
