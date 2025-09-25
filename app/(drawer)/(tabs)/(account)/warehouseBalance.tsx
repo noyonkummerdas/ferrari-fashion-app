@@ -39,14 +39,14 @@ const WarehouserBalance = () => {
     if(userInfo?.type === 'admin'){
       setId('all');
     }else{
-      setId(userInfo?.warehouse?._id || 'all');
+      setId(userInfo?.warehouse?.id || 'all');
     }
   }, [userInfo]);
 
   // Warehouse data fetching
-  const { data , isLoading, refetch, isSuccess, error } = useWarehouseAccountsQuery({
+  const { data, isLoading, refetch, isSuccess, error } = useWarehouseAccountsQuery({
     _id: id,
-    date: format(currentDay, "yyyy-MM-dd"), // 🔹 String পাঠানো হলো
+    date:currentDay
   });
 
   useEffect(() => {
@@ -133,31 +133,52 @@ const WarehouserBalance = () => {
       headerShown: true,
     });
   }, [navigation, id]);
+  const warehouse = Array.isArray(data?.warehouse) ? data?.warehouse : [];
 
   const renderHeader = () => (
     <View>
-      <View className=" p-4 space-x-2">
-        <View className="flex flex-row">
-          <View className="flex flex-row justify-center items-center mb-1">
-            {data?.type === "factory" ? (
-              <MaterialIcons name="factory" size={22} color="#fdb714" className="me-2" />
-            ) : (
-              <MaterialIcons name="storefront" size={22} color="#fdb714" className="me-2" />
-            )}
-            <Text className="text-gray-200 text-lg">{data?.warehouse?.name}</Text>
-          </View>
-        </View>
-        <View className="flex flex-row">
-          <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
-          <Text className="text-gray-200 text-[18px] ms-2">{data?.warehouse?.phone}</Text>
-        </View>
-        <View className="flex flex-row items-center">
-          <Ionicons name="location-outline" size={18} color={"#fdb714"} />
-          <Text className="text-gray-400 p-1 ms-2">{data?.warehouse?.address}</Text>
-        </View>
-      </View>
 
-      {/* 🔹 Date navigation */}
+      {/*  Warehouse Info */}
+
+      {warehouse?.length > 0 ? (
+        warehouse?.map((wh) => (
+          <View key={wh._id} className="p-4 space-x-2">
+            <View className="flex flex-row">
+              <View className="flex flex-row justify-center items-center mb-1">
+                {wh.type === "factory" ? (
+                  <MaterialIcons name="factory" size={22} color="#fdb714" className="me-2" />
+                ) : (
+                  <MaterialIcons name="storefront" size={22} color="#fdb714" className="me-2" />
+                )}
+                <Text className="text-gray-200 text-lg">{wh.name}</Text>
+              </View>
+            </View>
+            <View className="flex flex-row">
+              <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
+              <Text className="text-gray-200 text-[18px] ms-2">{wh.phone}</Text>
+            </View>
+            <View className="flex flex-row items-center">
+              <Ionicons name="location-outline" size={18} color={"#fdb714"} />
+              <Text className="text-gray-400 p-1 ms-2">{wh.address}</Text>
+            </View>
+            <View className="flex flex-row justify-evenly items-center mt-2 w-full">
+              <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
+                <Text className="text-white text-xl p-3">Opening Balance</Text>
+                <Text className="text-primary font-bold text-center text-xl">{wh.openingBalance ?? 0}</Text>
+              </View>
+              <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
+                <Text className="text-white text-xl p-3">Current Balance</Text>
+                <Text className="text-primary font-bold text-center text-xl">{wh.currentBalance ?? 0}</Text>
+              </View>
+            </View>
+          </View>
+        ))
+      ) : (
+        <Text className="text-center mt-4 text-gray-400">No warehouse found</Text>
+      )}
+
+      {/*  Date navigation */}
+
       <View className="m-2 flex-1">
         <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
@@ -181,7 +202,7 @@ const WarehouserBalance = () => {
         </View>
       </View>
 
-      {/* 🔹 Balance Section */}
+      {/*  Balance Section */}
       <View className="flex flex-row justify-evenly items-center mt-2 w-full ">
         <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
           <Text className="text-white text-xl p-3">Opening Balance</Text>
