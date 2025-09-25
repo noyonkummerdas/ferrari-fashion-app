@@ -1,12 +1,12 @@
-import { Colors } from "@/constants/Colors";
+import CustomDropdown from "@/components/CustomDropdown";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useWarehouseAccountsQuery, useWarehouseQuery } from "@/store/api/warehouseApi";
+import { useWarehouseAccountsQuery, useWarehousesQuery } from "@/store/api/warehouseApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { addDays, format, isToday, set, subDays } from "date-fns";
-import { Link, useFocusEffect, useLocalSearchParams, useNavigation } from "expo-router";
+import { addDays, format, isToday, subDays } from "date-fns";
+import { Link, useFocusEffect, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { use, useCallback, useEffect, useLayoutEffect, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import {
   ActivityIndicator,
   FlatList,
@@ -18,6 +18,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+
 
 const WarehouserBalance = () => {
   const colorScheme = useColorScheme();
@@ -39,7 +40,7 @@ const WarehouserBalance = () => {
     if(userInfo?.type === 'admin'){
       setId('all');
     }else{
-      setId(userInfo?.warehouse?.id || 'all');
+      setId(userInfo?.warehouse);
     }
   }, [userInfo]);
 
@@ -48,6 +49,9 @@ const WarehouserBalance = () => {
     _id: id,
     date:currentDay
   });
+
+
+  const {data:warehouseData} = useWarehousesQuery();
 
   useEffect(() => {
     refetch();
@@ -116,7 +120,6 @@ const WarehouserBalance = () => {
     navigation.setOptions({
       title: "Warehouser Balance",
       headerStyle: {
-        // backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
         backgroundColor: '#000000',
       },
       headerLeft: () => (
@@ -139,43 +142,58 @@ const WarehouserBalance = () => {
     <View>
 
       {/*  Warehouse Info */}
-
-      {warehouse?.length > 0 ? (
-        warehouse?.map((wh) => (
-          <View key={wh._id} className="p-4 space-x-2">
-            <View className="flex flex-row">
-              <View className="flex flex-row justify-center items-center mb-1">
-                {wh.type === "factory" ? (
-                  <MaterialIcons name="factory" size={22} color="#fdb714" className="me-2" />
-                ) : (
-                  <MaterialIcons name="storefront" size={22} color="#fdb714" className="me-2" />
-                )}
-                <Text className="text-gray-200 text-lg">{wh.name}</Text>
-              </View>
-            </View>
-            <View className="flex flex-row">
-              <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
-              <Text className="text-gray-200 text-[18px] ms-2">{wh.phone}</Text>
-            </View>
-            <View className="flex flex-row items-center">
-              <Ionicons name="location-outline" size={18} color={"#fdb714"} />
-              <Text className="text-gray-400 p-1 ms-2">{wh.address}</Text>
-            </View>
-            <View className="flex flex-row justify-evenly items-center mt-2 w-full">
-              <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
-                <Text className="text-white text-xl p-3">Opening Balance</Text>
-                <Text className="text-primary font-bold text-center text-xl">{wh.openingBalance ?? 0}</Text>
-              </View>
-              <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
-                <Text className="text-white text-xl p-3">Current Balance</Text>
-                <Text className="text-primary font-bold text-center text-xl">{wh.currentBalance ?? 0}</Text>
-              </View>
-            </View>
+      {userInfo?.type !== 'admin' ? (
+      <View className=" p-4 space-x-2">
+        <View className="flex flex-row">
+          <View className="flex flex-row justify-center items-center mb-1">
+            {data?.type === "factory" ? (
+              <MaterialIcons name="factory" size={22} color="#fdb714" className="me-2" />
+            ) : (
+              <MaterialIcons name="storefront" size={22} color="#fdb714" className="me-2" />
+            )}
+            <Text className="text-gray-200 text-lg">{data?.warehouse?.name}</Text>
           </View>
-        ))
-      ) : (
-        <Text className="text-center mt-4 text-gray-400">No warehouse found</Text>
+        </View>
+        <View className="flex flex-row">
+          <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
+          <Text className="text-gray-200 text-[18px] ms-2">{data?.warehouse?.phone}</Text>
+        </View>
+        <View className="flex flex-row items-center">
+          <Ionicons name="location-outline" size={18} color={"#fdb714"} />
+          <Text className="text-gray-400 p-1 ms-2">{data?.warehouse?.address}</Text>
+        </View>
+      </View>
+      ):
+      (
+        <View className=" space-x-2">
+          {/* <Text className="text-gray-200 text-lg">Warehouse DW</Text> */}
+          {/* <Dropdown
+            data={warehouseData?.map((wh) => ({ label: wh.name, value: wh._id }))}
+            labelField="label"
+            valueField="value"
+            placeholder="Select Warehouse"
+            value={id}
+            onChange={(item: any) => setId(item.value)}
+            placeholderStyle={{ color: 'white' }}
+            style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, minWidth: 190, height: 45,marginTop: 10 }}
+            selectedTextStyle={{ color: 'white' }}
+            itemTextStyle={{ color: 'black' }}
+          /> */}
+
+          <CustomDropdown
+            data={warehouseData?.map((wh) => ({ label: wh.name, value: wh._id }))}
+            value={id}
+            setValue={(value) => setId(value)}
+            placeholder="Select Warehouse"
+            mode="modal"
+            placeholderStyle={{ color: 'white' }}
+            style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, minWidth: 190, height: 45,marginTop: 10 }}
+            selectedTextStyle={{ color: 'white' }}
+            itemTextStyle={{ color: 'white' }}
+          />
+        </View>
       )}
+      
 
       {/*  Date navigation */}
 

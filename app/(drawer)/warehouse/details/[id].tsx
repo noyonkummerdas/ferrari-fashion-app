@@ -1,4 +1,3 @@
-import { Colors } from "@/constants/Colors";
 import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
