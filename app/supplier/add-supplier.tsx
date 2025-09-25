@@ -4,18 +4,21 @@ import { router, useNavigation } from "expo-router";
 import React, { useLayoutEffect, useState } from "react";
 import {
   Image,
+  KeyboardAvoidingView,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
   View,
+  Platform,
 } from "react-native";
 
 import { useAddSupplierMutation } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import profile from "../../assets/images/profile.jpg";
+
 
 const AddSupplier = () => {
   const { userInfo } = useGlobalContext();
@@ -93,6 +96,11 @@ const AddSupplier = () => {
   };
 
   return (
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1 bg-dark"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
     <ScrollView className="flex-1 bg-dark p-4">
       <View>
         <TouchableOpacity
@@ -156,6 +164,7 @@ const AddSupplier = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 export default AddSupplier;

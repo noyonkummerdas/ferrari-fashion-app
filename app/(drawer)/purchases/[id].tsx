@@ -24,7 +24,7 @@ const PruchasesDetails = () => {
 
 
   const { data, isLoading, error, isSuccess } = usePurchaseQuery(id as string);
-  console.log('details data', data, isLoading, isSuccess)
+  // console.log('details data', data, isLoading, isSuccess)
 
   // console.log('error',data, isSuccess, error)
 

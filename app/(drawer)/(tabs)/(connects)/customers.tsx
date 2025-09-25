@@ -153,6 +153,7 @@ const Customers = () => {
           }
         />
       </SafeAreaView>
+      
     </>
   );
 };
