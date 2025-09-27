@@ -31,7 +31,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
 
   const renderItem = ({ item }: { item: DropdownItem }) => (
     <TouchableOpacity
-      className="flex-row w-full justify-between items-center p-4 rounded-lg hover:bg-black-100 border-b border-black-100 mb-1"
+      className="flex-row w-full justify-between items-center p-2 rounded-lg hover:bg-gray-300 border-b border-black-100 mb-1"
       onPress={() => {
         setValue(item.value);
         if (dropdownRef.current && mode === "modal") {
@@ -60,7 +60,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           width: "100%",
         }}
         placeholderStyle={{
-          fontSize: 18,
+          fontSize: 14,
           color: "#6b7280",
           fontFamily: "Poppins-Regular",
         }}
@@ -70,7 +70,7 @@ const CustomDropdown: React.FC<CustomDropdownProps> = ({
           fontFamily: "Poppins-Regular",
         }}
         inputSearchStyle={{
-          height: 30,
+          height: 40,
           fontSize: 12,
           color: "#e5e7eb",
           backgroundColor: "#242424",
