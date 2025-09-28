@@ -13,11 +13,12 @@ import {
   Dimensions,
   RefreshControl,
   ScrollView,
+  StatusBar,
   Text,
   TouchableOpacity,
+  useColorScheme,
   View,
 } from "react-native";
-import { useColorScheme, StatusBar } from "react-native";
 // import {
 //   useChartSaleQuery,
 //   useDashboardSaleQuery,
@@ -26,7 +27,7 @@ import { useColorScheme, StatusBar } from "react-native";
 
 const screenWidth = Dimensions.get("window").width;
 const cardWidth = screenWidth * 0.4; 
-const profile = require("../../../assets/images/profile.jpg");
+const profile = require("@/assets/images/profile.jpg");
 
 export default function PosDashboard() {
     const scheme = useColorScheme(); // "light" or "dark"
@@ -38,7 +39,10 @@ export default function PosDashboard() {
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
  
 
-  const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery({ warehouse: warehouse, date: startDate, type: type } as any);
+  const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery(
+    { warehouse: warehouse, date: startDate, type: type } as any,
+    { skip: !userInfo } // Skip query until userInfo is available
+  );
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 
