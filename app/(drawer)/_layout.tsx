@@ -4,11 +4,11 @@ import { router, usePathname, useSegments } from "expo-router";
 import Drawer from "expo-router/drawer";
 import React, { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import profile from "../../assets/images/profile.jpg";
 // import * as globalCon from "@/context/GlobalProvider"
 import { StatusBar } from "expo-status-bar";
 import { useSelector } from "react-redux";
 import { useGlobalContext } from "../../context/GlobalProvider";
+const profile = require("@/assets/images/profile.jpg");
 
 const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
   const isFocused = Array.isArray(focused)
@@ -78,7 +78,13 @@ const CustomDrawerComponent = (props: any) => {
       <StatusBar style="light" />
       <TouchableOpacity onPress={() => router.push("/")} className="mx-2 pe-3">
         <View className="flex flex-row gap-x-3 border-b items-center border-slate-400 pb-4 mb-2">
-          <Image source={profile} className="h-14 w-14" />
+          {profile ? (
+            <Image source={profile} className="w-12 h-12 rounded-full" />
+          ) : (
+            <View className="w-12 h-12 rounded-full bg-primary/10 items-center justify-center">
+              <Ionicons name="person" size={24} color="#FDB714" />
+            </View>
+          )}
           <View>
             <Text className="text-xl text-gray-200 font-pmedium">
               {userInfo?.name}
