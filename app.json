@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "Ferrari Fashion",
-    "slug": "FFApp",
-    "version": "1.0.0",
+    "name": "FFApp",
+    "slug": "ff-app",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
     "scheme": "ffapp",
@@ -18,7 +18,8 @@
         "backgroundColor": "#000000"
       },
       "edgeToEdgeEnabled": true,
-      "package": "com.manishankarvakta.FFApp"
+      "package": "com.manishankarvakta.FFApp",
+      "versionCode": 4
     },
     "web": {
       "bundler": "metro",
@@ -43,8 +44,9 @@
     "extra": {
       "router": {},
       "eas": {
-         "projectId": "28a47908-1761-4c88-8802-7b9dd310d885"
+        "projectId": "9a215206-00f1-44d7-85c4-35973e56a0e3"
       }
-    }
+    },
+    "owner": "manishankarvakta"
   }
 }
