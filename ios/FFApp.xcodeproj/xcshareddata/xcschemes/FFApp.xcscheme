@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "FerrariFashion.app"
-               BlueprintName = "FerrariFashion"
-               ReferencedContainer = "container:FerrariFashion.xcodeproj">
+               BuildableName = "FFApp.app"
+               BlueprintName = "FFApp"
+               ReferencedContainer = "container:FFApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "FerrariFashionTests.xctest"
-               BlueprintName = "FerrariFashionTests"
-               ReferencedContainer = "container:FerrariFashion.xcodeproj">
+               BuildableName = "FFAppTests.xctest"
+               BlueprintName = "FFAppTests"
+               ReferencedContainer = "container:FFApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FerrariFashion.app"
-            BlueprintName = "FerrariFashion"
-            ReferencedContainer = "container:FerrariFashion.xcodeproj">
+            BuildableName = "FFApp.app"
+            BlueprintName = "FFApp"
+            ReferencedContainer = "container:FFApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "FerrariFashion.app"
-            BlueprintName = "FerrariFashion"
-            ReferencedContainer = "container:FerrariFashion.xcodeproj">
+            BuildableName = "FFApp.app"
+            BlueprintName = "FFApp"
+            ReferencedContainer = "container:FFApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
