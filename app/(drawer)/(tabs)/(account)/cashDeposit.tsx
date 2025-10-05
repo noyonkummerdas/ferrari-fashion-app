@@ -195,10 +195,12 @@ const CashDepositDetails = () => {
       className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView className="flex-1 bg-dark"
-        keyboardShouldPersistTaps="handled"
-    >
+      <ScrollView
+            className="flex-1 px-6 pt-4"
+            contentContainerStyle={{ paddingBottom: 300 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
       <StatusBar style="light" />
 
         {/* Name Input */}
@@ -319,7 +321,6 @@ const CashDepositDetails = () => {
         </View>
       )}
     </ScrollView>
-    </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };

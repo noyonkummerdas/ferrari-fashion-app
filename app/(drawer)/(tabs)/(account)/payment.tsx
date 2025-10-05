@@ -291,11 +291,7 @@ const Payment = () => {
          showsVerticalScrollIndicator={false}
           >
         <View className="flex-1 bg-dark">
-
-
           <StatusBar style="light" />
-
-          
             {/* Supplier Input */}
             <View className="mb-4">
               <Text className="text-gray-300 text-lg font-medium">
