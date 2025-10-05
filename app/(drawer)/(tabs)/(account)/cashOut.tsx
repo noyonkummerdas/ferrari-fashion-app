@@ -269,21 +269,17 @@ const CashOut = () => {
 
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1 bg-dark"
+      className="flex-1"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-    <View className="flex-1 bg-dark">
+    <SafeAreaView className="flex-1 bg-dark">
       <StatusBar style="light" />
       <ScrollView
-        className="flex-1 px-6 pt-4"
+        className="px-6 pt-4"
+        contentContainerStyle={{ paddingBottom: 300 }}
+        keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
       >
-        <SafeAreaView
-          className=" flex-1 justify-center "
-          style={{
-            minHeight: Dimensions.get("window").height - 200,
-          }}
-        >
         {/* Name Input */}
         <View className="mb-4">
           <Text className="text-gray-300 text-lg font-medium">Name</Text>
@@ -465,9 +461,9 @@ const CashOut = () => {
           </View>
         </View>
       )}
-      </SafeAreaView>
+ 
        </ScrollView>
-    </View>
+    </SafeAreaView>
     </KeyboardAvoidingView>
   );
 };

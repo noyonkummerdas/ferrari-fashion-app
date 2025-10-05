@@ -172,6 +172,7 @@ const WarehouserBalance = () => {
         </View>
       )}
 
+
       {/* Date navigation */}
       <View className="m-2 flex-1">
         <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
