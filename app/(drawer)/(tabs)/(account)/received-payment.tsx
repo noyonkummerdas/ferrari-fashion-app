@@ -221,10 +221,12 @@ const RecivedPayment = () => {
     
       <View className="flex-1 bg-dark">
         <StatusBar style="light" />
-        <ScrollView
-          className="flex-1 px-6 pt-4"
-          showsVerticalScrollIndicator={false}
-        >
+      <ScrollView
+         className="flex-1 px-6 pt-4"
+        contentContainerStyle={{ paddingBottom: 300 }}
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+          >
           {/* Type Input */}
           <View className="mb-4">
             <Text className="text-gray-300 text-lg font-medium">Customer</Text>
