@@ -316,7 +316,12 @@ const createPurchase = () => {
       className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-      <ScrollView>
+      <ScrollView 
+       className="flex-1 pt-4"
+           contentContainerStyle={{ paddingBottom: 300 }}
+           keyboardShouldPersistTaps="handled"
+           showsVerticalScrollIndicator={false}
+      >
         <View className="flex-1 bg-dark">
           <StatusBar style="light" />
           <ScrollView

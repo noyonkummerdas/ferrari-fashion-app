@@ -124,7 +124,12 @@ const AddCustomer = () => {
       className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-    <ScrollView className="flex-1 bg-dark p-4">
+    <ScrollView className="flex-1 bg-dark p-4"
+    
+           contentContainerStyle={{ paddingBottom: 360 }}
+           keyboardShouldPersistTaps="handled"
+           showsVerticalScrollIndicator={false}
+    >
       <View>
         <TouchableOpacity
           onPress={pickImage}

@@ -86,6 +86,9 @@ const StockIndex = () => {
   const handleAddStock = () => {
     router.push("/(drawer)/(tabs)/(stock)/add-stock");
   };
+   // Total quantity calculation
+  const totalQuantity =
+    data?.reduce((total, item) => total + (item.currentStock || 0), 0) || 0;
 
   return (
     <View className="flex-1 bg-dark">
@@ -101,6 +104,14 @@ const StockIndex = () => {
           />
           <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
         </View>
+
+         {/* Total items & quantity */}
+      <View className="flex flex-row justify-between items-center px-4 mb-2 bg-black-200 p-4 rounded-lg mx-4">
+        <Text className="text-gray-300 text-xl font-bold ms-4">
+          Total Quantity: 
+        </Text>
+        <Text className="text-gray-300 text-xl font-bold me-4">{totalQuantity}</Text>
+      </View>
 
       <ScrollView
         className="flex-1 p-4"
