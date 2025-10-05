@@ -8,6 +8,7 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import { KeyboardAvoidingView } from "react-native";
 import {
   Alert,
   Image,
@@ -278,13 +279,23 @@ const Payment = () => {
 
   return (
     <>
-      <ScrollView>
-        <View className="flex-1 bg-dark">
-          <StatusBar style="light" />
-          <ScrollView
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        >
+      <ScrollView
             className="flex-1 px-6 pt-4"
-            showsVerticalScrollIndicator={false}
+           contentContainerStyle={{ paddingBottom: 300 }}
+         keyboardShouldPersistTaps="handled"
+         showsVerticalScrollIndicator={false}
           >
+        <View className="flex-1 bg-dark">
+
+
+          <StatusBar style="light" />
+
+          
             {/* Supplier Input */}
             <View className="mb-4">
               <Text className="text-gray-300 text-lg font-medium">
@@ -419,7 +430,7 @@ const Payment = () => {
                 Payment
               </Text>
             </TouchableOpacity>
-          </ScrollView>
+
 
           {/* Date Picker Modal */}
           {showDatePicker && (
@@ -477,6 +488,7 @@ const Payment = () => {
           )}
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };
