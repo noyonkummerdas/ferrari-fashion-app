@@ -10,6 +10,7 @@ import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 import { ScrollView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
+import PrintButton from "../PrintButton";
 // Logged-in user example
 const currentUser = {
   role: "admin", // "admin" or "user"
@@ -105,12 +106,8 @@ console.log("CashOutData:", cashOutData);
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
+       
+        <PrintButton filteredData={filteredData} title="Cash Out Report" />
       ),
     });
   }, [navigation]);
@@ -122,7 +119,6 @@ console.log("CashOutData:", cashOutData);
       const matchesDate =
         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
         (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-
       const matchesWarehouse =
         currentUser.role === "admin"
           ? selectedWarehouse
@@ -133,7 +129,6 @@ console.log("CashOutData:", cashOutData);
       return matchesDate && matchesWarehouse;
     })
   : [];
-
   return (
     <>
      <StatusBar style="light" backgroundColor="white" />
@@ -162,14 +157,12 @@ console.log("CashOutData:", cashOutData);
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
         </View>
       </View>
-
       {showStartPicker && (
         <DateTimePicker
           value={fromDate}
@@ -194,7 +187,6 @@ console.log("CashOutData:", cashOutData);
           }}
         />
       )}
-
       {/* Summary */}
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
@@ -237,11 +229,8 @@ console.log("CashOutData:", cashOutData);
     </View>
   ))}
 </View>
-        </ScrollView>
-    </View>
-
-
-
+</ScrollView>
+</View>
 </>
-  );
+);
 }

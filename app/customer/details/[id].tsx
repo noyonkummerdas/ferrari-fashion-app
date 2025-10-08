@@ -4,7 +4,7 @@ import { Ionicons } from "@expo/vector-icons";
 import { addMonths, subMonths, format } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CustomerDetails = () => {
   const { id } = useLocalSearchParams();
@@ -79,7 +79,17 @@ const CustomerDetails = () => {
 
   return (
     <>
-      <ScrollView>
+    <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1 bg-dark"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        >
+        <ScrollView className="bg-dark p-4"
+        
+               contentContainerStyle={{ paddingBottom: 360 }}
+               keyboardShouldPersistTaps="handled"
+               showsVerticalScrollIndicator={false}
+        >
         {/* Customer Info */}
         <View className="px-4 space-y-2">
           <View key={data?.customer?._id} className="mb-4">
@@ -160,7 +170,7 @@ const CustomerDetails = () => {
             </View>
           </View>
         ))}
-      </ScrollView>
+  
 
       {/* Month/Year Picker Modal (SupplierDetails style) */}
       <Modal visible={showDatePicker} transparent animationType="fade">
@@ -206,6 +216,8 @@ const CustomerDetails = () => {
           </View>
         </View>
       </Modal>
+          </ScrollView>
+    </KeyboardAvoidingView>
     </>
   );
 };

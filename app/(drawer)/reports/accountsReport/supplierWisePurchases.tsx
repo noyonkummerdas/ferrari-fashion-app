@@ -9,6 +9,7 @@ import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 import { StatusBar } from "expo-status-bar";
+import PrintButton from "../PrintButton";
 
 
 // Logged-in user example
@@ -104,12 +105,13 @@ console.log("CashInData:", cashInData);
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
+        // <TouchableOpacity
+        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+        //   className="me-4"
+        // >
+        //   <Ionicons name="print-outline" size={28} color="white" />
+        // </TouchableOpacity>
+        <PrintButton filteredData={filteredData} title="Supplier Purchese Report" />
       ),
     });
   }, [navigation]);

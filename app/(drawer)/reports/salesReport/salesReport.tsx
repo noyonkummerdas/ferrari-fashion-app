@@ -13,6 +13,7 @@ import { format, startOfDay, endOfDay } from "date-fns";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
  import { StatusBar } from "expo-status-bar";
+ import PrintButton from "../PrintButton";
 
 
 interface Transaction {
@@ -157,47 +158,47 @@ const SalesReport = () => {
         }
       }, [warehousesData]);
 
-  const exportCSV = async () => {
-    try {
-      let csv = "Invoice,Customer,Warehouse,Amount\n";
-      filteredSales.forEach((sale) => {
-        csv += `${sale.invoice || sale.invoiceId},${sale.customerName || sale.customerId?.name || ''},${sale.warehouse || ''},${sale.amount || 0}\n`;
-      });
-      const fileUri = FileSystem.documentDirectory + "sales_report.csv";
-      await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
-      await Sharing.shareAsync(fileUri);
-    } catch (error) {
-      Alert.alert("Error", "Failed to export CSV");
-    }
-  };
+  // const exportCSV = async () => {
+  //   try {
+  //     let csv = "Invoice,Customer,Warehouse,Amount\n";
+  //     filteredSales.forEach((sale) => {
+  //       csv += `${sale.invoice || sale.invoiceId},${sale.customerName || sale.customerId?.name || ''},${sale.warehouse || ''},${sale.amount || 0}\n`;
+  //     });
+  //     const fileUri = FileSystem.documentDirectory + "sales_report.csv";
+  //     await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
+  //     await Sharing.shareAsync(fileUri);
+  //   } catch (error) {
+  //     Alert.alert("Error", "Failed to export CSV");
+  //   }
+  // };
 
-  const exportPDF = async () => {
-    try {
-      const html = `
-        <h1>Sales Report</h1>
-        <table border="1" cellspacing="0" cellpadding="5">
-          <tr>
-            <th>Invoice</th>
-            <th>Customer</th>
-            <th>Warehouse</th>
-            <th>Amount</th>
-          </tr>
-          ${filteredSales.map((sale) => `
-            <tr>
-              <td>${sale.invoice || sale.invoiceId}</td>
-              <td>${sale.customerName || sale.customerId?.name || ''}</td>
-              <td>${sale.warehouse || ''}</td>
-              <td>৳${sale.amount?.toLocaleString() || 0}</td>
-            </tr>
-          `).join('')}
-        </table>
-      `;
-      const { uri } = await Print.printToFileAsync({ html });
-      await Sharing.shareAsync(uri);
-    } catch (error) {
-      Alert.alert("Error", "Failed to export PDF");
-    }
-  };
+  // const exportPDF = async () => {
+  //   try {
+  //     const html = `
+  //       <h1>Sales Report</h1>
+  //       <table border="1" cellspacing="0" cellpadding="5">
+  //         <tr>
+  //           <th>Invoice</th>
+  //           <th>Customer</th>
+  //           <th>Warehouse</th>
+  //           <th>Amount</th>
+  //         </tr>
+  //         ${filteredSales.map((sale) => `
+  //           <tr>
+  //             <td>${sale.invoice || sale.invoiceId}</td>
+  //             <td>${sale.customerName || sale.customerId?.name || ''}</td>
+  //             <td>${sale.warehouse || ''}</td>
+  //             <td>৳${sale.amount?.toLocaleString() || 0}</td>
+  //           </tr>
+  //         `).join('')}
+  //       </table>
+  //     `;
+  //     const { uri } = await Print.printToFileAsync({ html });
+  //     await Sharing.shareAsync(uri);
+  //   } catch (error) {
+  //     Alert.alert("Error", "Failed to export PDF");
+  //   }
+  // };
 
   const navigation = useNavigation();
   useLayoutEffect(() => {
@@ -213,12 +214,13 @@ const SalesReport = () => {
           </TouchableOpacity>
         ),
         headerRight: () => (
-          <TouchableOpacity
-            onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-            className="me-4"
-          >
-            <Ionicons name="print-outline" size={28} color="white" />
-          </TouchableOpacity>
+          // <TouchableOpacity
+          //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+          //   className="me-4"
+          // >
+          //   <Ionicons name="print-outline" size={28} color="white" />
+          // </TouchableOpacity>
+          <PrintButton filteredData={filteredSales} title="Sales Report" />
         ),
       });
     }, [navigation]);

@@ -7,15 +7,12 @@ import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Alert,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -60,11 +57,8 @@ const CashDepositDetails = () => {
     type: "deposit",
     status: "complete",
   });
-
   console.log("FD", formData);
-
   console.log(data);
-
   useEffect(() => {
     if (data && isSuccess) {
       setFormData((prev) => ({

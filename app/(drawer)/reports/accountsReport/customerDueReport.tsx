@@ -9,6 +9,7 @@ import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 import { StatusBar } from "expo-status-bar";
+import PrintButton from "../PrintButton";
 
 // Logged-in user example
 const currentUser = {
@@ -89,7 +90,7 @@ export default function CashInReport() {
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
   // const type = userInfo?.type
-  console.log(type)
+  // console.log(type)
 
   
 //   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
@@ -155,12 +156,13 @@ console.log("CashInData:", cashInData);
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
+        // <TouchableOpacity
+        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+        //   className="me-4"
+        // >
+        //   <Ionicons name="print-outline" size={28} color="white" />
+        // </TouchableOpacity>
+        <PrintButton filteredData={cashInData || []} title="Customer Due Report" />
       ),
     });
   }, [navigation]);

@@ -10,6 +10,7 @@ import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 import { ScrollView } from "react-native-gesture-handler";
     import { StatusBar } from "expo-status-bar";
+    import PrintButton from "../PrintButton";
 
 
 // Logged-in user example
@@ -102,12 +103,13 @@ console.log("CashInData:", cashInData);
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
+        // <TouchableOpacity
+        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+        //   className="me-4"
+        // >
+        //   <Ionicons name="print-outline" size={28} color="white" />
+        // </TouchableOpacity>
+        <PrintButton filteredData={cashInData} title="Current Stock Report" />
       ),
     });
   }, [navigation]);

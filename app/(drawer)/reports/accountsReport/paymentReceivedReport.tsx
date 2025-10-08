@@ -8,7 +8,8 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
-    import { StatusBar } from "expo-status-bar";
+  import { StatusBar } from "expo-status-bar";
+  import PrintButton from "../PrintButton";
 
 
 // Logged-in user example
@@ -32,6 +33,7 @@ const received = [
 export default function PaymentReceivedReport() {
   const navigation = useNavigation();
   const { data: userInfo } = { data: currentUser };
+   const [currentDay, setCurrentDay] = useState(new Date());
  
   // const type = userInfo?.type
   const { data: warehousesData } = useWarehousesQuery();
@@ -45,6 +47,15 @@ export default function PaymentReceivedReport() {
   const [showEndPicker, setShowEndPicker] = useState(false);
 
 const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+
+const { data, isSuccess, error, isError } =
+    useTransactionListQuery({
+      warehouse: userInfo?.warehouse,
+      type: "paymentReceived",
+      date: format(currentDay, "MM-dd-yyyy"),
+      forceRefetch: true,
+    });
+    console.log("data", data, isSuccess, error, isError);
 
 // replace this
 // const selectedDateString = formatDate(selectedDate);
@@ -101,12 +112,13 @@ console.log("CashInData:", cashInData);
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
+        // <TouchableOpacity
+        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+        //   className="me-4"
+        // >
+        //   <Ionicons name="print-outline" size={28} color="white" />
+        // </TouchableOpacity>
+        <PrintButton filteredData={filteredData} title="Payment Received Report" /> 
       ),
     });
   }, [navigation]);

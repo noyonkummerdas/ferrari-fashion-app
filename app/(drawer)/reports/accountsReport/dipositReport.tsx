@@ -1,6 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { useWarehouseQuery, useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,6 +10,7 @@ import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 import { ScrollView } from "react-native-gesture-handler";
  import { StatusBar } from "expo-status-bar";
+ import PrintButton from "../PrintButton";
 
 
 // Logged-in user example
@@ -52,7 +53,11 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 const selectedDateString = formatDateString(fromDate);
 
 const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
+// console.log("CashInData:", cashInData);
+ const { data, isSuccess } = useWarehouseQuery(
+    userInfo?.warehouse,
+  );
+  console.log("Single Warehouse Data:", data);
 
  useEffect(()=>{
     refetch()
@@ -70,6 +75,7 @@ console.log("CashInData:", cashInData);
       }
     }
   }, [warehousesData]);
+
 
   // Fetch CashIn data from backend (replace with your API)
   useEffect(() => {
@@ -102,12 +108,13 @@ console.log("CashInData:", cashInData);
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
+        // <TouchableOpacity
+        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+        //   className="me-4"
+        // >
+        //   <Ionicons name="print-outline" size={28} color="white" />
+        // </TouchableOpacity>
+        <PrintButton filteredData={filteredData} title="Cash Deposit Report" />
       ),
     });
   }, [navigation]);
