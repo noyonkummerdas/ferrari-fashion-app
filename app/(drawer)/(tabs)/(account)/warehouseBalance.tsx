@@ -43,7 +43,7 @@ const WarehouserBalance = () => {
     _id: id,
     date: format(currentDay, "yyyy-MM-dd"), // ✅ string format
   });
-
+  
   const { data: warehouseData } = useWarehousesQuery();
 
   useEffect(() => {

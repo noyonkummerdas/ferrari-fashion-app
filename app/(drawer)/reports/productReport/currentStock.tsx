@@ -109,14 +109,14 @@ console.log("CashInData:", cashInData);
         // >
         //   <Ionicons name="print-outline" size={28} color="white" />
         // </TouchableOpacity>
-        <PrintButton filteredData={cashInData} title="Current Stock Report" />
+        <PrintButton filteredData={currentStock} title="Current Stock Report" />
       ),
     });
-  }, [navigation]);
+  }, [navigation, currentStock]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
+  const filteredData = currentStock
+  ? currentStock.filter((item) => {
       const itemDate = new Date(item.date);
       const matchesDate =
         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
