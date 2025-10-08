@@ -124,6 +124,102 @@ interface Transaction {
       name: "Frog",
       balance: 100000
     },
+    {
+      name: "Hudie ",
+      balance: 150000
+    },
+    {
+      name: "T- Shirt",
+      balance: 128000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
   ]
 const SalesReport = () => {
   const [fromDate, setFromDate] = useState<Date>(new Date());
@@ -220,10 +316,10 @@ const SalesReport = () => {
           // >
           //   <Ionicons name="print-outline" size={28} color="white" />
           // </TouchableOpacity>
-          <PrintButton filteredData={filteredSales} title="Sales Report" />
+          <PrintButton filteredData={saleProductDetails} title="Sales Report" />
         ),
       });
-    }, [navigation]);
+    }, [navigation, saleProductDetails]);
 
 
 
