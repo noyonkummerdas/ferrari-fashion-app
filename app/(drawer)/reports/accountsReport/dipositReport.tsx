@@ -114,10 +114,10 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
         // >
         //   <Ionicons name="print-outline" size={28} color="white" />
         // </TouchableOpacity>
-        <PrintButton filteredData={filteredData} title="Cash Deposit Report" />
+        <PrintButton filteredData={deposit} title="Cash Deposit Report" />
       ),
     });
-  }, [navigation]);
+  }, [navigation, deposit]);
 
   // Filter data by role, warehouse, and date
   const filteredData = cashInData

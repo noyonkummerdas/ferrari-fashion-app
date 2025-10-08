@@ -162,14 +162,14 @@ console.log("CashInData:", cashInData);
         // >
         //   <Ionicons name="print-outline" size={28} color="white" />
         // </TouchableOpacity>
-        <PrintButton filteredData={cashInData || []} title="Customer Due Report" />
+        <PrintButton filteredData={customers} title="Customer Due Report" />
       ),
     });
-  }, [navigation]);
+  }, [navigation, customers]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
+  const filteredData = customers
+  ? customers.filter((item) => {
       const itemDate = new Date(item.date);
       const matchesDate =
         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&

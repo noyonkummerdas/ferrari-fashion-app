@@ -108,14 +108,14 @@ console.log("CashInData:", cashInData);
         // >
         //   <Ionicons name="print-outline" size={28} color="white" />
         // </TouchableOpacity>
-        <PrintButton filteredData={filteredData} title="Payment Received Report" /> 
+        <PrintButton filteredData={received} title="Payment Received Report" /> 
       ),
     });
-  }, [navigation]);
+  }, [navigation, received]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
+  const filteredData = received
+  ? received.filter((item) => {
       const itemDate = new Date(item.date);
       const matchesDate =
         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&

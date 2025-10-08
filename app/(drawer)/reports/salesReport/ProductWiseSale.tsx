@@ -154,10 +154,10 @@ const ProductWiseSale = () => {
           // >
           //   <Ionicons name="print-outline" size={28} color="white" />
           // </TouchableOpacity>
-          <PrintButton filteredData={filteredSales} title="Product Wise Sale Report" />
+          <PrintButton filteredData={saleProductDetails} title="Product Wise Sale Report" />
         ),
       });
-    }, [navigation]);
+    }, [navigation, saleProductDetails]);
 
   return (
     <>

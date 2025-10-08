@@ -139,10 +139,10 @@ console.log("CashInData:", cashInData);
         // >
         //   <Ionicons name="print-outline" size={28} color="white" />
         // </TouchableOpacity>
-        <PrintButton filteredData={cashInData} title="Stock In Report" />
+        <PrintButton filteredData={stockInReport} title="Stock In Report" />
       ),
     });
-  }, [navigation]);
+  }, [navigation, stockInReport]);
 
   // Filter data by role, warehouse, and date
   const filteredData = cashInData
