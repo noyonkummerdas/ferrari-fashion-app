@@ -107,14 +107,14 @@ console.log("CashOutData:", cashOutData);
       ),
       headerRight: () => (
        
-        <PrintButton filteredData={filteredData} title="Cash Out Report" />
+        <PrintButton filteredData={cashOut} title="Cash Out Report" />
       ),
     });
-  }, [navigation]);
+  }, [navigation, cashOut]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashOutData
-  ? cashOutData.filter((item) => {
+  const filteredData = cashOut
+  ? cashOut.filter((item) => {
       const itemDate = new Date(item.date);
       const matchesDate =
         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
