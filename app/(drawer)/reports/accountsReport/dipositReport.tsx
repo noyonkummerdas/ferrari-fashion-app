@@ -1,6 +1,6 @@
 import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { useWarehouseQuery, useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { useWarehouseQuery, useWarehousesQuery} from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
 import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,13 +11,15 @@ import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/
 import { ScrollView } from "react-native-gesture-handler";
  import { StatusBar } from "expo-status-bar";
  import PrintButton from "../PrintButton";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 
 // Logged-in user example
-const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
+// const user = {
+//   role: "admin", // "admin" or "user"
+//   warehouse: "w1",
+// };
+
 
 const deposit = [
     {id: '1', source: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
@@ -32,66 +34,47 @@ const deposit = [
 ];
 
 export default function CashInReport() {
+
   const navigation = useNavigation();
-  const { data: userInfo } = { data: currentUser };
-  
+  // const { data: userInfo } = { data: user };
+  // console.log("UserInfo:", userInfo);
+  const {userInfo: user} = useGlobalContext()
+  console.log("UserContext:", user);
     // const type = userInfo?.type
   const { data: warehousesData } = useWarehousesQuery();
-  const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+  console.log("WarehousesData:", warehousesData);
 
-  
-//   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
+  const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [currentDay, setCurrentDay] = useState(new Date());
 
-const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+  const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
-// replace this
-// const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
-
 const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-// console.log("CashInData:", cashInData);
  const { data, isSuccess } = useWarehouseQuery(
-    userInfo?.warehouse,
+    user?.warehouse,
   );
-
+  console.log("UserWarehouse:", data);
  useEffect(()=>{
     refetch()
  },[cashInData])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
+    user.role === "user" ? user.warehouse : null
   );
   // Set warehouses after fetch
   useEffect(() => {
-    if (warehousesData) {
+    if (user?.role === "user") {
       setWarehouses(warehousesData);
-      if (currentUser.role === "admin" && warehousesData.length > 0) {
-        setSelectedWarehouse(warehousesData[0]._id);
-      }
+    } else if (user?.role === "admin") {
+      setSelectedWarehouse(warehousesData[0]._id);  
     }
-  }, [warehousesData]);
-
-
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
+  }, [warehousesData, user]);
+      // console.log("CashDeposit:", cashDeposit);
 
   // Header with print button
   useLayoutEffect(() => {
@@ -127,11 +110,11 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
         (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
 
       const matchesWarehouse =
-        currentUser.role === "admin"
+        user.role === "admin"
           ? selectedWarehouse
             ? item.warehouse === selectedWarehouse
             : true
-          : item.warehouse === currentUser.warehouse;
+          : item.warehouse === user.warehouse;
 
       return matchesDate && matchesWarehouse;
     })
@@ -142,7 +125,7 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {currentUser.role === "admin" && (
+        {user.role === "admin" && (
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"

@@ -138,8 +138,8 @@ const AddUser = () => {
         contentContainerStyle={{ flexGrow: 1, paddingBottom: 360 }}
         automaticallyAdjustKeyboardInsets={Platform.OS === "ios"}
       >
-    
-      <StatusBar style="dark" />
+
+      <StatusBar style="light" />
       <View>
         
         <TouchableOpacity
