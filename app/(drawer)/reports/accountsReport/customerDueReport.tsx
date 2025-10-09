@@ -65,7 +65,7 @@ const customers = [
     lastPurchase: "2025-08-28",
   },
   {
-    id: "c5",
+    id: "c6",
     name: "Karim Enterprise",
     totalSales: 85000,
     invoices: 6,
@@ -74,7 +74,7 @@ const customers = [
     lastPurchase: "2025-08-28",
   },
   {
-    id: "c5",
+    id: "c7",
     name: "Karim Enterprise",
     totalSales: 85000,
     invoices: 6,

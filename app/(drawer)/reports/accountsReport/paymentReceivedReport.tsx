@@ -20,14 +20,14 @@ const currentUser = {
 const received = [
   { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
   { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+  { id: "r3", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+  { id: "r4", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+  { id: "r5", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+  { id: "r6", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+  { id: "r7", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+  { id: "r8", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+  { id: "r9", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+  { id: "r10", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
 ];
 
 export default function PaymentReceivedReport() {

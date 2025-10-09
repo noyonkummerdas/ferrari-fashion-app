@@ -218,16 +218,18 @@ console.log("CashOutData:", cashOutData);
 
         <ScrollView>
                 <View>
-  {cashOut?.map((items) => (
-    <View  className="bg-black-200 p-4 rounded-xl mb-3 "
-    key={items.id}>
-      <Text className="text-white">{items.source}</Text>
-      <View className="flex-row justify-between mt-2 items-center">
-        <Text className="text-gray-400">{items.date}</Text>
-        <Text className="text-primary font-bold">{items.amount.toLocaleString()} BDT</Text>
-      </View>
+  {cashOut.map((item, index) => (
+  <View key={index} className="bg-black-200 p-4 rounded-xl mb-3">
+    <Text className="text-white font-semibold">{item.source}</Text>
+    <View className="flex-row justify-between mt-2">
+      <Text className="text-gray-400">{item.date}</Text>
+      <Text className="text-gray-200 font-bold">
+        <Text className="text-primary">{item.amount.toLocaleString()}</Text>
+        <Text> BDT</Text>
+      </Text>
     </View>
-  ))}
+  </View>
+))}
 </View>
 </ScrollView>
 </View>

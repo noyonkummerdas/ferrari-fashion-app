@@ -23,12 +23,12 @@ const deposit = [
     {id: '1', source: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
     {id: '3', source: 'Hasib', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '3', source: 'Naimul', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '3', source: 'Faruk', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '3', source: 'Borkot', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '3', source: 'Sofik', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '3', source: 'Nirob', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '3', source: 'Sahon', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
+    {id: '4', source: 'Naimul', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
+    {id: '5', source: 'Faruk', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
+    {id: '6', source: 'Borkot', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
+    {id: '7', source: 'Sofik', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
+    {id: '8', source: 'Nirob', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
+    {id: '9', source: 'Sahon', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
 ];
 
 export default function CashInReport() {
@@ -57,7 +57,6 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
  const { data, isSuccess } = useWarehouseQuery(
     userInfo?.warehouse,
   );
-  console.log("Single Warehouse Data:", data);
 
  useEffect(()=>{
     refetch()
@@ -164,7 +163,6 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
@@ -211,6 +209,7 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
         </View>
       </View>
 
+
       {/* List */}
       <FlatList
         data={filteredData}
@@ -229,12 +228,15 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
 
       <ScrollView>
                 <View>
-                  {deposit?.map((items) => (
-                    <View className="bg-black-200 p-4 rounded-xl mb-3" key={items.id}>
-                      <Text className="text-white">{items.source}</Text>
+                  {deposit?.map((item,index) => (
+                    <View key={item.id} className="bg-black-200 p-4 rounded-xl mb-3">
+                      <Text className="text-white">{item.source}</Text>
                       <View className="flex-row justify-between mt-2 items-center">
-                        <Text className="text-gray-400">{items.date}</Text>
-                        <Text className="text-gray-200 font-bold"><Text className="text-primary">{items.amount.toLocaleString()}</Text> BDT</Text>
+                        <Text className="text-gray-400">{item.date}</Text>
+                        <Text className="text-gray-200 font-bold">
+                        <Text className="text-primary">{item.amount.toLocaleString()} </Text>
+                        BDT
+                      </Text>
                       </View>
                     </View>
                   ))}
