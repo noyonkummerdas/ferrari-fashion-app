@@ -30,6 +30,7 @@ const StockIndex = () => {
       forceRefetch: true,
     });
 
+    // console.log("User Info in Stock Index:", data);
   useEffect(() => {
     if (searchQuery) {
       refetch();
@@ -63,7 +64,7 @@ const StockIndex = () => {
       headerTitleAlign: "center",
       headerShown: true,
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
-      headerRight: () => {!userInfo?.permissions?.users?.create &&
+      headerRight: () => (
         <View className="me-4">
           <TouchableOpacity
             onPress={() => router.push("/(drawer)/(tabs)/(stock)/add-stock")}
@@ -73,7 +74,7 @@ const StockIndex = () => {
             <Text className="text-gray-200 text-lg" >Add</Text>
           </TouchableOpacity>
         </View>
-      },
+      )
     });
   }, [navigation, userInfo]);
 

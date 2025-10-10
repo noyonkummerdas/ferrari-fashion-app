@@ -233,8 +233,7 @@ const SalesReport = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   // const [searchQuery, setSearchQuery] = useState("");
   // const colorScheme = useColorScheme(); 
-     const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(userInfo?.warehouse : null
-      );
+     const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(userInfo?.warehouse ?? null);
       const { data: warehousesData } = useWarehousesQuery();
       const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
@@ -244,6 +243,7 @@ const SalesReport = () => {
     isDate: "month",
      forceRefetch: true,
   });
+  console.log("SalesData:", salesData);
 
   useEffect(() => {
      refetch()
@@ -292,7 +292,7 @@ const SalesReport = () => {
      <StatusBar style="light" backgroundColor="white" />
       <View className='bg-dark flex-1 p-2'>
             
-            {userInfo?.role === "admin" && warehouses?.length > 0 && (
+            {/* {userInfo?.role === "admin" && warehouses?.length > 0 && ( */}
               <View className='flex-row items-center justify-evenly'>
               <View>
               <Dropdown
@@ -320,7 +320,7 @@ const SalesReport = () => {
               </TouchableOpacity>
             </View>
           </View>
-        )}
+        {/* )} */}
 
         {/* Date Pickers */}
 
@@ -356,10 +356,10 @@ const SalesReport = () => {
             <View className="mt-4 p-4 bg-black-200 rounded-xl ">
             {/* <Text className='text-gray-300 font-bold text-lg'>Product based sale</Text> */}
             {
-              saleProductDetails.map((product, idx) => (
+              salesData?.map((product, idx) => (
                 <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-                  <Text className="text-gray-200">{product.name}</Text>
-                  <Text className="text-gray-200"><Text className='text-primary'>{product.balance?.toLocaleString()}</Text> BDT</Text>
+                  <Text className="text-gray-200">{product.customerName}</Text>
+                  <Text className="text-gray-200"><Text className='text-primary'>{product.amount?.toLocaleString()}</Text> BDT</Text>
                 </View>
               ))}
             </View>

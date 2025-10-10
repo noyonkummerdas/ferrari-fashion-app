@@ -10,29 +10,31 @@ import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
   import { StatusBar } from "expo-status-bar";
   import PrintButton from "../PrintButton";
+import { useGlobalContext } from "@/context/GlobalProvider";
 
 
 // Logged-in user example
-const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
-const received = [
-  { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r3", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r4", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r5", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r6", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r7", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r8", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-  { id: "r9", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-  { id: "r10", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-];
+// const currentUser = {
+//   role: "admin", // "admin" or "user"
+//   warehouse: "w1",
+// };
+// const received = [
+//   { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+//   { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+//   { id: "r3", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+//   { id: "r4", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+//   { id: "r5", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+//   { id: "r6", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+//   { id: "r7", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+//   { id: "r8", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+//   { id: "r9", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
+//   { id: "r10", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
+// ];
 
 export default function PaymentReceivedReport() {
   const navigation = useNavigation();
-  const { data: userInfo } = { data: currentUser };
+  // const { data: userInfo } = { data: currentUser };
+ const {userInfo: currentUser} = useGlobalContext()
  
   // const type = userInfo?.type
   const { data: warehousesData } = useWarehousesQuery();
@@ -44,6 +46,7 @@ export default function PaymentReceivedReport() {
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date()); 
 
 const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
@@ -51,12 +54,21 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
 
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
+// const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
+// console.log("CashInData:", cashInData);
+  const { data  : paymentReceivedData, isSuccess, isLoading, error, isError, refetch } =
+    useTransactionListQuery({
+      warehouse: currentUser?.warehouse,
+      type: "paymentReceived",
+      date: format(currentDate, "MM-dd-yyyy"),
+      forceRefetch: true,
+    });
+    console.log("PaymentReceivedData:", paymentReceivedData, isSuccess, isError);
+
 
  useEffect(()=>{
     refetch()
- },[cashInData])
+ },[paymentReceivedData, currentDate])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
     currentUser.role === "user" ? currentUser.warehouse : null
@@ -71,23 +83,6 @@ console.log("CashInData:", cashInData);
     }
   }, [warehousesData]);
 
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
-
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -101,36 +96,17 @@ console.log("CashInData:", cashInData);
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
-        // <TouchableOpacity
-        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-        //   className="me-4"
-        // >
-        //   <Ionicons name="print-outline" size={28} color="white" />
-        // </TouchableOpacity>
-        <PrintButton filteredData={received} title="Payment Received Report" /> 
-      ),
+      // headerRight: () => (
+      //   <TouchableOpacity
+      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+      //     className="me-4"
+      //   >
+      //     <Ionicons name="print-outline" size={28} color="white" />
+      //   </TouchableOpacity>
+      //   <PrintButton filteredData={received} title="Payment Received Report" /> 
+      // ),
     });
-  }, [navigation, received]);
-
-  // Filter data by role, warehouse, and date
-  const filteredData = received
-  ? received.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
-
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
+  }, [navigation])
 
   return (
     <>
@@ -138,7 +114,7 @@ console.log("CashInData:", cashInData);
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {currentUser.role === "admin" && (
+        
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -151,7 +127,6 @@ console.log("CashInData:", cashInData);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-        )}
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
@@ -196,39 +171,81 @@ console.log("CashInData:", cashInData);
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total payment Received</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+          {/* <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text> */}
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
+            {/* {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
           </Text>
         </View>
       </View>
 
       {/* List */}
       <FlatList
-        data={filteredData}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item.source}</Text>
-            <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400">{item.date}</Text>
-              <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text>
+          data={paymentReceivedData?.data || []}
+          keyExtractor={(item) => item._id?.toString()}
+          renderItem={({ item }) => (
+            <View className="bg-black-200 p-4 rounded-xl mb-3">
+              <Text className="text-white font-semibold">{item?.customerId?.name}</Text>
+              <View className="flex-row justify-between mt-2">
+                <Text className="text-gray-400">{item?.date}</Text>
+                <Text className="text-green-400 font-bold">+ {item?.amount} BDT</Text>
+              </View>
             </View>
-          </View>
-        )}
-      />
+          )}
+        />
+
+      {/* {paymentReceivedData?.length > 0 ? (
+              paymentReceivedData?.map((item) => (
+                <View key={item._id} className="mt-4 mx-4">
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.push({
+                        pathname: "/paymentReceivedDetails",
+                        params: { _id: item?._id },
+                      })
+                    }
+                    className="flex-row justify-between bg-black-200 rounded-xl p-4 items-center"
+                  >
+                    <View className="flex flex-col items-start">
+                      <Text className="text-lg font-medium text-primary">
+                        {item.customerId?.name}
+                      </Text>
+                      <Text className="text-sm text-gray-200">
+                        {item?.date && format(new Date(item?.date), "dd-MM-yyyy")}
+                      </Text>
+                    </View>
+                    <View>
+                      <Text className="text-sm text-primary capitalize">
+                        {item.type}
+                      </Text>
+                      <Text className="text-lg text-primary">
+                        ৳{item.amount?.toLocaleString()}{" "}
+                        <Text className="text-white">BDT</Text>
+                      </Text>
+                    </View>
+                  </TouchableOpacity>
+                </View>
+              ))
+            ) : (
+              <View className="flex-1 h-96 w-full justify-center items-center mt-10">
+                <Ionicons name="save-outline" size={60} color="gray" />
+                <Text className="text-primary text-lg mt-4">No data found</Text>
+                <Text className="text-white text-sm">
+                  Please select a different date
+                </Text>
+              </View>
+            )} */}
 
        <FlatList
-              data={received}
+              data={paymentReceivedData}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View className="bg-black-200 p-4 rounded-xl mb-3">
-                  <Text className="text-white font-semibold">{item.customer}</Text>
+                  <Text className="text-white font-semibold">{item?.customerId?.name}</Text>
                   <View className="flex-row justify-between mt-2">
-                    <Text className="text-gray-400">{item.date}</Text>
+                    <Text className="text-gray-400">{item?.date}</Text>
                     <Text className="text-gray-200"><Text className="text-primary">{item.amount}</Text> BDT</Text>
                   </View>
                 </View>

@@ -10,6 +10,9 @@ import { useNavigation, router } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
     import { StatusBar } from "expo-status-bar";
 import PrintButton from "../PrintButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { useProductsQuery } from "@/store/api/productApi";
 
 
 // Logged-in user example
@@ -75,15 +78,27 @@ export default function CashInReport() {
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+   const [searchQuery, setSearchQuery] = useState("");
 
 const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
 // replace this
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
+const { data: productData } =
+    useProductsQuery({
+      q: searchQuery || "all",
+      forceRefetch: true,
+    });
+    console.log("User Info in Stock Index:", productData);
+
 
 const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
 console.log("CashInData:", cashInData);
+ const { stockItem: stockIn, error, success, successMessage } = useSelector(
+    (state: RootState) => state.stock,
+  );
+  console.log("Stock In Data from Redux:", stockIn);
 
  useEffect(()=>{
     refetch()
@@ -102,22 +117,7 @@ console.log("CashInData:", cashInData);
     }
   }, [warehousesData]);
 
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
+  // Fetch CashIn data from backend
 
   // Header with print button
   useLayoutEffect(() => {
@@ -145,23 +145,7 @@ console.log("CashInData:", cashInData);
   }, [navigation, stockInReport]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
 
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
-
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
 
   return (
     <>
@@ -227,7 +211,7 @@ console.log("CashInData:", cashInData);
       <View className=" mb-4">
         <View className="bg-black-200 p-4 rounded-2xl ">
           <Text className="text-zinc-300 text-sm">Total Stock In</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+          <Text className="text-yellow-400 text-xl font-bold">{stockIn.length}</Text>
         </View>
         {/* <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
@@ -239,7 +223,7 @@ console.log("CashInData:", cashInData);
 
       {/* List */}
       <FlatList
-        data={filteredData}
+        data={stockIn || []}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
@@ -253,9 +237,9 @@ console.log("CashInData:", cashInData);
       />
       <View>
         {
-           stockInReport.map((data)=>(
+           cashInData.map((data)=>(
             <View className="bg-black-200 p-4 rounded-lg mb-2">
-              <Text className="text-white text-lg">Name : {data.name}</Text>
+              <Text className="text-white text-lg">Name : {data.product}</Text>
               <View className="flex-row justify-between">
                 <Text className="text-white ">Date : {data.date}</Text>
               <Text className="text-white">Stock IN : <Text className="text-primary">{data.stock}</Text></Text>
@@ -263,6 +247,45 @@ console.log("CashInData:", cashInData);
             </View>
            ))
         }
+
+        {/* {
+          stockIn && stockIn.length > 0 && (
+            stockIn.map((data)=>(
+              <View className="bg-black-200 p-4 rounded-lg mb-2">
+                <Text className="text-white text-lg">Name : {data.product}</Text>
+                <View className="flex-row justify-between">
+                  <Text className="text-white ">Date : {data.date}</Text>
+                <Text className="text-white">Stock IN : <Text className="text-primary">{data.stock}</Text></Text>
+                </View>
+              </View>
+            ))
+          )
+        } */}
+        {/* {
+          stockIn && (
+            <View className="bg-black-200 p-4 rounded-lg mb-2">
+    <Text className="text-white text-lg">Name : {stockIn.product}</Text>
+    <View className="flex-row justify-between">
+      <Text className="text-white">Date : {stockIn.date}</Text>
+      <Text className="text-white">
+        Stock IN : <Text className="text-primary">{stockIn.openingStock}</Text>
+      </Text>
+    </View>
+  </View>
+          )
+        } */}
+        {/* {stockIn.length > 0 && (
+                    data?.stock.map((item) => (
+                      <View key={item._id} className="flex flex-row justify-between items-center">
+                        <Text className="text-white text-lg">{item.warehouse.name}</Text>
+                        <Text className="text-white text-lg">{item.currentStock}</Text>
+                      </View>
+                    ))
+                  )} */}
+
+            
+
+              
       </View>
     </View>
     </>

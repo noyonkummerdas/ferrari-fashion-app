@@ -21,6 +21,7 @@ const StockDetails = () => {
   const { stockItem, isLoading, error, success, successMessage } = useSelector(
     (state: RootState) => state.stock,
   );
+  // console.log("Stock Item from Redux:", stockItem);
 
 
   const {

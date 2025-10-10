@@ -39,7 +39,7 @@ export default function CashInReport() {
   // const { data: userInfo } = { data: user };
   // console.log("UserInfo:", userInfo);
   const {userInfo: user} = useGlobalContext()
-  console.log("UserContext:", user);
+  // console.log("UserContext:", user);
     // const type = userInfo?.type
   const { data: warehousesData } = useWarehousesQuery();
   console.log("WarehousesData:", warehousesData);
@@ -54,14 +54,23 @@ export default function CashInReport() {
   const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
 const selectedDateString = formatDateString(fromDate);
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
+const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "all", type: "payment", date: selectedDateString })
  const { data, isSuccess } = useWarehouseQuery(
     user?.warehouse,
   );
-  console.log("UserWarehouse:", data);
+   const { data :cashDeposit, isSuccess: cashSuccess, isLoading: cashLoading, error: cashError, isError: cashIsError, refetch: cashRefetch } =
+      useTransactionListQuery({
+        warehouse: user?.warehouse,
+        type: "deposit",
+        date: format(currentDay, "MM-dd-yyyy"),
+        forceRefetch: true,
+      });
+      console.log("CashDepositData:", cashDeposit);
+  
+  // console.log("UserWarehouse:", data);
  useEffect(()=>{
     refetch()
- },[cashInData])
+ },[cashDeposit])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
     user.role === "user" ? user.warehouse : null
@@ -96,36 +105,20 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
         // >
         //   <Ionicons name="print-outline" size={28} color="white" />
         // </TouchableOpacity>
-        <PrintButton filteredData={deposit} title="Cash Deposit Report" />
+        <PrintButton filteredData={cashDeposit} title="Cash Deposit Report" />
       ),
     });
-  }, [navigation, deposit]);
+  }, [navigation,cashDeposit]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-
-      const matchesWarehouse =
-        user.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === user.warehouse;
-
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
+ 
 
   return (
     <> <StatusBar style="light" backgroundColor="white" />
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {user.role === "admin" && (
+       
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -138,7 +131,6 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-        )}
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
@@ -182,12 +174,12 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Cash In</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+          {/* <Text className="text-yellow-400 text-xl font-bold">{cashDeposit.length}</Text> */}
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
+            {/* {cashDeposit.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
           </Text>
         </View>
       </View>
@@ -195,7 +187,7 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
 
       {/* List */}
       <FlatList
-        data={filteredData}
+        data={cashDeposit}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
@@ -209,9 +201,9 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
       />
 
 
-      <ScrollView>
+      {/* <ScrollView>
                 <View>
-                  {deposit?.map((item,index) => (
+                  {cashDeposit?.map((item,index) => (
                     <View key={item.id} className="bg-black-200 p-4 rounded-xl mb-3">
                       <Text className="text-white">{item.source}</Text>
                       <View className="flex-row justify-between mt-2 items-center">
@@ -224,7 +216,7 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
                     </View>
                   ))}
                 </View>
-      </ScrollView>
+      </ScrollView> */}
     </View>
     </>
   );

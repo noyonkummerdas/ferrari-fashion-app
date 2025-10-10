@@ -228,9 +228,11 @@ const PruchasesDetails = () => {
           {data?.poId && (
             <View className="mb-4">
               <Text className="text-gray-300 text-base mb-2">Invoice Reference</Text>
-              <Text className="text-white text-base bg-gray-700 rounded-lg p-3 font-mono">
+              <Text className="text-white text-base bg-gray-700 rounded-lg p-3 font-mono mb-2">
                 {data?.poId}
               </Text>
+
+              <Text className="text-white text-base bg-gray-700 rounded-lg p-3 font-mono">{data?.invoiceId}</Text>
             </View>
           )}
         </View>

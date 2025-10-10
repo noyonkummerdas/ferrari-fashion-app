@@ -47,7 +47,7 @@ const createPurchase = () => {
     // note: "",
     photo: null as string | null,
     supplierId: "",
-    invoice: "",
+    invoiceId: "",
     name: "",
     note: "",
     type: "payment",
@@ -55,7 +55,7 @@ const createPurchase = () => {
     warehouse: userInfo?.warehouse,
     status: "complete",
   });
-  // console.log('formdata : ', formData)
+  console.log('formdata : ', formData)
 
   const {
     data: supplierData,
@@ -157,7 +157,7 @@ const createPurchase = () => {
 
   //   try {
   //     const formData = {
-  //       invoice,
+  //       invoiceId,
   //       amount,
   //       supplierId,
   //       date: format(new Date(), "yyyy-MM-dd"), 
@@ -188,13 +188,13 @@ const createPurchase = () => {
   //   //           openingBalance: 0,
   //   //           currentBalance: 0,
   //   //           photo: "",
-  //   //           invoices: "",
+  //   //           invoiceIds: "",
   //   //           note: "",
   //   //           date: new Date(),
   //   //           type: "payment",
   //   //           status: "complete",
   //   //           supplierId: "",
-  //   //           invoice: "",
+  //   //           invoiceId: "",
   //   //         });
   //   //         router.back();
   //   //       },
@@ -206,7 +206,7 @@ const createPurchase = () => {
     try {
       const payload = {
         ...formData,
-        poId: formData.invoice, // যদি backend poId expect করে
+        poId: formData.invoiceId, // যদি backend poId expect করে
       };
       const response = await createPurchase(payload).unwrap();
       refetch();
@@ -393,8 +393,8 @@ const createPurchase = () => {
               <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-                value={formData.invoice.toString()}
-                onChangeText={(value) => handleInputChange("invoice", value)}
+                value={formData.invoiceId.toString()}
+                onChangeText={(value) => handleInputChange("invoiceId", value)}
                 placeholder="Enter invoice"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"

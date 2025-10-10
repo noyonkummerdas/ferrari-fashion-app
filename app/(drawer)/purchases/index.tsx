@@ -26,6 +26,7 @@ const PurchasesList = () => {
     isDate: "month",
      forceRefetch: true,
   });
+  console.log("Purchases Data:", data, isSuccess, isError);
 
   useEffect(() => {
     refetch();
