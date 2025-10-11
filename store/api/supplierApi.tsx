@@ -20,7 +20,7 @@ export const SupplierApi = createApi({
       providesTags: ["Supplier"],
     }),
     GetSupplierByInvoice: builder.query<string, any>({
-           query: (invoiceId) => `/supplier/invoice/${invoiceId}`,
+           query: ({invoiceId}) => `/supplier/invoice/${invoiceId}`,
             keepUnusedDataFor: 0,
        refetchOnMountOrArgChange: true,
        transformResponse: (response) => {

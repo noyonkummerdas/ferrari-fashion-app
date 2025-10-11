@@ -54,6 +54,8 @@ const Payment = () => {
     invoices: "",
     status: "complete",
   });
+ console.log("Supplire formData", formData);
+
 
   const {
     data: supplierData,
@@ -187,36 +189,6 @@ const Payment = () => {
     // );
   };
 
- const {
-     data: invoiceData,
-     isSuccess: invoiceSuccess,
-     isError: invoiceError,
-     refetch: invoiceRefetch
-   } = useGetSupplierByInvoiceQuery({
-     invoiceId: search, 
-     skip: !search
-   });
-   console.log('supplireInvoicedata', invoiceData);
-
-   console.log('')
-     useEffect(()=>{
-       invoiceRefetch()
-     }, [search])
-     
-     
-     useEffect(()=>{
-       console.log(invoiceData)
-       if(invoiceData){
-         if(search === ""){
-           handleInputChange("supplierId", "")
-         }else{
-           handleInputChange("supplierId", invoiceData?.supplierId)
-         }
-         console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
-       }else{
-         handleInputChange("supplierId", "")
-       }
-     }, [invoiceSuccess, invoiceData])
 
   const handlePhotoUpload = async () => {
     try {
@@ -308,7 +280,37 @@ const Payment = () => {
   const removePhoto = () => {
     setFormData((prev) => ({ ...prev, photo: null }));
   };
-
+  
+  const {
+      data: invoiceData,
+      isSuccess: invoiceSuccess,
+      isError: invoiceError,
+      refetch: invoiceRefetch
+    } = useGetSupplierByInvoiceQuery({
+      invoiceId: search, 
+      skip: !search
+    });
+    console.log('supplireInvoicedata', invoiceData, invoiceError, invoiceSuccess);
+ 
+    console.log('')
+      useEffect(()=>{
+        invoiceRefetch()
+      }, [search])
+      
+      
+      useEffect(()=>{
+        console.log(invoiceData)
+        if(invoiceData){
+          if(search === ""){
+            handleInputChange("supplierId", "")
+          }else{
+            handleInputChange("supplierId", invoiceData?.supplierId)
+          }
+          console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
+        }else{
+          handleInputChange("supplierId", "")
+        }
+      }, [invoiceSuccess, invoiceData])
   return (
     <>
         <KeyboardAvoidingView
