@@ -8,6 +8,7 @@ import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TouchableOpaci
 
 const CustomerDetails = () => {
   const { id } = useLocalSearchParams();
+  // console.log('customer id',id)
   const router = useRouter();
   const navigation = useNavigation();
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -16,11 +17,11 @@ const CustomerDetails = () => {
 
   const { data, refetch } = useGetCustomerByIdQuery({
     id,
-    date: currentDate,
+    date: currentDate.toDateString(),
     isDate:'month',
     forceRefetch: true,
   });
-  console.log("customer data", data);
+  // console.log("customer data", data);
 
   useEffect(() => {
     refetch();

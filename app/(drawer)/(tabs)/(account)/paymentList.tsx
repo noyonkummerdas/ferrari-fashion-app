@@ -20,10 +20,10 @@ const PaymentList = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-  const type = userInfo?.type
   // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+    const [search, setSearch] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -86,7 +86,7 @@ const PaymentList = () => {
     year: currentDay.getFullYear(),
   };
 
-  const [search, setSearch] = useState("");
+
   const filteredList = paymentList.filter(
     (item) =>
       item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||

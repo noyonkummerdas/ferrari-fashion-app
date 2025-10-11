@@ -1,6 +1,6 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useGetSupplierByInvoiceQuery, useSuppliersQuery } from "@/store/api/supplierApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -34,6 +34,7 @@ const Payment = () => {
   const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
     q: q,
   });
+  const [search, setSearch] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -185,6 +186,37 @@ const Payment = () => {
     //   ],
     // );
   };
+
+ const {
+     data: invoiceData,
+     isSuccess: invoiceSuccess,
+     isError: invoiceError,
+     refetch: invoiceRefetch
+   } = useGetSupplierByInvoiceQuery({
+     invoiceId: search, 
+     skip: !search
+   });
+   console.log('supplireInvoicedata', invoiceData);
+
+   console.log('')
+     useEffect(()=>{
+       invoiceRefetch()
+     }, [search])
+     
+     
+     useEffect(()=>{
+       console.log(invoiceData)
+       if(invoiceData){
+         if(search === ""){
+           handleInputChange("supplierId", "")
+         }else{
+           handleInputChange("supplierId", invoiceData?.supplierId)
+         }
+         console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
+       }else{
+         handleInputChange("supplierId", "")
+       }
+     }, [invoiceSuccess, invoiceData])
 
   const handlePhotoUpload = async () => {
     try {
@@ -358,7 +390,10 @@ const Payment = () => {
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
                 value={formData.invoice.toString()}
-                onChangeText={(value) => handleInputChange("invoice", value)}
+                onChangeText={(value) => {
+                handleInputChange("invoice", value)
+                setSearch(value)
+              }}
                 placeholder="Enter invoice"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"

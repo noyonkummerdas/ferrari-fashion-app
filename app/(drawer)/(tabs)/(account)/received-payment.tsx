@@ -10,6 +10,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useGetCustomerByInvoiceQuery } from "@/store/api/customerApi";
 import {
   Alert,
   KeyboardAvoidingView,
@@ -26,6 +27,7 @@ const RecivedPayment = () => {
   const { userInfo } = useGlobalContext();
   const [createTransaction] = useAddTransactionMutation();
   const [q, setQ] = useState("all");
+  const [search, setSearch] = useState('')
   const { data, isSuccess, isLoading, refetch } = useCustomerListQuery({
     q: q,
   });
@@ -47,11 +49,13 @@ const RecivedPayment = () => {
   }, [data, isSuccess]);
 
   const router = useRouter();
+  const [showDatePicker, setShowDatePicker] = useState(false);
   const navigation = useNavigation();
 
   const [type, setType] = useState([{ label: "Select Customer", value: "" }]);
 
-  const [showDatePicker, setShowDatePicker] = useState(false);
+
+
 
   // Form state
   const [formData, setFormData] = useState({
@@ -110,6 +114,52 @@ const RecivedPayment = () => {
       }
     }
   };
+ const handleInputChange = (field: string, value: string) => {
+    if (field === "amount") {
+      // Convert string to number for numeric fields
+      const numValue = parseInt(value) || 0;
+      setFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+        currentBalance: customerData?.currentBalance
+          ? parseInt(customerData?.currentBalance) - numValue
+          : 0 - numValue,
+      }));
+    } else {
+      // Handle string fields normally
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    }
+  };
+
+const {
+    data: invoiceData,
+    isSuccess: invoiceSuccess,
+    isError: invoiceError,
+    refetch: invoiceRefetch
+  } = useGetCustomerByInvoiceQuery({
+    invoiceId: search, 
+    skip: !search
+  });
+  console.log('')
+  useEffect(()=>{
+    invoiceRefetch()
+  }, [search])
+  
+  
+  useEffect(()=>{
+    // console.log(invoiceData)
+    if(invoiceData){
+      if(search === ""){
+        handleInputChange("customerId", "")
+      }else{
+        handleInputChange("customerId", invoiceData?.customerId)
+      }
+      console.log('customer invoiceId ', invoiceData, invoiceError, invoiceSuccess)
+    }else{
+      handleInputChange("customerId", "")
+
+    }
+  }, [invoiceSuccess, invoiceData])
 
   // date formatting
   const today = new Date();
@@ -141,22 +191,7 @@ const RecivedPayment = () => {
     });
   }, [navigation]);
 
-  const handleInputChange = (field: string, value: string) => {
-    if (field === "amount") {
-      // Convert string to number for numeric fields
-      const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({
-        ...prev,
-        [field]: numValue,
-        currentBalance: customerData?.currentBalance
-          ? parseInt(customerData?.currentBalance) - numValue
-          : 0 - numValue,
-      }));
-    } else {
-      // Handle string fields normally
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    }
-  };
+ 
 
   console.log("formData", formData);
 
@@ -260,7 +295,10 @@ const RecivedPayment = () => {
             <TextInput
               className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
               value={formData.invoice}
-              onChangeText={(value) => handleInputChange("invoice", value)}
+              onChangeText={(value) => {
+                handleInputChange("invoice", value)
+                setSearch(value)
+              }}
               placeholder="Enter invoice"
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"

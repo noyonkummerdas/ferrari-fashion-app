@@ -6,87 +6,16 @@ import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router } from "expo-router";
+import { useNavigation, router, useLocalSearchParams } from "expo-router";
 import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
 import { StatusBar } from "expo-status-bar";
 import PrintButton from "../PrintButton";
-
-// Logged-in user example
-const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
-const customers = [
-
-
-  {
-    id: "c1",
-    name: "Rahim Store",
-    totalSales: 150000,
-    invoices: 12,
-    paid: 120000,
-    due: 30000,
-    lastPurchase: "2025-09-01",
-  },
-  {
-    id: "c2",
-    name: "Karim Enterprise",
-    totalSales: 85000,
-    invoices: 6,
-    paid: 85000,
-    due: 0,
-    lastPurchase: "2025-08-28",
-  },
-  {
-    id: "c3",
-    name: "Karim Enterprise",
-    totalSales: 85000,
-    invoices: 6,
-    paid: 85000,
-    due: 0,
-    lastPurchase: "2025-08-28",
-  },
-  {
-    id: "c4",
-    name: "Karim Enterprise",
-    totalSales: 85000,
-    invoices: 6,
-    paid: 85000,
-    due: 0,
-    lastPurchase: "2025-08-28",
-  },
-  {
-    id: "c5",
-    name: "Karim Enterprise",
-    totalSales: 85000,
-    invoices: 6,
-    paid: 85000,
-    due: 0,
-    lastPurchase: "2025-08-28",
-  },
-  {
-    id: "c6",
-    name: "Karim Enterprise",
-    totalSales: 85000,
-    invoices: 6,
-    paid: 85000,
-    due: 0,
-    lastPurchase: "2025-08-28",
-  },
-  {
-    id: "c7",
-    name: "Karim Enterprise",
-    totalSales: 85000,
-    invoices: 6,
-    paid: 85000,
-    due: 0,
-    lastPurchase: "2025-08-28",
-  },
-];
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
 
 export default function CashInReport() {
   const navigation = useNavigation();
-  const { data: userInfo } = { data: currentUser };
+  const {userInfo : currentUser} = useGlobalContext();
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
   // const type = userInfo?.type
@@ -95,9 +24,12 @@ export default function CashInReport() {
   
 //   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
   const [fromDate, setFromDate] = useState<Date>(new Date());
+    const { id } = useLocalSearchParams();
+    // console.log(id)
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+  const [currentDate, setCurrentDate] = useState(new Date());
 
 const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
@@ -105,12 +37,17 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
 
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
+ const { data : customerDue , refetch, isSuccess, isError } = useGetCustomerByIdQuery({
+    id,
+    date: currentDate.toDateString(),
+    isDate:'month',
+    forceRefetch: true,
+  });
+  // console.log("customer data", customerDue, isSuccess, isError);
 
  useEffect(()=>{
     refetch()
- },[cashInData])
+ },[customerDue, isSuccess])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
     currentUser.role === "user" ? currentUser.warehouse : null
@@ -126,21 +63,7 @@ console.log("CashInData:", cashInData);
   }, [warehousesData]);
 
   // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
 
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
 
   // Header with print button
   useLayoutEffect(() => {
@@ -155,36 +78,18 @@ console.log("CashInData:", cashInData);
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
-        // <TouchableOpacity
-        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-        //   className="me-4"
-        // >
-        //   <Ionicons name="print-outline" size={28} color="white" />
-        // </TouchableOpacity>
-        <PrintButton filteredData={customers} title="Customer Due Report" />
-      ),
+      // headerRight: () => (
+      //   // <TouchableOpacity
+      //   //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+      //   //   className="me-4"
+      //   // >
+      //   //   <Ionicons name="print-outline" size={28} color="white" />
+      //   // </TouchableOpacity>
+      //   <PrintButton filteredData={customers} title="Customer Due Report" />
+      // ),
     });
-  }, [navigation, customers]);
-
-  // Filter data by role, warehouse, and date
-  const filteredData = customers
-  ? customers.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
-
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
+  }, [navigation]);
+ 
 
   return (
     <>
@@ -192,7 +97,7 @@ console.log("CashInData:", cashInData);
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {currentUser.role === "admin" && (
+       
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -205,7 +110,6 @@ console.log("CashInData:", cashInData);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-        )}
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
@@ -250,19 +154,19 @@ console.log("CashInData:", cashInData);
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Customer Due</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+          {/* <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text> */}
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
+            {/* {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
           </Text>
         </View>
       </View>
 
       {/* List */}
       <FlatList
-        data={filteredData}
+        data={customerDue}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
@@ -276,7 +180,7 @@ console.log("CashInData:", cashInData);
       />
 
        <FlatList
-              data={customers}
+              data={customerDue}
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => (
                 <View className="bg-black-200 p-4 rounded-2xl mb-3">

@@ -196,61 +196,7 @@ const selectedDateString = formatDateString(fromDate);
           )}
         />
 
-      {/* {paymentReceivedData?.length > 0 ? (
-              paymentReceivedData?.map((item) => (
-                <View key={item._id} className="mt-4 mx-4">
-                  <TouchableOpacity
-                    onPress={() =>
-                      router.push({
-                        pathname: "/paymentReceivedDetails",
-                        params: { _id: item?._id },
-                      })
-                    }
-                    className="flex-row justify-between bg-black-200 rounded-xl p-4 items-center"
-                  >
-                    <View className="flex flex-col items-start">
-                      <Text className="text-lg font-medium text-primary">
-                        {item.customerId?.name}
-                      </Text>
-                      <Text className="text-sm text-gray-200">
-                        {item?.date && format(new Date(item?.date), "dd-MM-yyyy")}
-                      </Text>
-                    </View>
-                    <View>
-                      <Text className="text-sm text-primary capitalize">
-                        {item.type}
-                      </Text>
-                      <Text className="text-lg text-primary">
-                        ৳{item.amount?.toLocaleString()}{" "}
-                        <Text className="text-white">BDT</Text>
-                      </Text>
-                    </View>
-                  </TouchableOpacity>
-                </View>
-              ))
-            ) : (
-              <View className="flex-1 h-96 w-full justify-center items-center mt-10">
-                <Ionicons name="save-outline" size={60} color="gray" />
-                <Text className="text-primary text-lg mt-4">No data found</Text>
-                <Text className="text-white text-sm">
-                  Please select a different date
-                </Text>
-              </View>
-            )} */}
-
-       <FlatList
-              data={paymentReceivedData}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View className="bg-black-200 p-4 rounded-xl mb-3">
-                  <Text className="text-white font-semibold">{item?.customerId?.name}</Text>
-                  <View className="flex-row justify-between mt-2">
-                    <Text className="text-gray-400">{item?.date}</Text>
-                    <Text className="text-gray-200"><Text className="text-primary">{item.amount}</Text> BDT</Text>
-                  </View>
-                </View>
-              )}
-            />
+      
     </View>
     </>
   );
