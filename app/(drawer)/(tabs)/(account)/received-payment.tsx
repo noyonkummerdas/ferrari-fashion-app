@@ -27,7 +27,6 @@ const RecivedPayment = () => {
   const { userInfo } = useGlobalContext();
   const [createTransaction] = useAddTransactionMutation();
   const [q, setQ] = useState("all");
-  const [search, setSearch] = useState('')
   const { data, isSuccess, isLoading, refetch } = useCustomerListQuery({
     q: q,
   });
@@ -130,6 +129,7 @@ const RecivedPayment = () => {
       setFormData((prev) => ({ ...prev, [field]: value }));
     }
   };
+  const [search, setSearch] = useState('')
 
 const {
     data: invoiceData,
@@ -267,7 +267,7 @@ const {
             <Text className="text-gray-300 text-lg font-medium">Customer</Text>
             <CustomDropdownWithSearch
               data={type}
-              value={formData.customerId}
+              value={formData.customerId} 
               placeholder="Select Customer"
               onValueChange={(value: string) =>
                 handleInputChange("customerId", value)
@@ -304,7 +304,6 @@ const {
               keyboardType="numeric"
             />
           </View>
-
           {/* Amount Input */}
           <View className="mb-4">
             <Text className="text-gray-300 text-lg font-medium">Amount</Text>

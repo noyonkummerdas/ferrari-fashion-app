@@ -91,18 +91,14 @@ const { data: productData } =
       forceRefetch: true,
     });
     console.log("User Info in Stock Index:", productData);
-
-
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
- const { stockItem: stockIn, error, success, successMessage } = useSelector(
+ const { stockItem: stockIn} = useSelector(
     (state: RootState) => state.stock,
   );
   console.log("Stock In Data from Redux:", stockIn);
 
  useEffect(()=>{
     refetch()
- },[cashInData])
+ },[stockIn])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
     currentUser.role === "user" ? currentUser.warehouse : null
@@ -174,14 +170,12 @@ console.log("CashInData:", cashInData);
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
         </View>
       </View>
-
       {showStartPicker && (
         <DateTimePicker
           value={fromDate}
@@ -220,7 +214,6 @@ console.log("CashInData:", cashInData);
           </Text>
         </View> */}
       </View>
-
       {/* List */}
       <FlatList
         data={stockIn || []}
@@ -237,8 +230,8 @@ console.log("CashInData:", cashInData);
       />
       <View>
         {
-           cashInData.map((data)=>(
-            <View className="bg-black-200 p-4 rounded-lg mb-2">
+         Array?.isArray(stockIn) && stockIn.map((item) =>(
+            <View  key={item.id} className="bg-black-200 p-4 rounded-lg mb-2">
               <Text className="text-white text-lg">Name : {data.product}</Text>
               <View className="flex-row justify-between">
                 <Text className="text-white ">Date : {data.date}</Text>
@@ -247,7 +240,6 @@ console.log("CashInData:", cashInData);
             </View>
            ))
         }
-
         {/* {
           stockIn && stockIn.length > 0 && (
             stockIn.map((data)=>(
@@ -281,11 +273,7 @@ console.log("CashInData:", cashInData);
                         <Text className="text-white text-lg">{item.currentStock}</Text>
                       </View>
                     ))
-                  )} */}
-
-            
-
-              
+           )} */}              
       </View>
     </View>
     </>
