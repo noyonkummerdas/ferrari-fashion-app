@@ -12,18 +12,15 @@ import { StatusBar } from "expo-status-bar";
 import PrintButton from "../PrintButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
+import { useAllSaleQuery } from "@/store/api/saleApi";
 
-export default function CashInReport() {
+export default function CustomerDueReport() {
   const navigation = useNavigation();
   const {userInfo : currentUser} = useGlobalContext();
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
-  // const type = userInfo?.type
-  // console.log(type)
-
-  
-//   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
   const [fromDate, setFromDate] = useState<Date>(new Date());
+  const [currentDay, setCurrentday] = useState(new Date())
     const { id } = useLocalSearchParams();
     // console.log(id)
   const [toDate, setToDate] = useState<Date>(new Date());
@@ -37,20 +34,17 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
 
- const { data : customerDue , refetch, isSuccess, isError } = useGetCustomerByIdQuery({
-    id,
-    date: currentDate.toDateString(),
-    isDate:'month',
-    forceRefetch: true,
+  const { data : customerDue, isSuccess, refetch } = useAllSaleQuery({
+    warehouse: currentUser?.warehouse as string,
+    startDate: format(currentDay, "MM-dd-yyyy"),
+    isDate: "month",
+     forceRefetch: true,
   });
-  // console.log("customer data", customerDue, isSuccess, isError);
-
- useEffect(()=>{
-    refetch()
- },[customerDue, isSuccess])
+    console.log('sales data for report ', customerDue)
+  useEffect(() => { refetch() }, [currentUser?.warehouse, currentDay]);
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
+    // currentUser.role === "user" ? currentUser.warehouse : null
   );
   // Set warehouses after fetch
   useEffect(() => {
@@ -165,19 +159,6 @@ const selectedDateString = formatDateString(fromDate);
       </View>
 
       {/* List */}
-      <FlatList
-        data={customerDue}
-        keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
-          <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item.source}</Text>
-            <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400">{item.date}</Text>
-              <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text>
-            </View>
-          </View>
-        )}
-      />
 
        <FlatList
               data={customerDue}
@@ -185,28 +166,23 @@ const selectedDateString = formatDateString(fromDate);
               renderItem={({ item }) => (
                 <View className="bg-black-200 p-4 rounded-2xl mb-3">
                   <View className="flex-row justify-between items-center">
-                    <Text className="text-gray-200 text-lg font-semibold">
-                      {item.name}
+                    <Text className="text-gray-200 text-xl font-semibold">
+                      {item?.customerName}
                     </Text>
                     
                   </View>
                   
-                  <View className="flex-row justify-between">
+                  <View className="flex-row justify-between items-center  ">
                  <View>
-                   <Text className="text-zinc-400 text-sm mt-1">
-                    Last Sale: {item.lastPurchase}
-                  </Text>
+                   
       
                     <Text className="text-gray-300 font-bold">
-                      Sales: {item.totalSales.toLocaleString()} BDT
+                     {item?.formatedDate}
                     </Text>
                  </View>
                     <View>
-                      <Text className="text-green-400 font-bold">
-                      Paid: {item.paid.toLocaleString()} BDT
-                    </Text>
                     <Text className="text-primary font-bold">
-                      Due: {item.due.toLocaleString()} BDT
+                      Due: {item?.amount} BDT
                     </Text>
                     </View>
                   </View>
