@@ -13,36 +13,14 @@ import { ScrollView } from "react-native-gesture-handler";
  import PrintButton from "../PrintButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-
-// Logged-in user example
-// const user = {
-//   role: "admin", // "admin" or "user"
-//   warehouse: "w1",
-// };
-
-
-const deposit = [
-    {id: '1', source: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
-    {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-    {id: '3', source: 'Hasib', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '4', source: 'Naimul', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '5', source: 'Faruk', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '6', source: 'Borkot', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '7', source: 'Sofik', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '8', source: 'Nirob', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-    {id: '9', source: 'Sahon', date: '2023-10-03', amount: 1500, warehouse: 'w2'},
-];
-
 export default function CashInReport() {
 
   const navigation = useNavigation();
-  // const { data: userInfo } = { data: user };
-  // console.log("UserInfo:", userInfo);
+ 
   const {userInfo: user} = useGlobalContext()
-  // console.log("UserContext:", user);
-    // const type = userInfo?.type
+  
   const { data: warehousesData } = useWarehousesQuery();
-  console.log("WarehousesData:", warehousesData);
+
 
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
   const [fromDate, setFromDate] = useState<Date>(new Date());
@@ -54,20 +32,17 @@ export default function CashInReport() {
   const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
 const selectedDateString = formatDateString(fromDate);
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "all", type: "payment", date: selectedDateString })
- const { data, isSuccess } = useWarehouseQuery(
+ const { data } = useWarehouseQuery(
     user?.warehouse,
-  );
-   const { data :cashDeposit, isSuccess: cashSuccess, isLoading: cashLoading, error: cashError, isError: cashIsError, refetch: cashRefetch } =
+  ); 
+  const { data :cashDeposit, isSuccess, isLoading, error, isError, refetch } =
       useTransactionListQuery({
         warehouse: user?.warehouse,
         type: "deposit",
         date: format(currentDay, "MM-dd-yyyy"),
         forceRefetch: true,
       });
-      console.log("CashDepositData:", cashDeposit);
-  
-  // console.log("UserWarehouse:", data);
+      console.log('cash Deposit ', cashDeposit)
  useEffect(()=>{
     refetch()
  },[cashDeposit])
@@ -97,15 +72,6 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
         <TouchableOpacity onPress={() => router.back()} className="ms-4">
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
-      ),
-      headerRight: () => (
-        // <TouchableOpacity
-        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-        //   className="me-4"
-        // >
-        //   <Ionicons name="print-outline" size={28} color="white" />
-        // </TouchableOpacity>
-        <PrintButton filteredData={cashDeposit} title="Cash Deposit Report" />
       ),
     });
   }, [navigation,cashDeposit]);
@@ -187,14 +153,14 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
 
       {/* List */}
       <FlatList
-        data={cashDeposit}
+        data={cashDeposit?.transactions || [] }
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item.source}</Text>
+            <Text className="text-white font-semibold"> Name : {item?.name}</Text>
             <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400">{item.date}</Text>
-              <Text className="text-gray-200 font-bold"> <Text className="text-primary">{item.amount.toLocaleString()}</Text> BDT</Text>
+              <Text className="text-gray-400"> Date :{item.date}</Text>
+            <Text className="text-white font-semibold"> Amount :{item?.amount} <Text className="text-whtie">BDT</Text></Text>
             </View>
           </View>
         )}
