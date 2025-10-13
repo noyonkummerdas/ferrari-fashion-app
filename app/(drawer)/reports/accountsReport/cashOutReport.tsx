@@ -11,6 +11,7 @@ import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/
 import { ScrollView } from "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import PrintButton from "../PrintButton";
+import { useGlobalContext } from "@/context/GlobalProvider";
 // Logged-in user example
 const currentUser = {
   role: "admin", // "admin" or "user"
@@ -36,7 +37,7 @@ const cashOut = [
 ];
 export default function CashOutReport() {
   const navigation = useNavigation();
-  const { data: userInfo } = { data: currentUser };
+  const {userInfo : currentUser}= useGlobalContext()
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
@@ -46,24 +47,14 @@ export default function CashOutReport() {
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
- 
-  // const type = userInfo?.type
+    const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+    // const selectedDateString = formatDateString(fromDate);
+    const [currentDay, setCurrentDay] = useState(new Date())
 
-const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
-// replace this
-// const selectedDateString = formatDate(selectedDate);
-const selectedDateString = formatDateString(fromDate);
-
-const {data: cashOutData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashOutData:", cashOutData);
-
- useEffect(()=>{
-    refetch()
- },[cashOutData])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
+    //  currentUser.warehouse : null
   );
   // Set warehouses after fetch
   useEffect(() => {
@@ -74,23 +65,7 @@ console.log("CashOutData:", cashOutData);
       }
     }
   }, [warehousesData]);
-
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
+  
 
   // Header with print button
   useLayoutEffect(() => {
@@ -110,7 +85,15 @@ console.log("CashOutData:", cashOutData);
         <PrintButton filteredData={cashOut} title="Cash Out Report" />
       ),
     });
-  }, [navigation, cashOut]);
+  }, [navigation]);
+  const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
+      useTransactionListQuery({
+        warehouse: currentUser?.warehouse,
+        type: "cashOut",
+        date: format(currentDay, "MM-dd-yyyy"),
+        forceRefetch: true,
+      });
+      console.log('cashout list ', cashOutData)
 
   // Filter data by role, warehouse, and date
   const filteredData = cashOut
@@ -136,7 +119,7 @@ console.log("CashOutData:", cashOutData);
      
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {currentUser.role === "admin" && (
+        
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -149,7 +132,6 @@ console.log("CashOutData:", cashOutData);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-        )}
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
@@ -202,21 +184,24 @@ console.log("CashOutData:", cashOutData);
       </View>
 
       {/* List */}
-      {/* <FlatList
-        data={filteredData}
+      <FlatList
+        data={cashOutData?.transactions || []}
         keyExtractor={(item) => item.id || item._id} 
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item.source}</Text>
-            <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400">{item.date}</Text>
-              <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text>
-            </View>
+            <Text className="text-white font-semibold">{item?.name}</Text>
+             <View className="flex-row justify-between mt-2">
+               <Text className="text-gray-400">{item?.date}</Text>
+               <Text className="text-gray-200 font-bold">
+                 <Text className="text-primary">{item?.amount?.toLocaleString()}</Text>
+                 <Text> BDT</Text>
+               </Text>
+             </View>
           </View>
         )}
-      /> */}
+      />
 
-        <ScrollView>
+        {/* <ScrollView>
                 <View>
   {cashOut.map((item, index) => (
   <View key={index} className="bg-black-200 p-4 rounded-xl mb-3">
@@ -231,7 +216,7 @@ console.log("CashOutData:", cashOutData);
   </View>
 ))}
 </View>
-</ScrollView>
+</ScrollView> */}
 </View>
 </>
 );
