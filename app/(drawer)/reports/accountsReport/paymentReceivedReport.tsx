@@ -107,6 +107,11 @@ const selectedDateString = formatDateString(fromDate);
       // ),
     });
   }, [navigation])
+  const totalPayments = paymentReceivedData?.transactions?.length || 0;
+  const totalAmount = paymentReceivedData?.transactions?.reduce(
+  (sum, item) => sum + (item.amount || 0),
+  0
+) || 0;
 
   return (
     <>
@@ -171,12 +176,12 @@ const selectedDateString = formatDateString(fromDate);
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total payment Received</Text>
-          {/* <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text> */}
+          <Text className="text-yellow-400 text-xl font-bold">{totalPayments}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {/* {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
+            {totalAmount} BDT
           </Text>
         </View>
       </View>
