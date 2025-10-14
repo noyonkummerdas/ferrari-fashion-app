@@ -286,6 +286,9 @@ const SalesReport = () => {
     month: currentDay.toLocaleString("en-US", { month: "long" }),
     year: currentDay.getFullYear(),
   };
+const totalSale = Array.isArray(salesData)
+  ? salesData.reduce((sum, item) => sum + (item?.amount || 0), 0)
+  : 0;
 
   return (
     <>
@@ -346,9 +349,9 @@ const SalesReport = () => {
 
       
         {/**total sale*/}
-             <View className="mt-4 p-4 bg-black-200 rounded-xl ">
-        <Text className='text-gray-300 font-bold text-lg'>Total Sale </Text>
-        <Text className='text-gray-300'>Amount : <Text className='text-primary'>12000000</Text></Text>
+             <View className="mt-4 p-4 bg-black-200 rounded-xl flex flex-row item-center justify-between ">
+        <Text className='text-gray-200 text-xl'>Total Sale </Text>
+        <Text className='text-gray-300 text-lg text-primary'> {totalSale}</Text>
         </View>
 
         <ScrollView>

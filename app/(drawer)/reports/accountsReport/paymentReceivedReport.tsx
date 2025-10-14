@@ -63,7 +63,7 @@ const selectedDateString = formatDateString(fromDate);
       date: format(currentDate, "MM-dd-yyyy"),
       forceRefetch: true,
     });
-    console.log("PaymentReceivedData:", paymentReceivedData, isSuccess, isError);
+    // console.log("PaymentReceivedData:", paymentReceivedData, isSuccess, isError);
 
 
  useEffect(()=>{

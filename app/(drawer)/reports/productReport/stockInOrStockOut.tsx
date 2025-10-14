@@ -55,8 +55,11 @@ const { data: productData, error, isLoding } =
       }
     }
   }, [warehousesData]);
-  const totalStock = Array.isArray(productData)
-  ? productData.reduce((sum, item) => sum + (item.currentStock || 0), 0)
+ const totalStock = Array.isArray(productData)
+  ? Math.max(
+      productData.reduce((sum, item) => sum + (item.openingStock || 0), 0),
+      0
+    )
   : 0;
 
   // Fetch CashIn data from backend
@@ -149,14 +152,10 @@ const { data: productData, error, isLoding } =
 
       {/* Summary */}
       <View className=" mb-4">
-        <View className="bg-black-200 p-4 rounded-2xl ">
-          <Text className="text-zinc-300 text-sm">Total Stock In</Text>
-            <Text className="text-yellow-400 text-xl font-bold">
-        {totalStock}
-      </Text>
-          {/* <Text className="text-yellow-400 text-xl font-bold">{productData.length}</Text> */}
-        </View>
-        
+        <View className="bg-black-200 p-4  rounded-lg flex-row justify-between items-center">
+        <Text className="text-zinc-300 text-xl">Total Opening Stock</Text>
+        <Text className="text-yellow-400 text-xl font-bold">{totalStock}</Text>
+      </View>
       </View>
       {/* List */}
 
