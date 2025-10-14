@@ -217,8 +217,8 @@ const selectedDateString = formatDateString(fromDate);
               <Text className="text-gray-200 text-xl mb-2">{item.type}</Text>
 
               <View className="flex flex-row justify-between">
-              <Text className="text-gray-200">Date: {item?.date && format(new Date(item?.date), "dd-MM-yyyy")}</Text>
-              <Text className="text-gray-200 text-lg text-primary">Amount: {item.amount}</Text>
+              <Text className="text-gray-300"> {item?.date && format(new Date(item?.date), "dd-MM-yyyy")}</Text>
+              <Text className="text-gray-200 text-lg text-primary">{item.amount}<Text className="text-gray-200"> BDT</Text></Text>
               </View>
               
             </View>
