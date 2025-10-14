@@ -52,6 +52,8 @@ const { data: productData, error} =
   ? productData.reduce((sum, item) => sum + (item.currentStock || 0), 0)
   : 0;
 
+  
+
   // Fetch CashIn data from backend
 
   // Header with print button
@@ -78,7 +80,7 @@ const { data: productData, error} =
       // ),
     });
   }, [navigation]);
-
+ 
   
   // if (isLoading) return <Text>Loading .......</Text>;
   if (error) return <Text>Error Loading data</Text>;

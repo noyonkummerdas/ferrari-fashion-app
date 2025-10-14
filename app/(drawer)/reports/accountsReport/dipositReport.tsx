@@ -77,6 +77,11 @@ const selectedDateString = formatDateString(fromDate);
   }, [navigation,cashDeposit]);
 
   // Filter data by role, warehouse, and date
+  const totalCashIn = cashDeposit?.transactions?.length || 0;
+  const totalAmount = cashDeposit?.transactions?.reduce(
+  (sum, item) => sum + (item.amount || 0),
+  0
+) || 0;
  
 
   return (
@@ -140,12 +145,13 @@ const selectedDateString = formatDateString(fromDate);
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Cash In</Text>
-          {/* <Text className="text-yellow-400 text-xl font-bold">{cashDeposit.length}</Text> */}
+
+          <Text className="text-yellow-400 text-xl font-bold">{totalCashIn}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {/* {cashDeposit.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
+            {totalAmount} BDT
           </Text>
         </View>
       </View>
@@ -157,10 +163,10 @@ const selectedDateString = formatDateString(fromDate);
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold"> Name : {item?.name}</Text>
-            <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400"> Date :{item.date}</Text>
-            <Text className="text-white font-semibold"> Amount :{item?.amount} <Text className="text-whtie">BDT</Text></Text>
+            <Text className="text-gray-300 text-xl"> Name : {item?.name}</Text>
+            <View className="flex-row justify-between mt-2 item-center">
+              <Text className="text-gray-300"> {item?.date && format(new Date(item?.date), "dd-MM-yyyy")}</Text>
+            <Text className="text-white font-semibold text-lg"><Text className="text-primary"> {item?.amount}</Text> BDT</Text>
             </View>
           </View>
         )}

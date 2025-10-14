@@ -80,10 +80,10 @@ export default function CashOutReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
+      // headerRight: () => (
        
-        <PrintButton filteredData={cashOut} title="Cash Out Report" />
-      ),
+      //   // <PrintButton filteredData={cashOut} title="Cash Out Report" />
+      // ),
     });
   }, [navigation]);
   const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
@@ -95,23 +95,11 @@ export default function CashOutReport() {
       });
       // console.log('cashout list ', cashOutData)
 
-  // Filter data by role, warehouse, and date
-  const filteredData = cashOut
-  ? cashOut.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
+     const totalCashOut = cashOutData?.transactions?.length || 0;
+     const totalAmount = cashOutData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
+  // Filter data by role, warehouse, and date
+
   return (
     <>
      <StatusBar style="light" backgroundColor="white" />
@@ -173,12 +161,13 @@ export default function CashOutReport() {
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Cash In</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+
+          <Text className="text-yellow-400 text-xl font-bold">{totalCashOut}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
+            {totalAmount} BDT
           </Text>
         </View>
       </View>
