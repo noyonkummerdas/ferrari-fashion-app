@@ -40,7 +40,7 @@ const selectedDateString = formatDateString(fromDate);
     isDate: "month",
      forceRefetch: true,
   });
-    console.log('sales data for report ', customerDue)
+    // console.log('sales data for report ', customerDue)
   useEffect(() => { refetch() }, [currentUser?.warehouse, currentDay]);
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(

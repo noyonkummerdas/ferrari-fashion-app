@@ -42,7 +42,7 @@ const selectedDateString = formatDateString(fromDate);
         date: format(currentDay, "MM-dd-yyyy"),
         forceRefetch: true,
       });
-      console.log('cash Deposit ', cashDeposit)
+      // console.log('cash Deposit ', cashDeposit)
  useEffect(()=>{
     refetch()
  },[cashDeposit])

@@ -68,7 +68,7 @@ const selectedDateString = formatDateString(fromDate);
 
  useEffect(()=>{
     refetch()
- },[paymentReceivedData, currentDate])
+ },[ currentDate])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
     currentUser.role === "user" ? currentUser.warehouse : null
@@ -182,20 +182,46 @@ const selectedDateString = formatDateString(fromDate);
       </View>
 
       {/* List */}
-      <FlatList
-          data={paymentReceivedData?.data || []}
-          keyExtractor={(item) => item._id?.toString()}
+       {/* <FlatList
+          data={paymentReceivedData?.transactions || []}
+          keyExtractor={(item, index) =>
+            item.id ? item.id.toString() : index.toString()
+          }
           renderItem={({ item }) => (
-            <View className="bg-black-200 p-4 rounded-xl mb-3">
-              <Text className="text-white font-semibold">{item?.customerId?.name}</Text>
+            <View className="bg-[#1f1f1f] p-4 rounded-xl mb-3">
+              <Text className="text-white font-semibold">{item?.type}</Text>
               <View className="flex-row justify-between mt-2">
-                <Text className="text-gray-400">{item?.date}</Text>
-                <Text className="text-green-400 font-bold">+ {item?.amount} BDT</Text>
+                <Text className="text-gray-400">
+                  warehouse: {item?.warehouse}
+                </Text>
+                <Text className="text-green-400 font-bold">
+                  + {item?.amount} BDT
+                </Text>
               </View>
             </View>
           )}
-        />
+        /> */}
 
+
+{paymentReceivedData?.transactions?.length > 0 ? (
+        <FlatList
+          data={paymentReceivedData?.transactions}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <View className="bg-[#1f1f1f] p-3 rounded-lg mb-3">
+              <Text className="text-gray-200 text-xl mb-2">{item.type}</Text>
+
+              <View className="flex flex-row justify-between">
+              <Text className="text-gray-200">Date: {item?.date && format(new Date(item?.date), "dd-MM-yyyy")}</Text>
+              <Text className="text-gray-200 text-lg text-primary">Amount: {item.amount}</Text>
+              </View>
+              
+            </View>
+          )} 
+        />
+      ) : (
+        <Text className="text-gray-400">No transactions found</Text>
+      )}
       
     </View>
     </>

@@ -56,6 +56,7 @@ const PaymentReceivedList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
+    // console.log('payment recived', data)
   useEffect(() => {
     if (userInfo?.warehouse) {
       refetch();

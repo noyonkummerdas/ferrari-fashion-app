@@ -93,7 +93,7 @@ export default function CashOutReport() {
         date: format(currentDay, "MM-dd-yyyy"),
         forceRefetch: true,
       });
-      console.log('cashout list ', cashOutData)
+      // console.log('cashout list ', cashOutData)
 
   // Filter data by role, warehouse, and date
   const filteredData = cashOut
