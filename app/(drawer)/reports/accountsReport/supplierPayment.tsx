@@ -57,23 +57,6 @@ console.log("CashInData:", cashInData);
     }
   }, [warehousesData]);
 
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
-
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -87,36 +70,19 @@ console.log("CashInData:", cashInData);
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
-        // <TouchableOpacity
-        //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-        //   className="me-4"
-        // >
-        //   <Ionicons name="print-outline" size={28} color="white" />
-        // </TouchableOpacity>
-        <PrintButton filteredData={filteredData} title="Supplier Payment Report" />
-      ),
+      // headerRight: () => (
+      //   // <TouchableOpacity
+      //   //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+      //   //   className="me-4"
+      //   // >
+      //   //   <Ionicons name="print-outline" size={28} color="white" />
+      //   // </TouchableOpacity>
+      //   // <PrintButton filteredData={filteredData} title="Supplier Payment Report" />
+      // ),
     });
   }, [navigation]);
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
-
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
 
   return (
     <>
@@ -182,19 +148,19 @@ console.log("CashInData:", cashInData);
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Cash In</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+          {/* <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text> */}
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
+            {/* {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
           </Text>
         </View>
       </View>
 
       {/* List */}
       <FlatList
-        data={filteredData}
+        data={cashInData}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">

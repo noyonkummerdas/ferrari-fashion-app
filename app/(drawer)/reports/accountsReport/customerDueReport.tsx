@@ -83,6 +83,11 @@ const selectedDateString = formatDateString(fromDate);
       // ),
     });
   }, [navigation]);
+  const totalCustomerDue = customerDue?.length || 0;
+  const totalAmount = customerDue?.reduce(
+  (sum, item) => sum + (item.amount || 0),
+  0
+) || 0;
  
 
   return (
@@ -148,12 +153,12 @@ const selectedDateString = formatDateString(fromDate);
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Customer Due</Text>
-          {/* <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text> */}
+          <Text className="text-yellow-400 text-xl font-bold">{totalCustomerDue}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {/* {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
+            {totalAmount} BDT
           </Text>
         </View>
       </View>
@@ -176,13 +181,13 @@ const selectedDateString = formatDateString(fromDate);
                  <View>
                    
       
-                    <Text className="text-gray-300 font-bold">
+                    <Text className="text-gray-400 font-bold">
                      {item?.formatedDate}
                     </Text>
                  </View>
                     <View>
-                    <Text className="text-primary font-bold">
-                      Due: {item?.amount} BDT
+                    <Text className="text-gray-300 font-bold text-lg">
+                      Due <Text className="text-primary">{item?.amount}</Text> BDT
                     </Text>
                     </View>
                   </View>
