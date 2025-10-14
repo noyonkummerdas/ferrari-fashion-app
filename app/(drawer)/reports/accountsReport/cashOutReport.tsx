@@ -160,12 +160,12 @@ export default function CashOutReport() {
       {/* Summary */}
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Cash In</Text>
+          <Text className="text-zinc-300 text-xl">Total Cash Out</Text>
 
           <Text className="text-yellow-400 text-xl font-bold">{totalCashOut}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Amount</Text>
+          <Text className="text-zinc-300 text-xl">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
             {totalAmount} BDT
           </Text>
@@ -178,11 +178,11 @@ export default function CashOutReport() {
         keyExtractor={(item) => item.id || item._id} 
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item?.name}</Text>
+            <Text className="text-white font-semibold text-lg">{item?.name}</Text>
              <View className="flex-row justify-between mt-2">
-               <Text className="text-gray-400">{item?.date}</Text>
+               <Text className="text-gray-400">{item?.date && format(new Date(item?.date), "dd-MM-yyyy")}</Text>
                <Text className="text-gray-200 font-bold">
-                 <Text className="text-primary">{item?.amount?.toLocaleString()}</Text>
+                 <Text className="text-primary text-lg">{item?.amount?.toLocaleString()}</Text>
                  <Text> BDT</Text>
                </Text>
              </View>
