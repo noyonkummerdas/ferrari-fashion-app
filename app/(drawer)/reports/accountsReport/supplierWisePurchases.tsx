@@ -13,29 +13,6 @@ import PrintButton from "../PrintButton";
 import { usePurchasesDWQuery } from "@/store/api/purchasApi";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-
-// Logged-in user example
-// const currentUser = {
-//   role: "admin", // "admin" or "user"
-//   warehouse: "w1",
-// };
-
-
-// const supplirePurcheseData = [
-//     {id: '1', name: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
-//     {id: '2', name: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-// ];
-// const supplierWisePurchases = [
-//     {id: '1', source: 'Hasan', date: '2023-10-01', amount: 5000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-//     {id: '2', source: 'Ovik', date: '2023-10-02', amount: 2000, warehouse: 'w1'},
-// ];
-
 export default function SupplierPaymentReport() {
   const navigation = useNavigation();
   // const { data: userInfo } = { data: currentUser };
@@ -52,14 +29,7 @@ export default function SupplierPaymentReport() {
   const [showEndPicker, setShowEndPicker] = useState(false);
   const [currentDate, setCurrentDate] = useState(new Date());
 
-// const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
-// replace this
-// const  = formatDate(selectedDate);
-// const  = formatDateString(fromDate);
-
-// const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date:  })
-// console.log("CashInData:", cashInData);
 
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
@@ -113,6 +83,11 @@ export default function SupplierPaymentReport() {
       // ),
     });
   }, [navigation]);
+  const totalPurchases = purchasesData?.length || 0;
+  const totalAmount = purchasesData?.reduce(
+  (sum, item) => sum + (item.amount || 0),
+  0
+) || 0;
 
   return (
     <>
@@ -177,12 +152,12 @@ export default function SupplierPaymentReport() {
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Supplier Total Purchases</Text>
-          {/* <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text> */}
+          <Text className="text-yellow-400 text-xl font-bold">{totalPurchases}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
           <Text className="text-zinc-300 text-sm">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {/* {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT */}
+            {totalAmount} BDT
           </Text>
         </View>
       </View>
@@ -193,10 +168,10 @@ export default function SupplierPaymentReport() {
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item?.supplierName}</Text>
+            <Text className="text-gray-200 font-semibold text-lg">{item?.supplierName}</Text>
             <View className="flex-row justify-between mt-2">
               <Text className="text-gray-400">{item?.formatedDate}</Text>
-              <Text className="text-green-400 font-bold">+ {item?.amount.toLocaleString()} BDT</Text>
+              <Text className="text-primary font-bold text-lg"> {item?.amount.toLocaleString()} <Text className="text-gray-200">BDT</Text></Text>
             </View>
           </View>
         )}
