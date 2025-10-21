@@ -41,7 +41,7 @@ const Payment = () => {
     // note: "",
     photo: null as string | null,
     supplierId: "",
-    invoice: "",
+    // invoice: "",
     name: "",
     note: "",
     type: "payment",
@@ -52,7 +52,7 @@ const Payment = () => {
     invoices: "",
     status: "complete",
   });
- console.log("Supplire formData", formData);
+//  console.log("Supplire formData", formData);
 
 
   const {
@@ -297,15 +297,22 @@ const Payment = () => {
       
       
       useEffect(()=>{
-        console.log(invoiceData)
+        // console.log(invoiceData)
         if(invoiceData){
+          if(invoiceData?.status !== "paid"){
           if(search === ""){
             handleInputChange("supplierId", "")
           }else{
             handleInputChange("supplierId", invoiceData?.supplierId)
-            handleInputChange("amount", invoiceData.amount);
+            handleInputChange("amount", invoiceData.due);
+          }}else{
+            Alert.alert("Invoice Paid", "This invoice has already been paid.", [
+              {
+                text: "OK", 
+              },
+            ]);
           }
-          console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
+          // console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
         }else{
           handleInputChange("supplierId", "")
         }
@@ -359,7 +366,10 @@ const Payment = () => {
 
             {/* Amount Input */}
             <View className="mb-4">
+            <View className="flex justify-between items-center flex-row">
               <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+              <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+            </View>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
                 value={formData.amount.toString()}
@@ -390,9 +400,9 @@ const Payment = () => {
               <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-                value={formData.invoice.toString()}
+                value={formData.invoices.toString()}
                 onChangeText={(value) => {
-                handleInputChange("invoice", value)
+                handleInputChange("invoices", value)
                 setSearch(value)
               }}
                 placeholder="Enter invoice"

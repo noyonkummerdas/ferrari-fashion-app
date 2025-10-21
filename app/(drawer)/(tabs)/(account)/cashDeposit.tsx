@@ -57,8 +57,8 @@ const CashDepositDetails = () => {
     type: "deposit",
     status: "complete",
   });
-  console.log("FD", formData);
-  console.log(data);
+  // console.log("FD", formData);
+  // console.log(data);
   useEffect(() => {
     if (data && isSuccess) {
       setFormData((prev) => ({

@@ -12,13 +12,13 @@ import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  KeyboardAvoidingView,
+  Alert, KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const RecivedPayment = () => {
@@ -42,7 +42,7 @@ const RecivedPayment = () => {
     note: "",
     name: "",
     customerId: "",
-    invoice: "",
+    // invoice: "",
     photo: null as string | null,
     type: "paymentReceived",
     user: userInfo?.id,
@@ -52,6 +52,7 @@ const RecivedPayment = () => {
     invoices: "",
     status: "complete",
   });
+  // console.log("Customer formData", formData);
 
   // Customer list for dropdown
   const { data: customerList, isSuccess, refetch } = useCustomerListQuery({
@@ -88,13 +89,22 @@ const RecivedPayment = () => {
   }, [search]);
 
   // Update customerId when invoiceData changes
-  useEffect(() => {
-    if (invoiceData && invoiceSuccess) {
-      handleInputChange("customerId", invoiceData.customerId);
-      handleInputChange("amount", invoiceData.amount);
-    } else {
-      handleInputChange("customerId", "");
-    }
+  useEffect(() => { 
+    if(invoiceData){
+        if(invoiceData?.status !== "paid"){
+              if(search === ""){
+                handleInputChange("customerId", "")
+              }else{
+                handleInputChange("customerId", invoiceData?.customerId)
+                handleInputChange("amount", invoiceData.due);
+              }}else{
+                Alert.alert("Invoice Paid", "This invoice has already been paid.", [
+                  {
+                    text: "OK", 
+                  },
+                ]);
+              }
+            }
   }, [invoiceData, invoiceSuccess]);
 
   // Get customer data to update openingBalance and currentBalance
@@ -223,9 +233,9 @@ const RecivedPayment = () => {
             <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
             <TextInput
               className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
-              value={formData.invoice}
+              value={formData.invoices}
               onChangeText={(value) => {
-                handleInputChange("invoice", value);
+                handleInputChange("invoices", value);
                 setSearch(value);
               }}
               placeholder="Enter invoice"
@@ -236,7 +246,10 @@ const RecivedPayment = () => {
 
           {/* Amount */}
           <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+            <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+                <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+             </View>
             <TextInput
               className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
               value={formData.amount.toString()}
