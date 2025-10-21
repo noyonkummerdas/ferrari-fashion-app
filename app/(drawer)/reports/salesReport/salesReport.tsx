@@ -243,7 +243,7 @@ const SalesReport = () => {
     isDate: "month",
      forceRefetch: true,
   });
-  console.log("SalesData:", salesData);
+  // console.log("SalesData:", salesData);
 
   useEffect(() => {
      refetch()

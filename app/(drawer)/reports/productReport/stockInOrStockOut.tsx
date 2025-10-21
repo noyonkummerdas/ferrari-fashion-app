@@ -37,7 +37,7 @@ const { data: productData, error, isLoding } =
   const { stockItem, isLoading, success, successMessage } = useSelector(
     (state: RootState) => state.stock,
   );
-  console.log("Stock In Data from Redux:", stockItem);
+  // console.log("Stock In Data from Redux:", stockItem);
 
 //  useEffect(()=>{
 //     refetch()
@@ -165,10 +165,10 @@ const { data: productData, error, isLoding } =
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item?.style}</Text>
+            <Text className="text-gray-200 text-xl">{item?.style}</Text>
             <View className="flex-row justify-between mt-2">
-            <Text className="text-white font-semibold">Code : {item?.code}</Text>
-              <Text className="text-gray-300">{item?.openingStock} </Text>
+            <Text className="text-gray-300 text-lg ">Code : {item?.code}</Text>
+              <Text className="text-primary text-lg">{item?.openingStock} </Text>
               {/* <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text> */}
             </View>
           </View>

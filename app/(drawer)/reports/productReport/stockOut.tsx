@@ -33,7 +33,7 @@ const { data: productData, error} =
       q: searchQuery || "all",
       forceRefetch: true,
     });
-    console.log("User Info in Stock Index:", productData);
+    // console.log("User Info in Stock Index:", productData);
 
 
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
@@ -159,10 +159,10 @@ const { data: productData, error} =
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item?.style}</Text>
+            <Text className="text-gray-200 text-xl">{item?.style}</Text>
             <View className="flex-row justify-between mt-2">
-            <Text className="text-white font-semibold">Code : {item?.code}</Text>
-              <Text className="text-gray-300">{item?.currentStock} </Text>
+            <Text className="text-gray-300 text-lg">Code : {item?.code}</Text>
+              <Text className="text-primary text-lg">{item?.currentStock} </Text>
               {/* <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text> */}
             </View>
           </View>

@@ -8,16 +8,14 @@ import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { KeyboardAvoidingView } from "react-native";
 import {
   Alert,
-  Image,
-  Platform,
+  Image, KeyboardAvoidingView, Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const Payment = () => {
@@ -305,6 +303,7 @@ const Payment = () => {
             handleInputChange("supplierId", "")
           }else{
             handleInputChange("supplierId", invoiceData?.supplierId)
+            handleInputChange("amount", invoiceData.amount);
           }
           console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
         }else{

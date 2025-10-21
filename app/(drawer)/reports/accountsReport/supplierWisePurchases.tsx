@@ -54,7 +54,7 @@ export default function SupplierPaymentReport() {
    });
    
 
-   console.log("PurchasesData:", purchasesData, isSuccess, isError);
+  //  console.log("PurchasesData:", purchasesData, isSuccess, isError);
     useEffect(()=>{
     refetch()
  },[purchasesData])

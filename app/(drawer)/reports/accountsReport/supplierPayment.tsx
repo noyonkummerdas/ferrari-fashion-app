@@ -38,7 +38,7 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 const selectedDateString = formatDateString(fromDate);
 
 const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
+// console.log("CashInData:", cashInData);
 
  useEffect(()=>{
     refetch()
