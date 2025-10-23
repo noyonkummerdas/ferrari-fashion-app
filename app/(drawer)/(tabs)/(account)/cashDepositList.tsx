@@ -57,6 +57,7 @@ const CashDepositList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
+    console.log('deposit data',data);
 
   useEffect(() => {
     if (userInfo?.warehouse) {

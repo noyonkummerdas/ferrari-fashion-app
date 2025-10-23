@@ -1,43 +1,25 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useTransactionListQuery } from "@/store/api/transactionApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router } from "expo-router";
-import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
-import { ScrollView } from "react-native-gesture-handler";
+import { format } from "date-fns";
+import { router, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import PrintButton from "../PrintButton";
-import { useGlobalContext } from "@/context/GlobalProvider";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 // Logged-in user example
-const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
 
 
-const cashOut = [
-  { id: '1', source: 'Sale', date: '2024-10-01', amount: 5000, warehouse: 'w1' },
-  { id: '2', source: 'Refund', date: '2024-10-02', amount: 2000, warehouse: 'w1' },
-  { id: '4', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '5', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '6', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '7', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '8', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '9', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  // Add more sample data as needed
-];
+
+
+
 export default function CashOutReport() {
   const navigation = useNavigation();
   const {userInfo : currentUser}= useGlobalContext()
+  const isAdmin = currentUser?.role === "admin";
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
@@ -88,12 +70,19 @@ export default function CashOutReport() {
   }, [navigation]);
   const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
       useTransactionListQuery({
-        warehouse: currentUser?.warehouse,
+       warehouse: isAdmin ? selectedWarehouse : currentUser?.warehouse,
         type: "cashOut",
         date: format(currentDay, "MM-dd-yyyy"),
         forceRefetch: true,
       });
       // console.log('cashout list ', cashOutData)
+      useEffect(() => {
+  if (isAdmin && selectedWarehouse) {
+    refetch();
+  }
+}, [selectedWarehouse]);
+if (!warehousesData) return null;
+
 
      const totalCashOut = cashOutData?.transactions?.length || 0;
      const totalAmount = cashOutData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
@@ -102,12 +91,12 @@ export default function CashOutReport() {
 
   return (
     <>
-     <StatusBar style="light" backgroundColor="white" />
+     <StatusBar backgroundColor="white" />
     <View className="flex-1 bg-dark p-2">
      
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        
+        {isAdmin && (
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -120,7 +109,7 @@ export default function CashOutReport() {
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-
+        )}
         {/* From / To Dates */}
         <View className="flex-row gap-3">
           <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">

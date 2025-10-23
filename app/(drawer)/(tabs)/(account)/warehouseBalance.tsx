@@ -43,6 +43,7 @@ const WarehouserBalance = () => {
     _id: id,
     date: format(currentDay, "yyyy-MM-dd"), // ✅ string format
   });
+  // console.log("Warehouse Accounts Data:", data);
   
   const { data: warehouseData } = useWarehousesQuery();
 
@@ -67,7 +68,7 @@ const WarehouserBalance = () => {
   const dayTransactions = transactions.filter(
     (t) => format(new Date(t.date), "yyyy-MM-dd") === format(currentDay, "yyyy-MM-dd")
   );
-
+// console.log("Day Transactions:", dayTransactions);
   const formattedDate = {
     day: currentDay.getDate(),
     month: currentDay.toLocaleString("en-US", { month: "long" }),
