@@ -4,31 +4,27 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { Ionicons } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, {
+  useCallback,
   useLayoutEffect,
   useMemo,
   useState,
-  useCallback,
 } from "react";
 import {
-  View,
+  Platform,
+  ScrollView,
   Text,
   TouchableOpacity,
-  Modal,
-  Platform,
-  FlatList,
-  RefreshControl,
-  ScrollView,
+  View
 } from "react-native";
 
-import DateTimePicker from "@react-native-community/datetimepicker";
 import {
-  format,
+  endOfDay,
   isSameDay,
   isWithinInterval,
-  startOfDay,
-  endOfDay,
+  startOfDay
 } from "date-fns";
 import { router } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 
 // ===== Dummy User Context =====
 const useGlobalContext = () => {
@@ -481,6 +477,8 @@ const Report = () => {
   // )
 
   return(
+    <>
+    <StatusBar style="light" backgroundColor="white" />
    <ScrollView className="flex-1 bg-dark p-2">
       {/* Sales Report */}
       <View className="p-2 rounded-lg mt-4">
@@ -625,6 +623,7 @@ const Report = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </>
   )
 };
 

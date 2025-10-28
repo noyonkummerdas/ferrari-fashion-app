@@ -361,11 +361,17 @@ const CustomDrawerComponent = (props: any) => {
         className="flex flex-row ms-5 mt-4"
       >
         <Ionicons name="power" size={24} color={"#ff6a39"} />
-        <Text className="text-xl font-pmedium text-gray-400 ms-3">Logout</Text>
+        <Text className="text-xl font-pmedium text-gray-400 ms-3 ">Logout</Text>
       </TouchableOpacity>
+
+      <View className="flex flex-row items-center justify-center mt-10 pt-12 ms-6">
+        <Text className="text-gray-500 text-sm">Powerd By Techsoul</Text>
+      </View>
     </DrawerContentScrollView>
   );
 };
+
+
 
 const DrawerLayout = () => {
   return (
@@ -375,6 +381,7 @@ const DrawerLayout = () => {
     />
   );
 };
+
 
 export default DrawerLayout;
 
