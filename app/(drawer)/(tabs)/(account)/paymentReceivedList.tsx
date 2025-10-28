@@ -21,12 +21,13 @@ const PaymentReceivedList = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-  const type = userInfo?.type
 
   // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [tempDate, setTempDate] = useState(new Date());
+  const [paymentReceivedList, setPaymentReceivedList] = useState<any[]>([]);
+   const [search, setSearch] = useState("");
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -48,7 +49,6 @@ const PaymentReceivedList = () => {
       headerShown: true,
     });
   }, [navigation]);
-
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
@@ -56,14 +56,14 @@ const PaymentReceivedList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
-
+    // console.log('payment recived', data)
   useEffect(() => {
     if (userInfo?.warehouse) {
       refetch();
     }
   }, [userInfo?.warehouse, currentDay]);
 
-  const [paymentReceivedList, setPaymentReceivedList] = useState<any[]>([]);
+  
 
   useEffect(() => {
     if (data) {
@@ -90,7 +90,7 @@ const PaymentReceivedList = () => {
     year: currentDay.getFullYear(),
   };
 
-  const [search, setSearch] = useState("");
+ 
   const filteredList = paymentReceivedList.filter(
     (item) =>
       item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||

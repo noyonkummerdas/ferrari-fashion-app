@@ -15,12 +15,13 @@ import {
   FlatList,
 } from "react-native";
 import { CustomDrawerToggleButton } from "@/components";
-import { useCustomerListQuery } from "@/store/api/customerApi";
+import { useCustomerListQuery, useGetCustomerByInvoiceQuery } from "@/store/api/customerApi";
 import { StatusBar } from "expo-status-bar";
 
 interface Customer {
   _id: string;
   name: string;
+  invoiceId?: string;
   photo: string;
   phone: string;
   email: string;
@@ -36,6 +37,7 @@ const Customers = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
   const [customer, setCustomers] = useState<Customer[]>([]);
+  const [invoiceCustomer, setInvoiceCustomer] = useState<Customer | null>(null);
 
   const { data, error, isLoading, refetch } = useCustomerListQuery({
     q: searchQuery || "all",
@@ -46,7 +48,6 @@ const Customers = () => {
     setSearchQuery("");
     refetch();
   };
-
   // Pull-to-refresh
   const onRefresh = () => {
     setRefreshing(true);

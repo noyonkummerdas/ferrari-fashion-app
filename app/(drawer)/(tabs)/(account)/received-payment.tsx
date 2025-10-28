@@ -3,6 +3,7 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import {
   useCustomerListQuery,
   useCustomerQuery,
+  useGetCustomerByInvoiceQuery,
 } from "@/store/api/customerApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
@@ -11,56 +12,37 @@ import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Alert,
-  KeyboardAvoidingView,
+  Alert, KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
-// import DropDownPicker from "react-native-dropdown-picker";
 
 const RecivedPayment = () => {
   const { userInfo } = useGlobalContext();
-  const [createTransaction] = useAddTransactionMutation();
-  const [q, setQ] = useState("all");
-  const { data, isSuccess, isLoading, refetch } = useCustomerListQuery({
-    q: q,
-  });
-
-  useEffect(() => {
-    refetch();
-  }, [q]);
-
-  // console.log("q, data", q, data);
-
-  useEffect(() => {
-    if (data && isSuccess) {
-      const customerOptions = data.map((item) => ({
-        label: item.name,
-        value: item._id || item.id,
-      }));
-      setType(customerOptions);
-    }
-  }, [data, isSuccess]);
-
   const router = useRouter();
   const navigation = useNavigation();
 
-  const [type, setType] = useState([{ label: "Select Customer", value: "" }]);
+  const [createTransaction] = useAddTransactionMutation();
 
+  const [q, setQ] = useState("all");
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [search, setSearch] = useState("");
+
+  // Customer dropdown state
+  const [type, setType] = useState([{ label: "Select Customer", value: "" }]);
 
   // Form state
   const [formData, setFormData] = useState({
     date: new Date(),
-    amount: 0,
+    amount: '',
     note: "",
     name: "",
     customerId: "",
-    invoice: "",
+    // invoice: "",
     photo: null as string | null,
     type: "paymentReceived",
     user: userInfo?.id,
@@ -70,65 +52,128 @@ const RecivedPayment = () => {
     invoices: "",
     status: "complete",
   });
+  // console.log("Customer formData", formData);
 
+  // Customer list for dropdown
+  const { data: customerList, isSuccess, refetch } = useCustomerListQuery({
+    q: q,
+  });
+
+
+  useEffect(() => {
+    refetch();
+  }, [q]);
+
+  useEffect(() => {
+    if (customerList && isSuccess) {
+      const options = customerList.map((item) => ({
+        label: item.name,
+        value: item._id || item.id,
+      }));
+      setType(options);
+    }
+  }, [customerList, isSuccess]);
+
+  // Get invoice data
   const {
-    data: customerData,
-    isSuccess: customerIsSuccess,
-    refetch: customerRefetch,
-  } = useCustomerQuery(formData.customerId);
+    data: invoiceData,
+    isSuccess: invoiceSuccess,
+    refetch: invoiceRefetch,
+  } = useGetCustomerByInvoiceQuery(
+    { invoiceId: search },
+    { skip: !search }
+  );
+
+  useEffect(() => {
+    if (search) invoiceRefetch();
+  }, [search]);
+
+  // Update customerId when invoiceData changes
+  useEffect(() => { 
+    if(invoiceData){
+        if(invoiceData?.status !== "paid"){
+              if(search === ""){
+                handleInputChange("customerId", "")
+              }else{
+                handleInputChange("customerId", invoiceData?.customerId)
+                handleInputChange("amount", invoiceData.due);
+              }}else{
+                Alert.alert("Invoice Paid", "This invoice has already been paid.", [
+                  {
+                    text: "OK", 
+                  },
+                ]);
+              }
+            }
+  }, [invoiceData, invoiceSuccess]);
+
+  // Get customer data to update openingBalance and currentBalance
+  const { data: customerData, isSuccess: customerIsSuccess, error : customerError } =
+    useCustomerQuery(formData.customerId);
+    // console.log('Custoemr Data ', customerData, customerIsSuccess,  customerError)
 
   useEffect(() => {
     if (customerData && customerIsSuccess) {
       setFormData((prev) => ({
         ...prev,
-        openingBalance: customerData?.currentBalance ?? 0,
-        currentBalance: customerData?.currentBalance ?? 0,
+        openingBalance: customerData.balance ?? 0,
+        currentBalance: customerData.balance ?? 0,
+        amount: customerData.balance ?? 0, // Auto-fill amount
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        openingBalance: 0,
+        currentBalance: 0,
+        amount: 0,
       }));
     }
   }, [customerData, customerIsSuccess]);
 
-  useEffect(() => {
-    customerRefetch();
-  }, [formData.customerId]);
-
-  const handleDatePress = () => {
-    console.log("Opening date picker");
-    setShowDatePicker(true);
-  };
+  const handleDatePress = () => setShowDatePicker(true);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    console.log("Date picker event:", event);
-    console.log("Selected date:", selectedDate);
-
     if (selectedDate) {
       setFormData((prev) => ({ ...prev, date: selectedDate }));
-      console.log("Date updated to:", selectedDate);
-
-      // Close picker after selection
-      if (Platform.OS === "android") {
-        setShowDatePicker(false);
-      }
+      if (Platform.OS === "android") setShowDatePicker(false);
     }
   };
 
-  // date formatting
-  const today = new Date();
-  const formattedDate = {
-    day: today.getDate(),
-    month: today.toLocaleString("en-US", { month: "long" }),
-    year: today.getFullYear(),
+  const handleInputChange = (field: string, value: any) => {
+    if (field === "amount") {
+      const numValue = parseInt(value) || 0;
+      setFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+        currentBalance:
+          customerData?.balance != null ? customerData.balance - numValue : -numValue,
+      }));
+    } else {
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    }
   };
-  const formattedDateString = `${formattedDate.day} ${formattedDate.month}, ${formattedDate.year}`;
+
+  const handleSubmit = async () => {
+    try {
+      const response = await createTransaction(formData).unwrap();
+      console.log("Transaction created:", response);
+    } catch (error) {
+      console.error("Error creating transaction:", error);
+    }
+    router.back();
+  };
+
+  // Format date for display
+  const formattedDateString = `${formData.date.getDate()} ${formData.date.toLocaleString(
+    "en-US",
+    { month: "long" }
+  )}, ${formData.date.getFullYear()}`;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Create Received Payment",
-      //@ts-ignore
-      headerStyle: {
-        backgroundColor: `#000000`,
-      },
-      //@ts-ignore
-      headerTintColor: `#ffffff`,
+      headerStyle: { backgroundColor: "#000" },
+      headerTintColor: "#fff",
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
       headerTitleAlign: "center",
@@ -141,91 +186,21 @@ const RecivedPayment = () => {
     });
   }, [navigation]);
 
-  const handleInputChange = (field: string, value: string) => {
-    if (field === "amount") {
-      // Convert string to number for numeric fields
-      const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({
-        ...prev,
-        [field]: numValue,
-        currentBalance: customerData?.currentBalance
-          ? parseInt(customerData?.currentBalance) - numValue
-          : 0 - numValue,
-      }));
-    } else {
-      // Handle string fields normally
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    }
-  };
-
-  console.log("formData", formData);
-
-  const handleTypeChange = (
-    type: "income" | "expense" | "payment" | "receipt",
-  ) => {
-    setFormData((prev) => ({ ...prev, type }));
-  };
-
-  const handleSubmit = async () => {
-    console.log("Transaction Form Data:", formData);
-    console.log("Photo URI:", formData.photo);
-
-    try {
-      const response = await createTransaction(formData).unwrap();
-      console.log("Transaction created:", response);
-    } catch (error) {
-      // console.error("Error creating transaction:", error);
-     
-    }
-    router.back()
-
-    // Alert.alert(
-    //   "Success",
-    //   "Form data logged to console. Check console for details.",
-    //   [
-    //     {
-    //       text: "OK",
-    //       onPress: () => {
-    //         setFormData({
-    //           name: "",
-    //           user: userInfo?.id,
-    //           warehouse: userInfo?.warehouse,
-    //           amount: 0,
-    //           openingBalance: 0,
-    //           currentBalance: 0,
-    //           photo: "",
-    //           invoices: "",
-    //           note: "",
-    //           date: new Date(),
-    //           type: "paymentReceived",
-    //           status: "complete",
-    //           // supplierId: "",
-    //           invoice: "",
-    //           customerId: "",
-    //         });
-    //         router.back();
-    //       },
-    //     },
-    //   ],
-    // );
-  };
-
   return (
-    <>
-<KeyboardAvoidingView
+    <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-
-    
       <View className="flex-1 bg-dark">
         <StatusBar style="light" />
         <ScrollView
           className="flex-1 px-6 pt-4"
+          contentContainerStyle={{ paddingBottom: 300 }}
+          keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          {/* Type Input */}
+          {/* Customer Dropdown */}
           <View className="mb-4">
             <Text className="text-gray-300 text-lg font-medium">Customer</Text>
             <CustomDropdownWithSearch
@@ -236,10 +211,11 @@ const RecivedPayment = () => {
                 handleInputChange("customerId", value)
               }
               onSearchChange={(query: string) => setQ(query)}
-              searchPlaceholder="Search suppliers..."
+              searchPlaceholder="Search customers..."
             />
           </View>
-          {/* Date Input */}
+
+          {/* Date */}
           <View className="mb-4">
             <Text className="text-gray-300 text-lg font-medium">Date</Text>
             <TouchableOpacity
@@ -251,25 +227,31 @@ const RecivedPayment = () => {
               <Ionicons name="calendar" size={24} color="#FDB714" />
             </TouchableOpacity>
           </View>
-          {/* Invoice Input */}
 
+          {/* Invoice */}
           <View className="mb-4">
             <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
             <TextInput
-              className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-              value={formData.invoice}
-              onChangeText={(value) => handleInputChange("invoice", value)}
+              className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
+              value={formData.invoices}
+              onChangeText={(value) => {
+                handleInputChange("invoices", value);
+                setSearch(value);
+              }}
               placeholder="Enter invoice"
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
             />
           </View>
 
-          {/* Amount Input */}
+          {/* Amount */}
           <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+            <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+                <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+             </View>
             <TextInput
-              className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
+              className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
               value={formData.amount.toString()}
               onChangeText={(value) => handleInputChange("amount", value)}
               placeholder="Enter amount"
@@ -278,13 +260,13 @@ const RecivedPayment = () => {
             />
           </View>
 
-          {/* Note Input */}
+          {/* Note */}
           <View className="mb-4">
             <Text className="text-gray-300 text-lg font-medium">Note</Text>
             <TextInput
-              multiline={true}
+              multiline
               numberOfLines={4}
-              className="border  border-black-200 bg-black-200  rounded-lg p-4 text-base text-white min-h-[120px]"
+              className="border border-black-200 bg-black-200 rounded-lg p-4 text-base text-white min-h-[120px]"
               value={formData.note}
               onChangeText={(value) => handleInputChange("note", value)}
               placeholder="Enter transaction note..."
@@ -293,7 +275,7 @@ const RecivedPayment = () => {
             />
           </View>
 
-          {/* Submit Button */}
+          {/* Submit */}
           <TouchableOpacity
             className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
             onPress={handleSubmit}
@@ -305,14 +287,12 @@ const RecivedPayment = () => {
           </TouchableOpacity>
         </ScrollView>
 
-        {/* Date Picker Modal */}
+        {/* Date Picker */}
         {showDatePicker && (
           <View className="absolute inset-0 bg-black/70 justify-center items-center z-50">
             <View className="bg-gray-900 rounded-2xl p-6 w-full border border-gray-700 shadow-2xl">
               <View className="flex-row justify-between items-center mb-6">
-                <Text className="text-white text-xl font-bold">
-                  Select Date
-                </Text>
+                <Text className="text-white text-xl font-bold">Select Date</Text>
                 <TouchableOpacity
                   onPress={() => setShowDatePicker(false)}
                   className="p-2"
@@ -320,7 +300,6 @@ const RecivedPayment = () => {
                   <Ionicons name="close" size={24} color="#9CA3AF" />
                 </TouchableOpacity>
               </View>
-
               <View className="bg-gray-800 rounded-xl p-4 mb-6">
                 <DateTimePicker
                   value={formData.date}
@@ -333,7 +312,6 @@ const RecivedPayment = () => {
                   themeVariant="dark"
                 />
               </View>
-
               {Platform.OS === "ios" && (
                 <View className="flex-row gap-3">
                   <TouchableOpacity
@@ -360,8 +338,7 @@ const RecivedPayment = () => {
           </View>
         )}
       </View>
-      </KeyboardAvoidingView>
-    </>
+    </KeyboardAvoidingView>
   );
 };
 

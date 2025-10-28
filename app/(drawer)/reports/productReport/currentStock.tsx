@@ -7,59 +7,37 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format, formatDate, isAfter, isBefore } from "date-fns";
 import { useNavigation, router } from "expo-router";
-import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
-import { ScrollView } from "react-native-gesture-handler";
-    import { StatusBar } from "expo-status-bar";
-
-
-// Logged-in user example
-const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
-const currentStock = [
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-  { id: "p1", name: "Product A", stock: 150, warehouse: "w1" },
-  { id: "p2", name: "Product B", stock: 80, warehouse: "w1" },
-];
-export default function CurrentStockReport() {
+import { StatusBar } from "expo-status-bar";
+import PrintButton from "../PrintButton";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import { useProductsQuery } from "@/store/api/productApi";
+import { useGlobalContext } from "@/context/GlobalProvider";
+export default function CurrentStock() {
   const navigation = useNavigation();
-  const { data: userInfo } = { data: currentUser };
-  // const type = userInfo?.type;
+  const {userInfo : currentUser}= useGlobalContext()
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
-
-  
-//   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
+   const [searchQuery, setSearchQuery] = useState("");
 
 const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
-// replace this
-// const selectedDateString = formatDate(selectedDate);
+
 const selectedDateString = formatDateString(fromDate);
+const { data: productData, error} =
+    useProductsQuery({
+      q: searchQuery || "all",
+      forceRefetch: true,
+    });
+    console.log("User Info in Stock Index:", productData);
 
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
 
- useEffect(()=>{
-    refetch()
- },[cashInData])
-// warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
+    // currentUser.warehouse : null
   );
   // Set warehouses after fetch
   useEffect(() => {
@@ -70,23 +48,11 @@ console.log("CashInData:", cashInData);
       }
     }
   }, [warehousesData]);
+  const totalStock = Array.isArray(productData)
+  ? productData.reduce((sum, item) => sum + (item.currentStock || 0), 0)
+  : 0;
 
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
+  // Fetch CashIn data from backend
 
   // Header with print button
   useLayoutEffect(() => {
@@ -101,43 +67,30 @@ console.log("CashInData:", cashInData);
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
-      ),
+      // headerRight: () => (
+      //   <TouchableOpacity
+      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+      //     className="me-4"
+      //   >
+      //     <Ionicons name="print-outline" size={28} color="white" />
+      //   </TouchableOpacity>
+        
+      // ),
     });
   }, [navigation]);
 
-  // Filter data by role, warehouse, and date
-  const filteredData = cashInData
-  ? cashInData.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
+  
+  // if (isLoading) return <Text>Loading .......</Text>;
+  if (error) return <Text>Error Loading data</Text>;
 
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
 
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
 
   return (
-    <> 
-    <StatusBar style="light" backgroundColor="white" />
-    <View className=" bg-dark p-2">
+    <>
+     <StatusBar style="light" backgroundColor="white" />
+    <View className=" bg-dark p-2 flex-1">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {currentUser.role === "admin" && (
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -150,22 +103,18 @@ console.log("CashInData:", cashInData);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-        )}
-
         {/* From / To Dates */}
         <View className="flex-row gap-3">
           <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
         </View>
       </View>
-
       {showStartPicker && (
         <DateTimePicker
           value={fromDate}
@@ -193,48 +142,30 @@ console.log("CashInData:", cashInData);
 
       {/* Summary */}
       <View className=" mb-4">
-        <View className="bg-black-200 p-4 rounded-lg w-full mb-4">
-          <Text className="text-zinc-300 text-sm">Total Product stock</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+        <View className="bg-black-200 p-4 rounded-2xl ">
+          <Text className="text-zinc-300 text-sm">Total Stock In</Text>
+            <Text className="text-yellow-400 text-xl font-bold">
+        {totalStock}
+      </Text>
+          {/* <Text className="text-yellow-400 text-xl font-bold">{productData.length}</Text> */}
         </View>
-        {/* <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Amount</Text>
-          <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
-          </Text>
-        </View> */}
+        
       </View>
-
       {/* List */}
-      {/* <FlatList
-        data={filteredData}
-        keyExtractor={(item) => item.id}
+      <FlatList
+        data={productData || []}
+        keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item.source}</Text>
+            <Text className="text-white font-semibold">{item?.style}</Text>
             <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400">{item.date}</Text>
-              <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text>
+            <Text className="text-white font-semibold">Code : {item?.code}</Text>
+              <Text className="text-gray-300">{item?.currentStock} </Text>
+              {/* <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text> */}
             </View>
           </View>
         )}
-      /> */}
-
-      <ScrollView>
-        <View>
-        {
-          currentStock.map((item, index) => (
-            <View key={index} className="bg-black-200 p-4 rounded-xl mb-3">
-              <Text className="text-white font-semibold">{item.name}</Text>
-              <View className="flex-row justify-between mt-2">
-                <Text className="text-gray-400">Warehouse: {item.warehouse}</Text>
-                <Text className="text-gray-200 font-bold">Stock:<Text className="text-primary"> {item.stock}</Text></Text>
-              </View>
-            </View>
-          ))
-        }
-      </View>
-      </ScrollView>
+      />
     </View>
     </>
   );

@@ -43,6 +43,7 @@ export default function PosDashboard() {
     { warehouse: warehouse, date: startDate, type: type } as any,
     { skip: !userInfo } // Skip query until userInfo is available
   );
+  // console.log("Dashboard Data:", dashboardData);
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 

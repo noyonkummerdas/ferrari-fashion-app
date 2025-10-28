@@ -23,6 +23,15 @@ export const CustomerApi = createApi({
       query: ({ id,date,isDate }) => `/customer/byTime/${id}/${date}/${isDate}`,
       providesTags: ["Customer"],
     }),
+    GetCustomerByInvoice: builder.query<string, any>({
+       query: ({invoiceId}) => `/customer/invoice/${invoiceId}`,
+       keepUnusedDataFor: 0,
+       refetchOnMountOrArgChange: true,
+       transformResponse: (response) => {
+       // return empty array or null if not found
+       return response ? response : {customerId:""};
+  },
+     }),
     // new
     CustomersExport: builder.query<Customer[], any>({
       query: ({ warehouse }) => `/customer/export/${warehouse}`,
@@ -98,6 +107,7 @@ export const {
   useCustomersExportQuery,
   useCustomerQuery,
   useGetCustomerByIdQuery,
+  useGetCustomerByInvoiceQuery,
   // useCustomerPointQuery,
   useCustomerDWQuery,
   useAddCustomerMutation,

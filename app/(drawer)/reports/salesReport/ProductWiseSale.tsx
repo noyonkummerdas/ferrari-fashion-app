@@ -13,6 +13,7 @@ import { format, startOfDay, endOfDay } from "date-fns";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
     import { StatusBar } from "expo-status-bar";
+    import PrintButton from "../PrintButton";
 
 
 interface Transaction {
@@ -133,48 +134,6 @@ const ProductWiseSale = () => {
         }
       }, [warehousesData]);
 
-  const exportCSV = async () => {
-    try {
-      let csv = "Invoice,Customer,Warehouse,Amount\n";
-      filteredSales.forEach((sale) => {
-        csv += `${sale.invoice || sale.invoiceId},${sale.customerName || sale.customerId?.name || ''},${sale.warehouse || ''},${sale.amount || 0}\n`;
-      });
-      const fileUri = FileSystem.documentDirectory + "sales_report.csv";
-      await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
-      await Sharing.shareAsync(fileUri);
-    } catch (error) {
-      Alert.alert("Error", "Failed to export CSV");
-    }
-  };
-
-  const exportPDF = async () => {
-    try {
-      const html = `
-        <h1>Sales Report</h1>
-        <table border="1" cellspacing="0" cellpadding="5">
-          <tr>
-            <th>Invoice</th>
-            <th>Customer</th>
-            <th>Warehouse</th>
-            <th>Amount</th>
-          </tr>
-          ${filteredSales.map((sale) => `
-            <tr>
-              <td>${sale.invoice || sale.invoiceId}</td>
-              <td>${sale.customerName || sale.customerId?.name || ''}</td>
-              <td>${sale.warehouse || ''}</td>
-              <td>৳${sale.amount?.toLocaleString() || 0}</td>
-            </tr>
-          `).join('')}
-        </table>
-      `;
-      const { uri } = await Print.printToFileAsync({ html });
-      await Sharing.shareAsync(uri);
-    } catch (error) {
-      Alert.alert("Error", "Failed to export PDF");
-    }
-  };
-
   const navigation = useNavigation();
   useLayoutEffect(() => {
       navigation.setOptions({
@@ -189,54 +148,16 @@ const ProductWiseSale = () => {
           </TouchableOpacity>
         ),
         headerRight: () => (
-          <TouchableOpacity
-            onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-            className="me-4"
-          >
-            <Ionicons name="print-outline" size={28} color="white" />
-          </TouchableOpacity>
+          // <TouchableOpacity
+          //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+          //   className="me-4"
+          // >
+          //   <Ionicons name="print-outline" size={28} color="white" />
+          // </TouchableOpacity>
+          <PrintButton filteredData={saleProductDetails} title="Product Wise Sale Report" />
         ),
       });
-    }, [navigation]);
-
-
-
-  // const customerWiseSales =[
-  //   {
-  //     name: "Haidar Ali",
-  //     balance: 2899900
-  //   },
-  //   {
-  //     name: "Morshed Alam",
-  //     balance: 128000
-  //   },
-  //   {
-  //     name: "Jony Mia",
-  //     balance: 23000
-  //   },
-  //   {
-  //     name: "Jewel Rana",
-  //     balance: 100000
-  //   },
-  // ]
-  // const saleProductDetails =[
-  //   {
-  //     name: "Hudie ",
-  //     balance: 150000
-  //   },
-  //   {
-  //     name: "T- Shirt",
-  //     balance: 128000
-  //   },
-  //   {
-  //     name: "Jeans Pant",
-  //     balance: 23000
-  //   },
-  //   {
-  //     name: "Frog",
-  //     balance: 100000
-  //   },
-  // ]
+    }, [navigation, saleProductDetails]);
 
   return (
     <>
@@ -297,23 +218,6 @@ const ProductWiseSale = () => {
           onChange={(_, date) => { date && setToDate(date); setShowEndPicker(false); }}
         />
       )}
-
-      {/* <TouchableOpacity onPress={exportCSV} className="bg-primary p-3 rounded-xl mt-3 items-center">
-        <Text className="text-black font-bold">Export CSV</Text>
-      </TouchableOpacity> */}
-
-      {/* <View className="mt-4">
-        <Text className="text-white text-lg font-bold mb-2">Sales Report</Text>
-        {filteredSales.length === 0 && (
-          <Text className="text-gray-400 text-center mt-4">No sales data available</Text>
-        )}
-        {filteredSales.map((sale, idx) => (
-          <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-            <Text className="text-gray-300">{sale.invoice || sale.invoiceId}</Text>
-            <Text className="text-white">৳{sale.amount?.toLocaleString()}</Text>
-          </View>
-        ))}
-      </View> */}
       {/**total sale*/}
       <View className="mt-4 p-4 bg-black-200 rounded-xl ">
         <Text className='text-gray-300 font-bold text-lg'>Product Sale </Text>
@@ -343,21 +247,7 @@ const ProductWiseSale = () => {
             </View>
           ))}
         </View>
-        {/**customer wise sale */}
-        {/* <View className="mt-4 p-4 bg-black-200 rounded-xl ">
-          <Text className='text-gray-300 font-bold text-lg'>Customer Wise Sale report </Text>
-          {
-            customerWiseSales.map((customer, idx) => (
-              <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-                <Text className="text-gray-300">{customer.name}</Text>
-                <Text className="text-white">৳{customer.balance?.toLocaleString()}</Text>
-              </View>
-            ))}
-        </View> */}
-
-      {/* <TouchableOpacity onPress={() => router.back()} className="bg-primary p-4 rounded-xl items-center mt-4">
-        <Text className="text-black font-semibold">Back</Text>
-      </TouchableOpacity> */}
+       
     </ScrollView>
     </View>
     </>

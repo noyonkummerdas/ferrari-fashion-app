@@ -7,15 +7,12 @@ import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Alert,
-  Keyboard,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  TouchableWithoutFeedback,
   View,
 } from "react-native";
 
@@ -60,11 +57,8 @@ const CashDepositDetails = () => {
     type: "deposit",
     status: "complete",
   });
-
-  console.log("FD", formData);
-
-  console.log(data);
-
+  // console.log("FD", formData);
+  // console.log(data);
   useEffect(() => {
     if (data && isSuccess) {
       setFormData((prev) => ({
@@ -195,10 +189,12 @@ const CashDepositDetails = () => {
       className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
-       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <ScrollView className="flex-1 bg-dark"
-        keyboardShouldPersistTaps="handled"
-    >
+      <ScrollView
+            className="flex-1 px-6 pt-4"
+            contentContainerStyle={{ paddingBottom: 300 }}
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+          >
       <StatusBar style="light" />
 
         {/* Name Input */}
@@ -319,7 +315,6 @@ const CashDepositDetails = () => {
         </View>
       )}
     </ScrollView>
-    </TouchableWithoutFeedback>
     </KeyboardAvoidingView>
   );
 };

@@ -1,6 +1,6 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useGetSupplierByInvoiceQuery, useSuppliersQuery } from "@/store/api/supplierApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -10,13 +10,12 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
-  Image,
-  Platform,
+  Image, KeyboardAvoidingView, Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const Payment = () => {
@@ -33,6 +32,7 @@ const Payment = () => {
   const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
     q: q,
   });
+  const [search, setSearch] = useState('');
 
   // Form state
   const [formData, setFormData] = useState({
@@ -41,7 +41,7 @@ const Payment = () => {
     // note: "",
     photo: null as string | null,
     supplierId: "",
-    invoice: "",
+    // invoice: "",
     name: "",
     note: "",
     type: "payment",
@@ -52,6 +52,8 @@ const Payment = () => {
     invoices: "",
     status: "complete",
   });
+//  console.log("Supplire formData", formData);
+
 
   const {
     data: supplierData,
@@ -185,6 +187,7 @@ const Payment = () => {
     // );
   };
 
+
   const handlePhotoUpload = async () => {
     try {
       // Request permissions
@@ -275,16 +278,60 @@ const Payment = () => {
   const removePhoto = () => {
     setFormData((prev) => ({ ...prev, photo: null }));
   };
-
+  
+  const {
+      data: invoiceData,
+      isSuccess: invoiceSuccess,
+      isError: invoiceError,
+      refetch: invoiceRefetch
+    } = useGetSupplierByInvoiceQuery({
+      invoiceId: search, 
+      skip: !search
+    });
+    console.log('supplireInvoicedata', invoiceData, invoiceError, invoiceSuccess);
+ 
+    console.log('')
+      useEffect(()=>{
+        invoiceRefetch()
+      }, [search])
+      
+      
+      useEffect(()=>{
+        // console.log(invoiceData)
+        if(invoiceData){
+          if(invoiceData?.status !== "paid"){
+          if(search === ""){
+            handleInputChange("supplierId", "")
+          }else{
+            handleInputChange("supplierId", invoiceData?.supplierId)
+            handleInputChange("amount", invoiceData.due);
+          }}else{
+            Alert.alert("Invoice Paid", "This invoice has already been paid.", [
+              {
+                text: "OK", 
+              },
+            ]);
+          }
+          // console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
+        }else{
+          handleInputChange("supplierId", "")
+        }
+      }, [invoiceSuccess, invoiceData])
   return (
     <>
-      <ScrollView>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        >
+      <ScrollView
+            className="flex-1 px-6 pt-4"
+           contentContainerStyle={{ paddingBottom: 300 }}
+         keyboardShouldPersistTaps="handled"
+         showsVerticalScrollIndicator={false}
+          >
         <View className="flex-1 bg-dark">
           <StatusBar style="light" />
-          <ScrollView
-            className="flex-1 px-6 pt-4"
-            showsVerticalScrollIndicator={false}
-          >
             {/* Supplier Input */}
             <View className="mb-4">
               <Text className="text-gray-300 text-lg font-medium">
@@ -319,7 +366,10 @@ const Payment = () => {
 
             {/* Amount Input */}
             <View className="mb-4">
+            <View className="flex justify-between items-center flex-row">
               <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+              <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+            </View>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
                 value={formData.amount.toString()}
@@ -350,8 +400,11 @@ const Payment = () => {
               <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-                value={formData.invoice.toString()}
-                onChangeText={(value) => handleInputChange("invoice", value)}
+                value={formData.invoices.toString()}
+                onChangeText={(value) => {
+                handleInputChange("invoices", value)
+                setSearch(value)
+              }}
                 placeholder="Enter invoice"
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
@@ -419,7 +472,7 @@ const Payment = () => {
                 Payment
               </Text>
             </TouchableOpacity>
-          </ScrollView>
+
 
           {/* Date Picker Modal */}
           {showDatePicker && (
@@ -477,6 +530,7 @@ const Payment = () => {
           )}
         </View>
       </ScrollView>
+      </KeyboardAvoidingView>
     </>
   );
 };

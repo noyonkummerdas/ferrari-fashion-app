@@ -1,6 +1,7 @@
 import { CustomDrawerToggleButton } from "@/components";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { usePurchasesDWQuery } from "@/store/api/purchasApi";
+import { useSupplierExportQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { router, useNavigation } from "expo-router";
@@ -26,6 +27,11 @@ const PurchasesList = () => {
     isDate: "month",
      forceRefetch: true,
   });
+  console.log("Purchases Data:", data, isSuccess, isError);
+   const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
+    skip: !searchQuery, //
+  })
+  console.log('supplier InvoiceId data', invoiceData, invoiceIdSuccess, invoiceIdError)
 
   useEffect(() => {
     refetch();

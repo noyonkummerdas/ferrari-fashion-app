@@ -25,6 +25,8 @@ const PaymentDetails = () => {
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
 
+    console.log("TRANSACTION DETAILS", data);
+
   useEffect(() => {
     refetch();
   }, [_id]);

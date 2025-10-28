@@ -1,19 +1,16 @@
-import { ScrollView, Text, TouchableOpacity, View, Alert, useColorScheme, Platform } from 'react-native';
+import { ScrollView, Text, TouchableOpacity, View, Platform } from 'react-native';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useNavigation } from 'expo-router';
-import * as FileSystem from "expo-file-system";
-import * as Sharing from "expo-sharing";
-import * as Print from "expo-print";
 import { Dropdown } from 'react-native-element-dropdown';
 import { useAllSaleQuery } from "@/store/api/saleApi";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, startOfDay, endOfDay } from "date-fns";
-import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
-import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
- import { StatusBar } from "expo-status-bar";
-
+import { format, isAfter, isBefore } from "date-fns";
+import { useWarehousesQuery } from "@/store/api/warehouseApi";
+import { WarehouseTypes } from "@/types/warehouse";
+import { StatusBar } from "expo-status-bar";
+import PrintButton from "../PrintButton";
 
 interface Transaction {
   _id: string;
@@ -26,7 +23,107 @@ interface Transaction {
   warehouse?: string;
   items?: any[];
 }
-  const saleProductDetails =[
+
+const saleProductDetails = [
+  {
+    name: "Hudie ",
+    balance: 150000
+  },
+  {
+    name: "T- Shirt",
+    balance: 128000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    balance: 100000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    balance: 100000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    balance: 100000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    balance: 100000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    balance: 100000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    balance: 100000
+  },
+  {
+    name: "Jeans Pant",
+    balance: 23000
+  },
+  {
+    name: "Frog",
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
+    {
+      name: "Jeans Pant",
+      balance: 23000
+    },
+    {
+      name: "Frog",
+      balance: 100000
+    },
     {
       name: "Hudie ",
       balance: 150000
@@ -125,81 +222,43 @@ interface Transaction {
     },
   ]
 const SalesReport = () => {
+  const { userInfo } = useGlobalContext();
+   const navigation = useNavigation();
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
-  const [filteredSales, setFilteredSales] = useState<Transaction[]>([]);
+  const [currentDay, setCurrentDay] = useState(new Date());
+  const [tempDate, setTempDate] = useState(new Date());
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  // const [searchQuery, setSearchQuery] = useState("");
+  // const colorScheme = useColorScheme(); 
+     const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(userInfo?.warehouse ?? null);
+      const { data: warehousesData } = useWarehousesQuery();
+      const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
+ const { data: salesData, isSuccess, refetch } = useAllSaleQuery({
+    warehouse: userInfo?.warehouse as string,
+    startDate: format(currentDay, "MM-dd-yyyy"),
+    isDate: "month",
+     forceRefetch: true,
+  });
+  // console.log("SalesData:", salesData);
 
-
-  const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
-  
-  const { data: userInfo } = { data: currentUser };
-    // const type = userInfo?.type;
-    const { data: warehousesData } = useWarehousesQuery();
-    const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
-
-    // warehouse  role
-      const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-        currentUser.role === "user" ? currentUser.warehouse : null
-      );
-      // Set warehouses after fetch
-      useEffect(() => {
+  useEffect(() => {
+     refetch()
+  }, [salesData, isSuccess]);  
+  // warehouse  role
+    // Set warehouses after fetch
+    useEffect(() => {
         if (warehousesData) {
           setWarehouses(warehousesData);
-          if (currentUser.role === "admin" && warehousesData.length > 0) {
-            setSelectedWarehouse(warehousesData[0]._id);
+          if ( warehousesData.length > 0) {
+            setSelectedWarehouse(warehousesData);
           }
         }
-      }, [warehousesData]);
-
-  const exportCSV = async () => {
-    try {
-      let csv = "Invoice,Customer,Warehouse,Amount\n";
-      filteredSales.forEach((sale) => {
-        csv += `${sale.invoice || sale.invoiceId},${sale.customerName || sale.customerId?.name || ''},${sale.warehouse || ''},${sale.amount || 0}\n`;
-      });
-      const fileUri = FileSystem.documentDirectory + "sales_report.csv";
-      await FileSystem.writeAsStringAsync(fileUri, csv, { encoding: FileSystem.EncodingType.UTF8 });
-      await Sharing.shareAsync(fileUri);
-    } catch (error) {
-      Alert.alert("Error", "Failed to export CSV");
-    }
-  };
-
-  const exportPDF = async () => {
-    try {
-      const html = `
-        <h1>Sales Report</h1>
-        <table border="1" cellspacing="0" cellpadding="5">
-          <tr>
-            <th>Invoice</th>
-            <th>Customer</th>
-            <th>Warehouse</th>
-            <th>Amount</th>
-          </tr>
-          ${filteredSales.map((sale) => `
-            <tr>
-              <td>${sale.invoice || sale.invoiceId}</td>
-              <td>${sale.customerName || sale.customerId?.name || ''}</td>
-              <td>${sale.warehouse || ''}</td>
-              <td>৳${sale.amount?.toLocaleString() || 0}</td>
-            </tr>
-          `).join('')}
-        </table>
-      `;
-      const { uri } = await Print.printToFileAsync({ html });
-      await Sharing.shareAsync(uri);
-    } catch (error) {
-      Alert.alert("Error", "Failed to export PDF");
-    }
-  };
-
-  const navigation = useNavigation();
+      }, [warehousesData, userInfo]);
+ 
   useLayoutEffect(() => {
       navigation.setOptions({
         title: "Sales Report",
@@ -212,167 +271,118 @@ const SalesReport = () => {
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
         ),
-        headerRight: () => (
-          <TouchableOpacity
-            onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-            className="me-4"
-          >
-            <Ionicons name="print-outline" size={28} color="white" />
-          </TouchableOpacity>
-        ),
+        // headerRight: () => (
+          // <TouchableOpacity
+          //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
+          //   className="me-4"
+          // >
+          //   <Ionicons name="print-outline" size={28} color="white" />
+          // </TouchableOpacity>
+          // <PrintButton filteredData={saleProductDetails} title="Sales Report" />
+        // ),
       });
-    }, [navigation]);
-
-
-
-  // const customerWiseSales =[
-  //   {
-  //     name: "Haidar Ali",
-  //     balance: 2899900
-  //   },
-  //   {
-  //     name: "Morshed Alam",
-  //     balance: 128000
-  //   },
-  //   {
-  //     name: "Jony Mia",
-  //     balance: 23000
-  //   },
-  //   {
-  //     name: "Jewel Rana",
-  //     balance: 100000
-  //   },
-  // ]
-  // const saleProductDetails =[
-  //   {
-  //     name: "Hudie ",
-  //     balance: 150000
-  //   },
-  //   {
-  //     name: "T- Shirt",
-  //     balance: 128000
-  //   },
-  //   {
-  //     name: "Jeans Pant",
-  //     balance: 23000
-  //   },
-  //   {
-  //     name: "Frog",
-  //     balance: 100000
-  //   },
-  // ]
+    }, [navigation]); 
+     const formattedDate = {
+    month: currentDay.toLocaleString("en-US", { month: "long" }),
+    year: currentDay.getFullYear(),
+  };
+const totalSale = Array.isArray(salesData)
+  ? salesData.reduce((sum, item) => sum + (item?.amount || 0), 0)
+  : 0;
 
   return (
     <>
      <StatusBar style="light" backgroundColor="white" />
-    <View className='bg-dark flex-1 p-2'>
-    
-     {userInfo?.role === "admin" && (
-        <>
-        <View className='flex-row items-center justify-evenly'>
-          <View>
+      <View className='bg-dark flex-1 p-2'>
+            
+            {/* {userInfo?.role === "admin" && warehouses?.length > 0 && ( */}
+              <View className='flex-row items-center justify-evenly'>
+              <View>
+              <Dropdown
+                data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
+                labelField="label"
+                valueField="value"
+                placeholder="Select Warehouse"
+                value={selectedWarehouse}
+                onChange={(item: any) => setSelectedWarehouse(item.value)}
+                placeholderStyle={{ color: 'white' }}
+                style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, width: 180, height: 60,marginTop: 10 }}
+                selectedTextStyle={{ color: 'white' }}
+                itemTextStyle={{ color: 'black' }}
+              />
+            </View>
 
-            {/* <Text className="text-white ms-2 ">Select Warehouse</Text> */}
-          <Dropdown
-              data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Warehouse"
-              value={selectedWarehouse}
-              onChange={(item: any) => setSelectedWarehouse(item.value)}
-              placeholderStyle={{ color: 'white' }}
-              style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, width: 180, height: 60,marginTop: 10 }}
-              selectedTextStyle={{ color: 'white' }}
-              itemTextStyle={{ color: 'black' }}
-            />
+            <View className="flex-row gap-3 mt-3">
+              <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 ms-2 rounded-xl bg-black-200 flex-col">
+                <Text className='text-white'><Ionicons name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
+                <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col">
+                <Text className='text-white'><Ionicons name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
+                <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
+              </TouchableOpacity>
+            </View>
           </View>
+        {/* )} */}
 
-        <View className="flex-row gap-3 mt-3">
-        <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 ms-2 rounded-xl bg-black-200 flex-col">
-          <Text className='text-white'><Ionicons name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
-          <Text className="text-white  text-sm"> {format(fromDate, "dd MMM yyyy")}</Text>
-        </TouchableOpacity>
-        <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200  flex-col">
-          <Text className='flex-row justify-end items-end text-end' ><Ionicons className="flex-row justify-end items-center " name="calendar-number-sharp" size={24} color="#fdb714" /></Text>
-          <Text className="text-white  text-sm"> {format(toDate, "dd MMM yyyy")}</Text>
-        </TouchableOpacity>
-      </View>
-      </View>
-        </>
-      )}
-      {/* Date Pickers */}
+        {/* Date Pickers */}
+
+        
+
+        {showStartPicker && (
+          <DateTimePicker
+            value={fromDate}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+            onChange={(_, date) => { date && setFromDate(date); setShowStartPicker(false); }}
+          />
+        )}
+
+        {showEndPicker && (
+          <DateTimePicker
+            value={toDate}
+            mode="date"
+            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+            onChange={(_, date) => { date && setToDate(date); setShowEndPicker(false); }}
+          />
+        )}
 
       
-
-      {showStartPicker && (
-        <DateTimePicker
-          value={fromDate}
-          mode="date"
-          display={Platform.OS === 'ios' ? 'inline' : 'default'}
-          onChange={(_, date) => { date && setFromDate(date); setShowStartPicker(false); }}
-        />
-      )}
-
-      {showEndPicker && (
-        <DateTimePicker
-          value={toDate}
-          mode="date"
-          display={Platform.OS === 'ios' ? 'inline' : 'default'}
-          onChange={(_, date) => { date && setToDate(date); setShowEndPicker(false); }}
-        />
-      )}
-
-      {/* <TouchableOpacity onPress={exportCSV} className="bg-primary p-3 rounded-xl mt-3 items-center">
-        <Text className="text-black font-bold">Export CSV</Text>
-      </TouchableOpacity> */}
-
-      {/* <View className="mt-4">
-        <Text className="text-white text-lg font-bold mb-2">Sales Report</Text>
-        {filteredSales.length === 0 && (
-          <Text className="text-gray-400 text-center mt-4">No sales data available</Text>
-        )}
-        {filteredSales.map((sale, idx) => (
-          <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-            <Text className="text-gray-300">{sale.invoice || sale.invoiceId}</Text>
-            <Text className="text-white">৳{sale.amount?.toLocaleString()}</Text>
-          </View>
-        ))}
-      </View> */}
-      {/**total sale*/}
-      <View className="mt-4 p-4 bg-black-200 rounded-xl ">
-        <Text className='text-gray-300 font-bold text-lg'>Total Sale </Text>
-        <Text className='text-gray-300'>Amount : <Text className='text-primary'>12000000</Text></Text>
+        {/**total sale*/}
+             <View className="mt-4 p-4 bg-black-200 rounded-xl flex flex-row item-center justify-between ">
+        <Text className='text-gray-200 text-xl'>Total Sale </Text>
+        <Text className='text-gray-300 text-lg text-primary'> {totalSale}</Text>
         </View>
 
         <ScrollView>
-        {/**product wise sale */}
-        <View className="mt-4 p-4 bg-black-200 rounded-xl ">
-        {/* <Text className='text-gray-300 font-bold text-lg'>Product based sale</Text> */}
-        {
-          saleProductDetails.map((product, idx) => (
-            <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-              <Text className="text-gray-200">{product.name}</Text>
-              <Text className="text-gray-200"><Text className='text-primary'>{product.balance?.toLocaleString()}</Text> BDT</Text>
+            {/**product wise sale */}
+            <View className="mt-4 p-4 bg-black-200 rounded-xl ">
+            {/* <Text className='text-gray-300 font-bold text-lg'>Product based sale</Text> */}
+            {
+              salesData?.map((product, idx) => (
+                <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
+                  <Text className="text-gray-200">{product.customerName}</Text>
+                  <Text className="text-gray-200"><Text className='text-primary'>{product.amount?.toLocaleString()}</Text> BDT</Text>
+                </View>
+              ))}
             </View>
-          ))}
-        </View>
-        {/**customer wise sale */}
-        {/* <View className="mt-4 p-4 bg-black-200 rounded-xl ">
-          <Text className='text-gray-300 font-bold text-lg'>Customer Wise Sale report </Text>
-          {
-            customerWiseSales.map((customer, idx) => (
-              <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-                <Text className="text-gray-300">{customer.name}</Text>
-                <Text className="text-white">৳{customer.balance?.toLocaleString()}</Text>
-              </View>
-            ))}
-        </View> */}
+            {/**customer wise sale */}
+            {/* <View className="mt-4 p-4 bg-black-200 rounded-xl ">
+              <Text className='text-gray-300 font-bold text-lg'>Customer Wise Sale report </Text>
+              {
+                customerWiseSales.map((customer, idx) => (
+                  <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
+                    <Text className="text-gray-300">{customer.name}</Text>
+                    <Text className="text-white">৳{customer.balance?.toLocaleString()}</Text>
+                  </View>
+                ))}
+            </View> */}
 
-      {/* <TouchableOpacity onPress={() => router.back()} className="bg-primary p-4 rounded-xl items-center mt-4">
-        <Text className="text-black font-semibold">Back</Text>
-      </TouchableOpacity> */}
-    </ScrollView>
-    </View>
+            {/* <TouchableOpacity onPress={() => router.back()} className="bg-primary p-4 rounded-xl items-center mt-4">
+              <Text className="text-black font-semibold">Back</Text>
+            </TouchableOpacity> */}
+        </ScrollView>
+      </View>
     </>
   );
 };

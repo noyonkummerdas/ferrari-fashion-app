@@ -52,7 +52,7 @@ const SalesList = () => {
     isDate: "month",
      forceRefetch: true,
   });
-
+    console.log('sales data ', data)
   useEffect(() => { refetch() }, [userInfo?.warehouse, currentDay]);
 
   const [saleList, setSaleList] = useState<any[]>([]);

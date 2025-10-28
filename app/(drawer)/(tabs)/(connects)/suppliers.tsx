@@ -12,7 +12,7 @@ import {
 } from "react-native";
 // import { useInventoriesQuery } from '@/store/api/inventoryApi';
 
-import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useSupplierExportQuery, useSuppliersQuery } from "@/store/api/supplierApi";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
@@ -50,6 +50,7 @@ const Suppliers = ({}) => {
   // const [stockData, setStockData] = useState<Customer[]>([])
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
+  
   // useInventoriesQuery
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useSuppliersQuery({
@@ -58,7 +59,10 @@ const Suppliers = ({}) => {
     });
 
   // console.log(data);
-
+ const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
+  skip: !searchQuery, //
+})
+console.log('supplier InvoiceId data', invoiceData, invoiceIdSuccess, invoiceIdError)
   useEffect(() => {
     refetch();
   }, [aamarId]);
@@ -123,7 +127,7 @@ const Suppliers = ({}) => {
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
+        <Ionicons name="search-outline" size={24} color={"#CDCDE0"}/>
       </View>
 
       <ScrollView>

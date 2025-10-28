@@ -1,41 +1,25 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useTransactionListQuery } from "@/store/api/transactionApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router } from "expo-router";
-import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
-import { ScrollView } from "react-native-gesture-handler";
+import { format } from "date-fns";
+import { router, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 // Logged-in user example
-const currentUser = {
-  role: "admin", // "admin" or "user"
-  warehouse: "w1",
-};
 
 
-const cashOut = [
-  { id: '1', source: 'Sale', date: '2024-10-01', amount: 5000, warehouse: 'w1' },
-  { id: '2', source: 'Refund', date: '2024-10-02', amount: 2000, warehouse: 'w1' },
-  { id: '4', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '5', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '6', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '7', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '8', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '9', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  { id: '10', source: 'Purchase', date: '2024-10-03', amount: 3000, warehouse: 'w2' },
-  // Add more sample data as needed
-];
+
+
+
 export default function CashOutReport() {
   const navigation = useNavigation();
-  const { data: userInfo } = { data: currentUser };
+  const {userInfo : currentUser}= useGlobalContext()
+  const isAdmin = currentUser?.role === "admin";
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
@@ -45,24 +29,14 @@ export default function CashOutReport() {
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
- 
-  // const type = userInfo?.type
+    const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+    // const selectedDateString = formatDateString(fromDate);
+    const [currentDay, setCurrentDay] = useState(new Date())
 
-const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
-// replace this
-// const selectedDateString = formatDate(selectedDate);
-const selectedDateString = formatDateString(fromDate);
-
-const {data: cashOutData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashOutData:", cashOutData);
-
- useEffect(()=>{
-    refetch()
- },[cashOutData])
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
+    //  currentUser.warehouse : null
   );
   // Set warehouses after fetch
   useEffect(() => {
@@ -73,23 +47,7 @@ console.log("CashOutData:", cashOutData);
       }
     }
   }, [warehousesData]);
-
-  // Fetch CashIn data from backend (replace with your API)
-  useEffect(() => {
-    async function fetchCashIn() {
-      try {
-        const res = await fetch(
-          `https://your-api.com/cashin?warehouse=${selectedWarehouse}`
-        );
-        const data = await res.json();
-        setCashInData(data);
-      } catch (err) {
-        console.log("CashIn fetch error:", err);
-      }
-    }
-
-    if (selectedWarehouse) fetchCashIn();
-  }, [selectedWarehouse]);
+  
 
   // Header with print button
   useLayoutEffect(() => {
@@ -104,44 +62,41 @@ console.log("CashOutData:", cashOutData);
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: () => (
-        <TouchableOpacity
-          onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          className="me-4"
-        >
-          <Ionicons name="print-outline" size={28} color="white" />
-        </TouchableOpacity>
-      ),
+      // headerRight: () => (
+       
+      //   // <PrintButton filteredData={cashOut} title="Cash Out Report" />
+      // ),
     });
   }, [navigation]);
+  const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
+      useTransactionListQuery({
+       warehouse: isAdmin ? selectedWarehouse : currentUser?.warehouse,
+        type: "cashOut",
+        date: format(currentDay, "MM-dd-yyyy"),
+        forceRefetch: true,
+      });
+      // console.log('cashout list ', cashOutData)
+      useEffect(() => {
+  if (isAdmin && selectedWarehouse) {
+    refetch();
+  }
+}, [selectedWarehouse]);
+if (!warehousesData) return null;
+
+
+     const totalCashOut = cashOutData?.transactions?.length || 0;
+     const totalAmount = cashOutData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
   // Filter data by role, warehouse, and date
-  const filteredData = cashOutData
-  ? cashOutData.filter((item) => {
-      const itemDate = new Date(item.date);
-      const matchesDate =
-        (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
-        (isBefore(itemDate, toDate) || itemDate.toDateString() === toDate.toDateString());
-
-      const matchesWarehouse =
-        currentUser.role === "admin"
-          ? selectedWarehouse
-            ? item.warehouse === selectedWarehouse
-            : true
-          : item.warehouse === currentUser.warehouse;
-
-      return matchesDate && matchesWarehouse;
-    })
-  : [];
 
   return (
     <>
-     <StatusBar style="light" backgroundColor="white" />
+     <StatusBar backgroundColor="white" />
     <View className="flex-1 bg-dark p-2">
      
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {currentUser.role === "admin" && (
+        {isAdmin && (
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -155,21 +110,18 @@ console.log("CashOutData:", cashOutData);
             itemTextStyle={{ color: "black" }}
           />
         )}
-
         {/* From / To Dates */}
         <View className="flex-row gap-3">
           <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
-
           <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
             <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
             <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
           </TouchableOpacity>
         </View>
       </View>
-
       {showStartPicker && (
         <DateTimePicker
           value={fromDate}
@@ -194,54 +146,56 @@ console.log("CashOutData:", cashOutData);
           }}
         />
       )}
-
       {/* Summary */}
       <View className="flex-row justify-between mb-4">
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Cash In</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{filteredData.length}</Text>
+          <Text className="text-zinc-300 text-xl">Total Cash Out</Text>
+
+          <Text className="text-yellow-400 text-xl font-bold">{totalCashOut}</Text>
         </View>
         <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Amount</Text>
+          <Text className="text-zinc-300 text-xl">Total Amount</Text>
           <Text className="text-primary text-xl font-bold">
-            {filteredData.reduce((sum, item) => sum + item.amount, 0).toLocaleString()} BDT
+            {totalAmount} BDT
           </Text>
         </View>
       </View>
 
       {/* List */}
-      {/* <FlatList
-        data={filteredData}
+      <FlatList
+        data={cashOutData?.transactions || []}
         keyExtractor={(item) => item.id || item._id} 
         renderItem={({ item }) => (
           <View className="bg-black-200 p-4 rounded-xl mb-3">
-            <Text className="text-white font-semibold">{item.source}</Text>
-            <View className="flex-row justify-between mt-2">
-              <Text className="text-gray-400">{item.date}</Text>
-              <Text className="text-green-400 font-bold">+ {item.amount.toLocaleString()} BDT</Text>
-            </View>
+            <Text className="text-white font-semibold text-lg">{item?.name}</Text>
+             <View className="flex-row justify-between mt-2">
+               <Text className="text-gray-400">{item?.date && format(new Date(item?.date), "dd-MM-yyyy")}</Text>
+               <Text className="text-gray-200 font-bold">
+                 <Text className="text-primary text-lg">{item?.amount?.toLocaleString()}</Text>
+                 <Text> BDT</Text>
+               </Text>
+             </View>
           </View>
         )}
-      /> */}
+      />
 
-        <ScrollView>
+        {/* <ScrollView>
                 <View>
-  {cashOut?.map((items) => (
-    <View  className="bg-black-200 p-4 rounded-xl mb-3 "
-    key={items.id}>
-      <Text className="text-white">{items.source}</Text>
-      <View className="flex-row justify-between mt-2 items-center">
-        <Text className="text-gray-400">{items.date}</Text>
-        <Text className="text-primary font-bold">{items.amount.toLocaleString()} BDT</Text>
-      </View>
+  {cashOut.map((item, index) => (
+  <View key={index} className="bg-black-200 p-4 rounded-xl mb-3">
+    <Text className="text-white font-semibold">{item.source}</Text>
+    <View className="flex-row justify-between mt-2">
+      <Text className="text-gray-400">{item.date}</Text>
+      <Text className="text-gray-200 font-bold">
+        <Text className="text-primary">{item.amount.toLocaleString()}</Text>
+        <Text> BDT</Text>
+      </Text>
     </View>
-  ))}
+  </View>
+))}
 </View>
-        </ScrollView>
-    </View>
-
-
-
+</ScrollView> */}
+</View>
 </>
-  );
+);
 }

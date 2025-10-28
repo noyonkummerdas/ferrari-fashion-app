@@ -1,21 +1,26 @@
 import { CustomDrawerToggleButton } from "@/components";
-import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { Colors } from "@/constants/Colors";
+import { useColorScheme } from "@/hooks/useColorScheme.web";
 // import { CustomDrawerToggleButton } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 // import { useColorScheme } from "react-native";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useTransactionListQuery } from "@/store/api/transactionApi";
+import { format } from "date-fns";
+import { StatusBar } from "expo-status-bar";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+
+
 
 const Accounts = () => {
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo, fetchUser } = useGlobalContext();
   const type = userInfo?.type
-
+  const [currentDay, setCurrentDay] = useState(new Date());
   useLayoutEffect(() => {
     navigation.setOptions({
       // headerRight: () => (
@@ -40,8 +45,52 @@ const Accounts = () => {
       headerShown: true,
     });
   }, [navigation]);
+  // cash deposit data fetch
+   const { data, isSuccess, isLoading, error, isError, refetch } =
+      useTransactionListQuery({
+        warehouse: userInfo?.warehouse,
+        type: "deposit",
+        date: format(currentDay, "MM-dd-yyyy"),
+        forceRefetch: true,
+      });
+      const totalDepositAmount = data?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
+
+      // cash out data fetch
+
+      const { data: cashOutData } =
+          useTransactionListQuery({
+            warehouse: userInfo?.warehouse,
+            type: "cashOut",
+            date: format(currentDay, "MM-dd-yyyy"),
+            forceRefetch: true,
+          });
+           const totalCashOutAmount = cashOutData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
+
+       //payment data fetch
+       const { data: paymentData } =
+           useTransactionListQuery({
+             warehouse: userInfo?.warehouse,
+             type: "payment",
+             date: format(currentDay, "MM-dd-yyyy"),
+             forceRefetch: true,
+           });
+           const totalPaymentAmount = paymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
+
+      // received payment data fetch
+      const { data: receivedPaymentData } =
+          useTransactionListQuery({
+            warehouse: userInfo?.warehouse,
+            type: "paymentReceived",
+            date: format(currentDay, "MM-dd-yyyy"),
+            forceRefetch: true,
+          });
+          const totalReceivedPaymentAmount = receivedPaymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
   return (
+
+    <>
+    <StatusBar backgroundColor="#ffff" />
+
     <ScrollView
       className="flex-1 bg-black-700  h-full"
       showsVerticalScrollIndicator={false}
@@ -81,7 +130,7 @@ const Accounts = () => {
               <Ionicons name="cash" size={22} color="#fdb714" />
               <Text className="text-gray-300 ms-2">Payment</Text>
             </View>
-            <Text className="text-white text-xl font-pbold ms-1">0.00</Text>
+            <Text className="text-white text-xl font-pbold ms-1">{totalPaymentAmount}</Text>
           </TouchableOpacity>
           
           {/* Payment Received */}
@@ -92,7 +141,7 @@ const Accounts = () => {
               <Ionicons name="checkmark-done-circle" size={22} color="#fdb714" />
               <Text className="text-gray-300 ms-2"> Received</Text>
             </View>
-            <Text className="text-white text-xl font-pbold ms-1">0.00</Text>
+            <Text className="text-white text-xl font-pbold ms-1">{totalReceivedPaymentAmount}</Text>
           </TouchableOpacity>
         </View>
           
@@ -105,7 +154,7 @@ const Accounts = () => {
               <Ionicons name="arrow-up-circle" size={22} color="#fdb714" />
               <Text className="text-gray-300 ms-1">Cash Out</Text>
             </View>
-            <Text className="text-white text-xl font-pbold ms-2">0.00</Text>
+            <Text className="text-white text-xl font-pbold ms-2">{totalCashOutAmount}</Text>
           </TouchableOpacity>
           
           {/* Cash Deposit */}
@@ -116,7 +165,7 @@ const Accounts = () => {
               <Ionicons name="arrow-down-circle" size={22} color="#fdb714" />
               <Text className="text-gray-300 ms-1 ">Cash deposit</Text>
             </View>
-            <Text className="text-white text-xl font-pbold ms-2">0.00</Text>
+            <Text className="text-white text-xl font-pbold ms-2">{totalDepositAmount}</Text>
           </TouchableOpacity>
         </View>
 
@@ -136,7 +185,8 @@ const Accounts = () => {
 
         <View>
           
-<Text className="text-lg text-gray-300 pb-4 mt-4 font-pbold "> Payment Section</Text>
+    
+    <Text className="text-lg text-gray-300 pb-4 mt-4 font-pbold "> Payment Section</Text>
      {/* Row 1 */}
      <View className="flex-row mb-4">
         <TouchableOpacity
@@ -181,6 +231,8 @@ const Accounts = () => {
         </View>
               </View>
             </ScrollView>
+
+            </>
   );
 };
 

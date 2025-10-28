@@ -19,6 +19,15 @@ export const SupplierApi = createApi({
       query: ({ _id, date, isDate }) => `/supplier/byTime/${_id}/${date}/${isDate}`,
       providesTags: ["Supplier"],
     }),
+    GetSupplierByInvoice: builder.query<string, any>({
+           query: ({invoiceId}) => `/supplier/invoice/${invoiceId}`,
+            keepUnusedDataFor: 0,
+       refetchOnMountOrArgChange: true,
+       transformResponse: (response) => {
+       // return empty array or null if not found
+       return response ? response : {supplierId:""};
+  },
+         }),
     addSupplier: builder.mutation<{}, Supplier>({
       query: (supplier) => ({
         url: "/supplier",
@@ -93,6 +102,7 @@ export const {
   useSuppliersQuery,
   useSupplierQuery,
   useSupplierTestQuery,
+  useGetSupplierByInvoiceQuery,
   useSupplierPurchaseQuery,
   useSupplierExportQuery,
   useSupplierByProductQuery,
