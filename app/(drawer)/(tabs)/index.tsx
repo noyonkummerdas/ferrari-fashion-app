@@ -145,7 +145,11 @@ export default function PosDashboard() {
       </ItemWrapper>
     );
   };
-  
+  const cashIn = dashboardData?.accountsData?.deposit?.totalAmount || 0;
+const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
+
+const totalCurrentBalance = cashIn - cashOut;
+
   return (
     <>
     
@@ -169,14 +173,14 @@ export default function PosDashboard() {
                       <Ionicons name="trending-up" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Opening Balance</Text>
                     </View>
-                    <Text className="text-white text-xl font-pbold">0.00</Text>
+                    <Text className="text-white text-xl font-pbold">{dashboardData?.accountsData?.deposit?.totalAmount || 0}</Text>
                   </View>
                   <View className="flex-1 ml-2  bg-black-200 rounded-xl h-24 p-4 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="wallet" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Current Balance</Text>
                     </View>
-                    <Text className="text-white text-xl font-pbold">0.00</Text>
+                    <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
                   </View>
             </View>
         {/* Cash In/Out Cards */}
