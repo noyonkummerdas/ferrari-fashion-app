@@ -230,7 +230,10 @@ const RecivedPayment = () => {
 
           {/* Invoice */}
           <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
+           <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
+                <Text className="text-gray-300 text-lg font-medium">Due: {invoiceData && invoiceData.status !== "paid" && invoiceData.due}</Text>
+             </View>
             <TextInput
               className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
               value={formData.invoices}
