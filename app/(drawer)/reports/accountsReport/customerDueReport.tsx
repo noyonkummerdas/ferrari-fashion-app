@@ -96,7 +96,8 @@ const selectedDateString = formatDateString(fromDate);
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-       
+       {
+       currentUser?.type === "admin" && warehouses?.length > 0 &&
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -109,6 +110,7 @@ const selectedDateString = formatDateString(fromDate);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
+       }
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
