@@ -191,7 +191,7 @@ const RecivedPayment = () => {
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1 bg-dark"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-    >
+      >
       <View className="flex-1 bg-dark">
         <StatusBar style="light" />
         <ScrollView
@@ -202,7 +202,10 @@ const RecivedPayment = () => {
         >
           {/* Customer Dropdown */}
           <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Customer</Text>
+            <View className="flex justify-between items-center flex-row">
+              <Text className="text-gray-300 text-lg font-medium">Customer</Text>
+              <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+            </View>
             <CustomDropdownWithSearch
               data={type}
               value={formData.customerId}
@@ -232,7 +235,6 @@ const RecivedPayment = () => {
           <View className="mb-4">
            <View className="flex justify-between items-center flex-row">
                 <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
-                <Text className="text-gray-300 text-lg font-medium">Due: {invoiceData && invoiceData.status !== "paid" && invoiceData.due}</Text>
              </View>
             <TextInput
               className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
@@ -251,7 +253,7 @@ const RecivedPayment = () => {
           <View className="mb-4">
             <View className="flex justify-between items-center flex-row">
                 <Text className="text-gray-300 text-lg font-medium">Amount</Text>
-                <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+                <Text className="text-gray-300 text-lg font-medium">Total Due: {invoiceData && invoiceData.status !== "paid" && invoiceData.due}</Text>
              </View>
             <TextInput
               className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
@@ -260,7 +262,7 @@ const RecivedPayment = () => {
               placeholder="Enter amount"
               placeholderTextColor="#9CA3AF"
               keyboardType="numeric"
-            />
+              />
           </View>
 
           {/* Note */}
