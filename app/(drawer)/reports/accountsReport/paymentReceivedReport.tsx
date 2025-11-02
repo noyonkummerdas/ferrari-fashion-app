@@ -119,7 +119,8 @@ const selectedDateString = formatDateString(fromDate);
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        
+        {
+        currentUser?.type === "admin" && warehouses?.length > 0 && (
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -132,6 +133,7 @@ const selectedDateString = formatDateString(fromDate);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
+        )}
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
@@ -185,30 +187,7 @@ const selectedDateString = formatDateString(fromDate);
           </Text>
         </View>
       </View>
-
-      {/* List */}
-       {/* <FlatList
-          data={paymentReceivedData?.transactions || []}
-          keyExtractor={(item, index) =>
-            item.id ? item.id.toString() : index.toString()
-          }
-          renderItem={({ item }) => (
-            <View className="bg-[#1f1f1f] p-4 rounded-xl mb-3">
-              <Text className="text-white font-semibold">{item?.type}</Text>
-              <View className="flex-row justify-between mt-2">
-                <Text className="text-gray-400">
-                  warehouse: {item?.warehouse}
-                </Text>
-                <Text className="text-green-400 font-bold">
-                  + {item?.amount} BDT
-                </Text>
-              </View>
-            </View>
-          )}
-        /> */}
-
-
-{paymentReceivedData?.transactions?.length > 0 ? (
+        {paymentReceivedData?.transactions?.length > 0 ? (
         <FlatList
           data={paymentReceivedData?.transactions}
           keyExtractor={(item, index) => index.toString()}

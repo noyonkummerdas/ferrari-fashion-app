@@ -17,7 +17,7 @@ export default function CashInReport() {
 
   const navigation = useNavigation();
  
-  const {userInfo: user} = useGlobalContext()
+  const {userInfo} = useGlobalContext()
   
   const { data: warehousesData } = useWarehousesQuery();
 
@@ -89,7 +89,7 @@ const selectedDateString = formatDateString(fromDate);
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-       
+       {  userInfo?.type === "admin" && warehouses?.length > 0 &&  
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -102,7 +102,7 @@ const selectedDateString = formatDateString(fromDate);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-
+        }
         {/* From / To Dates */}
         <View className="flex-row gap-3">
           <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
