@@ -93,6 +93,8 @@ const { data: productData, error} =
     <View className=" bg-dark p-2 flex-1">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
+
+        { currentUser?.type === "admin" && warehouses?.length > 0 &&
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -105,6 +107,7 @@ const { data: productData, error} =
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
+        }
         {/* From / To Dates */}
         <View className="flex-row gap-3">
           <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
