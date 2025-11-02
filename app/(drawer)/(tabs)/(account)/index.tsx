@@ -5,7 +5,7 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 // import { useColorScheme } from "react-native";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionListQuery } from "@/store/api/transactionApi";
@@ -21,6 +21,8 @@ const Accounts = () => {
   const { userInfo, fetchUser } = useGlobalContext();
   const type = userInfo?.type
   const [currentDay, setCurrentDay] = useState(new Date());
+  const [openingBalance, setOpeningBalance] = useState(0);
+  const [currentBalance, setCurrentBalance] = useState(0);
   useLayoutEffect(() => {
     navigation.setOptions({
       // headerRight: () => (
@@ -85,6 +87,18 @@ const Accounts = () => {
             forceRefetch: true,
           });
           const totalReceivedPaymentAmount = receivedPaymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
+          
+
+          const totalCurrentBalance = (totalDepositAmount - totalCashOutAmount);
+
+        useEffect(() => {
+          const timer = setInterval(() => {
+              setOpeningBalance(totalCurrentBalance);
+              setCurrentBalance(totalCurrentBalance);
+            }, 24 * 60 * 60 * 1000); // 24 hours = 86400000 ms
+
+          return () => clearInterval(timer);
+        }, [totalCurrentBalance]);
 
   return (
 
@@ -109,14 +123,14 @@ const Accounts = () => {
               <Ionicons name="trending-up" size={22} color="#fdb714" />
               <Text className="text-gray-300">Opening Balance</Text>
             </View>
-            <Text className="text-white text-xl font-pbold">0.00</Text>
+          <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
           </View>
           <View className="flex-1 ml-2 bg-black-200 rounded-xl h-28 p-4 ">
             <View className="flex-row items-center justify-between mb-2 px-1">
               <Ionicons name="wallet" size={22} color="#fdb714" />
               <Text className="text-gray-300">Current Balance</Text>
             </View>
-            <Text className="text-white text-xl font-pbold">0.00</Text>
+            <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
           </View>
         </View>
      

@@ -81,7 +81,7 @@ export default function PosDashboard() {
     }
     // refetch();
   };
-
+  
   // Function to fetch updated data
   const onRefresh = () => {
     setRefreshing(true);
@@ -146,7 +146,7 @@ export default function PosDashboard() {
     );
   };
   const cashIn = dashboardData?.accountsData?.deposit?.totalAmount || 0;
-const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
+  const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
 
 const totalCurrentBalance = cashIn - cashOut;
 

@@ -3,12 +3,14 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { usePurchasesDWQuery } from "@/store/api/purchasApi";
 import { useSupplierExportQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 import { format } from "date-fns";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View, Modal } from "react-native";
 
 const PurchasesList = () => {
+   const isFocused = useIsFocused();
   const colorScheme = useColorScheme();
   const { userInfo } = useGlobalContext();
 
@@ -25,14 +27,24 @@ const PurchasesList = () => {
     warehouse: userInfo?.warehouse,
     date: format(currentDate, "MM-dd-yyyy"),
     isDate: "month",
+    q: searchQuery || "all",
      forceRefetch: true,
   });
+
   console.log("Purchases Data:", data, isSuccess, isError);
    const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
     skip: !searchQuery, //
   })
   console.log('supplier InvoiceId data', invoiceData, invoiceIdSuccess, invoiceIdError)
 
+   useEffect(() => {
+      if (searchQuery) {
+        refetch();
+      }
+      if (isFocused) {
+        refetch();
+      }
+    }, [searchQuery, isFocused]);
   useEffect(() => {
     refetch();
   }, [userInfo?.warehouse, currentDate]);
