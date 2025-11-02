@@ -52,7 +52,7 @@ const SalesList = () => {
     isDate: "month",
      forceRefetch: true,
   });
-    console.log('sales data ', data)
+
   useEffect(() => { refetch() }, [userInfo?.warehouse, currentDay]);
 
   const [saleList, setSaleList] = useState<any[]>([]);
@@ -64,12 +64,21 @@ const SalesList = () => {
     }
   }, [data, isSuccess]);
 
-  const filteredList = saleList.filter(
-    item =>
-      item?.name?.toLowerCase()?.includes(searchQuery.toLowerCase()) ||
-      item?.amount?.toString()?.includes(searchQuery) ||
-      item?.date?.includes(searchQuery),
-  );
+  // ===== Fix: Search / Filter Logic =====
+  const filteredList = saleList.filter(item => {
+    const customerName = item?.customerName?.toLowerCase() ?? "";
+    const amount = item?.amount?.toString() ?? "";
+    const saleDate = item?.formatedDate 
+      ? format(new Date(item.formatedDate), "yyyy-MM-dd") 
+      : "";
+
+    const query = searchQuery.toLowerCase();
+    return (
+      customerName.includes(query) ||
+      amount.includes(query) ||
+      saleDate.includes(query)
+    );
+  });
 
   const formattedDate = {
     month: currentDay.toLocaleString("en-US", { month: "long" }),
@@ -161,7 +170,7 @@ const SalesList = () => {
         {/* Search Bar */}
         <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
           <TextInput
-            placeholder="Search Customer"
+            placeholder="Search Customer / Amount / Date"
             placeholderTextColor="#9CA3AF"
             className="flex-1 text-gray-300"
             value={searchQuery}
@@ -170,9 +179,9 @@ const SalesList = () => {
           <Ionicons name="search-outline" size={24} color="gray" />
         </View>
 
-        {data?.length > 0 ?
+        {filteredList?.length > 0 ?
           (<FlatList
-            data={data}
+            data={filteredList}
             keyExtractor={(item, index) => item._id || index.toString()}
             renderItem={({ item }) => (
               <TouchableOpacity
