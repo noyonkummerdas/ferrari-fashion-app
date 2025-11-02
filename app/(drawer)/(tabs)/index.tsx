@@ -35,6 +35,8 @@ export default function PosDashboard() {
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
+  const [openingBalance, setOpeningBalance] = useState(0);
+  const [currentBalance, setCurrentBalance] = useState(0);
   const type = userInfo?.type;
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
  
@@ -149,6 +151,14 @@ export default function PosDashboard() {
   const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
 
 const totalCurrentBalance = cashIn - cashOut;
+useEffect(() => {
+          const timer = setInterval(() => {
+              setOpeningBalance(totalCurrentBalance);
+              setCurrentBalance(totalCurrentBalance);
+            }, 24 * 60 * 60 * 1000); // 24 hours = 86400000 ms
+
+          return () => clearInterval(timer);
+        }, [totalCurrentBalance]);
 
   return (
     <>
@@ -173,7 +183,7 @@ const totalCurrentBalance = cashIn - cashOut;
                       <Ionicons name="trending-up" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Opening Balance</Text>
                     </View>
-                    <Text className="text-white text-xl font-pbold">{dashboardData?.accountsData?.deposit?.totalAmount || 0}</Text>
+                    <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
                   </View>
                   <View className="flex-1 ml-2  bg-black-200 rounded-xl h-24 p-4 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
