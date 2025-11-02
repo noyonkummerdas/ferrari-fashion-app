@@ -39,13 +39,13 @@ export default function PosDashboard() {
   const [currentBalance, setCurrentBalance] = useState(0);
   const type = userInfo?.type;
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
- 
+  
 
   const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery(
     { warehouse: warehouse, date: startDate, type: type } as any,
     { skip: !userInfo } // Skip query until userInfo is available
   );
-  // console.log("Dashboard Data:", dashboardData);
+  console.log("Dashboard Data:", dashboardData);
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 

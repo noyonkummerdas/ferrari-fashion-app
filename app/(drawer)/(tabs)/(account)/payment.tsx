@@ -24,6 +24,7 @@ const Payment = () => {
   const navigation = useNavigation();
   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
+  const [note, setNote] = useState("");
   
   const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
@@ -334,9 +335,12 @@ const Payment = () => {
           <StatusBar style="light" />
             {/* Supplier Input */}
             <View className="mb-4">
-              <Text className="text-gray-300 text-lg font-medium">
+              <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">
                 Supplier
               </Text>
+              <Text className="text-gray-300 text-lg font-medium">Total Amount: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+              </View>
               <CustomDropdownWithSearch
                 data={type}
                 value={formData.supplierId}
@@ -366,10 +370,12 @@ const Payment = () => {
 
             {/* Amount Input */}
             <View className="mb-4">
-            <View className="flex justify-between items-center flex-row">
-              <Text className="text-gray-300 text-lg font-medium">Amount</Text>
-              <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
-            </View>
+            
+              <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+                <Text className="text-gray-200">Invoice due: {formData.amount.toString()}</Text>
+              </View>
+
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
                 value={formData.amount.toString()}
