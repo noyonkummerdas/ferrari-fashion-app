@@ -170,7 +170,7 @@ const SalesList = () => {
         {/* Search Bar */}
         <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
           <TextInput
-            placeholder="Search Customer / Amount / Date"
+            placeholder="Search Customer Amount Date"
             placeholderTextColor="#9CA3AF"
             className="flex-1 text-gray-300"
             value={searchQuery}

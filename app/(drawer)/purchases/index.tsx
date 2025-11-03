@@ -115,7 +115,7 @@ const PurchasesList = () => {
       {/* Search */}
       <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
         <TextInput
-          placeholder="Search Supplier / Invoice / Amount"
+          placeholder="Search Supplier Invoice Amount"
           className="placeholder:text-gray-100 flex-1 text-gray-300"
           value={searchQuery}
           onChangeText={setSearchQuery}

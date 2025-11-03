@@ -233,12 +233,14 @@ const SalesReport = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   // const [searchQuery, setSearchQuery] = useState("");
   // const colorScheme = useColorScheme(); 
-     const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(userInfo?.warehouse ?? null);
-      const { data: warehousesData } = useWarehousesQuery();
+    const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+  userInfo?.type === "admin" ? null : userInfo?.warehouse ?? null
+);
+  const { data: warehousesData } = useWarehousesQuery();
       const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
  const { data: salesData, isSuccess, refetch } = useAllSaleQuery({
-    warehouse: userInfo?.warehouse as string,
+    warehouse: selectedWarehouse || userInfo?.warehouse,
     startDate: format(currentDay, "MM-dd-yyyy"),
     isDate: "month",
      forceRefetch: true,
