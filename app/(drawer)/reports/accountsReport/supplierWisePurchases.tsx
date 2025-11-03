@@ -33,8 +33,8 @@ export default function SupplierPaymentReport() {
 
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-   
-  );
+     currentUser.role === "user" ? currentUser.warehouse : null
+   );
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
@@ -43,11 +43,11 @@ export default function SupplierPaymentReport() {
         setSelectedWarehouse(warehousesData[0]._id);
       }
     }
-  }, [warehousesData]);
+  }, [warehousesData, currentUser]);
 
   // Fetch CashIn data from backend (replace with your API)
  const { data : purchasesData, isSuccess, isError, refetch } = usePurchasesDWQuery({
-     warehouse: currentUser?.warehouse,
+     warehouse: selectedWarehouse || currentUser?.warehouse,
      date: format(currentDate, "MM-dd-yyyy"),
      isDate: "month",
       forceRefetch: true,
