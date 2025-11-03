@@ -54,11 +54,14 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
 
+const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+   currentUser.role === "user" ? currentUser.warehouse : null
+ );
 // const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
 // console.log("CashInData:", cashInData);
   const { data  : paymentReceivedData, isSuccess, isLoading, error, isError, refetch } =
     useTransactionListQuery({
-      warehouse: currentUser?.warehouse,
+      warehouse: selectedWarehouse || currentUser?.warehouse,
       type: "paymentReceived",
       date: format(currentDate, "MM-dd-yyyy"),
       forceRefetch: true,
@@ -69,10 +72,7 @@ const selectedDateString = formatDateString(fromDate);
  useEffect(()=>{
     refetch()
  },[ currentDate])
-// warehouse  role
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
-  );
+ // warehouse  role
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
@@ -81,7 +81,7 @@ const selectedDateString = formatDateString(fromDate);
         setSelectedWarehouse(warehousesData[0]._id);
       }
     }
-  }, [warehousesData]);
+  }, [warehousesData, currentUser]);
 
   // Header with print button
   useLayoutEffect(() => {
