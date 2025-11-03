@@ -10,6 +10,7 @@ import { useNavigation, router } from "expo-router";
 import { useAllSaleQuery } from "@/store/api/saleApi";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { StatusBar } from "expo-status-bar";
+import PrintButton from "../PrintButton";
 
 export default function CustomerDueReport() {
   const navigation = useNavigation();
@@ -60,6 +61,9 @@ export default function CustomerDueReport() {
         <TouchableOpacity onPress={() => router.back()} className="ms-4">
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
+      ),
+      headerRight: () => (
+        <PrintButton filteredData={customerDue} title="Customer Due Report" />
       ),
     });
   }, [navigation]);

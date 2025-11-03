@@ -273,15 +273,9 @@ const SalesReport = () => {
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
         ),
-        // headerRight: () => (
-          // <TouchableOpacity
-          //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          //   className="me-4"
-          // >
-          //   <Ionicons name="print-outline" size={28} color="white" />
-          // </TouchableOpacity>
-          // <PrintButton filteredData={saleProductDetails} title="Sales Report" />
-        // ),
+        headerRight: () => (
+          <PrintButton filteredData={salesData} title="Sales Report" />
+        ),
       });
     }, [navigation]); 
      const formattedDate = {

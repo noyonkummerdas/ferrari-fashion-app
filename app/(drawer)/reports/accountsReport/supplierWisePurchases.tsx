@@ -72,17 +72,12 @@ export default function SupplierPaymentReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-      //     className="me-4"
-      //   >
-      //     <Ionicons name="print-outline" size={28} color="white" />
-      //   </TouchableOpacity>
-      //   <PrintButton filteredData={supplierWisePurchases} title="Supplier Purchese Report" />
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={purchasesData} title="Supplier Purchese Report" />
+      ),
+    
     });
-  }, [navigation]);
+  }, [navigation, purchasesData]);
   const totalPurchases = purchasesData?.length || 0;
   const totalAmount = purchasesData?.reduce(
   (sum, item) => sum + (item.amount || 0),

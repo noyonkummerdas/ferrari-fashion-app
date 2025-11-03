@@ -10,6 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import PrintButton from "../PrintButton";
 // Logged-in user example
 
 
@@ -62,10 +63,9 @@ export default function CashOutReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-       
-      //   // <PrintButton filteredData={cashOut} title="Cash Out Report" />
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={cashOutData?.transactions || []} title="Cash Out Report" />
+      ),
     });
   }, [navigation]);
   const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =

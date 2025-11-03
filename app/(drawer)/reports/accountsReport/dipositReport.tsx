@@ -10,6 +10,7 @@ import { useNavigation, router } from "expo-router";
 import { useTransactionListQuery } from "@/store/api/transactionApi";
 import { StatusBar } from "expo-status-bar";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import PrintButton from "../PrintButton";
 
 export default function CashInReport() {
   const navigation = useNavigation();
@@ -75,6 +76,11 @@ export default function CashInReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
+      headerRight: () => (
+        <PrintButton
+          filteredData={cashDeposit?.transactions || []}
+          title="Cash Deposit Report"
+        />),
     });
   }, [navigation, cashDeposit]);
 

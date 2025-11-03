@@ -12,25 +12,6 @@ import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/
   import PrintButton from "../PrintButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-
-// Logged-in user example
-// const currentUser = {
-//   role: "admin", // "admin" or "user"
-//   warehouse: "w1",
-// };
-// const received = [
-//   { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r3", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r4", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r5", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r6", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r7", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r8", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r9", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r10", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-// ];
-
 export default function PaymentReceivedReport() {
   const navigation = useNavigation();
   // const { data: userInfo } = { data: currentUser };
@@ -103,10 +84,16 @@ const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
       //   >
       //     <Ionicons name="print-outline" size={28} color="white" />
       //   </TouchableOpacity>
-      //   <PrintButton filteredData={received} title="Payment Received Report" /> 
       // ),
+      headerRight: () => (
+        <>
+          {/* <PrintButton filteredData={paymentReceivedData} title="Payment Received Report" /> */}
+          <PrintButton filteredData={paymentReceivedData?.transactions || []} title="Payment Received Report" />
+        </>
+      ),
     });
   }, [navigation])
+
   const totalPayments = paymentReceivedData?.transactions?.length || 0;
   const totalAmount = paymentReceivedData?.transactions?.reduce(
   (sum, item) => sum + (item.amount || 0),

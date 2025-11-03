@@ -77,15 +77,9 @@ const { data: productData, error, isLoding } =
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-      //     className="me-4"
-      //   >
-      //     <Ionicons name="print-outline" size={28} color="white" />
-      //   </TouchableOpacity>
-        
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={productData} title="Stock In Report" />  
+      ),
     });
   }, [navigation]);
 

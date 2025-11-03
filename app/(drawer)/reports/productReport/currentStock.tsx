@@ -15,7 +15,7 @@ import { useProductsQuery } from "@/store/api/productApi";
 import { useGlobalContext } from "@/context/GlobalProvider";
 export default function CurrentStock() {
   const navigation = useNavigation();
-  const {userInfo : currentUser}= useGlobalContext()
+  const {userInfo }= useGlobalContext()
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
   const [fromDate, setFromDate] = useState<Date>(new Date());
@@ -43,7 +43,7 @@ const { data: productData, error} =
   useEffect(() => {
     if (warehousesData) {
       setWarehouses(warehousesData);
-      if (currentUser.role === "admin" && warehousesData.length > 0) {
+      if (userInfo.role === "admin" && warehousesData.length > 0) {
         setSelectedWarehouse(warehousesData[0]._id);
       }
     }
@@ -67,15 +67,9 @@ const { data: productData, error} =
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-      //     className="me-4"
-      //   >
-      //     <Ionicons name="print-outline" size={28} color="white" />
-      //   </TouchableOpacity>
-        
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={productData} title="Current Stock Report" />
+      ),
     });
   }, [navigation]);
 
