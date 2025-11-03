@@ -37,8 +37,8 @@ const { data: productData, error} =
 
 
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    // currentUser.warehouse : null
-  );
+  userInfo?.type === "admin" ? null : userInfo?.warehouse ?? null
+);
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {

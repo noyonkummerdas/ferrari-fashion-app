@@ -35,9 +35,9 @@ export default function CashOutReport() {
 
 
 // warehouse  role
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    //  currentUser.warehouse : null
-  );
+ const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+  currentUser?.type === "admin" ? null : currentUser?.warehouse ?? null
+);
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
