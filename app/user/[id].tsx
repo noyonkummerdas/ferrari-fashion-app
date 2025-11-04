@@ -4,12 +4,14 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   Image,
+  Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
   View,
+   KeyboardAvoidingView,
 } from "react-native";
 
 import CustomDropdown from "@/components/CustomDropdown";
@@ -22,6 +24,7 @@ import profile from "../../assets/images/profile.jpg";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import ExpoPhotoUploader from "@/components/PhotoUpload";
 import photo from "@/assets/images/profile.jpg";
+
 
 const updateUser = () => {
   const { userInfo } = useGlobalContext();
@@ -162,7 +165,17 @@ const updateUser = () => {
   };
 
   return (
-    <ScrollView className="flex-1 bg-dark p-4 mx-auto w-full">
+     <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              className="flex-1"
+              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+    <ScrollView className="flex-1 bg-dark p-4 mx-auto w-full"
+                  className="flex-1 px-6 pt-4"
+                 contentContainerStyle={{ paddingBottom: 300 }}
+               keyboardShouldPersistTaps="handled"
+               showsVerticalScrollIndicator={false}
+                >
       <StatusBar style="light" />
       <View>
         <TouchableOpacity
@@ -268,6 +281,7 @@ const updateUser = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
