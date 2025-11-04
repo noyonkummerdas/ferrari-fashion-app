@@ -5,7 +5,7 @@
 
 // LIVE
 export const BASE_URL = "https://ffapi.aamardokan.online/api";
-export const PHOTO_URL = "https://ffapi.aamardokan.online";
+export const PHOTO_URL = "https://minio.aamardokan.online";
 export const WS_URL = "wss://api.aamardokan.online";
 
 // LIVE

@@ -17,6 +17,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import PhotoUploader from "@/components/PhotoUploader"; 
 
 const Payment = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -318,6 +319,12 @@ const Payment = () => {
           handleInputChange("supplierId", "")
         }
       }, [invoiceSuccess, invoiceData])
+
+
+      // ✅ Photo upload success callback
+  const handlePhotoUploadSuccess = (url: string) => {
+    setFormData((prev) => ({ ...prev, photo: url }));
+  };
   return (
     <>
         <KeyboardAvoidingView
@@ -422,8 +429,13 @@ const Payment = () => {
               <Text className="text-gray-300 text-lg font-medium">
                 Invoice Photo
               </Text>
+               <PhotoUploader
+              uploadSuccess={handlePhotoUploadSuccess}
+              folderName="supplier-payment"
+              placeholder={formData.photo}
+                />
 
-              {formData.photo ? (
+              {/* {formData.photo ? (
                 <View className="border border-black-200 bg-black-200 rounded-lg p-4">
                   <Image
                     source={{ uri: formData.photo }}
@@ -465,7 +477,7 @@ const Payment = () => {
                     Tap to select an image from your gallery
                   </Text>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
 
             {/* Submit Button */}

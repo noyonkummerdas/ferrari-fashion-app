@@ -20,6 +20,8 @@ import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import profile from "../../assets/images/profile.jpg";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import ExpoPhotoUploader from "@/components/PhotoUpload";
+import photo from "@/assets/images/profile.jpg";
 
 const updateUser = () => {
   const { userInfo } = useGlobalContext();
@@ -169,6 +171,14 @@ const updateUser = () => {
         >
           <Image source={profile} className="w-40 h-40 rounded-full" />
         </TouchableOpacity>
+
+          {/* <ExpoPhotoUploader
+          uploadSuccess={(url) => setForm({ ...form, photo: url })}
+          folderName="ffapp"
+          placeholder={photo}
+          // existingPhoto={}
+        /> */}
+
       </View>
 
       <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">

@@ -13,6 +13,7 @@ import {
   useColorScheme,
   View,
 } from "react-native";
+import { Image } from "react-native-svg";
 
 const PaymentDetails = () => {
   const { _id } = useLocalSearchParams();
@@ -277,7 +278,12 @@ const PaymentDetails = () => {
               <Text className="text-gray-300 text-base mb-2">Photo</Text>
               <View className="bg-gray-700 rounded-lg p-3">
                 <Text className="text-white text-base text-center">
-                  Photo attached
+               <Image
+                 source={{ uri: data.photo }}
+                 className="w-full h-48 rounded-lg"
+                 resizeMode="cover"
+                 />
+
                 </Text>
               </View>
             </View>
