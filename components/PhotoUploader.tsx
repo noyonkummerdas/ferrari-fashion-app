@@ -36,7 +36,7 @@ const PhotoUploader = ({
     setCurrentPhoto(existingPhoto || null);
   }, [existingPhoto]);
 
-  const handleImageSelection = async (uri: string) => {
+  const handleImageSelection = async (uri: string) => {§
     setIsUploading(true);
     try {
       // Create FormData for upload
