@@ -12,25 +12,6 @@ import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/
   import PrintButton from "../PrintButton";
 import { useGlobalContext } from "@/context/GlobalProvider";
 
-
-// Logged-in user example
-// const currentUser = {
-//   role: "admin", // "admin" or "user"
-//   warehouse: "w1",
-// };
-// const received = [
-//   { id: "r1", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r2", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r3", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r4", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r5", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r6", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r7", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r8", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-//   { id: "r9", date: "2025-09-01", customer: "Rahim Store", amount: 20000 },
-//   { id: "r10", date: "2025-09-02", customer: "Karim Enterprise", amount: 10000 },
-// ];
-
 export default function PaymentReceivedReport() {
   const navigation = useNavigation();
   // const { data: userInfo } = { data: currentUser };
@@ -54,11 +35,14 @@ const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 // const selectedDateString = formatDate(selectedDate);
 const selectedDateString = formatDateString(fromDate);
 
+const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+   currentUser.role === "user" ? currentUser.warehouse : null
+ );
 // const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
 // console.log("CashInData:", cashInData);
   const { data  : paymentReceivedData, isSuccess, isLoading, error, isError, refetch } =
     useTransactionListQuery({
-      warehouse: currentUser?.warehouse,
+      warehouse: selectedWarehouse || currentUser?.warehouse,
       type: "paymentReceived",
       date: format(currentDate, "MM-dd-yyyy"),
       forceRefetch: true,
@@ -69,10 +53,7 @@ const selectedDateString = formatDateString(fromDate);
  useEffect(()=>{
     refetch()
  },[ currentDate])
-// warehouse  role
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    currentUser.role === "user" ? currentUser.warehouse : null
-  );
+ // warehouse  role
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
@@ -81,7 +62,7 @@ const selectedDateString = formatDateString(fromDate);
         setSelectedWarehouse(warehousesData[0]._id);
       }
     }
-  }, [warehousesData]);
+  }, [warehousesData, currentUser]);
 
   // Header with print button
   useLayoutEffect(() => {
@@ -103,10 +84,16 @@ const selectedDateString = formatDateString(fromDate);
       //   >
       //     <Ionicons name="print-outline" size={28} color="white" />
       //   </TouchableOpacity>
-      //   <PrintButton filteredData={received} title="Payment Received Report" /> 
       // ),
+      headerRight: () => (
+        <>
+          {/* <PrintButton filteredData={paymentReceivedData} title="Payment Received Report" /> */}
+          <PrintButton filteredData={paymentReceivedData?.transactions || []} title="Payment Received Report" />
+        </>
+      ),
     });
   }, [navigation])
+
   const totalPayments = paymentReceivedData?.transactions?.length || 0;
   const totalAmount = paymentReceivedData?.transactions?.reduce(
   (sum, item) => sum + (item.amount || 0),
@@ -119,7 +106,8 @@ const selectedDateString = formatDateString(fromDate);
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        
+        {
+        currentUser?.type === "admin" && warehouses?.length > 0 && (
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -132,6 +120,7 @@ const selectedDateString = formatDateString(fromDate);
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
+        )}
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">
@@ -185,30 +174,7 @@ const selectedDateString = formatDateString(fromDate);
           </Text>
         </View>
       </View>
-
-      {/* List */}
-       {/* <FlatList
-          data={paymentReceivedData?.transactions || []}
-          keyExtractor={(item, index) =>
-            item.id ? item.id.toString() : index.toString()
-          }
-          renderItem={({ item }) => (
-            <View className="bg-[#1f1f1f] p-4 rounded-xl mb-3">
-              <Text className="text-white font-semibold">{item?.type}</Text>
-              <View className="flex-row justify-between mt-2">
-                <Text className="text-gray-400">
-                  warehouse: {item?.warehouse}
-                </Text>
-                <Text className="text-green-400 font-bold">
-                  + {item?.amount} BDT
-                </Text>
-              </View>
-            </View>
-          )}
-        /> */}
-
-
-{paymentReceivedData?.transactions?.length > 0 ? (
+        {paymentReceivedData?.transactions?.length > 0 ? (
         <FlatList
           data={paymentReceivedData?.transactions}
           keyExtractor={(item, index) => index.toString()}

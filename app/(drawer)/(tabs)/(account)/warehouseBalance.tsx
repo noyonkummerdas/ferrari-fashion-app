@@ -39,12 +39,13 @@ const WarehouserBalance = () => {
     }
   }, [userInfo]);
 
-  const { data, isLoading, refetch, isSuccess, error } = useWarehouseAccountsQuery({
+  const { data, isLoading, refetch, isSuccess } = useWarehouseAccountsQuery({
     _id: id,
-    date: format(currentDay, "yyyy-MM-dd"), // ✅ string format
+    date: format(currentDay, "yyyy-MM-dd"),
   });
-  // console.log("Warehouse Accounts Data:", data);
-  
+
+  console.log("Warehouse Accounts Data:", data);
+
   const { data: warehouseData } = useWarehousesQuery();
 
   useEffect(() => {
@@ -65,10 +66,6 @@ const WarehouserBalance = () => {
     }, [id])
   );
 
-  const dayTransactions = transactions.filter(
-    (t) => format(new Date(t.date), "yyyy-MM-dd") === format(currentDay, "yyyy-MM-dd")
-  );
-// console.log("Day Transactions:", dayTransactions);
   const formattedDate = {
     day: currentDay.getDate(),
     month: currentDay.toLocaleString("en-US", { month: "long" }),
@@ -79,18 +76,22 @@ const WarehouserBalance = () => {
   const goToNextDay = () => {
     if (!isToday(currentDay)) setCurrentDay((prev) => addDays(prev, 1));
   };
+
   const openDatePicker = () => {
     setTempDate(currentDay);
     setShowDatePicker(true);
   };
+
   const handleDateChange = (event: any, selectedDate?: Date) => {
     if (Platform.OS === "android") setShowDatePicker(false);
     if (selectedDate) setTempDate(selectedDate);
   };
+
   const confirmDateSelection = () => {
     setCurrentDay(tempDate);
     setShowDatePicker(false);
   };
+
   const cancelDateSelection = () => {
     setTempDate(currentDay);
     setShowDatePicker(false);
@@ -127,31 +128,14 @@ const WarehouserBalance = () => {
 
   const renderHeader = () => (
     <View>
-      {userInfo?.type !== "admin" ? (
-        <View className=" p-4 space-x-2">
-          <View className="flex flex-row">
-            <View className="flex flex-row justify-center items-center mb-1">
-              {data?.warehouse?.type === "factory" ? (
-                <MaterialIcons name="factory" size={22} color="#fdb714" className="me-2" />
-              ) : (
-                <MaterialIcons name="storefront" size={22} color="#fdb714" className="me-2" />
-              )}
-              <Text className="text-gray-200 text-lg">{data?.warehouse?.name}</Text>
-            </View>
-          </View>
-          <View className="flex flex-row">
-            <Ionicons name="phone-portrait-sharp" size={18} color={"#fdb714"} />
-            <Text className="text-gray-200 text-[18px] ms-2">{data?.warehouse?.phone}</Text>
-          </View>
-          <View className="flex flex-row items-center">
-            <Ionicons name="location-outline" size={18} color={"#fdb714"} />
-            <Text className="text-gray-400 p-1 ms-2">{data?.warehouse?.address}</Text>
-          </View>
-        </View>
-      ) : (
-        <View className=" space-x-2">
+      {/* Warehouse Dropdown for Admin */}
+      {userInfo?.type === "admin" && warehouseData && (
+        <View className="space-x-2">
           <CustomDropdown
-            data={warehouseData?.map((wh) => ({ label: wh.name, value: wh._id }))}
+            data={warehouseData?.map((wh) => ({
+              label: wh.name,
+              value: wh._id,
+            }))}
             value={id}
             setValue={(value) => setId(value)}
             placeholder="Select Warehouse"
@@ -173,8 +157,7 @@ const WarehouserBalance = () => {
         </View>
       )}
 
-
-      {/* Date navigation */}
+      {/* Date Navigation */}
       <View className="m-2 flex-1">
         <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
@@ -206,7 +189,7 @@ const WarehouserBalance = () => {
       </View>
 
       {/* Balance Section */}
-      <View className="flex flex-row justify-evenly items-center mt-2 w-full ">
+      <View className="flex flex-row justify-evenly items-center mt-2 w-full">
         <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
           <Text className="text-white text-xl p-3">Opening Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
@@ -230,7 +213,7 @@ const WarehouserBalance = () => {
     <>
       <StatusBar style="light" backgroundColor="#1f2937" />
       <FlatList
-        data={dayTransactions}
+        data={data?.transaction || []}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
           <View className="bg-black p-4 rounded-lg mt-4 mx-4 h-20 flex justify-between">
@@ -239,19 +222,26 @@ const WarehouserBalance = () => {
               <Text className="text-white text-md">
                 {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
               </Text>
-              <Text className="text-primary text-lg font-bold">
-                {item.amount} <Text className="text-white">BDT</Text>
+              <Text
+                className={`text-lg font-bold ${
+                  item.type === "paymentReceived" ? "text-green-400" : "text-red-400"
+                }`}
+              >
+                ৳{item.amount} <Text className="text-white">BDT</Text>
               </Text>
             </View>
           </View>
         )}
-        ListEmptyComponent={
-          <Text className="text-center text-gray-400 mt-4">No transactions available</Text>
-        }
         ListHeaderComponent={renderHeader}
+        ListEmptyComponent={
+          <Text className="text-center text-gray-400 mt-4">
+            No transactions available
+          </Text>
+        }
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
 
+      {/* Date Picker Modal */}
       <Modal visible={showDatePicker} transparent={true} animationType="fade">
         <View className="flex-1 bg-black/70 justify-center items-center">
           <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
@@ -261,6 +251,7 @@ const WarehouserBalance = () => {
                 <Ionicons name="close" size={24} color="#666" />
               </TouchableOpacity>
             </View>
+
             <DateTimePicker
               value={tempDate}
               mode="date"
@@ -273,6 +264,7 @@ const WarehouserBalance = () => {
                 width: Platform.OS === "ios" ? "100%" : "auto",
               }}
             />
+
             {Platform.OS === "ios" && (
               <View className="flex-row justify-end gap-2 space-x-3 mt-6">
                 <TouchableOpacity

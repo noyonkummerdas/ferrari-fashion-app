@@ -17,6 +17,7 @@ import {
   TouchableOpacity,
   View
 } from "react-native";
+import PhotoUploader from "@/components/PhotoUploader"; 
 
 const Payment = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -24,6 +25,7 @@ const Payment = () => {
   const navigation = useNavigation();
   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
+  const [note, setNote] = useState("");
   
   const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
@@ -317,6 +319,12 @@ const Payment = () => {
           handleInputChange("supplierId", "")
         }
       }, [invoiceSuccess, invoiceData])
+
+
+      // ✅ Photo upload success callback
+  const handlePhotoUploadSuccess = (url: string) => {
+    setFormData((prev) => ({ ...prev, photo: url }));
+  };
   return (
     <>
         <KeyboardAvoidingView
@@ -334,9 +342,12 @@ const Payment = () => {
           <StatusBar style="light" />
             {/* Supplier Input */}
             <View className="mb-4">
-              <Text className="text-gray-300 text-lg font-medium">
+              <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">
                 Supplier
               </Text>
+              <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+              </View>
               <CustomDropdownWithSearch
                 data={type}
                 value={formData.supplierId}
@@ -366,10 +377,12 @@ const Payment = () => {
 
             {/* Amount Input */}
             <View className="mb-4">
-            <View className="flex justify-between items-center flex-row">
-              <Text className="text-gray-300 text-lg font-medium">Amount</Text>
-              <Text className="text-gray-300 text-lg font-medium">Invoice: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
-            </View>
+            
+              <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+                <Text className="text-gray-200">Invoice due: {formData.amount.toString()}</Text>
+              </View>
+
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
                 value={formData.amount.toString()}
@@ -416,8 +429,13 @@ const Payment = () => {
               <Text className="text-gray-300 text-lg font-medium">
                 Invoice Photo
               </Text>
+               <PhotoUploader
+              uploadSuccess={handlePhotoUploadSuccess}
+              folderName="supplier-payment"
+              placeholder={formData.photo}
+                />
 
-              {formData.photo ? (
+              {/* {formData.photo ? (
                 <View className="border border-black-200 bg-black-200 rounded-lg p-4">
                   <Image
                     source={{ uri: formData.photo }}
@@ -459,7 +477,7 @@ const Payment = () => {
                     Tap to select an image from your gallery
                   </Text>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
 
             {/* Submit Button */}

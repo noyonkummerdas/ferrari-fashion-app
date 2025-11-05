@@ -233,12 +233,14 @@ const SalesReport = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   // const [searchQuery, setSearchQuery] = useState("");
   // const colorScheme = useColorScheme(); 
-     const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(userInfo?.warehouse ?? null);
-      const { data: warehousesData } = useWarehousesQuery();
+    const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+  userInfo?.type === "admin" ? null : userInfo?.warehouse ?? null
+);
+  const { data: warehousesData } = useWarehousesQuery();
       const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
  const { data: salesData, isSuccess, refetch } = useAllSaleQuery({
-    warehouse: userInfo?.warehouse as string,
+    warehouse: selectedWarehouse || userInfo?.warehouse,
     startDate: format(currentDay, "MM-dd-yyyy"),
     isDate: "month",
      forceRefetch: true,
@@ -271,15 +273,9 @@ const SalesReport = () => {
             <Ionicons name="arrow-back" size={24} color="white" />
           </TouchableOpacity>
         ),
-        // headerRight: () => (
-          // <TouchableOpacity
-          //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-          //   className="me-4"
-          // >
-          //   <Ionicons name="print-outline" size={28} color="white" />
-          // </TouchableOpacity>
-          // <PrintButton filteredData={saleProductDetails} title="Sales Report" />
-        // ),
+        headerRight: () => (
+          <PrintButton filteredData={salesData} title="Sales Report" />
+        ),
       });
     }, [navigation]); 
      const formattedDate = {
@@ -290,27 +286,29 @@ const totalSale = Array.isArray(salesData)
   ? salesData.reduce((sum, item) => sum + (item?.amount || 0), 0)
   : 0;
 
+
+  // console.log("userInfo", userInfo.type,warehouses.length);
   return (
     <>
      <StatusBar style="light" backgroundColor="white" />
-      <View className='bg-dark flex-1 p-2'>
-            
-            {/* {userInfo?.role === "admin" && warehouses?.length > 0 && ( */}
-              <View className='flex-row items-center justify-evenly'>
-              <View>
-              <Dropdown
-                data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
-                labelField="label"
-                valueField="value"
-                placeholder="Select Warehouse"
-                value={selectedWarehouse}
-                onChange={(item: any) => setSelectedWarehouse(item.value)}
-                placeholderStyle={{ color: 'white' }}
-                style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, width: 180, height: 60,marginTop: 10 }}
-                selectedTextStyle={{ color: 'white' }}
-                itemTextStyle={{ color: 'black' }}
-              />
+          <View className='bg-dark flex-row p-2'>
+            {
+              userInfo?.type === "admin" && warehouses?.length > 0 && 
+            <View className="flex-row justify-between items-center">
+                <Dropdown
+                  data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
+                  labelField="label"
+                  valueField="value"
+                  placeholder="Select Warehouse"
+                  value={selectedWarehouse}
+                  onChange={(item: any) => setSelectedWarehouse(item.value)}
+                  placeholderStyle={{ color: 'white' }}
+                  style={{ backgroundColor: '#1f1f1f', borderRadius: 8, paddingHorizontal: 8, paddingVertical: 8, width: 180, height: 60,marginTop: 10 }}
+                  selectedTextStyle={{ color: 'white' }}
+                  itemTextStyle={{ color: 'black' }}
+                  />
             </View>
+              }
 
             <View className="flex-row gap-3 mt-3">
               <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 ms-2 rounded-xl bg-black-200 flex-col">
@@ -323,7 +321,6 @@ const totalSale = Array.isArray(salesData)
               </TouchableOpacity>
             </View>
           </View>
-        {/* )} */}
 
         {/* Date Pickers */}
 
@@ -361,28 +358,14 @@ const totalSale = Array.isArray(salesData)
             {
               salesData?.map((product, idx) => (
                 <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-                  <Text className="text-gray-200">{product.customerName}</Text>
+                  <Text className="text-gray-200">{product?.customerName}</Text>
                   <Text className="text-gray-200"><Text className='text-primary'>{product.amount?.toLocaleString()}</Text> BDT</Text>
                 </View>
               ))}
             </View>
             {/**customer wise sale */}
-            {/* <View className="mt-4 p-4 bg-black-200 rounded-xl ">
-              <Text className='text-gray-300 font-bold text-lg'>Customer Wise Sale report </Text>
-              {
-                customerWiseSales.map((customer, idx) => (
-                  <View key={idx} className="flex-row justify-between py-2 border-b border-gray-700">
-                    <Text className="text-gray-300">{customer.name}</Text>
-                    <Text className="text-white">৳{customer.balance?.toLocaleString()}</Text>
-                  </View>
-                ))}
-            </View> */}
-
-            {/* <TouchableOpacity onPress={() => router.back()} className="bg-primary p-4 rounded-xl items-center mt-4">
-              <Text className="text-black font-semibold">Back</Text>
-            </TouchableOpacity> */}
+          
         </ScrollView>
-      </View>
     </>
   );
 };

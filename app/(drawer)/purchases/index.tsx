@@ -1,14 +1,15 @@
 import { CustomDrawerToggleButton } from "@/components";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { usePurchasesDWQuery } from "@/store/api/purchasApi";
-import { useSupplierExportQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
+import { useIsFocused } from "@react-navigation/native";
 import { format } from "date-fns";
 import { router, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View, Modal } from "react-native";
 
 const PurchasesList = () => {
+  const isFocused = useIsFocused();
   const colorScheme = useColorScheme();
   const { userInfo } = useGlobalContext();
 
@@ -21,21 +22,17 @@ const PurchasesList = () => {
     "July", "August", "September", "October", "November", "December"
   ];
 
-  const { data, isSuccess, isError, refetch } = usePurchasesDWQuery({
+  const { data, isSuccess, refetch } = usePurchasesDWQuery({
     warehouse: userInfo?.warehouse,
     date: format(currentDate, "MM-dd-yyyy"),
     isDate: "month",
-     forceRefetch: true,
+    q: searchQuery || "all",
+    forceRefetch: true,
   });
-  console.log("Purchases Data:", data, isSuccess, isError);
-   const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
-    skip: !searchQuery, //
-  })
-  console.log('supplier InvoiceId data', invoiceData, invoiceIdSuccess, invoiceIdError)
 
   useEffect(() => {
-    refetch();
-  }, [userInfo?.warehouse, currentDate]);
+    if (isFocused) refetch();
+  }, [isFocused, currentDate, userInfo?.warehouse]);
 
   const formattedDate = {
     month: currentDate.toLocaleString("en-US", { month: "long" }),
@@ -43,15 +40,11 @@ const PurchasesList = () => {
   };
 
   const selectMonth = (monthIndex: number) => {
-    const newDate = new Date(currentDate.getFullYear(), monthIndex, 1);
-    setCurrentDate(newDate);
+    setCurrentDate(new Date(currentDate.getFullYear(), monthIndex, 1));
     setShowDatePicker(false);
   };
 
-  const goToPreviousMonth = () => {
-    setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
-  };
-
+  const goToPreviousMonth = () => setCurrentDate(prev => new Date(prev.getFullYear(), prev.getMonth() - 1, 1));
   const goToNextMonth = () => {
     const nextMonth = new Date(currentDate.getFullYear(), currentDate.getMonth() + 1, 1);
     if (nextMonth <= new Date()) setCurrentDate(nextMonth);
@@ -82,6 +75,15 @@ const PurchasesList = () => {
     });
   }, [navigation]);
 
+  // ===== Filter logic =====
+  const filteredData = data?.filter(item => {
+    const supplierName = item?.supplierName?.toLowerCase() ?? "";
+    const invoice = item?.invoice?.toString() ?? "";
+    const amount = item?.amount?.toString() ?? "";
+    const query = searchQuery.toLowerCase();
+    return supplierName.includes(query) || invoice.includes(query) || amount.includes(query);
+  }) || [];
+
   return (
     <>
       {/* Calendar */}
@@ -105,11 +107,7 @@ const PurchasesList = () => {
             className={`p-2 ${currentDate >= new Date() ? "opacity-50" : ""}`}
             disabled={currentDate >= new Date()}
           >
-            <Ionicons
-              name="arrow-forward"
-              size={24}
-              color={currentDate >= new Date() ? "#666" : "white"}
-            />
+            <Ionicons name="arrow-forward" size={24} color={currentDate >= new Date() ? "#666" : "white"} />
           </TouchableOpacity>
         </View>
       </View>
@@ -117,7 +115,7 @@ const PurchasesList = () => {
       {/* Search */}
       <View className="flex flex-row justify-between rounded-full h-14 items-center px-5 m-2 bg-black-200">
         <TextInput
-          placeholder="Search Supplier"
+          placeholder="Search Supplier Invoice Amount"
           className="placeholder:text-gray-100 flex-1 text-gray-300"
           value={searchQuery}
           onChangeText={setSearchQuery}
@@ -127,7 +125,7 @@ const PurchasesList = () => {
 
       {/* Purchases List */}
       <FlatList
-        data={data}
+        data={filteredData}
         keyExtractor={(item, index) => item._id || index.toString()}
         renderItem={({ item }) => (
           <TouchableOpacity
@@ -147,6 +145,12 @@ const PurchasesList = () => {
             </View>
           </TouchableOpacity>
         )}
+        ListEmptyComponent={
+          <View className="flex-1 h-96 w-full justify-center items-center mt-10">
+            <Ionicons name="bag-outline" size={60} color="gray" />
+            <Text className="text-primary text-lg mt-4">No purchases found</Text>
+          </View>
+        }
       />
 
       {/* Month/Year Picker Modal */}

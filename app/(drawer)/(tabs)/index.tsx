@@ -35,15 +35,17 @@ export default function PosDashboard() {
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
   const { userInfo, fetchUser } = useGlobalContext();
+  const [openingBalance, setOpeningBalance] = useState(0);
+  const [currentBalance, setCurrentBalance] = useState(0);
   const type = userInfo?.type;
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
- 
+  
 
   const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery(
     { warehouse: warehouse, date: startDate, type: type } as any,
     { skip: !userInfo } // Skip query until userInfo is available
   );
-  // console.log("Dashboard Data:", dashboardData);
+  console.log("Dashboard Data:", dashboardData);
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 
@@ -81,7 +83,7 @@ export default function PosDashboard() {
     }
     // refetch();
   };
-
+  
   // Function to fetch updated data
   const onRefresh = () => {
     setRefreshing(true);
@@ -145,7 +147,19 @@ export default function PosDashboard() {
       </ItemWrapper>
     );
   };
-  
+  const cashIn = dashboardData?.accountsData?.deposit?.totalAmount || 0;
+  const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
+
+const totalCurrentBalance = cashIn - cashOut;
+useEffect(() => {
+          const timer = setInterval(() => {
+              setOpeningBalance(totalCurrentBalance);
+              setCurrentBalance(totalCurrentBalance);
+            }, 24 * 60 * 60 * 1000); // 24 hours = 86400000 ms
+
+          return () => clearInterval(timer);
+        }, [totalCurrentBalance]);
+
   return (
     <>
     
@@ -169,14 +183,14 @@ export default function PosDashboard() {
                       <Ionicons name="trending-up" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Opening Balance</Text>
                     </View>
-                    <Text className="text-white text-xl font-pbold">0.00</Text>
+                    <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
                   </View>
                   <View className="flex-1 ml-2  bg-black-200 rounded-xl h-24 p-4 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="wallet" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Current Balance</Text>
                     </View>
-                    <Text className="text-white text-xl font-pbold">0.00</Text>
+                    <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
                   </View>
             </View>
         {/* Cash In/Out Cards */}

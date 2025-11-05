@@ -10,6 +10,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Text, TouchableOpacity, View } from "react-native";
 import { Dropdown } from "react-native-element-dropdown";
+import PrintButton from "../PrintButton";
 // Logged-in user example
 
 
@@ -19,7 +20,7 @@ import { Dropdown } from "react-native-element-dropdown";
 export default function CashOutReport() {
   const navigation = useNavigation();
   const {userInfo : currentUser}= useGlobalContext()
-  const isAdmin = currentUser?.role === "admin";
+  
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
@@ -35,9 +36,9 @@ export default function CashOutReport() {
 
 
 // warehouse  role
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    //  currentUser.warehouse : null
-  );
+ const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+  currentUser?.type === "admin" ? null : currentUser?.warehouse ?? null
+);
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
@@ -62,22 +63,21 @@ export default function CashOutReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-       
-      //   // <PrintButton filteredData={cashOut} title="Cash Out Report" />
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={cashOutData?.transactions || []} title="Cash Out Report" />
+      ),
     });
   }, [navigation]);
   const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
       useTransactionListQuery({
-       warehouse: isAdmin ? selectedWarehouse : currentUser?.warehouse,
+       warehouse: currentUser ? selectedWarehouse : currentUser?.warehouse,
         type: "cashOut",
         date: format(currentDay, "MM-dd-yyyy"),
         forceRefetch: true,
       });
       // console.log('cashout list ', cashOutData)
       useEffect(() => {
-  if (isAdmin && selectedWarehouse) {
+  if (currentUser && selectedWarehouse) {
     refetch();
   }
 }, [selectedWarehouse]);
@@ -96,7 +96,8 @@ if (!warehousesData) return null;
      
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-        {isAdmin && (
+        { 
+        currentUser?.type === "admin" && warehouses?.length > 0 && 
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -109,7 +110,7 @@ if (!warehousesData) return null;
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
-        )}
+        }
         {/* From / To Dates */}
         <View className="flex-row gap-3">
           <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">

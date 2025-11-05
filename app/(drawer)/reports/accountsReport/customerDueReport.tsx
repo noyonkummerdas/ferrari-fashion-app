@@ -1,65 +1,55 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
+import { View, Text, FlatList, TouchableOpacity } from "react-native";
 import React, { useState, useLayoutEffect, useEffect } from "react";
-import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
-import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
+import { useWarehousesQuery } from "@/store/api/warehouseApi";
+import { WarehouseTypes } from "@/types/warehouse";
 import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router, useLocalSearchParams } from "expo-router";
-import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
+import { format } from "date-fns";
+import { useNavigation, router } from "expo-router";
+import { useAllSaleQuery } from "@/store/api/saleApi";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { StatusBar } from "expo-status-bar";
 import PrintButton from "../PrintButton";
-import { useGlobalContext } from "@/context/GlobalProvider";
-import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
-import { useAllSaleQuery } from "@/store/api/saleApi";
 
 export default function CustomerDueReport() {
   const navigation = useNavigation();
-  const {userInfo : currentUser} = useGlobalContext();
+  const { userInfo: currentUser } = useGlobalContext();
+
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
+    currentUser?.type === "admin" ? null : currentUser?.warehouse ?? null
+  );
+
   const [fromDate, setFromDate] = useState<Date>(new Date());
-  const [currentDay, setCurrentday] = useState(new Date())
-    const { id } = useLocalSearchParams();
-    // console.log(id)
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDay, setCurrentDay] = useState(new Date());
 
-const formatDateString = (date: Date) => date.toISOString().split("T")[0];
-
-// replace this
-// const selectedDateString = formatDate(selectedDate);
-const selectedDateString = formatDateString(fromDate);
-
-  const { data : customerDue, isSuccess, refetch } = useAllSaleQuery({
-    warehouse: currentUser?.warehouse as string,
-    startDate: format(currentDay, "MM-dd-yyyy"),
-    isDate: "month",
-     forceRefetch: true,
-  });
-    // console.log('sales data for report ', customerDue)
-  useEffect(() => { refetch() }, [currentUser?.warehouse, currentDay]);
-// warehouse  role
-  const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-    // currentUser.role === "user" ? currentUser.warehouse : null
-  );
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
       setWarehouses(warehousesData);
-      if (currentUser.role === "admin" && warehousesData.length > 0) {
+      if (currentUser?.type === "admin" && warehousesData.length > 0 && !selectedWarehouse) {
         setSelectedWarehouse(warehousesData[0]._id);
       }
     }
   }, [warehousesData]);
 
-  // Fetch CashIn data from backend (replace with your API)
+  const { data: customerDue, refetch } = useAllSaleQuery({
+    warehouse: selectedWarehouse || currentUser?.warehouse,
+    startDate: format(currentDay, "MM-dd-yyyy"),
+    isDate: "month",
+    forceRefetch: true,
+  });
 
+  useEffect(() => {
+    if (selectedWarehouse) refetch();
+  }, [selectedWarehouse, currentDay]);
 
-  // Header with print button
+  // Header
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Customer Due Report",
@@ -72,129 +62,129 @@ const selectedDateString = formatDateString(fromDate);
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   // <TouchableOpacity
-      //   //   onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-      //   //   className="me-4"
-      //   // >
-      //   //   <Ionicons name="print-outline" size={28} color="white" />
-      //   // </TouchableOpacity>
-      //   <PrintButton filteredData={customers} title="Customer Due Report" />
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={customerDue} title="Customer Due Report" />
+      ),
     });
   }, [navigation]);
+
   const totalCustomerDue = customerDue?.length || 0;
-  const totalAmount = customerDue?.reduce(
-  (sum, item) => sum + (item.amount || 0),
-  0
-) || 0;
- 
+  const totalAmount =
+    customerDue?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
   return (
     <>
-    <StatusBar style="light" backgroundColor="white" />
-    <View className="flex-1 bg-dark p-2">
-      {/* Filters */}
-      <View className="flex-row justify-between items-center mb-4">
-       
-          <Dropdown
-            data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
-            labelField="label"
-            valueField="value"
-            placeholder="Select Warehouse"
-            value={selectedWarehouse}
-            onChange={(item: any) => setSelectedWarehouse(item.value)}
-            placeholderStyle={{ color: "white" }}
-            style={{ backgroundColor: "#1f1f1f", borderRadius: 8, padding: 8, width: 180, height: 45 }}
-            selectedTextStyle={{ color: "white" }}
-            itemTextStyle={{ color: "black" }}
-          />
-
-        {/* From / To Dates */}
-        <View className="flex-row gap-3">
-          <TouchableOpacity onPress={() => setShowStartPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
-            <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
-            <Text className="text-white text-sm">{format(fromDate, "dd MMM yyyy")}</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity onPress={() => setShowEndPicker(true)} className="p-2 rounded-xl bg-black-200 flex-col items-center">
-            <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
-            <Text className="text-white text-sm">{format(toDate, "dd MMM yyyy")}</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {showStartPicker && (
-        <DateTimePicker
-          value={fromDate}
-          mode="date"
-          display="default"
-          maximumDate={new Date()}
-          onChange={(e, selectedDate) => {
-            setShowStartPicker(false);
-            if (selectedDate) setFromDate(selectedDate);
-          }}
-        />
-      )}
-      {showEndPicker && (
-        <DateTimePicker
-          value={toDate}
-          mode="date"
-          display="default"
-          maximumDate={new Date()}
-          onChange={(e, selectedDate) => {
-            setShowEndPicker(false);
-            if (selectedDate) setToDate(selectedDate);
-          }}
-        />
-      )}
-
-      {/* Summary */}
-      <View className="flex-row justify-between mb-4">
-        <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Customer Due</Text>
-          <Text className="text-yellow-400 text-xl font-bold">{totalCustomerDue}</Text>
-        </View>
-        <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
-          <Text className="text-zinc-300 text-sm">Total Amount</Text>
-          <Text className="text-primary text-xl font-bold">
-            {totalAmount} BDT
-          </Text>
-        </View>
-      </View>
-
-      {/* List */}
-
-       <FlatList
-              data={customerDue}
-              keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <View className="bg-black-200 p-4 rounded-2xl mb-3">
-                  <View className="flex-row justify-between items-center">
-                    <Text className="text-gray-200 text-xl font-semibold">
-                      {item?.customerName}
-                    </Text>
-                    
-                  </View>
-                  
-                  <View className="flex-row justify-between items-center  ">
-                 <View>
-                   
-      
-                    <Text className="text-gray-400 font-bold">
-                     {item?.formatedDate}
-                    </Text>
-                 </View>
-                    <View>
-                    <Text className="text-gray-300 font-bold text-lg">
-                      Due <Text className="text-primary">{item?.amount}</Text> BDT
-                    </Text>
-                    </View>
-                  </View>
-                </View>
-              )}
+      <StatusBar style="light" backgroundColor="white" />
+      <View className="flex-1 bg-dark p-2">
+        {/* Filters */}
+        <View className="flex-row justify-between items-center mb-4">
+          {currentUser?.type === "admin" && warehouses?.length > 0 && (
+            <Dropdown
+              data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
+              labelField="label"
+              valueField="value"
+              placeholder="Select Warehouse"
+              value={selectedWarehouse}
+              onChange={(item: any) => setSelectedWarehouse(item.value)}
+              placeholderStyle={{ color: "white" }}
+              style={{
+                backgroundColor: "#1f1f1f",
+                borderRadius: 8,
+                padding: 8,
+                width: 180,
+                height: 45,
+              }}
+              selectedTextStyle={{ color: "white" }}
+              itemTextStyle={{ color: "black" }}
             />
-    </View>
+          )}
+
+          {/* From / To Dates */}
+          <View className="flex-row gap-3">
+            <TouchableOpacity
+              onPress={() => setShowStartPicker(true)}
+              className="p-2 rounded-xl bg-black-200 flex-col items-center"
+            >
+              <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
+              <Text className="text-white text-sm">
+                {format(fromDate, "dd MMM yyyy")}
+              </Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              onPress={() => setShowEndPicker(true)}
+              className="p-2 rounded-xl bg-black-200 flex-col items-center"
+            >
+              <Ionicons name="calendar-number-sharp" size={24} color="#fdb714" />
+              <Text className="text-white text-sm">
+                {format(toDate, "dd MMM yyyy")}
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        {showStartPicker && (
+          <DateTimePicker
+            value={fromDate}
+            mode="date"
+            display="default"
+            maximumDate={new Date()}
+            onChange={(e, selectedDate) => {
+              setShowStartPicker(false);
+              if (selectedDate) setFromDate(selectedDate);
+            }}
+          />
+        )}
+        {showEndPicker && (
+          <DateTimePicker
+            value={toDate}
+            mode="date"
+            display="default"
+            maximumDate={new Date()}
+            onChange={(e, selectedDate) => {
+              setShowEndPicker(false);
+              if (selectedDate) setToDate(selectedDate);
+            }}
+          />
+        )}
+
+        {/* Summary */}
+        <View className="flex-row justify-between mb-4">
+          <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
+            <Text className="text-zinc-300 text-sm">Total Customer Due</Text>
+            <Text className="text-yellow-400 text-xl font-bold">
+              {totalCustomerDue}
+            </Text>
+          </View>
+          <View className="bg-black-200 p-4 rounded-2xl w-[48%]">
+            <Text className="text-zinc-300 text-sm">Total Amount</Text>
+            <Text className="text-primary text-xl font-bold">
+              {totalAmount} BDT
+            </Text>
+          </View>
+        </View>
+
+        {/* List */}
+        <FlatList
+          data={customerDue}
+          keyExtractor={(item) => item._id}
+          renderItem={({ item }) => (
+            <View className="bg-black-200 p-4 rounded-2xl mb-3">
+              <View className="flex-row justify-between items-center">
+                <Text className="text-gray-200 text-xl font-semibold">
+                  {item?.customerName}
+                </Text>
+              </View>
+              <View className="flex-row justify-between items-center mt-2">
+                <Text className="text-gray-400 font-bold">{item?.formatedDate}</Text>
+                <Text className="text-gray-300 font-bold text-lg">
+                  Due <Text className="text-primary">{item?.amount}</Text> BDT
+                </Text>
+              </View>
+            </View>
+          )}
+        />
+      </View>
     </>
   );
 }

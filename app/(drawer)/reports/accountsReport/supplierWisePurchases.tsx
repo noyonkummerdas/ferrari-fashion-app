@@ -33,8 +33,8 @@ export default function SupplierPaymentReport() {
 
 // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
-   
-  );
+     currentUser.role === "user" ? currentUser.warehouse : null
+   );
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
@@ -43,11 +43,11 @@ export default function SupplierPaymentReport() {
         setSelectedWarehouse(warehousesData[0]._id);
       }
     }
-  }, [warehousesData]);
+  }, [warehousesData, currentUser]);
 
   // Fetch CashIn data from backend (replace with your API)
  const { data : purchasesData, isSuccess, isError, refetch } = usePurchasesDWQuery({
-     warehouse: currentUser?.warehouse,
+     warehouse: selectedWarehouse || currentUser?.warehouse,
      date: format(currentDate, "MM-dd-yyyy"),
      isDate: "month",
       forceRefetch: true,
@@ -72,17 +72,12 @@ export default function SupplierPaymentReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-      //     className="me-4"
-      //   >
-      //     <Ionicons name="print-outline" size={28} color="white" />
-      //   </TouchableOpacity>
-      //   <PrintButton filteredData={supplierWisePurchases} title="Supplier Purchese Report" />
-      // ),
+      headerRight: () => (
+        <PrintButton filteredData={purchasesData} title="Supplier Purchese Report" />
+      ),
+    
     });
-  }, [navigation]);
+  }, [navigation, purchasesData]);
   const totalPurchases = purchasesData?.length || 0;
   const totalAmount = purchasesData?.reduce(
   (sum, item) => sum + (item.amount || 0),
@@ -95,7 +90,7 @@ export default function SupplierPaymentReport() {
     <View className=" bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
-       
+       { currentUser?.type === "admin" && warehouses?.length > 0 &&
           <Dropdown
             data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
             labelField="label"
@@ -108,6 +103,7 @@ export default function SupplierPaymentReport() {
             selectedTextStyle={{ color: "white" }}
             itemTextStyle={{ color: "black" }}
           />
+       }
 
         {/* From / To Dates */}
         <View className="flex-row gap-3">

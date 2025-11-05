@@ -4,12 +4,14 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   Image,
+  Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
   View,
+   KeyboardAvoidingView,
 } from "react-native";
 
 import CustomDropdown from "@/components/CustomDropdown";
@@ -20,6 +22,9 @@ import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
 import profile from "../../assets/images/profile.jpg";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import ExpoPhotoUploader from "@/components/PhotoUpload";
+import photo from "@/assets/images/profile.jpg";
+
 
 const updateUser = () => {
   const { userInfo } = useGlobalContext();
@@ -160,7 +165,17 @@ const updateUser = () => {
   };
 
   return (
-    <ScrollView className="flex-1 bg-dark p-4 mx-auto w-full">
+     <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              className="flex-1"
+              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+    <ScrollView className="flex-1 bg-dark p-4 mx-auto w-full"
+                  className="flex-1 px-6 pt-4"
+                 contentContainerStyle={{ paddingBottom: 300 }}
+               keyboardShouldPersistTaps="handled"
+               showsVerticalScrollIndicator={false}
+                >
       <StatusBar style="light" />
       <View>
         <TouchableOpacity
@@ -169,6 +184,14 @@ const updateUser = () => {
         >
           <Image source={profile} className="w-40 h-40 rounded-full" />
         </TouchableOpacity>
+
+          {/* <ExpoPhotoUploader
+          uploadSuccess={(url) => setForm({ ...form, photo: url })}
+          folderName="ffapp"
+          placeholder={photo}
+          // existingPhoto={}
+        /> */}
+
       </View>
 
       <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">
@@ -258,6 +281,7 @@ const updateUser = () => {
         </Text>
       </TouchableOpacity>
     </ScrollView>
+    </KeyboardAvoidingView>
   );
 };
 
