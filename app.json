@@ -19,6 +19,9 @@
       },
       "edgeToEdgeEnabled": true,
       "package": "com.manishankarvakta.FFApp",
+      "blockedPermissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ],
       "versionCode": 4
     },
     "web": {
