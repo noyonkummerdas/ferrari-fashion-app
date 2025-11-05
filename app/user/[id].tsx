@@ -2,28 +2,24 @@ import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Alert,
-  Image,
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  useColorScheme,
   View,
-   KeyboardAvoidingView,
+  useColorScheme
 } from "react-native";
 
+import photo from "@/assets/images/profile.jpg";
 import CustomDropdown from "@/components/CustomDropdown";
+import PhotoUploader from "@/components/PhotoUploader";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import { useUpdateUserMutation, useUserQuery } from "@/store/api/userApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
-import * as ImagePicker from "expo-image-picker";
 import { StatusBar } from "expo-status-bar";
-import profile from "../../assets/images/profile.jpg";
-import { useGlobalContext } from "@/context/GlobalProvider";
-import ExpoPhotoUploader from "@/components/PhotoUpload";
-import photo from "@/assets/images/profile.jpg";
 
 
 const updateUser = () => {
@@ -59,7 +55,7 @@ const updateUser = () => {
     }
   }, [isUseSeccess, userData]);
 
-  // console.log("USER DATA", userData, isUseSeccess);
+  // console.log("USER DATA",id, userData, isUseSeccess);
 
   const [updateUser] = useUpdateUserMutation();
 
@@ -73,6 +69,7 @@ const updateUser = () => {
   ]);
 
   const { data, isSuccess, isError, isLoading } = useWarehousesQuery();
+
 
   // console.log("WAREHOUSE DATA", data);
   useEffect(() => {
@@ -124,7 +121,7 @@ const updateUser = () => {
     username: "",
     password: "",
     type: "manager",
-    photo: "",
+    // photo: "",
     phone: "",
     status: "active",
     warehouse: "",
@@ -140,18 +137,7 @@ const updateUser = () => {
     handleInputChange("username", form?.phone);
   }, [form?.phone]);
 
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.Images,
-      allowsEditing: true,
-      aspect: [4, 4],
-      quality: 1,
-    });
-
-    if (!result.canceled) {
-      setForm({ ...form, photo: result.assets[0].uri });
-    }
-  };
+  
 
   const handleUpdateUser = async () => {
     try {
@@ -162,6 +148,12 @@ const updateUser = () => {
     } catch (error) {
       console.error("Error adding User:", error);
     }
+  };
+
+  const handlePhotoUploadSuccess = async (url: string) => {
+    // console.log("URL", url);
+    const response = await updateUser({_id: userData?._id, photo: url})
+    console.log("Response", response);
   };
 
   return (
@@ -178,20 +170,12 @@ const updateUser = () => {
                 >
       <StatusBar style="light" />
       <View>
-        <TouchableOpacity
-          onPress={pickImage}
-          className="flex justify-center items-center"
-        >
-          <Image source={profile} className="w-40 h-40 rounded-full" />
-        </TouchableOpacity>
-
-          {/* <ExpoPhotoUploader
-          uploadSuccess={(url) => setForm({ ...form, photo: url })}
-          folderName="ffapp"
+        <PhotoUploader
+          existingPhoto={userData?.photo || ""}
           placeholder={photo}
-          // existingPhoto={}
-        /> */}
-
+          onUploadSuccess={(url:string)=>handlePhotoUploadSuccess(url)}
+          previewStyle="round-full"
+        />
       </View>
 
       <Text className="text-gray-200 placeholder:text-gray-500 font-regular text-lg ms-3">

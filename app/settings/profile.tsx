@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { router, useNavigation } from 'expo-router';
 import React, { useLayoutEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, useColorScheme, View } from 'react-native';
+import { SafeAreaView, ScrollView, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
 
 
 
@@ -54,10 +54,11 @@ const profile = () => {
   const handleEditProfile = () => {
     console.log("Edit profile pressed");
     // Example: navigate to edit profile screen
-    router.push("/user/edit");
+    router.push(`/user/${userInfo?.id}`);
   };
  const { userInfo } = useGlobalContext();
  
+//  console.log(userInfo)
   
 
   return (

@@ -13,7 +13,7 @@ export const UserApi = createApi({
       query: () => `/user`,
       providesTags: ["User"],
     }),
-    User: builder.query<User, string>({
+    User: builder.query<User, { _id: string }>({
       query: ({ _id }) => `/user/${_id}`,
       providesTags: ["User"],
     }),
