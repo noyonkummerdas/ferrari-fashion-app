@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/Colors";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -39,11 +39,11 @@ const updateUser = () => {
     },
   ]);
 
-  const {
-    data: userData,
-    isSuccess: isUseSeccess,
-    refetch: userRefetch,
-  } = useUserQuery({ _id: id });
+    const {
+      data: userData,
+      isSuccess: isUseSeccess,
+      refetch: userRefetch,
+    } = useUserQuery({ _id: id });
 
   useEffect(() => {
     userRefetch();

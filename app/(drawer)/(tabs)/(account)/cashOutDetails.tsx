@@ -3,7 +3,7 @@ import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -22,6 +22,7 @@ const CashOutDetails = () => {
 
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
+    console.log("TRANSACTION DETAILS", data, isSuccess, isLoading, error);
 
   useEffect(() => {
     refetch();

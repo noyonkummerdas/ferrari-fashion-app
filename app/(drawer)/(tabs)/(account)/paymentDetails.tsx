@@ -1,10 +1,10 @@
-import { Colors } from "@/constants/Colors";
+import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,7 +13,6 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Image } from "react-native-svg";
 
 const PaymentDetails = () => {
   const { _id } = useLocalSearchParams();
@@ -278,11 +277,13 @@ const PaymentDetails = () => {
               <Text className="text-gray-300 text-base mb-2">Photo</Text>
               <View className="bg-gray-700 rounded-lg p-3">
                 <Text className="text-white text-base text-center">
-               <Image
-                 source={{ uri: data.photo }}
-                 className="w-full h-48 rounded-lg"
-                 resizeMode="cover"
-                 />
+               <PhotoUploader
+                placeholder={photo}
+                onUploadSuccess={(url)=>handleInputChange("photo", url)}
+                previewStyle={"square"}
+                aspectRatio={[9,19]}
+                />
+
 
                 </Text>
               </View>

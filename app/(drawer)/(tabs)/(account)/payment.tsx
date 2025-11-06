@@ -1,4 +1,6 @@
+import photo from "@/assets/images/Invoice.jpg";
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
+import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useGetSupplierByInvoiceQuery, useSuppliersQuery } from "@/store/api/supplierApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
@@ -7,17 +9,16 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
-  Image, KeyboardAvoidingView, Platform,
+  KeyboardAvoidingView, Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   View
 } from "react-native";
-import PhotoUploader from "@/components/PhotoUploader"; 
 
 const Payment = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -429,55 +430,15 @@ const Payment = () => {
               <Text className="text-gray-300 text-lg font-medium">
                 Invoice Photo
               </Text>
+
                <PhotoUploader
-              uploadSuccess={handlePhotoUploadSuccess}
-              folderName="supplier-payment"
-              placeholder={formData.photo}
+                placeholder={photo}
+                onUploadSuccess={(url)=>handleInputChange("photo", url)}
+                previewStyle={"square"}
+                aspectRatio={[9,19]}
                 />
 
-              {/* {formData.photo ? (
-                <View className="border border-black-200 bg-black-200 rounded-lg p-4">
-                  <Image
-                    source={{ uri: formData.photo }}
-                    className="w-full h-48 rounded-lg mb-3"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-row gap-3">
-                    <TouchableOpacity
-                      className="flex-1 bg-red-600 p-3 rounded-lg"
-                      onPress={removePhoto}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-white text-center font-medium">
-                        Remove Photo
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      className="flex-1 bg-primary p-3 rounded-lg"
-                      onPress={showPhotoOptions}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-black text-center font-medium">
-                        Change Photo
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  className="border border-black-200 bg-black-200 rounded-lg p-6 flex-col justify-center items-center"
-                  onPress={showPhotoOptions}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="camera" size={32} color="#FDB714" />
-                  <Text className="text-white text-lg mt-2 font-medium">
-                    Upload Photo
-                  </Text>
-                  <Text className="text-gray-400 text-sm mt-1 text-center">
-                    Tap to select an image from your gallery
-                  </Text>
-                </TouchableOpacity>
-              )} */}
+            
             </View>
 
             {/* Submit Button */}

@@ -1,7 +1,7 @@
 import photo from "@/assets/images/profile.jpg";
 import { BASE_URL } from "@/constants/baseUrl";
 import * as ImagePicker from "expo-image-picker";
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 
 type PhotoUploaderProps = {
@@ -36,7 +36,7 @@ const PhotoUploader = ({
     setCurrentPhoto(existingPhoto || null);
   }, [existingPhoto]);
 
-  const handleImageSelection = async (uri: string) => {§
+  const handleImageSelection = async (uri: string) => {
     setIsUploading(true);
     try {
       // Create FormData for upload
@@ -86,6 +86,7 @@ const PhotoUploader = ({
         // setCurrentPhoto(proxyUrl);
         // console.log("DATA.upURL", data.upURL);
         onUploadSuccess(data.upURL);
+        setCurrentPhoto(data.upURL);
       //   Alert.alert('Success', 'Photo uploaded successfully!');
       } 
       // else {

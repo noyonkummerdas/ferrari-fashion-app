@@ -4,7 +4,7 @@ import { useAddWarehouseMutation } from '@/store/api/warehouseApi'; // ✅ chang
 import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { router, useNavigation } from 'expo-router';
-import React, { useLayoutEffect } from 'react';
+import { useLayoutEffect } from 'react';
 import { SafeAreaView, ScrollView, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
 
 
@@ -30,15 +30,6 @@ const profile = () => {
           <Ionicons name="arrow-back" size={24} color="#ffffff" />
         </View>
        </TouchableOpacity>,
-      //  headerRight: () => <View className="flex flex-row items-center">
-      //   <Link href="warehouse/warehouseEdit" className="text-white">
-      //    <View className="flex flex-row items-center">
-      //     <Ionicons name="add" size={24} color="gray" />
-      //     <Text className='text-gray-200 font-lg'>Add</Text>
-      //    </View>
-      //   </Link>
-      //  </View>,
-      //@ts-ignore
       headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
       headerShadowVisible: true,
@@ -64,19 +55,13 @@ const profile = () => {
   return (
     <SafeAreaView className="bg-dark flex-1">
       {/* Header */}
-      {/* <View className="flex-row items-center justify-between px-4 py-3">
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="arrow-back" size={24} color="#ffffff" />
-        </TouchableOpacity>
-        <Text className="text-white text-xl font-bold">Profile</Text>
-        <View className="w-6" />
-      </View> */}
+
 
       {/* Profile Card */}
       <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4">
         <View className="flex-row items-center">
           <View className="w-16 h-16 rounded-full bg-orange-500 items-center justify-center mr-4">
-            <Ionicons name="person" size={32} color="#ffffff" />
+            {/* <Ionicons name="person" size={32} color="#ffffff" /> */}
           </View>
           <View className="flex-1">
             <View className="flex-row items-center mb-1">

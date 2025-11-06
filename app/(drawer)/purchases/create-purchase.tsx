@@ -1,18 +1,18 @@
+import Photo from "@/assets/images/Invoice.jpg";
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
+import PhotoUploader from "@/components/PhotoUploader";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddPurchaseMutation } from "@/store/api/purchasApi";
 import { useSuppliersQuery } from "@/store/api/supplierApi";
-import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
-  Image,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -20,7 +20,7 @@ import {
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 
 const createPurchase = () => {
@@ -406,8 +406,15 @@ const createPurchase = () => {
               <Text className="text-gray-300 text-lg font-medium">
                 Invoice Photo
               </Text>
+              <PhotoUploader
+                placeholder={Photo}
+                onUploadSuccess={(url)=>handleInputChange("photo", url)}
+                previewStyle={"square"}
+                aspectRatio={[9,19]}
+                />
 
-              {formData.photo ? (
+
+              {/* {formData.photo ? (
                 <View className="border border-black-200 bg-black-200 rounded-lg p-4">
                   <Image
                     source={{ uri: formData.photo }}
@@ -449,7 +456,7 @@ const createPurchase = () => {
                     Tap to select an image from your gallery
                   </Text>
                 </TouchableOpacity>
-              )}
+              )} */}
             </View>
 
             {/* Submit Button */}
