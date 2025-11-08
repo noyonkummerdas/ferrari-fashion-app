@@ -1,10 +1,14 @@
+import { CustomDrawerToggleButton } from "@/components";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
+import { useCustomerListQuery } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  FlatList,
   RefreshControl,
   SafeAreaView,
   Text,
@@ -12,11 +16,7 @@ import {
   TouchableOpacity,
   useColorScheme,
   View,
-  FlatList,
 } from "react-native";
-import { CustomDrawerToggleButton } from "@/components";
-import { useCustomerListQuery, useGetCustomerByInvoiceQuery } from "@/store/api/customerApi";
-import { StatusBar } from "expo-status-bar";
 
 interface Customer {
   _id: string;
@@ -94,7 +94,7 @@ const Customers = () => {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="white" />
+      <StatusBar style="light" backgroundColor="#000" />
 
       <SafeAreaView className="bg-dark flex-1">
         {/* 🔍 Search Box */}

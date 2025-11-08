@@ -1,8 +1,9 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useGetCustomerByIdQuery } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
-import { addMonths, subMonths, format } from "date-fns";
+import { addMonths, format, subMonths } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
@@ -80,6 +81,7 @@ const CustomerDetails = () => {
 
   return (
     <>
+    <StatusBar style="light" backgroundColor="#000" />
     <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           className="flex-1 bg-dark"
