@@ -3,6 +3,7 @@ import { PaymentChart } from "@/components/PaymentChart";
 import { WelcomeCard } from "@/components/WelcomeCard";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useDashbordQuery } from "@/store/api/dashbordApi";
+import { useGetuserPhotoQuery } from "@/store/api/userApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
@@ -46,6 +47,11 @@ export default function PosDashboard() {
     { skip: !userInfo } // Skip query until userInfo is available
   );
   console.log("Dashboard Data:", dashboardData);
+
+  const {data: userPhoto} = useGetuserPhotoQuery({id:userInfo?.id});
+  
+    // console.log("User Photo Data:", userPhoto)
+  
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 
@@ -173,7 +179,7 @@ useEffect(() => {
         {/* Welcome Card */}
         <WelcomeCard
           userName={userInfo?.name || "NK Noyon"}
-          userImage={profile}
+          userImage={userPhoto?.photo !== null && userPhoto?.photo !== "" && userPhoto?.photo !== undefined ? { uri: userPhoto?.photo } : profile}
           onProfilePress={() => router.push("/settings/profile")}
         />
         {/* current & opening balance */}

@@ -5,8 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 import { useIsFocused } from "@react-navigation/native";
 import { format } from "date-fns";
 import { router, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { FlatList, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View, Modal } from "react-native";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Modal, StatusBar, Text, TextInput, TouchableOpacity, useColorScheme, View } from "react-native";
 
 const PurchasesList = () => {
   const isFocused = useIsFocused();
@@ -29,6 +29,7 @@ const PurchasesList = () => {
     q: searchQuery || "all",
     forceRefetch: true,
   });
+  console.log("Purchases Data:", data);
 
   useEffect(() => {
     if (isFocused) refetch();

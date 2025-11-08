@@ -30,7 +30,7 @@ export const StockListItem: React.FC<StockListItemProps> = ({
       {/* Product Image */}
       <View className="mr-4">
         <Image
-          source={photo || productImage}
+          source={photo !== null && photo !== "" ? {uri: photo} : productImage}
           className="w-12 h-12 rounded-lg"
           resizeMode="cover"
         />

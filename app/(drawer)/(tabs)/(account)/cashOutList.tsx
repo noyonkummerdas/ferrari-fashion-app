@@ -5,7 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { router, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Modal,
   Platform,
@@ -55,6 +55,7 @@ const CashOutList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
+    // console.log("CASHOUT LIST DATA", data);
 
   useEffect(() => {
     if (userInfo?.warehouse) {

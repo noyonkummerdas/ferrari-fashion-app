@@ -22,7 +22,7 @@ const CashOutDetails = () => {
 
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
-    console.log("TRANSACTION DETAILS", data, isSuccess, isLoading, error);
+    // console.log("TRANSACTION DETAILS", data, isSuccess, isLoading, error);
 
   useEffect(() => {
     refetch();
@@ -271,16 +271,21 @@ const CashOutDetails = () => {
             </View>
           )}
 
-          {data.photo && (
-            <View>
-              <Text className="text-gray-300 text-base mb-2">Photo</Text>
-              <View className="bg-gray-700 rounded-lg p-3">
-                <Text className="text-white text-base text-center">
-                  Photo attached
-                </Text>
-              </View>
-            </View>
-          )}
+          <TouchableOpacity
+          onPress={() =>
+              router.push({
+                pathname: "(drawer)/(tabs)/(account)/cashoutInvoicePhoto",
+                params: {
+                  invoice: data?.invoices,
+                  photo: data?.photo,
+                },
+              })
+            }
+          >
+            <Text className="text-gray-200 text-lg border border-gray-600 rounded-lg p-3 text-center bg-black-200">
+              View Invoice Photo
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 

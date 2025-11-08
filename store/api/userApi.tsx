@@ -33,6 +33,15 @@ export const UserApi = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+
+    // get photo
+    GetuserPhoto: builder.query<User, any>({
+      query: ({ id }) => ({
+        url: `/user/photo/${id}`,
+        method: "GET",
+      }),
+    }),
+
     // new
 
     UserDw: builder.query<User, string>({
@@ -87,6 +96,7 @@ export const {
   useLoginUserMutation,
   useAddUserMutation,
   useUpdateUserMutation,
+  useGetuserPhotoQuery,
   useValidUserMutation,
   useDeleteUserMutation,
   useUserDwQuery,

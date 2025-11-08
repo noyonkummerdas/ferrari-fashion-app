@@ -1,19 +1,18 @@
+import photo from "@/assets/images/product.jpg";
 import { DatePickerField } from "@/components/DatePickerField";
-import { ImageUploader } from "@/components/ImageUploader";
+import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddProductMutation } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
-  KeyboardAvoidingView,
-  Platform,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const AddStock = () => {
@@ -171,10 +170,17 @@ const AddStock = () => {
         </View>
 
         {/* Media Upload */}
-        <ImageUploader
+        {/* <ImageUploader
           image={formData.image}
           onImageSelected={(uri) => handleInputChange("image", uri)}
-        />
+        /> */}
+       <PhotoUploader
+                placeholder={photo}
+                onUploadSuccess={(url)=>handleInputChange("photo", url)}
+                previewStyle={"square"}
+                aspectRatio={[1,1]}
+                />
+
 
         {/* Action Buttons */}
         <View className="flex-row gap-4 mb-8">

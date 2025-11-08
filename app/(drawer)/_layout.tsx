@@ -2,11 +2,11 @@ import { Ionicons } from "@expo/vector-icons";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { router, usePathname, useSegments } from "expo-router";
 import Drawer from "expo-router/drawer";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // import * as globalCon from "@/context/GlobalProvider"
+import { useGetuserPhotoQuery } from "@/store/api/userApi";
 import { StatusBar } from "expo-status-bar";
-import { useSelector } from "react-redux";
 import { useGlobalContext } from "../../context/GlobalProvider";
 const profile = require("@/assets/images/profile.jpg");
 
@@ -33,6 +33,7 @@ const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
   );
 };
 
+
 const CustomDrawerComponent = (props: any) => {
   // Set the animation options. This is optional.
   // SplashScreen.setOptions({
@@ -41,11 +42,14 @@ const CustomDrawerComponent = (props: any) => {
   // });
 
 
-  const userInfo = useSelector((state: any) => state.user);
+  // const userInfo = useSelector((state: any) => state.user);
 
-  // const {userInfo} = useGlobalContext()
+  const {userInfo} = useGlobalContext();
 
-  // console.log(userInfo.permissions)
+  const {data, isSuccess, refetch} = useGetuserPhotoQuery({id:userInfo?.id});
+  console.log("User Photo Data:", data, isSuccess);
+
+  // console.log(userInfo)
 
   const pathname = usePathname();
   const { loading, loggedIn, logout } = useGlobalContext();
@@ -78,13 +82,8 @@ const CustomDrawerComponent = (props: any) => {
       <StatusBar style="light" />
       <TouchableOpacity onPress={() => router.push("/")} className="mx-2 pe-3">
         <View className="flex flex-row gap-x-3 border-b items-center border-slate-400 pb-4 mb-2">
-          {profile ? (
-            <Image source={profile} className="w-12 h-12 rounded-full" />
-          ) : (
-            <View className="w-12 h-12 rounded-full bg-primary/10 items-center justify-center">
-              <Ionicons name="person" size={24} color="#FDB714" />
-            </View>
-          )}
+            <Image source={data?.photo !== null ?{uri:data?.photo}:profile} className="w-12 h-12 rounded-full" />
+          
           <View>
             <Text className="text-xl text-gray-200 font-pmedium">
               {userInfo?.name}

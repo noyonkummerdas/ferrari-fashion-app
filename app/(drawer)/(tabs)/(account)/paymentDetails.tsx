@@ -1,4 +1,3 @@
-import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
@@ -25,7 +24,7 @@ const PaymentDetails = () => {
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
 
-    console.log("TRANSACTION DETAILS", data);
+    // console.log("TRANSACTION DETAILS", data);
 
   useEffect(() => {
     refetch();
@@ -272,23 +271,23 @@ const PaymentDetails = () => {
             </View>
           )}
 
-          {data.photo && (
-            <View>
-              <Text className="text-gray-300 text-base mb-2">Photo</Text>
-              <View className="bg-gray-700 rounded-lg p-3">
-                <Text className="text-white text-base text-center">
-               <PhotoUploader
-                placeholder={photo}
-                onUploadSuccess={(url)=>handleInputChange("photo", url)}
-                previewStyle={"square"}
-                aspectRatio={[9,19]}
-                />
+       
 
-
-                </Text>
-              </View>
-            </View>
-          )}
+          <TouchableOpacity
+           onPress={() =>
+                        router.push({
+                          pathname: "(drawer)/(tabs)/(account)/cashoutInvoicePhoto",
+                          params: {
+                            invoice: data?.invoices,
+                            photo: data?.photo,
+                          },
+                        })
+                      }
+          >
+            <Text className="text-gray-200 text-lg border border-gray-600 rounded-lg p-3 text-center bg-black-200">
+              View Invoice Photo
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 

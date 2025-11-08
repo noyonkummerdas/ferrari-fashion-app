@@ -1,7 +1,7 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useSupplierQuery } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
-import { addMonths, subMonths, format } from "date-fns";
+import { addMonths, format, subMonths } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -16,7 +16,7 @@ const SupplierDetails = () => {
 
   const { data, refetch } = useSupplierQuery({
     _id: id,
-    date: currentDate,
+     date: currentDate.toISOString(),
     isDate: 'month',
     forceRefetch: true,
   });

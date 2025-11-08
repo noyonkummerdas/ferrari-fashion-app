@@ -1,11 +1,12 @@
 import { Colors } from '@/constants/Colors';
 import { useGlobalContext } from '@/context/GlobalProvider';
+import { useGetuserPhotoQuery } from '@/store/api/userApi';
 import { useAddWarehouseMutation } from '@/store/api/warehouseApi'; // ✅ change to your actual import
 import { Ionicons } from '@expo/vector-icons';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { router, useNavigation } from 'expo-router';
 import { useLayoutEffect } from 'react';
-import { SafeAreaView, ScrollView, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
+import { Image, SafeAreaView, ScrollView, Text, TouchableOpacity, View, useColorScheme } from 'react-native';
 
 
 
@@ -48,6 +49,7 @@ const profile = () => {
     router.push(`/user/${userInfo?.id}`);
   };
  const { userInfo } = useGlobalContext();
+   const {data: userPhoto} = useGetuserPhotoQuery({id:userInfo?.id});
  
 //  console.log(userInfo)
   
@@ -60,9 +62,8 @@ const profile = () => {
       {/* Profile Card */}
       <View className="mx-4 mb-6 bg-black-200 rounded-lg p-4">
         <View className="flex-row items-center">
-          <View className="w-16 h-16 rounded-full bg-orange-500 items-center justify-center mr-4">
-            {/* <Ionicons name="person" size={32} color="#ffffff" /> */}
-          </View>
+            <Image source={userPhoto?.photo !== null && userPhoto?.photo !== "" && userPhoto?.photo !== undefined ?{uri:userPhoto?.photo}:profile} height={80} width={80} className="w-12 h-12 rounded-full" />
+          
           <View className="flex-1">
             <View className="flex-row items-center mb-1">
               <Text className="text-yellow-400 text-lg font-bold mr-2">{userInfo?.name || "NK Noyon"}</Text>

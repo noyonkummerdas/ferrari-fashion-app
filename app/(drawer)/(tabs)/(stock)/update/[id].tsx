@@ -1,10 +1,12 @@
+import PhotoUploader from "@/components/PhotoUploader";
+import { useGlobalContext } from "@/context/GlobalProvider";
 import {
   useProductQuery,
   useUpdateProductMutation,
 } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
   ScrollView,
@@ -13,9 +15,9 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import photo from "../../../../../assets/images/product.jpg";
 import { DatePickerField } from "../../../../../components/DatePickerField";
-import { ImageUploader } from "../../../../../components/ImageUploader";
-import { useGlobalContext } from "@/context/GlobalProvider";
+
 const UpdateStock = () => {
   const navigation = useNavigation();
   const { id } = useLocalSearchParams();
@@ -190,9 +192,12 @@ const UpdateStock = () => {
         </View>
 
         {/* Media Upload */}
-        <ImageUploader
-          image={formData.photo}
-          onImageSelected={(uri) => handleInputChange("photo", uri)}
+        <PhotoUploader
+          existingPhoto={data?.photo || ""}
+          placeholder={photo}
+          onUploadSuccess={(url)=>handleInputChange("photo", url)}
+          previewStyle={"square"}
+          aspectRatio={[1,1]}
         />
 
         {/* Action Buttons */}

@@ -5,7 +5,7 @@ import { RootState } from "@/store/store";
 import { MaterialIcons } from "@expo/vector-icons";
 import { router, useLocalSearchParams, usePathname } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { Image, Text, TouchableOpacity, View } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 
@@ -13,7 +13,7 @@ const StockDetails = () => {
   const { id } = useLocalSearchParams();
   const { userInfo } = useGlobalContext();
   
-
+console.log("User Info in Stock Details:", userInfo);
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -66,12 +66,9 @@ useEffect(() => {
   console.log("STOCK ITEM FROM REDUX:", data?.stock);
 
   const productImage = require("../../../../assets/images/product.jpg");
-  let handleEdit ;
- if(userInfo.type === "admin"){
-   handleEdit = () => {
+  const handleEdit = () => {
     router.push(`/(drawer)/(tabs)/(stock)/update/${data?._id}`);
   };
-}
 
   // Stock operation functions
   const handleStockIn = () => {
@@ -116,7 +113,9 @@ useEffect(() => {
       </View>
 
       {/* Edit Button */}
-      <View className="absolute top-12 right-4 z-10">
+      {
+        // userInfo?.type === "Admin" && (
+          <View className="absolute top-12 right-4 z-10">
         <TouchableOpacity
           className="bg-white/90 p-3 rounded-full shadow-lg"
           onPress={handleEdit}
@@ -125,11 +124,13 @@ useEffect(() => {
           <MaterialIcons name="edit" size={24} color="#000000" />
         </TouchableOpacity>
       </View>
+        // )
+      }
 
       {/* Product Image Section - Square */}
       <View className="bg-gray-100 w-full aspect-square">
         <Image
-          source={productImage}
+          source={data?.photo !== ""? {uri: data?.photo} : productImage}
           className="w-full h-full"
           resizeMode="cover"
         />
