@@ -3,6 +3,7 @@ import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect } from "react";
 import {
   ActivityIndicator,
@@ -12,7 +13,6 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-
 const CashOutDetails = () => {
   const { _id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
@@ -117,6 +117,8 @@ const CashOutDetails = () => {
   };
 
   return (
+    <>
+      <StatusBar style="light" backgroundColor="#000" />
     <ScrollView className="flex-1 bg-dark">
       {/* Header Card */}
       <View className="mx-4 mt-6 bg-gradient-to-r from-red-600 to-red-700 rounded-2xl p-6">
@@ -301,6 +303,7 @@ const CashOutDetails = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </>
   );
 };
 

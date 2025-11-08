@@ -244,7 +244,7 @@ const CashOut = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
     <SafeAreaView className="flex-1 bg-dark">
-      <StatusBar style="light" />
+      <StatusBar style="light" backgroundColor="#000" />
       <ScrollView
         className="px-6 pt-4"
         contentContainerStyle={{ paddingBottom: 300 }}

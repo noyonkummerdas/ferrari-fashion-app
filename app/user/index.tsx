@@ -99,7 +99,7 @@ const Profile = () => {
   return (
     <ScrollView className="flex-1 bg-dark ">
 
-      <StatusBar style="light" backgroundColor="#1f2937" />
+      <StatusBar style="light" backgroundColor="#000" />
       {data?.map((user) => (
         <TouchableOpacity
           key={user._id}

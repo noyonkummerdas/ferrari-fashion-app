@@ -195,7 +195,7 @@ const CashDepositDetails = () => {
             keyboardShouldPersistTaps="handled"
             showsVerticalScrollIndicator={false}
           >
-      <StatusBar style="light" />
+      <StatusBar style="light" backgroundColor="#000" />
 
         {/* Name Input */}
         <View className="mb-4">

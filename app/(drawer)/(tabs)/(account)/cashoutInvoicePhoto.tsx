@@ -2,6 +2,7 @@ import profile from '@/assets/images/Invoice.jpg';
 import { useGlobalContext } from '@/context/GlobalProvider';
 import { Ionicons } from '@expo/vector-icons';
 import { router, useLocalSearchParams, useNavigation } from 'expo-router';
+import { StatusBar } from "expo-status-bar";
 import { useLayoutEffect, useState } from 'react';
 import { Image, TouchableOpacity, View } from 'react-native';
 
@@ -53,6 +54,7 @@ const cashoutInvoicePhoto = () => {
 
   return (
     <View>
+      <StatusBar style="light" backgroundColor="#000" />
       <Image source={photo ? { uri: photo } : profile} className="w-[360px] h-[650px] m-3" />
     </View>
   )

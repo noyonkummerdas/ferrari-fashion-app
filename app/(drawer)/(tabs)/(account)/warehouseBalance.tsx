@@ -1,7 +1,7 @@
 import CustomDropdown from "@/components/CustomDropdown";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useWarehouseAccountsQuery, useWarehousesQuery } from "@/store/api/warehouseApi";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { Link, useFocusEffect, useNavigation } from "expo-router";
@@ -211,7 +211,7 @@ const WarehouserBalance = () => {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="#1f2937" />
+     <StatusBar style="light" backgroundColor="#000" />
       <FlatList
         data={data?.transaction || []}
         keyExtractor={(item) => item._id}

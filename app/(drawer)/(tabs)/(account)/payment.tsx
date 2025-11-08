@@ -340,7 +340,7 @@ const Payment = () => {
          showsVerticalScrollIndicator={false}
           >
         <View className="flex-1 bg-dark">
-          <StatusBar style="light" />
+         <StatusBar style="light" backgroundColor="#000" />
             {/* Supplier Input */}
             <View className="mb-4">
               <View className="flex justify-between items-center flex-row">
