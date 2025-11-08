@@ -1,15 +1,17 @@
 import { router, Tabs } from "expo-router";
-import React from "react";
 
 // import { TabBarIcon } from '@/components/navigation/TabBarIcon';
 import { Image, Text, TouchableOpacity, View } from "react-native";
 
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useGetuserPhotoQuery } from "@/store/api/userApi";
 import { Ionicons } from "@expo/vector-icons";
 import { CustomDrawerToggleButton } from "../../../components";
 const profile = require("../../../assets/images/profile.jpg");
 
 //@ts-ignore
 const TabIcon = ({ icon, iconAlt, name, color, focused }) => {
+  
   return (
     <>
       <View className={`flex items-center justify-center`}>
@@ -39,6 +41,9 @@ const TabIcon = ({ icon, iconAlt, name, color, focused }) => {
 };
 
 export default function TabLayout() {
+  const {userInfo} = useGlobalContext();
+    const {data: userPhoto} = useGetuserPhotoQuery({id:userInfo?.id});
+  console.log("User Photo Data in Tab Icon:", userPhoto);
   return (
     <Tabs
       screenOptions={{
@@ -88,7 +93,7 @@ export default function TabLayout() {
               onPress={() => router.push({ pathname: "/settings/profile" })}
               className="mx-2 pe-3"
             >
-              <Image source={profile} className="h-8 w-8 ms-4 rounded-full" />
+              <Image source={userPhoto?.photo !== null && userPhoto?.photo !== "" && userPhoto?.photo !== undefined ? { uri: userPhoto?.photo } : profile} className="h-8 w-8 ms-4 rounded-full" />
             </TouchableOpacity>
           ),
         }}
@@ -126,7 +131,7 @@ export default function TabLayout() {
           headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
           headerRight: () => (
             <View className="mx-2 pe-3">
-              <Image source={profile} className="h-8 w-8 ms-4 rounded-full" />
+              <Image source={userPhoto?.photo !== null && userPhoto?.photo !== "" && userPhoto?.photo !== undefined ? { uri: userPhoto?.photo } : profile} className="h-8 w-8 ms-4 rounded-full" />
             </View>
           ),
           tabBarIcon: ({ color, focused }) => (

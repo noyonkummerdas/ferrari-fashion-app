@@ -5,6 +5,7 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { router, useNavigation } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
   Modal,
@@ -135,6 +136,8 @@ const PaymentReceivedList = () => {
   };
 
   return (
+    <>
+    <StatusBar style="light" backgroundColor="#000" />
     <ScrollView>
       {/* calendar */}
 
@@ -281,6 +284,7 @@ const PaymentReceivedList = () => {
         </View>
       )}
     </ScrollView>
+    </>
   );
 };
 

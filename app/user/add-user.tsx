@@ -238,7 +238,7 @@ const AddUser = () => {
           </Text>
         </TouchableOpacity>
       </ScrollView>
-    // </KeyboardAvoidingView>
+    </KeyboardAvoidingView>
   );
 };
 

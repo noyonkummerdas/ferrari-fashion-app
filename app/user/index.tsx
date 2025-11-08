@@ -3,9 +3,10 @@ import { useColorScheme } from "@/hooks/useColorScheme.web";
 import { useUsersQuery } from "@/store/api/userApi";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation, useRouter } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { useEffect, useLayoutEffect, useState } from "react";
+import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
+import profile from "@/assets/images/profile.jpg";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { StatusBar } from "expo-status-bar";
 
@@ -21,6 +22,8 @@ const Profile = () => {
     aamarId: userInfo?.aamarId,
     q: "",
   });
+
+  // console.log("User Info in User Index:", data);
 
   useEffect(() => {
     if (isSuccess) {
@@ -93,55 +96,10 @@ const Profile = () => {
     // Add edit profile logic here
     router.push("/user/add-user");
   };
-
-
-  //   {
-  //     id: 1,
-  //     name: "NK Noyon",
-  //     email: "nknoyon01936@gmail.com",
-  //     role: "Admin",
-  //     Phone: "123-456-7890",
-  //     status: "Active"
-  //   },
-  //   {
-  //     id: 1,
-  //     name: "NK Noyon",
-  //     email: "nknoyon01936@gmail.com",
-  //     role: "Manager",
-  //     Phone: "123-456-7890",
-  //      status: "Active"
-  //   },
-  //   {
-  //     id: 1,
-  //     name: "NK Noyon",
-  //     email: "nknoyon01936@gmail.com",
-  //     role: "Manager",
-  //     Phone: "123-456-7890",
-  //      status: "Active"
-  //   },
-  //   {
-  //     id: 1,
-  //     name: "NK Noyon",
-  //     email: "nknoyon01936@gmail.com",
-  //     role: "Manager",
-  //     Phone: "123-456-7890",
-  //      status: "Active"
-  //   },
-  //   {
-  //     id: 1,
-  //     name: "NK Noyon",
-  //     email: "nknoyon01936@gmail.com",
-  //     role: "Manager",
-  //     Phone: "123-456-7890",
-  //     status: "Active"
-
-  //   },
-  //   // Add more user data as needed
-  // ]
   return (
     <ScrollView className="flex-1 bg-dark ">
 
-      <StatusBar style="light" backgroundColor="#1f2937" />
+      <StatusBar style="light" backgroundColor="#000" />
       {data?.map((user) => (
         <TouchableOpacity
           key={user._id}
@@ -152,7 +110,7 @@ const Profile = () => {
 
             <View className="flex-row items-center">
               <View className="w-12 h-12 rounded-full bg-orange-500 items-center justify-center mr-4">
-                <Ionicons name="person" size={24} color="#ffffff" />
+                <Image source={user?.photo !== null && user?.photo !== "" && user?.photo !== undefined ?{uri:user?.photo}:profile} height={80} width={80} className="w-12 h-12 rounded-full" />
               </View>
               <View className="flex-1">
 

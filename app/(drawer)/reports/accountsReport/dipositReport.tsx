@@ -1,15 +1,15 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useTransactionListQuery } from "@/store/api/transactionApi";
 import { useWarehouseQuery, useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { format } from "date-fns";
-import { useNavigation, router } from "expo-router";
-import { useTransactionListQuery } from "@/store/api/transactionApi";
+import { router, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { useGlobalContext } from "@/context/GlobalProvider";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 import PrintButton from "../PrintButton";
 
 export default function CashInReport() {
@@ -94,7 +94,7 @@ export default function CashInReport() {
 
   return (
     <>
-      <StatusBar style="light" backgroundColor="white" />
+      <StatusBar style="light" backgroundColor="#000" />
       <View className="flex-1 bg-dark p-2">
         {/* Filters */}
         <View className="flex-row justify-between items-center mb-4">

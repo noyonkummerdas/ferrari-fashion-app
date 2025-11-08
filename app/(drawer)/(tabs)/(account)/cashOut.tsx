@@ -1,3 +1,5 @@
+import photo from "@/assets/images/Invoice.jpg";
+import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { useWarehouseQuery } from "@/store/api/warehouseApi";
@@ -6,11 +8,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Alert,
-  Dimensions,
-  Image,
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
@@ -18,7 +18,7 @@ import {
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 const CashOut = () => {
@@ -238,14 +238,13 @@ const CashOut = () => {
   };
 
   return (
-
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
       className="flex-1"
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
     <SafeAreaView className="flex-1 bg-dark">
-      <StatusBar style="light" />
+      <StatusBar style="light" backgroundColor="#000" />
       <ScrollView
         className="px-6 pt-4"
         contentContainerStyle={{ paddingBottom: 300 }}
@@ -324,13 +323,22 @@ const CashOut = () => {
             Invoice Photo
           </Text>
 
-          {formData.photo ? (
+          <PhotoUploader
+            placeholder={photo}
+            onUploadSuccess={(url)=>handleInputChange("photo", url)}
+            previewStyle={"square"}
+            aspectRatio={[9,19]}
+          />
+
+          {/* {formData.photo ? (
             <View className="border border-black-200 bg-black-200 rounded-lg p-4">
-              <Image
-                source={{ uri: formData.photo }}
-                className="w-full h-48 rounded-lg mb-3"
-                resizeMode="cover"
-              />
+              <PhotoUploader
+                placeholder={photo}
+                onUploadSuccess={(url)=>handleInputChange("photo", url)}
+                previewStyle={"square"}
+                aspectRatio={[9,19]}
+                />
+
               <View className="flex-row gap-3">
                 <TouchableOpacity
                   className="flex-1 bg-red-600 p-3 rounded-lg"
@@ -366,7 +374,7 @@ const CashOut = () => {
                 Tap to select an image from your gallery
               </Text>
             </TouchableOpacity>
-          )}
+          )} */}
         </View>
 
         {/* Submit Button */}
@@ -437,6 +445,7 @@ const CashOut = () => {
        </ScrollView>
     </SafeAreaView>
     </KeyboardAvoidingView>
+  
   );
 };
 

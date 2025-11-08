@@ -5,7 +5,8 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { router, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   Modal,
   Platform,
@@ -55,6 +56,7 @@ const CashOutList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
+    // console.log("CASHOUT LIST DATA", data);
 
   useEffect(() => {
     if (userInfo?.warehouse) {
@@ -135,8 +137,11 @@ const CashOutList = () => {
 
   console.log("SUMMARY", (data as any)?.summary);
   return (
-    <ScrollView>
-      {/* calendar */}
+    <>      
+    
+      <StatusBar style="light" backgroundColor="#000" />
+      <ScrollView>
+          {/* calendar */}
 
       <View className="mt-2 mb-2">
         <View className="flex flex-row justify-between items-center bg-black-200  mx-4 p-2 rounded-lg">
@@ -281,6 +286,7 @@ const CashOutList = () => {
         </View>
       )}
     </ScrollView>
+    </>
   );
 };
 

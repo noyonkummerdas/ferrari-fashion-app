@@ -2,14 +2,13 @@ import { useGlobalContext } from "@/context/GlobalProvider";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
-  Image,
   KeyboardAvoidingView,
   ScrollView,
   Text,
   TextInput,
   TouchableOpacity,
   useColorScheme,
-  View,
+  View
 } from "react-native";
 
 import {
@@ -18,7 +17,9 @@ import {
 } from "@/store/api/customerApi";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import profile from "../../assets/images/profile.jpg";
+// import profile from "../../assets/images/profile.jpg";
+import photo from "@/assets/images/profile.jpg";
+import PhotoUploader from "@/components/PhotoUploader";
 import { Platform } from "react-native";
 
 const updateCustomer = () => {
@@ -141,6 +142,11 @@ const updateCustomer = () => {
       // console.error("Error adding customer:", error);
     }
   };
+   const handlePhotoUploadSuccess = async (url: string) => {
+    // console.log("URL", url);
+    const response = await updateCustomer({_id: data?._id, photo: url})
+    console.log("Response", response);
+  };
 
   return (
     <KeyboardAvoidingView
@@ -149,13 +155,21 @@ const updateCustomer = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
     <ScrollView className="flex-1 bg-dark p-6">
-      <View>
+      {/* <View>
         <TouchableOpacity
           onPress={pickImage}
           className="flex justify-center items-center mb-2"
         >
           <Image source={profile} className="w-32 h-32 rounded-full" />
         </TouchableOpacity>
+      </View> */}
+      <View>
+        <PhotoUploader
+          existingPhoto={data?.photo || ""}
+          placeholder={photo}
+          onUploadSuccess={(url:string)=>handlePhotoUploadSuccess(url)}
+          previewStyle="round-full"
+        />
       </View>
 
       <Text className="text-white text-md font-regular">Customer name</Text>

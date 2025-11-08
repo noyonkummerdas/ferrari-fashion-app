@@ -1,17 +1,16 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { usePurchasesDWQuery } from "@/store/api/purchasApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router } from "expo-router";
-import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
+import { format } from "date-fns";
+import { router, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 import PrintButton from "../PrintButton";
-import { usePurchasesDWQuery } from "@/store/api/purchasApi";
-import { useGlobalContext } from "@/context/GlobalProvider";
 
 export default function SupplierPaymentReport() {
   const navigation = useNavigation();
@@ -86,7 +85,7 @@ export default function SupplierPaymentReport() {
 
   return (
     <>
-     <StatusBar style="light" backgroundColor="white" />
+     <StatusBar style="light" backgroundColor="#000" />
     <View className=" bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">

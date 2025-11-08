@@ -1,15 +1,15 @@
-import { ScrollView, Text, TouchableOpacity, View, Platform } from 'react-native';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import { Ionicons } from '@expo/vector-icons';
-import { router, useNavigation } from 'expo-router';
-import { Dropdown } from 'react-native-element-dropdown';
-import { useAllSaleQuery } from "@/store/api/saleApi";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, isAfter, isBefore } from "date-fns";
+import { useAllSaleQuery } from "@/store/api/saleApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi";
 import { WarehouseTypes } from "@/types/warehouse";
+import { Ionicons } from '@expo/vector-icons';
+import DateTimePicker from "@react-native-community/datetimepicker";
+import { format } from "date-fns";
+import { router, useNavigation } from 'expo-router';
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Dropdown } from 'react-native-element-dropdown';
 import PrintButton from "../PrintButton";
 
 interface Transaction {
@@ -290,7 +290,7 @@ const totalSale = Array.isArray(salesData)
   // console.log("userInfo", userInfo.type,warehouses.length);
   return (
     <>
-     <StatusBar style="light" backgroundColor="white" />
+     <StatusBar style="light" backgroundColor="#000" />
           <View className='bg-dark flex-row p-2'>
             {
               userInfo?.type === "admin" && warehouses?.length > 0 && 

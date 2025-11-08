@@ -3,6 +3,7 @@ import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect } from "react";
 import {
   ActivityIndicator,
@@ -116,6 +117,8 @@ const PaymentReceivedDetails = () => {
   };
 
   return (
+    <>
+    <StatusBar style="light" backgroundColor="#000" />
     <ScrollView className="flex-1 bg-dark">
       {/* Header Card */}
       <View className="mx-4 mt-6 bg-gradient-to-r from-green-600 to-green-700 rounded-2xl p-6">
@@ -295,6 +298,7 @@ const PaymentReceivedDetails = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </>
   );
 };
 

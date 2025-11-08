@@ -193,7 +193,7 @@ const RecivedPayment = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
       >
       <View className="flex-1 bg-dark">
-        <StatusBar style="light" />
+       <StatusBar style="light" backgroundColor="#000" />
         <ScrollView
           className="flex-1 px-6 pt-4"
           contentContainerStyle={{ paddingBottom: 300 }}

@@ -1,10 +1,10 @@
-import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
-import React, { useEffect, useLayoutEffect } from "react";
+import { StatusBar } from "expo-status-bar";
+import { useEffect, useLayoutEffect } from "react";
 import {
   ActivityIndicator,
   ScrollView,
@@ -13,7 +13,6 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-import { Image } from "react-native-svg";
 
 const PaymentDetails = () => {
   const { _id } = useLocalSearchParams();
@@ -26,7 +25,7 @@ const PaymentDetails = () => {
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
 
-    console.log("TRANSACTION DETAILS", data);
+    // console.log("TRANSACTION DETAILS", data);
 
   useEffect(() => {
     refetch();
@@ -119,6 +118,8 @@ const PaymentDetails = () => {
   };
 
   return (
+    <>
+    <StatusBar style="light" backgroundColor="#000" />
     <ScrollView className="flex-1 bg-dark">
       {/* Header Card */}
       <View className="mx-4 mt-6 bg-gradient-to-r from-orange-600 to-orange-700 rounded-2xl p-6">
@@ -273,21 +274,23 @@ const PaymentDetails = () => {
             </View>
           )}
 
-          {data.photo && (
-            <View>
-              <Text className="text-gray-300 text-base mb-2">Photo</Text>
-              <View className="bg-gray-700 rounded-lg p-3">
-                <Text className="text-white text-base text-center">
-               <Image
-                 source={{ uri: data.photo }}
-                 className="w-full h-48 rounded-lg"
-                 resizeMode="cover"
-                 />
+       
 
-                </Text>
-              </View>
-            </View>
-          )}
+          <TouchableOpacity
+           onPress={() =>
+                        router.push({
+                          pathname: "(drawer)/(tabs)/(account)/cashoutInvoicePhoto",
+                          params: {
+                            invoice: data?.invoices,
+                            photo: data?.photo,
+                          },
+                        })
+                      }
+          >
+            <Text className="text-gray-200 text-lg border border-gray-600 rounded-lg p-3 text-center bg-black-200">
+              View Invoice Photo
+            </Text>
+          </TouchableOpacity>
         </View>
       )}
 
@@ -303,6 +306,7 @@ const PaymentDetails = () => {
         </TouchableOpacity>
       </View>
     </ScrollView>
+    </>
   );
 };
 

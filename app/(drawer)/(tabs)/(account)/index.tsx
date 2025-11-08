@@ -103,7 +103,7 @@ const Accounts = () => {
   return (
 
     <>
-    <StatusBar backgroundColor="#ffff" />
+    <StatusBar style="light" backgroundColor="#000" />
 
     <ScrollView
       className="flex-1 bg-black-700  h-full"
