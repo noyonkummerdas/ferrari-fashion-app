@@ -91,7 +91,7 @@ if (!warehousesData) return null;
 
   return (
     <>
-     <StatusBar backgroundColor="white" />
+     <StatusBar style="light" backgroundColor="#000" />
     <View className="flex-1 bg-dark p-2">
      
       {/* Filters */}

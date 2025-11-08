@@ -1,15 +1,14 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useTransactionListQuery } from "@/store/api/transactionApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router } from "expo-router";
-import { useCashInTransactionQuery, useTransactionListQuery } from "@/store/api/transactionApi";
+import { format } from "date-fns";
+import { router, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import PrintButton from "../PrintButton";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
 // Logged-in user example
 const currentUser = {
   role: "admin", // "admin" or "user"
@@ -86,7 +85,7 @@ const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehou
 
   return (
     <>
-     <StatusBar style="light" backgroundColor="white" />
+     <StatusBar style="light" backgroundColor="#000" />
     <View className="flex-1 bg-dark p-2">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">

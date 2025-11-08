@@ -238,7 +238,7 @@ const Report = () => {
 
   return(
     <>
-    <StatusBar style="light" backgroundColor="white" />
+    <StatusBar style="light" backgroundColor="#000" />
    <ScrollView className="flex-1 bg-dark p-2">
       {/* Sales Report */}
       <View className="p-2 rounded-lg mt-4">

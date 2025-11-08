@@ -1,18 +1,18 @@
-import { View, Text, FlatList, TouchableOpacity, Alert } from "react-native";
-import React, { useState, useLayoutEffect, useEffect } from "react";
+import { useGlobalContext } from "@/context/GlobalProvider";
+import { useProductsQuery } from "@/store/api/productApi";
 import { useWarehousesQuery } from "@/store/api/warehouseApi"; // import api warehouse
+import { RootState } from "@/store/store";
 import { WarehouseTypes } from "@/types/warehouse"; //import warehousetypes
-import { Dropdown } from "react-native-element-dropdown";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { format, formatDate, isAfter, isBefore } from "date-fns";
-import { useNavigation, router } from "expo-router";
+import { format } from "date-fns";
+import { router, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { FlatList, Text, TouchableOpacity, View } from "react-native";
+import { Dropdown } from "react-native-element-dropdown";
+import { useSelector } from "react-redux";
 import PrintButton from "../PrintButton";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "@/store/store";
-import { useProductsQuery } from "@/store/api/productApi";
-import { useGlobalContext } from "@/context/GlobalProvider";
 export default function CashInReport() {
   const navigation = useNavigation();
   const {userInfo : currentUser}= useGlobalContext()
@@ -91,7 +91,7 @@ const { data: productData, error, isLoding } =
 
   return (
     <>
-     <StatusBar style="light" backgroundColor="white" />
+     <StatusBar style="light" backgroundColor="#000" />
     <View className=" bg-dark p-2 flex-1">
       {/* Filters */}
       <View className="flex-row justify-between items-center mb-4">
