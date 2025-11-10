@@ -1,5 +1,7 @@
 import photo from "@/assets/images/profile.jpg";
 import { BASE_URL } from "@/constants/baseUrl";
+import { useGetProxyUrl } from "@/hooks/useGetProxyUrl";
+import { useProxyPhotoUrlQuery } from "@/store/api/uploadApi";
 import * as ImagePicker from "expo-image-picker";
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from 'react-native';
@@ -78,20 +80,22 @@ const PhotoUploader = ({
       const responseText = await response.text();
       const data = JSON.parse(responseText);
 
-      // console.log("DATA", data);
+      console.log("DATA", data);
       
-      if (data.upURL) {
+      if (data.url) {
         // const proxyUrl = `${PROXY_URL}${encodeURIComponent(data.upURL)}`;
         // console.log('Proxy URL:', proxyUrl);
         // setCurrentPhoto(proxyUrl);
-        // console.log("DATA.upURL", data.upURL);
-        onUploadSuccess(data.upURL);
-        setCurrentPhoto(data.upURL);
+        console.log("DATA.url", data.url);
+        onUploadSuccess(data.url);
+        // const photo = await useGetProxyUrl(data.url);
+        console.log("CURRENT URL", data.url);
+        setCurrentPhoto(data.url);
       //   Alert.alert('Success', 'Photo uploaded successfully!');
       } 
-      // else {
-      //   throw new Error('Upload failed - no URL returned');
-      // }
+      else {
+        throw new Error('Upload failed - no URL returned');
+      }
     } catch (error: any) {
       console.error('Upload error:', error);
       Alert.alert('Upload Failed', error?.message || 'Failed to upload photo. Please try again.');
@@ -183,7 +187,7 @@ const PhotoUploader = ({
         disabled={isUploading}
       >
         <Image 
-          source={currentPhoto ? { uri: currentPhoto } : placeholder} 
+          source={currentPhoto ?  currentPhoto : placeholder} 
           className={`w-40 h-40 ${
             previewStyle === 'round' ? 'rounded-lg' : previewStyle === 'round-full' ? 'rounded-full' : ''
           }`} 

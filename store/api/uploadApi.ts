@@ -72,10 +72,17 @@ export const uploadApi = createApi({
       }),
       invalidatesTags: ["Upload"],
     }),
+    proxyPhotoUrl: builder.query<any, { photoUrl: string }>({
+      query: ({ photoUrl }) => ({
+        url: `/fileManager/photo-url/${encodeURIComponent(photoUrl)}`,
+        method: "GET",
+      }),
+    }),
   }),
 });
 
 export const {
+  useProxyPhotoUrlQuery,
   useUploadImageMutation,
   useUploadAvatarMutation,
   useUploadProductImageMutation,
