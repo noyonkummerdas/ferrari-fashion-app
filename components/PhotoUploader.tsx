@@ -30,7 +30,7 @@ const PhotoUploader = ({
 }: PhotoUploaderProps) => {
   const [isUploading, setIsUploading] = useState(false);
   const [currentPhoto, setCurrentPhoto] = useState<string | null>(existingPhoto || null);
-  const PROXY_URL = `${BASE_URL}/fileManager/photo-url/`;
+  const PROXY_URL = `${BASE_URL}/fileManager/photo-url/${encodeURIComponent('')}`;
 
   // console.log("CURRENT PHOTO", existingPhoto);
 
@@ -82,15 +82,16 @@ const PhotoUploader = ({
 
       console.log("DATA", data);
       
-      if (data.url) {
+      if (data.upURL) {
         // const proxyUrl = `${PROXY_URL}${encodeURIComponent(data.upURL)}`;
         // console.log('Proxy URL:', proxyUrl);
         // setCurrentPhoto(proxyUrl);
+        console.log("DATA.upURL", data.upURL);
         console.log("DATA.url", data.url);
-        onUploadSuccess(data.url);
+        onUploadSuccess(data.upURL);
         // const photo = await useGetProxyUrl(data.url);
-        console.log("CURRENT URL", data.url);
-        setCurrentPhoto(data.url);
+        console.log("CURRENT URL", data.upURL);
+        setCurrentPhoto(data.upURL);
       //   Alert.alert('Success', 'Photo uploaded successfully!');
       } 
       else {
@@ -187,12 +188,10 @@ const PhotoUploader = ({
         disabled={isUploading}
       >
         <Image 
-          source={currentPhoto ?  currentPhoto : placeholder} 
-          className={`w-40 h-40 ${
-            previewStyle === 'round' ? 'rounded-lg' : previewStyle === 'round-full' ? 'rounded-full' : ''
-          }`} 
+          source={currentPhoto ? { uri: currentPhoto } : placeholder} 
+          className={`w-40 h-40 ${previewStyle === 'round' ? 'rounded-lg' : previewStyle === 'round-full' ? 'rounded-full' : ''}`} 
+          resizeMode="cover"
         />
-        
         {isUploading && (
           <View className="absolute inset-0 bg-black/50 rounded-lg justify-center items-center">
             <ActivityIndicator size="large" color="#ffffff" />
