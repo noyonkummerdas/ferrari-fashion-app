@@ -2,12 +2,13 @@ import { Ionicons } from "@expo/vector-icons";
 import { DrawerContentScrollView, DrawerItem } from "@react-navigation/drawer";
 import { router, usePathname, useSegments } from "expo-router";
 import Drawer from "expo-router/drawer";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 // import * as globalCon from "@/context/GlobalProvider"
 import { useGetuserPhotoQuery } from "@/store/api/userApi";
 import { StatusBar } from "expo-status-bar";
 import { useGlobalContext } from "../../context/GlobalProvider";
+import { useProxyPhotoUrlQuery } from "@/store/api/uploadApi";
 const profile = require("@/assets/images/profile.jpg");
 
 const TabIcon = ({ icon, iconAlt, color, pathname, focused }) => {
@@ -47,7 +48,7 @@ const CustomDrawerComponent = (props: any) => {
   const {userInfo} = useGlobalContext();
 
   const {data, isSuccess, refetch} = useGetuserPhotoQuery({id:userInfo?.id});
-  console.log("User Photo Data:", data, isSuccess);
+  // console.log("User Photo Data:", data, isSuccess);
 
   // console.log(userInfo)
 
@@ -76,6 +77,17 @@ const CustomDrawerComponent = (props: any) => {
   }, [pathname, loggedIn, segments, isMounted]);
 
   // console.log(pathname);
+
+  const { data: proxyData, refetch: proxyRefetch, isSuccess:proxySuccess, isError } = useProxyPhotoUrlQuery({ photoUrl: "http://minio.aamardokan.online:9000/ffapp/1762762003790_upload-1762762002585.jpg" || ''});
+  
+    useEffect(() => {
+      // console.log("USER PHOTO URL:", data?.photo, encodeURIComponent("http://minio.aamardokan.online:9000/ffapp/1762762003790_upload-1762762002585.jpg"));
+      proxyRefetch();
+    }, [data, isSuccess]);
+
+    useEffect(() => {
+      console.log("Proxied Photo URL:",proxySuccess, isError, proxyData);
+    }, [proxySuccess]);
 
   return (
     <DrawerContentScrollView {...props}>

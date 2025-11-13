@@ -13,7 +13,7 @@ const StockDetails = () => {
   const { id } = useLocalSearchParams();
   const { userInfo } = useGlobalContext();
   
-console.log("User Info in Stock Details:", userInfo);
+// console.log("User Info in Stock Details:", userInfo);
   const dispatch = useDispatch();
   const pathname = usePathname();
 
@@ -63,7 +63,7 @@ useEffect(() => {
     }
   }, [data, isSuccess]);
 
-  console.log("STOCK ITEM FROM REDUX:", data?.stock);
+  // console.log("STOCK ITEM FROM REDUX:", data?.stock);
 
   const productImage = require("../../../../assets/images/product.jpg");
   const handleEdit = () => {
@@ -72,7 +72,7 @@ useEffect(() => {
 
   // Stock operation functions
   const handleStockIn = () => {
-    console.log("Opening Stock In");
+    // console.log("Opening Stock In");
     // setModalType("stockIn");
     // dispatch(setStockType("stockIn"));
     dispatch(
@@ -86,7 +86,7 @@ useEffect(() => {
   };
 
   const handleStockOut = () => {
-    console.log("Opening Stock Out");
+    // console.log("Opening Stock Out");
     // setModalType("stockOut");
     // dispatch(setStockType("stockOut"));
     dispatch(

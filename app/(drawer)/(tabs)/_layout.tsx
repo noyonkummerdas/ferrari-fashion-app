@@ -43,7 +43,7 @@ const TabIcon = ({ icon, iconAlt, name, color, focused }) => {
 export default function TabLayout() {
   const {userInfo} = useGlobalContext();
     const {data: userPhoto} = useGetuserPhotoQuery({id:userInfo?.id});
-  console.log("User Photo Data in Tab Icon:", userPhoto);
+  // console.log("User Photo Data in Tab Icon:", userPhoto);
   return (
     <Tabs
       screenOptions={{

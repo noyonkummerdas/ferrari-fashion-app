@@ -28,6 +28,9 @@ const StockIndex = () => {
     useProductsQuery({
       q: searchQuery || "all",
       forceRefetch: true,
+      refetchOnFocus: true,
+      refetchOnReconnect: true,
+      refetchOnMountOrArgChange: true,
     });
 
     // console.log("User Info in Stock Index:", data);
@@ -121,26 +124,17 @@ const StockIndex = () => {
         {data?.length > 0 &&
           data?.map((item) => (
             <StockListItem
-              key={item._id}
-              id={item._id}
-              style={item.style}
-              code={item.code}
-              photo={item.photo}
-              currentStock={item.currentStock}
-              onPress={() => handleItemPress(item._id)}
+              key={item?._id}
+              id={item?._id}
+              style={item?.style}
+              code={item?.code}
+              photo={item?.photo}
+              currentStock={item?.currentStock}
+              onPress={() => handleItemPress(item?._id)}
             />
           ))}
         <StatusBar style="light" />
       </ScrollView>
-
-      {/* Floating Add Button */}
-      {/* <TouchableOpacity
-        className="absolute bottom-6 right-6 bg-primary w-14 h-14 rounded-full items-center justify-center"
-        onPress={handleAddStock}
-        activeOpacity={0.8}
-      >
-        <Ionicons name="add" size={28} color="#000000" />
-      </TouchableOpacity> */}
     </View>
   );
 };

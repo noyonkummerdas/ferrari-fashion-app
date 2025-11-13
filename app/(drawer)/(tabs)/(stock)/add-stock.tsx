@@ -6,6 +6,8 @@ import { useAddProductMutation } from "@/store/api/productApi";
 import { Ionicons } from "@expo/vector-icons";
 import { router, useNavigation } from "expo-router";
 import { useEffect, useLayoutEffect, useState } from "react";
+import { Platform } from "react-native";
+import { KeyboardAvoidingView } from "react-native";
 import {
   Alert,
   ScrollView,
@@ -49,7 +51,7 @@ const AddStock = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("userInfo", formData);
+    // console.log("userInfo", formData);
     // Validate required fields
     if (!formData.style || !formData.code || !formData.openingStock) {
       Alert.alert("Error", "Please fill in all required fields");
@@ -82,12 +84,17 @@ const AddStock = () => {
   }, [navigation]);
 
   return (
-    // <KeyboardAvoidingView
-    //   behavior={Platform.OS === "ios" ? "padding" : "height"}
-    //   className="flex-1 bg-dark"
-    //   keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-    // > 
-    <ScrollView className="flex-1 bg-dark">
+    <KeyboardAvoidingView
+              behavior={Platform.OS === "ios" ? "padding" : "height"}
+              className="flex-1"
+              keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+            >
+    <ScrollView
+            className="flex-1 m-2"
+           contentContainerStyle={{ paddingBottom: 220 }}
+         keyboardShouldPersistTaps="handled"
+         showsVerticalScrollIndicator={false}
+          >
       <View className="">
         {/* Form */}
         <View className="bg-dark p-4 rounded-lg">
@@ -204,7 +211,7 @@ const AddStock = () => {
         </View>
       </View>
     </ScrollView>
-    // </KeyboardAvoidingView>
+ </KeyboardAvoidingView>
   );
 };
 

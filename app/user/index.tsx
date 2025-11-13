@@ -9,6 +9,7 @@ import { Image, ScrollView, Text, TouchableOpacity, View } from "react-native";
 import profile from "@/assets/images/profile.jpg";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { StatusBar } from "expo-status-bar";
+import { useProxyPhotoUrlQuery } from "@/store/api/uploadApi";
 
 const Profile = () => {
   const navigation = useNavigation();
@@ -96,6 +97,8 @@ const Profile = () => {
     // Add edit profile logic here
     router.push("/user/add-user");
   };
+
+  
   return (
     <ScrollView className="flex-1 bg-dark ">
 
