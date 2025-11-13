@@ -62,7 +62,7 @@ const StockIn = () => {
   }, [navigation]);
 
   const handleSubmit = async () => {
-    console.log("STOCK IN", stockItem);
+    // console.log("STOCK IN", stockItem);
     if (!stockItem.stock || parseInt(stockItem.stock.toString()) <= 0) {
       dispatch(setError("Please enter a valid stock quantity"));
       return;
