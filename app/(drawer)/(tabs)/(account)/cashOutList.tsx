@@ -1,7 +1,7 @@
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionListQuery } from "@/store/api/transactionApi";
-import { Ionicons } from "@expo/vector-icons";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
 import { router, useNavigation } from "expo-router";
@@ -46,8 +46,21 @@ const CashOutList = () => {
       headerShadowVisible: false,
       headerTitleAlign: "center",
       headerShown: true,
+
+      // headerRight: () => <View className="me-4" />,
+       headerRight: () => (
+        <View className="me-4">
+          <TouchableOpacity
+            onPress={() => router.push("/(drawer)/(tabs)/(account)/cashOut")}
+            className="flex flex-row justify-center items-center gap-2"
+          >
+            <MaterialIcons name="inventory" size={22} color="#ffffff" />
+            <Text className="text-gray-200 text-lg" >Add</Text>
+          </TouchableOpacity>
+        </View>
+      )
     });
-  }, [navigation]);
+  }, [navigation]); 
 
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionListQuery({

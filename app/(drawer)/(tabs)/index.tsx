@@ -202,32 +202,46 @@ useEffect(() => {
         {/* Cash In/Out Cards */}
         <View className="flex-row mb-2">
           <View className="flex-1 mr-2">
-            <DashboardCard
+            <TouchableOpacity
+              onPress={() => router.push("/(drawer)/(tabs)/(account)/cashDepositList")}
+            >
+              <DashboardCard
               title="Cash In"
               value={dashboardData?.accountsData?.deposit?.totalAmount || 0}
               iconName="wallet"
               bgColor="bg-black-200"
             />
+            </TouchableOpacity>
           </View>
           <View className="flex-1 ml-2">
-            <DashboardCard
-              title="Cash Out"
-              value={dashboardData?.accountsData?.cashOut?.totalAmount || 0}
-              iconName="card"
-              bgColor="bg-black-200"
+            <TouchableOpacity
+              onPress={() => router.push("/(drawer)/(tabs)/(account)/cashOutList")}
+            >
+             
+                <DashboardCard
+                title="Cash Out"
+                value={dashboardData?.accountsData?.cashOut?.totalAmount || 0}
+                iconName="card"
+                bgColor="bg-black-200"
             />
+              </TouchableOpacity>
+            
           </View>
         </View>
 
         {/* Second Row Cash In/Out */}
         <View className="flex-row mb-4">
           <View className="flex-1 mr-2">
+             <TouchableOpacity
+              onPress={() => router.push("/(drawer)/(tabs)/(account)/paymentList")}
+              >
             <DashboardCard
               title="Payment"
               value={dashboardData?.accountsData?.payment?.totalAmount || 0}
               iconName="trending-up"
               bgColor="bg-black-200"
             />
+            </TouchableOpacity>
           </View>
           <View className="flex-1 ml-2">
             <DashboardCard
