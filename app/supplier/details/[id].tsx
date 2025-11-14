@@ -159,9 +159,19 @@ const SupplierDetails = () => {
               <Text className="text-white text-md me-2">
                 {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
               </Text>
-              <Text className="text-primary text-lg font-bold">
-                {item?.amount} <Text className="text-white">BDT</Text>
-              </Text>
+              <Text
+      style={{
+        color:
+          item?.type === "Payment"
+            ? "#22c55e" // green
+            : item?.type ===  "Purchase"
+            ? "#ef4444" // red
+            : "#ffffff", // default white
+      }}
+      className="text-lg font-bold"
+    >
+      {item?.amount} <Text style={{ color: "#ffffff" }}>BDT</Text>
+    </Text>
             </View>
           </View>
         ))}
