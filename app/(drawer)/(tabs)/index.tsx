@@ -244,12 +244,16 @@ useEffect(() => {
             </TouchableOpacity>
           </View>
           <View className="flex-1 ml-2">
-            <DashboardCard
+            <TouchableOpacity
+            onPress={() => router.push("/(drawer)/(tabs)/(account)/paymentReceivedList")}
+            >
+              <DashboardCard
               title="Received"
               value={dashboardData?.accountsData?.paymentReceived?.totalAmount || 0}
               iconName="trending-down"
               bgColor="bg-black-200"
             />
+            </TouchableOpacity>
           </View>
         </View>
 

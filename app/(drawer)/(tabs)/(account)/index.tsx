@@ -206,41 +206,57 @@ const Accounts = () => {
         <TouchableOpacity
           className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
           activeOpacity={0.8}
+          onPress={() => router.push("/(drawer)/purchases")}
+        >
+          <Ionicons name="wallet" size={28} color="#FDB714" />
+          <Text className="text-white text-base mt-2">Purchases</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity
+          className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
+          activeOpacity={0.8}
           onPress={() => router.push("/(account)/cashDeposit")}
         >
           <Ionicons name="wallet" size={28} color="#FDB714" />
           <Text className="text-white text-base mt-2">Cash Deposit</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
         <TouchableOpacity
+          className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center ml-2"
+          activeOpacity={0.8}
+          onPress={() => router.push("/(drawer)/sales")}
+        >
+          <Ionicons name="card" size={28} color="#FDB714" />
+          <Text className="text-white text-base mt-2">Sales</Text>
+        </TouchableOpacity>
+        {/* <TouchableOpacity
           className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center ml-2"
           activeOpacity={0.8}
           onPress={() => router.push("/(account)/cashOut")}
         >
           <Ionicons name="card" size={28} color="#FDB714" />
           <Text className="text-white text-base mt-2">Cash Out</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
       {/* Row 2 */}
       <View className="flex-row">
         
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center mr-2"
           activeOpacity={0.8}
           onPress={() => router.push("/(account)/payment")}
         >
           <Ionicons name="cash" size={28} color="#FDB714" />
           <Text className="text-white text-base mt-2">Payment</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
 
-        <TouchableOpacity
+        {/* <TouchableOpacity
           className="flex-1 bg-black-200 rounded-xl h-32 justify-center items-center ml-2"
           activeOpacity={0.8}
           onPress={() => router.push("/(account)/received-payment/")}
         >
           <Ionicons name="checkmark-done-circle" size={28} color="#FDB714" />
           <Text className="text-white text-base mt-2">Received Payment</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
         </View>
               </View>
