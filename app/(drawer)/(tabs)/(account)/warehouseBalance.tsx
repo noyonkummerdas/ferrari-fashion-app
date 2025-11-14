@@ -44,7 +44,7 @@ const WarehouserBalance = () => {
     date: format(currentDay, "yyyy-MM-dd"),
   });
 
-  console.log("Warehouse Accounts Data:", data);
+  // console.log("Warehouse Accounts Data:", data);
 
   const { data: warehouseData } = useWarehousesQuery();
 
@@ -216,7 +216,8 @@ const WarehouserBalance = () => {
         data={data?.transaction || []}
         keyExtractor={(item) => item._id}
         renderItem={({ item }) => (
-          <View className="bg-black p-4 rounded-lg mt-4 mx-4 h-20 flex justify-between">
+          item.type !== "payment" && item.type !== "paymentReceived" && (
+            <View className="bg-black p-4 rounded-lg mt-4 mx-4 h-20 flex justify-between">
             <Text className="text-white text-xl">{item.type}</Text>
             <View className="flex flex-row justify-between items-center">
               <Text className="text-white text-md">
@@ -231,6 +232,8 @@ const WarehouserBalance = () => {
               </Text>
             </View>
           </View>
+          )
+
         )}
         ListHeaderComponent={renderHeader}
         ListEmptyComponent={

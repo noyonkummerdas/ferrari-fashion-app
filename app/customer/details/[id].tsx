@@ -159,19 +159,45 @@ const CustomerDetails = () => {
         {/* Transactions */}
         {data?.transaction?.map((item: any) => (
           <View
-            key={item?._id}
-            className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto"
-          >
-            <Text className="text-white text-xl">{item?.type}</Text>
-            <View className="flex flex-row justify-between items-center">
-              <Text className="text-white text-md me-2">
-                {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
-              </Text>
-              <Text className="text-primary text-lg font-bold">
-                {item?.amount} <Text className="text-white">BDT</Text>
-              </Text>
-            </View>
-          </View>
+  key={item?._id}
+  className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] mx-auto"
+>
+  {/* TYPE TEXT */}
+  <Text
+    className={`text-xl font-bold ${
+      item?.type === "receive Payment"
+        ? "text-green-500"
+        : item?.type === "due sale"
+        ? "text-red-500"
+        : "text-white"
+    }`}
+  >
+    {item?.type}
+  </Text>
+
+  <View className="flex flex-row justify-between items-center">
+    {/* DATE */}
+    <Text className="text-white text-md me-2">
+      {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
+    </Text>
+
+    {/* AMOUNT */}
+    <Text
+      style={{
+        color:
+          item?.type === "receive Payment"
+            ? "#22c55e" // green
+            : item?.type === "due sale"
+            ? "#ef4444" // red
+            : "#ffffff", // default white
+      }}
+      className="text-lg font-bold"
+    >
+      {item?.amount} <Text style={{ color: "#ffffff" }}>BDT</Text>
+    </Text>
+  </View>
+</View>
+
         ))}
   
 
