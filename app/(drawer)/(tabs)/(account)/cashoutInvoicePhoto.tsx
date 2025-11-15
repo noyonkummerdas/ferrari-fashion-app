@@ -34,24 +34,6 @@ const cashoutInvoicePhoto = () => {
           ),
         });
       }, [navigation]);
-
-    //   const { data, isSuccess, isLoading, error, isError, refetch } =
-    //       useTransactionListQuery({
-    //         warehouse: userInfo?.warehouse,
-    //         type: "cashOut",
-    //         date: format(currentDay, "MM-dd-yyyy"),
-    //         forceRefetch: true,
-    //       });
-        //   console.log("CASHOUT INVOICE PHOTO DATA", data);
-
-        //    const { data: transactionData } =
-        //       useTransactionQuery(_id as string);
-
-        //   const transaction = data?.transactions?.[0];
-        //  const photoUri =transaction?.photo && transaction.photo !== ""
-        //    ? { uri: transaction.photo }
-        //    : profile;
-
   return (
     <View>
       <StatusBar style="light" backgroundColor="#000" />

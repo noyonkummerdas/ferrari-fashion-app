@@ -35,7 +35,7 @@ const WarehouserDetails = () => {
   date: currentDay.toISOString(),
 });
   
-  console.log('warehouse data', data)
+  // console.log('warehouse data', data)
 
   // Whenever data changes, update transactions
   useEffect(() => {
@@ -171,15 +171,15 @@ const WarehouserDetails = () => {
       </View>
 
       {/* 🔹 Balance Section */}
-      <View className="flex flex-row justify-evenly items-center mt-2 w-full ">
-        <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
+      <View className="flex mb-2 w-full ">
+        {/* <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
           <Text className="text-white text-xl p-3">Opening Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
             {data?.warehouse?.openingBalance ?? 0}
           </Text>
-        </View>
+        </View> */}
         <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
-          <Text className="text-white text-xl p-3">Current Balance</Text>
+          <Text className="text-gray-200 text-2xl p-3">Current Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
             {data?.warehouse?.currentBalance ?? 0}
           </Text>
@@ -189,22 +189,21 @@ const WarehouserDetails = () => {
 
              {/* Summary Cards   */}
 
-      <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+      {/* <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
         <Text className="text-gray-200">Total Product</Text>
         <Text className="text-white text-xl font-bold">{data?.warehouse?.totalProducts ?? 0}</Text>
-      </View>
+      </View> */}
 
-      <View className="w-[48%] h-[90px]p-2 bg-black-200 rounded-lg mb-3">
-        <Text className="text-gray-200">Current Balance</Text>
-        <Text className="text-white text-xl font-bold">{data?.warehouse?.currentBalance ?? 0}</Text>
-      </View>
+      
 
       <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
         <Text className="text-gray-200">Supplier Due</Text>
+      <Text className="text-white text-xl font-bold">{data?.warehouse?.supplierDue ?? 0}</Text>
       </View>
 
       <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
         <Text className="text-gray-200">Customer Due</Text>
+        <Text className="text-white text-xl font-bold">{data?.warehouse?.customerDue ?? 0}</Text>
       </View>
 </View>
 
