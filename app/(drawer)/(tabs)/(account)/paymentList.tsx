@@ -224,9 +224,26 @@ const PaymentList = () => {
                 </Text>
               </View>
               <View>
-                <Text className="text-sm text-primary capitalize">
+                <View className="flex-row items-center gap-2">
+                  <Text className="text-sm text-primary capitalize">
                   {item.type}
                 </Text>
+                <TouchableOpacity
+                                  onPress={() =>
+                                  router.push({
+                                  pathname: "(drawer)/(tabs)/(account)/cashoutInvoicePhoto",
+                                  params: {
+                                  invoice: item?.invoices,
+                                  photo: item?.photo,
+                                },
+                              })
+                            }
+                                >
+                                  <Text className="text-sm text-white border border-gray-300 ml-4 px-2 rounded-lg">
+                                  Photo 
+                                  </Text>
+                                </TouchableOpacity>
+                </View>
                 <Text className="text-lg text-primary">
                   ৳{item.amount?.toLocaleString()}{" "}
                   <Text className="text-white">BDT</Text>
