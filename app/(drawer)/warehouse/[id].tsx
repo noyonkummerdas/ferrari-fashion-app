@@ -31,7 +31,7 @@ const WarehouseEdit = () => {
 
   const { data, isError, isSuccess, refetch } = useWarehouseQuery(id as string);
 
-  // console.log("WAREHOUSE:", data, isError, isSuccess, refetch);
+  console.log("WAREHOUSE:", data, isError, isSuccess, refetch);
 
   useEffect(() => {
     if (isSuccess) {

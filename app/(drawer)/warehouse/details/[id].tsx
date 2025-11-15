@@ -35,7 +35,7 @@ const WarehouserDetails = () => {
   date: currentDay.toISOString(),
 });
   
-  // console.log('warehouse data', data)
+  // console.log('warehouse data', id, data)
 
   // Whenever data changes, update transactions
   useEffect(() => {
@@ -122,7 +122,7 @@ const WarehouserDetails = () => {
       headerShown: true,
     });
   }, [navigation, id]);
-
+ 
   const renderHeader = () => (
     <View>
       <View className=" p-4 space-x-2">
@@ -198,12 +198,22 @@ const WarehouserDetails = () => {
 
       <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
         <Text className="text-gray-200">Supplier Due</Text>
-      <Text className="text-white text-xl font-bold">{data?.warehouse?.supplierDue ?? 0}</Text>
+      <Text className="text-white text-xl font-bold">{
+        data?.warehouse?.totalPurchase && data?.warehouse?.totalPayment
+        ? (data?.warehouse?.totalPurchase > 0 ? data?.warehouse?.totalPurchase : 0) - (data?.warehouse?.totalPayment > 0 ? data?.warehouse?.totalPayment : 0) 
+        : 0
+        }</Text>
       </View>
 
       <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
         <Text className="text-gray-200">Customer Due</Text>
-        <Text className="text-white text-xl font-bold">{data?.warehouse?.customerDue ?? 0}</Text>
+        <Text className="text-white text-xl font-bold">
+          {
+        data?.warehouse?.totalSale && data?.warehouse?.totalPaymentReceived
+        ? (data?.warehouse?.totalSale > 0 ? data?.warehouse?.totalSale : 0) - (data?.warehouse?.totalPaymentReceived > 0 ? data?.warehouse?.totalPaymentReceived : 0) 
+        : 0
+        }
+        </Text>
       </View>
 </View>
 
