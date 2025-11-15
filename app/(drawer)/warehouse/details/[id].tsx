@@ -30,12 +30,12 @@ const WarehouserDetails = () => {
   const [tempDate, setTempDate] = useState(new Date());
 
   // Warehouse data fetching
-  const { data, isLoading, refetch, isSuccess } = useWarehouseQuery({
-    _id: id,
-    date:currentDay
-  });
+ const { data, isLoading, refetch, isSuccess } = useWarehouseQuery({
+  _id: id,
+  date: currentDay.toISOString(),
+});
   
-  // console.log('warehouse data', data)
+  // console.log('warehouse data', id, data)
 
   // Whenever data changes, update transactions
   useEffect(() => {
@@ -122,7 +122,7 @@ const WarehouserDetails = () => {
       headerShown: true,
     });
   }, [navigation, id]);
-
+ 
   const renderHeader = () => (
     <View>
       <View className=" p-4 space-x-2">
@@ -171,20 +171,52 @@ const WarehouserDetails = () => {
       </View>
 
       {/* 🔹 Balance Section */}
-      <View className="flex flex-row justify-evenly items-center mt-2 w-full ">
-        <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
+      <View className="flex mb-2 w-full ">
+        {/* <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
           <Text className="text-white text-xl p-3">Opening Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
             {data?.warehouse?.openingBalance ?? 0}
           </Text>
-        </View>
+        </View> */}
         <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
-          <Text className="text-white text-xl p-3">Current Balance</Text>
+          <Text className="text-gray-200 text-2xl p-3">Current Balance</Text>
           <Text className="text-primary font-bold text-center text-xl">
             {data?.warehouse?.currentBalance ?? 0}
           </Text>
         </View>
       </View>
+      <View className="flex flex-row flex-wrap justify-between">
+
+             {/* Summary Cards   */}
+
+      {/* <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Total Product</Text>
+        <Text className="text-white text-xl font-bold">{data?.warehouse?.totalProducts ?? 0}</Text>
+      </View> */}
+
+      
+
+      <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Supplier Due</Text>
+      <Text className="text-white text-xl font-bold">{
+        data?.warehouse?.totalPurchase && data?.warehouse?.totalPayment
+        ? (data?.warehouse?.totalPurchase > 0 ? data?.warehouse?.totalPurchase : 0) - (data?.warehouse?.totalPayment > 0 ? data?.warehouse?.totalPayment : 0) 
+        : 0
+        }</Text>
+      </View>
+
+      <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Customer Due</Text>
+        <Text className="text-white text-xl font-bold">
+          {
+        data?.warehouse?.totalSale && data?.warehouse?.totalPaymentReceived
+        ? (data?.warehouse?.totalSale > 0 ? data?.warehouse?.totalSale : 0) - (data?.warehouse?.totalPaymentReceived > 0 ? data?.warehouse?.totalPaymentReceived : 0) 
+        : 0
+        }
+        </Text>
+      </View>
+</View>
+
     </View>
   );
 
@@ -194,6 +226,9 @@ const WarehouserDetails = () => {
   return (
     <>
       <StatusBar style="light" backgroundColor="#1f2937" />
+
+
+      
       <FlatList
         data={data?.transaction}
         keyExtractor={(item, index) => item._id}
@@ -213,6 +248,7 @@ const WarehouserDetails = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
 
+      
       <Modal visible={showDatePicker} transparent={true} animationType="fade">
         <View className="flex-1 bg-black/70 justify-center items-center">
           <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">

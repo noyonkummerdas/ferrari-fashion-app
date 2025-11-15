@@ -75,12 +75,12 @@ export default function CashOutReport() {
         date: format(currentDay, "MM-dd-yyyy"),
         forceRefetch: true,
       });
-      // console.log('cashout list ', cashOutData)
+      console.log('cashout list ', cashOutData);
       useEffect(() => {
-  if (currentUser && selectedWarehouse) {
-    refetch();
-  }
-}, [selectedWarehouse]);
+          if (currentUser && selectedWarehouse) {
+            refetch();
+          }
+        }, [selectedWarehouse]);
 if (!warehousesData) return null;
 
 

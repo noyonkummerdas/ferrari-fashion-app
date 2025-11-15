@@ -29,7 +29,7 @@ const PurchasesList = () => {
     q: searchQuery || "all",
     forceRefetch: true,
   });
-  console.log("Purchases Data:", data);
+  // console.log("Purchases Data:", data);
 
   useEffect(() => {
     if (isFocused) refetch();

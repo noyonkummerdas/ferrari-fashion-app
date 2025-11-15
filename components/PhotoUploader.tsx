@@ -86,10 +86,11 @@ const PhotoUploader = ({
         // const proxyUrl = `${PROXY_URL}${encodeURIComponent(data.url)}`;
         // console.log('Proxy URL:', proxyUrl);
         // setCurrentPhoto(proxyUrl);
+        console.log("DATA.upURL", data.url);
         console.log("DATA.url", data.url);
         onUploadSuccess(data.url);
         // const photo = await useGetProxyUrl(data.url);
-        // console.log("CURRENT URL", data.url);
+        console.log("CURRENT URL", data.url);
         setCurrentPhoto(data.url);
       //   Alert.alert('Success', 'Photo uploaded successfully!');
       } 

@@ -167,12 +167,22 @@ const CustomerDetails = () => {
               <Text className="text-white text-md me-2">
                 {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
               </Text>
-              <Text className="text-primary text-lg font-bold">
-                {item?.amount} <Text className="text-white">BDT</Text>
-              </Text>
-            </View>
-          </View>
-        ))}
+              <Text
+              style={{
+                color:
+                  item?.type === "Recieve Payment"
+                    ? "#22c55e" // green
+                    : item?.type === "Due Sale"
+                    ? "#ef4444" // red
+                    : "#ffffff", // default white
+              }}
+              className="text-lg font-bold"
+            >
+              {item?.amount} <Text style={{ color: "orange" }}>BDT</Text>
+                      </Text>
+                    </View>
+                  </View>
+                ))}
   
 
       {/* Month/Year Picker Modal (SupplierDetails style) */}

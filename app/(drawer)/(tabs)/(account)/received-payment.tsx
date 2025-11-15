@@ -52,9 +52,6 @@ const RecivedPayment = () => {
     invoices: "",
     status: "complete",
   });
-  // console.log("Customer formData", formData);
-
-  // Customer list for dropdown
   const { data: customerList, isSuccess, refetch } = useCustomerListQuery({
     q: q,
   });
@@ -83,7 +80,7 @@ const RecivedPayment = () => {
     { invoiceId: search },
     { skip: !search }
   );
-
+console.log('get Invoice data', invoiceData)
   useEffect(() => {
     if (search) invoiceRefetch();
   }, [search]);
@@ -110,7 +107,7 @@ const RecivedPayment = () => {
   // Get customer data to update openingBalance and currentBalance
   const { data: customerData, isSuccess: customerIsSuccess, error : customerError } =
     useCustomerQuery(formData.customerId);
-    // console.log('Custoemr Data ', customerData, customerIsSuccess,  customerError)
+    console.log('Custoemr Data ', customerData, customerIsSuccess,  customerError)
 
   useEffect(() => {
     if (customerData && customerIsSuccess) {
@@ -204,7 +201,7 @@ const RecivedPayment = () => {
           <View className="mb-4">
             <View className="flex justify-between items-center flex-row">
               <Text className="text-gray-300 text-lg font-medium">Customer</Text>
-              <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+              <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData?.currentBalance}</Text>
             </View>
             <CustomDropdownWithSearch
               data={type}

@@ -347,7 +347,7 @@ const Payment = () => {
                 <Text className="text-gray-300 text-lg font-medium">
                 Supplier
               </Text>
-              <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData.status !== "paid" && invoiceData.amount}</Text>
+              <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData?.currentBalance || 0}</Text>
               </View>
               <CustomDropdownWithSearch
                 data={type}
