@@ -30,12 +30,12 @@ const WarehouserDetails = () => {
   const [tempDate, setTempDate] = useState(new Date());
 
   // Warehouse data fetching
-  const { data, isLoading, refetch, isSuccess } = useWarehouseQuery({
-    _id: id,
-    date:currentDay
-  });
+ const { data, isLoading, refetch, isSuccess } = useWarehouseQuery({
+  _id: id,
+  date: currentDay.toISOString(),
+});
   
-  // console.log('warehouse data', data)
+  console.log('warehouse data', data)
 
   // Whenever data changes, update transactions
   useEffect(() => {
@@ -185,6 +185,29 @@ const WarehouserDetails = () => {
           </Text>
         </View>
       </View>
+      <View className="flex flex-row flex-wrap justify-between">
+
+             {/* Summary Cards   */}
+
+      <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Total Product</Text>
+        <Text className="text-white text-xl font-bold">{data?.warehouse?.totalProducts ?? 0}</Text>
+      </View>
+
+      <View className="w-[48%] h-[90px]p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Current Balance</Text>
+        <Text className="text-white text-xl font-bold">{data?.warehouse?.currentBalance ?? 0}</Text>
+      </View>
+
+      <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Supplier Due</Text>
+      </View>
+
+      <View className="w-[48%] p-2 bg-black-200 rounded-lg mb-3">
+        <Text className="text-gray-200">Customer Due</Text>
+      </View>
+</View>
+
     </View>
   );
 
@@ -194,6 +217,9 @@ const WarehouserDetails = () => {
   return (
     <>
       <StatusBar style="light" backgroundColor="#1f2937" />
+
+
+      
       <FlatList
         data={data?.transaction}
         keyExtractor={(item, index) => item._id}
@@ -213,6 +239,7 @@ const WarehouserDetails = () => {
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
 
+      
       <Modal visible={showDatePicker} transparent={true} animationType="fade">
         <View className="flex-1 bg-black/70 justify-center items-center">
           <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">

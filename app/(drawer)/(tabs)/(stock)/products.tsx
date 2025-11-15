@@ -109,7 +109,7 @@ const StockIndex = () => {
          {/* Total items & quantity */}
       <View className="flex flex-row justify-between items-center px-4 mb-2 bg-black-200 p-4 rounded-lg mx-4">
         <Text className="text-gray-300 text-xl font-bold ms-4">
-          Total Quantity: 
+          Total Stock: 
         </Text>
         <Text className="text-gray-300 text-xl font-bold me-4">{totalQuantity}</Text>
       </View>
