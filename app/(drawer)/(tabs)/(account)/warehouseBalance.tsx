@@ -1,10 +1,10 @@
-import CustomDropdown from "@/components/CustomDropdown";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useWarehouseAccountsQuery, useWarehousesQuery } from "@/store/api/warehouseApi";
+import { useTransactionListQuery } from "@/store/api/transactionApi";
+import { useWarehousesQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
-import { Link, useFocusEffect, useNavigation } from "expo-router";
+import { Link, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useCallback, useEffect, useLayoutEffect, useState } from "react";
 import {
@@ -12,7 +12,6 @@ import {
   FlatList,
   Modal,
   Platform,
-  RefreshControl,
   Text,
   TouchableOpacity,
   useColorScheme,
@@ -31,40 +30,71 @@ const WarehouserBalance = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [tempDate, setTempDate] = useState(new Date());
 
+  // Set warehouse id for user/admin
   useEffect(() => {
-    if (userInfo?.type === "admin") {
-      setId("all");
-    } else {
-      setId(userInfo?.warehouse);
-    }
+    if (userInfo?.type === "admin") setId("all");
+    else setId(userInfo?.warehouse);
   }, [userInfo]);
 
-  const { data, isLoading, refetch, isSuccess } = useWarehouseAccountsQuery({
-    _id: id,
-    date: format(currentDay, "yyyy-MM-dd"),
-  });
+  // Fetch deposits
+  const { data: depositData, isLoading: depositLoading, refetch: refetchDeposit } =
+    useTransactionListQuery({
+      warehouse: userInfo?.warehouse,
+      type: "deposit",
+      date: format(currentDay, "MM-dd-yyyy"),
+      forceRefetch: true,
+    });
 
-  // console.log("Warehouse Accounts Data:", data);
+  // Fetch cashouts
+  const { data: cashoutData, isLoading: cashoutLoading, refetch: refetchCashout } =
+    useTransactionListQuery({
+      warehouse: userInfo?.warehouse,
+      type: "cashOut",
+      date: format(currentDay, "MM-dd-yyyy"),
+      forceRefetch: true,
+    });
 
   const { data: warehouseData } = useWarehousesQuery();
 
+  // Refresh on date/id change
   useEffect(() => {
-    refetch();
+    refetchDeposit();
+    refetchCashout();
   }, [id, currentDay]);
 
   useEffect(() => {
-    if (data?.transactions && Array.isArray(data.transactions)) {
-      setTransactions(data.transactions);
-    } else {
-      setTransactions([]);
-    }
-  }, [data, isSuccess]);
+    // Combine deposits and cashouts
+    const deposits = Array.isArray(depositData?.transactions) ? depositData.transactions : [];
+    const cashouts = Array.isArray(cashoutData?.transactions) ? cashoutData.transactions : [];
+    const combined = [
+      ...deposits.map((t) => ({
+        date: format(new Date(t.date), "dd MMM yyyy"),
+        entryBy: t.name || "-",
+        category: t.note || "-",
+        mode: "Cash",
+        cashIn: t.amount,
+        cashOut: null,
+      })),
+      ...cashouts.map((t) => ({
+        date: format(new Date(t.date), "dd MMM yyyy"),
+        entryBy: t.name || "-",
+        category: t.note || "-",
+        mode: "Cash",
+        cashIn: null,
+        cashOut: t.amount,
+      })),
+    ]
+      .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
-  useFocusEffect(
-    useCallback(() => {
-      refetch();
-    }, [id])
-  );
+    // Calculate running balance
+    let balance = 0;
+    const withBalance = combined.map((t) => {
+      balance += (t.cashIn || 0) - (t.cashOut || 0);
+      return { ...t, balance };
+    });
+
+    setTransactions(withBalance);
+  }, [depositData, cashoutData]);
 
   const formattedDate = {
     day: currentDay.getDate(),
@@ -99,153 +129,73 @@ const WarehouserBalance = () => {
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
-    refetch();
+    refetchDeposit();
+    refetchCashout();
     setTimeout(() => setRefreshing(false), 1000);
-  }, [refetch]);
+  }, [refetchDeposit, refetchCashout]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Warehouser Balance",
-      headerStyle: {
-        backgroundColor: "#000000",
-      },
+      headerStyle: { backgroundColor: "#000" },
       headerLeft: () => (
         <Link href="/" className="ms-2">
           <Ionicons name="arrow-back" size={24} color="white" />
         </Link>
       ),
-      headerTitleStyle: {
-        fontWeight: "bold",
-        fontSize: 18,
-        color: "#ffffff",
-      },
+      headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#fff" },
       headerTitleAlign: "center",
       headerShown: true,
     });
   }, [navigation, id]);
 
-  const warehouse = Array.isArray(data?.warehouse) ? data?.warehouse : [];
-
-  const renderHeader = () => (
-    <View>
-      {/* Warehouse Dropdown for Admin */}
-      {userInfo?.type === "admin" && warehouseData && (
-        <View className="space-x-2">
-          <CustomDropdown
-            data={warehouseData?.map((wh) => ({
-              label: wh.name,
-              value: wh._id,
-            }))}
-            value={id}
-            setValue={(value) => setId(value)}
-            placeholder="Select Warehouse"
-            mode="modal"
-            placeholderStyle={{ color: "white" }}
-            search={true}
-            style={{
-              backgroundColor: "#1f1f1f",
-              borderRadius: 8,
-              paddingHorizontal: 8,
-              paddingVertical: 8,
-              minWidth: 190,
-              height: 45,
-              marginTop: 10,
-            }}
-            selectedTextStyle={{ color: "white" }}
-            itemTextStyle={{ color: "white" }}
-          />
-        </View>
-      )}
-
-      {/* Date Navigation */}
-      <View className="m-2 flex-1">
-        <View className="flex flex-row justify-between items-center bg-black-200 p-2 rounded-lg">
-          <TouchableOpacity onPress={goToPreviousDay} className="p-2">
-            <Ionicons name="arrow-back" size={24} color="white" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={openDatePicker}
-            className="flex flex-row items-center px-4 rounded-lg"
-          >
-            <Text className="text-white text-lg me-2">{formattedDate.day}</Text>
-            <Text className="text-primary text-lg">{formattedDate.month}</Text>
-            <Text className="text-white text-lg ml-2">{formattedDate.year}</Text>
-            <Ionicons name="calendar-outline" size={20} color="#fdb714" className="ml-2" />
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            onPress={goToNextDay}
-            disabled={isToday(currentDay)}
-            className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
-          >
-            <Ionicons
-              name="arrow-forward"
-              size={24}
-              color={isToday(currentDay) ? "#666" : "white"}
-            />
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Balance Section */}
-      <View className="flex flex-row justify-evenly items-center mt-2 w-full">
-        <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
-          <Text className="text-white text-xl p-3">Opening Balance</Text>
-          <Text className="text-primary font-bold text-center text-xl">
-            {data?.warehouse?.openingBalance ?? 0}
-          </Text>
-        </View>
-        <View className="flex bg-black-200 items-center justify-center p-5 text-center rounded-lg m-1">
-          <Text className="text-white text-xl p-3">Current Balance</Text>
-          <Text className="text-primary font-bold text-center text-xl">
-            {data?.warehouse?.currentBalance ?? 0}
-          </Text>
-        </View>
-      </View>
+  const renderRow = ({ item }) => (
+    <View className="flex-row py-2 bg-white mx-[1px]">
+      <Text className="flex-[1] text-[11px] px-1 mx-[1px]">{item.date}</Text>
+      <Text className="flex-[1] text-[11px] px-1 mx-[1px]">{item.entryBy}</Text>
+      <Text className="flex-[1] text-[11px] px-1 mx-[1px]">{item.category}</Text>
+      <Text className="flex-[1] text-[11px] px-1 mx-[1px]">{item.mode}</Text>
+      <Text className="flex-[1] text-[11px] font-semibold text-green-600 px-1 mx-[1px]">
+        {item.cashIn ?? "-"}
+      </Text>
+      <Text className="flex-[1] text-[11px] font-semibold text-red-600 px-1 mx-[1px]">
+        {item.cashOut ?? "-"}
+      </Text>
+      <Text className="flex-[1] text-[12px] font-bold px-1 mx-[1px]">{item.balance}</Text>
     </View>
   );
 
-  if (isLoading) return <ActivityIndicator size="large" color="blue" />;
-  if (!data) return <Text className="text-center mt-4 text-gray-400">No data found</Text>;
+  if (depositLoading || cashoutLoading)
+    return <ActivityIndicator size="large" color="blue" className="mt-4" />;
+  if (!transactions.length)
+    return <Text className="text-center mt-4 text-gray-400">No transactions found</Text>;
 
   return (
     <>
-     <StatusBar style="light" backgroundColor="#000" />
-      <FlatList
-        data={data?.transaction || []}
-        keyExtractor={(item) => item._id}
-        renderItem={({ item }) => (
-          item.type !== "payment" && item.type !== "paymentReceived" && (
-            <View className="bg-black p-4 rounded-lg mt-4 mx-4 h-20 flex justify-between">
-            <Text className="text-white text-xl">{item.type}</Text>
-            <View className="flex flex-row justify-between items-center">
-              <Text className="text-white text-md">
-                {format(new Date(item?.createdAt), "dd MMM yyyy, h:mm a")}
-              </Text>
-              <Text
-                className={`text-lg font-bold ${
-                  item.type === "paymentReceived" ? "text-green-400" : "text-red-400"
-                }`}
-              >
-                ৳{item.amount} <Text className="text-white">BDT</Text>
-              </Text>
-            </View>
-          </View>
-          )
+      <StatusBar style="light" backgroundColor="#000" />
 
-        )}
-        ListHeaderComponent={renderHeader}
-        ListEmptyComponent={
-          <Text className="text-center text-gray-400 mt-4">
-            No transactions available
-          </Text>
-        }
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      {/* Table Header */}
+      <View className="flex-row bg-gray-300 py-2 mx-[1px]">
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Date</Text>
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Entry By</Text>
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Category</Text>
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Mode</Text>
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Cash In</Text>
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Cash Out</Text>
+        <Text className="flex-[1] font-bold text-[12px] px-1 mx-[1px]">Balance</Text>
+      </View>
+
+      {/* Transactions */}
+      <FlatList
+        data={transactions}
+        renderItem={renderRow}
+        keyExtractor={(item, index) => index.toString()}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
       />
 
       {/* Date Picker Modal */}
-      <Modal visible={showDatePicker} transparent={true} animationType="fade">
+      <Modal visible={showDatePicker} transparent animationType="fade">
         <View className="flex-1 bg-black/70 justify-center items-center">
           <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
             <View className="flex-row justify-between items-center mb-6">
@@ -261,25 +211,16 @@ const WarehouserBalance = () => {
               display={Platform.OS === "ios" ? "spinner" : "default"}
               onChange={handleDateChange}
               maximumDate={new Date()}
-              textColor="#ffffff"
-              style={{
-                backgroundColor: "transparent",
-                width: Platform.OS === "ios" ? "100%" : "auto",
-              }}
+              textColor="#fff"
+              style={{ backgroundColor: "transparent", width: Platform.OS === "ios" ? "100%" : "auto" }}
             />
 
             {Platform.OS === "ios" && (
-              <View className="flex-row justify-end gap-2 space-x-3 mt-6">
-                <TouchableOpacity
-                  onPress={cancelDateSelection}
-                  className="px-6 py-3 rounded-lg bg-gray-600"
-                >
+              <View className="flex-row justify-end gap-2 mt-6">
+                <TouchableOpacity onPress={cancelDateSelection} className="px-6 py-3 rounded-lg bg-gray-600">
                   <Text className="text-white font-semibold">Cancel</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={confirmDateSelection}
-                  className="px-6 py-3 rounded-lg bg-primary"
-                >
+                <TouchableOpacity onPress={confirmDateSelection} className="px-6 py-3 rounded-lg bg-primary">
                   <Text className="text-black font-semibold">Confirm</Text>
                 </TouchableOpacity>
               </View>
