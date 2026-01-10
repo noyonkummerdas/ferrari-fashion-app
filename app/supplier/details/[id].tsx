@@ -568,7 +568,7 @@ const SupplierDetails = () => {
     isDate: 'month',
     forceRefetch: true,
   });
-
+console.log("SINGLE SUPPLIER DATA", data);
   // ✅ Update transactions whenever data changes
   useEffect(() => {
     if (data?.transaction) setTransactions(data.transaction);

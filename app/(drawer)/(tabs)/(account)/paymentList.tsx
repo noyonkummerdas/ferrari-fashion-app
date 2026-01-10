@@ -1,10 +1,10 @@
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useTransactionListQuery } from "@/store/api/transactionApi";
+import { useTransactionListQuery, useTransactionQuery } from "@/store/api/transactionApi";
 import { Ionicons, MaterialIcons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { addDays, format, isToday, subDays } from "date-fns";
-import { router, useNavigation } from "expo-router";
+import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
@@ -18,10 +18,10 @@ import {
 } from "react-native";
 
 const PaymentList = () => {
+  const { _id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-  // Date state management
   const [currentDay, setCurrentDay] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
     const [search, setSearch] = useState("");
@@ -66,6 +66,11 @@ const PaymentList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
+    const { data: transactionData, isSuccess: isTransactionSuccess, isLoading: isTransactionLoading, error: transactionError, isError: isTransactionError, refetch: refetchTransaction } =
+      useTransactionQuery(_id as string);
+
+      const newCurrentBalance = transactionData?.openingBalance - transactionData?.amount || 0;
+    
 
   useEffect(() => {
     if (userInfo?.warehouse) {
@@ -245,7 +250,7 @@ const PaymentList = () => {
                                 </TouchableOpacity>
                 </View>
                 <Text className="text-lg text-primary">
-                  ৳{item.amount?.toLocaleString()}{" "}
+                  {newCurrentBalance.toString()}
                   <Text className="text-white">BDT</Text>
                 </Text>
               </View>

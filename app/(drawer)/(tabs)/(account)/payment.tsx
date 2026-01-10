@@ -27,6 +27,7 @@ const Payment = () => {
   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
   const [note, setNote] = useState("");
+  const [supplierData, setSupplierData] = useState(null);
   
   const [createTransaction] = useAddTransactionMutation();
   // const [supplier, setSupplier] = useState("");
@@ -56,6 +57,13 @@ const Payment = () => {
     invoices: "",
     status: "complete",
   });
+
+  const handleDateChange = (date) => {
+  setFormData(prev => ({
+    ...prev,
+    date: date // বা যেটা চাই
+  }));
+};
 //  console.log("Supplire formData", formData);
 
 
@@ -403,7 +411,7 @@ const Payment = () => {
             </View>
 
             {/* Memo No Input */}
-            <View className="mb-4">
+            {/* <View className="mb-4">
               <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
               <TextInput
                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
@@ -416,7 +424,7 @@ const Payment = () => {
                 placeholderTextColor="#9CA3AF"
                 keyboardType="numeric"
               />
-            </View>
+            </View> */}
 
             {/* Photo Upload */}
             <View className="mb-4">
