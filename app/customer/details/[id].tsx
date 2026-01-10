@@ -142,13 +142,13 @@ const CustomerDetails = () => {
 
         {/* Opening & Current Balance */}
         <View className="flex flex-row justify-center items-center mx-auto">
-          <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
+          {/* <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
             <Text className="text-white text-xl">Opening Balance</Text>
             <Text className="text-primary font-bold text-xl text-center">
               {data?.customer?.balance} <Text className="text-white">BDT</Text>
             </Text>
-          </View>
-          <View className="flex bg-black-200 items-center justify-center p-5 w-[180px] text-center rounded-lg m-1">
+          </View> */}
+          <View className="flex bg-black-200 items-center justify-center p-5 w-[360px] mx-auto text-center rounded-lg m-1">
             <Text className="text-white text-xl">Current Balance</Text>
             <Text className="text-primary font-bold text-lg text-center">
               {data?.customer?.currentBalance} <Text className="text-white">BDT</Text>
