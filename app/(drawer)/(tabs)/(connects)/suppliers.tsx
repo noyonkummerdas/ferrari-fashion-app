@@ -12,9 +12,9 @@ import {
 } from "react-native";
 // import { useInventoriesQuery } from '@/store/api/inventoryApi';
 
-import { useSupplierExportQuery, useSuppliersQuery } from "@/store/api/supplierApi";
+import { useSupplierExportQuery, useSupplierQuery, useSuppliersQuery } from "@/store/api/supplierApi";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { ScrollView } from "react-native-gesture-handler";
 
 const CustomDrawerToggleButton = ({ tintColor = "#FDB714" }) => {
@@ -42,7 +42,7 @@ interface Customer {
 const Suppliers = ({}) => {
   const router = useRouter();
   const { userInfo } = useGlobalContext()
-
+ const {id} = useLocalSearchParams()
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   const colorScheme = useColorScheme();
@@ -57,12 +57,20 @@ const Suppliers = ({}) => {
       q: searchQuery || "all",
       forceRefetch: true,
     });
-
+console.log("SUPPLIER LIST DATA::", data);
   // console.log(data);
  const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
   skip: !searchQuery, //
 })
-console.log('supplier InvoiceId data', invoiceData, invoiceIdSuccess, invoiceIdError)
+const [currentDate, setCurrentDate] = useState(new Date());
+ const { data: supplierData, refetch: refetchSupplier } = useSupplierQuery({
+    _id: id,
+    date: currentDate.toISOString(),
+    isDate: 'month',
+    forceRefetch: true,
+  });
+  console.log("SUPPLIER DATA::", supplierData);
+  
   useEffect(() => {
     refetch();
   }, [aamarId]);
