@@ -1,850 +1,3 @@
-// import photo from "@/assets/images/Invoice.jpg";
-// import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
-// import PhotoUploader from "@/components/PhotoUploader";
-// import { useGlobalContext } from "@/context/GlobalProvider";
-// import { useGetSupplierByInvoiceQuery, useSuppliersQuery } from "@/store/api/supplierApi";
-// import { useAddTransactionMutation } from "@/store/api/transactionApi";
-// import { Ionicons } from "@expo/vector-icons";
-// import DateTimePicker from "@react-native-community/datetimepicker";
-// import * as ImagePicker from "expo-image-picker";
-// import { useNavigation, useRouter } from "expo-router";
-// import { StatusBar } from "expo-status-bar";
-// import { useEffect, useLayoutEffect, useState } from "react";
-// import {
-//   Alert,
-//   KeyboardAvoidingView, Platform,
-//   ScrollView,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View
-// } from "react-native";
-
-// const Payment = () => {
-//   const [showDatePicker, setShowDatePicker] = useState(false);
-//   const router = useRouter();
-//   const navigation = useNavigation();
-//   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
-//   const { userInfo } = useGlobalContext();
-//   const [note, setNote] = useState("");
-  
-//   const [createTransaction] = useAddTransactionMutation();
-//   // const [supplier, setSupplier] = useState("");
-
-//   const [q, setQ] = useState("all");
-//   const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
-//     q: q,
-//   });
-//   const [search, setSearch] = useState('');
-
-//   // Form state
-//   const [formData, setFormData] = useState({
-//     date: new Date(),
-//     amount: 0,
-//     // note: "",
-//     photo: null as string | null,
-//     supplierId: "",
-//     // invoice: "",
-//     name: "",
-//     note: "",
-//     type: "payment",
-//     user: userInfo?.id,
-//     warehouse: userInfo?.warehouse,
-//     openingBalance: 0,
-//     currentBalance: 0,
-//     invoices: "",
-//     status: "complete",
-//   });
-// //  console.log("Supplire formData", formData);
-
-
-//   const {
-//     data: supplierData,
-//     isSuccess: supplierIsSuccess,
-//     refetch: supplierRefetch,
-//   } = useSuppliersQuery(formData.supplierId);
-
-//   useEffect(() => {
-//     if (supplierData && supplierIsSuccess) {
-//       setFormData((prev) => ({
-//         ...prev,
-//         openingBalance: supplierData?.currentBalance ?? 0,
-//         currentBalance: supplierData?.currentBalance ?? 0,
-//       }));
-//     }
-//   }, [supplierData, supplierIsSuccess]);
-
-//   useEffect(() => {
-//     supplierRefetch();
-//   }, [formData.supplierId]);
-
-//   useEffect(() => {
-//     refetch();
-//   }, [q]);
-//   useEffect(() => {
-//     if (data && isSuccess) {
-//       const supplierOptions = data.map((item) => ({
-//         label: item.name,
-//         value: item._id || item.id,
-//       }));
-//       setType(supplierOptions);
-//     }
-//   }, [data, isSuccess]);
-
-//   // date formatting
-//   const today = new Date();
-//   const formattedDate = {
-//     day: today.getDate(),
-//     month: today.toLocaleString("en-US", { month: "long" }),
-//     year: today.getFullYear(),
-//   };
-//   const formattedDateString = `${formattedDate.day} ${formattedDate.month}, ${formattedDate.year}`;
-
-//   useLayoutEffect(() => {
-//     navigation.setOptions({
-//       title: "Create Payment",
-//       //@ts-ignore
-//       headerStyle: {
-//         backgroundColor: `#000000`,
-//       },
-//       //@ts-ignore
-//       headerTintColor: `#ffffff`,
-//       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
-//       headerShadowVisible: false,
-//       headerTitleAlign: "center",
-//       headerShown: true,
-//       headerLeft: () => (
-//         <TouchableOpacity onPress={() => router.back()}>
-//           <Ionicons name="arrow-back" size={24} color="white" />
-//         </TouchableOpacity>
-//       ),
-//     });
-//   }, [navigation]);
-
-//   const handleInputChange = (field: string, value: string) => {
-//     if (field === "amount") {
-//       // Convert string to number for numeric fields
-//       const numValue = parseInt(value) || 0;
-//       setFormData((prev) => ({
-//         ...prev,
-//         [field]: numValue,
-//         currentBalance: supplierData?.currentBalance
-//           ? parseInt(supplierData?.currentBalance) - numValue
-//           : 0 - numValue,
-//       }));
-//     } else {
-//       // Handle string fields normally
-//       setFormData((prev) => ({ ...prev, [field]: value }));
-//     }
-//   };
-
-//   const handleDatePress = () => {
-//     console.log("Opening date picker");
-//     setShowDatePicker(true);
-//   };
-
-//   const handleTypeChange = (
-//     type: "income" | "expense" | "payment" | "receipt",
-//   ) => {
-//     setFormData((prev) => ({ ...prev, type }));
-//   };
-
-//   const handleSubmit = async () => {
-//     console.log("Transaction Form Data:", formData);
-//     console.log("Photo URI:", formData.photo);
-
-//     try {
-//       const response = await createTransaction(formData).unwrap();
-//       // console.log("Transaction created:", response);
-//     } catch (error) {
-//       // console.error("Error creating transaction:", error);
-//     }
-//     router.back();
-//     // Alert.alert(
-//     //   "Success",
-//     //   "Form data logged to console. Check console for details.",
-//     //   [
-//     //     {
-//     //       text: "OK",
-//     //       onPress: () => {
-//     //         setFormData({
-//     //           name: "",
-//     //           user: userInfo?.id,
-//     //           warehouse: userInfo?.warehouse,
-//     //           amount: 0,
-//     //           openingBalance: 0,
-//     //           currentBalance: 0,
-//     //           photo: "",
-//     //           invoices: "",
-//     //           note: "",
-//     //           date: new Date(),
-//     //           type: "payment",
-//     //           status: "complete",
-//     //           supplierId: "",
-//     //           invoice: "",
-//     //         });
-//     //         router.back();
-//     //       },
-//     //     },
-//     //   ],
-//     // );
-//   };
-
-
-//   const handlePhotoUpload = async () => {
-//     try {
-//       // Request permissions
-//       const { status } =
-//         await ImagePicker.requestMediaLibraryPermissionsAsync();
-
-//       if (status !== "granted") {
-//         Alert.alert(
-//           "Permission Required",
-//           "Sorry, we need camera roll permissions to upload photos.",
-//           [{ text: "OK" }],
-//         );
-//         return;
-//       }
-
-//       // Launch image picker
-//       const result = await ImagePicker.launchImageLibraryAsync({
-//         mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//         allowsEditing: true,
-//         aspect: [4, 3],
-//         quality: 0.8,
-//       });
-
-//       if (!result.canceled && result.assets && result.assets[0]) {
-//         const selectedImage = result.assets[0];
-//         setFormData((prev) => ({ ...prev, photo: selectedImage.uri }));
-//         console.log("Photo selected:", selectedImage.uri);
-//       }
-//     } catch (error) {
-//       console.error("Error picking image:", error);
-//       Alert.alert("Error", "Failed to pick image. Please try again.", [
-//         { text: "OK" },
-//       ]);
-//     }
-//   };
-
-//   const handleCameraCapture = async () => {
-//     try {
-//       // Request camera permissions
-//       const { status } = await ImagePicker.requestCameraPermissionsAsync();
-
-//       if (status !== "granted") {
-//         Alert.alert(
-//           "Permission Required",
-//           "Sorry, we need camera permissions to take photos.",
-//           [{ text: "OK" }],
-//         );
-//         return;
-//       }
-
-//       // Launch camera
-//       const result = await ImagePicker.launchCameraAsync({
-//         allowsEditing: true,
-//         aspect: [4, 3],
-//         quality: 0.8,
-//       });
-
-//       if (!result.canceled && result.assets && result.assets[0]) {
-//         const capturedImage = result.assets[0];
-//         setFormData((prev) => ({ ...prev, photo: capturedImage.uri }));
-//         console.log("Photo captured:", capturedImage.uri);
-//       }
-//     } catch (error) {
-//       console.error("Error capturing image:", error);
-//       Alert.alert("Error", "Failed to capture image. Please try again.", [
-//         { text: "OK" },
-//       ]);
-//     }
-//   };
-
-//   const showPhotoOptions = () => {
-//     Alert.alert("Photo Upload", "Choose how you want to add a photo", [
-//       {
-//         text: "Camera",
-//         onPress: handleCameraCapture,
-//       },
-//       {
-//         text: "Gallery",
-//         onPress: handlePhotoUpload,
-//       },
-//       {
-//         text: "Cancel",
-//         style: "cancel",
-//       },
-//     ]);
-//   };
-
-//   const removePhoto = () => {
-//     setFormData((prev) => ({ ...prev, photo: null }));
-//   };
-  
-//   const {
-//       data: invoiceData,
-//       isSuccess: invoiceSuccess,
-//       isError: invoiceError,
-//       refetch: invoiceRefetch
-//     } = useGetSupplierByInvoiceQuery({
-//       invoiceId: search, 
-//       skip: !search
-//     });
-//     console.log('supplireInvoicedata', invoiceData, invoiceError, invoiceSuccess);
- 
-//     console.log('')
-//       useEffect(()=>{
-//         invoiceRefetch()
-//       }, [search])
-      
-      
-//       useEffect(()=>{
-//         // console.log(invoiceData)
-//         if(invoiceData){
-//           if(invoiceData?.status !== "paid"){
-//           if(search === ""){
-//             handleInputChange("supplierId", "")
-//           }else{
-//             handleInputChange("supplierId", invoiceData?.supplierId)
-//             handleInputChange("amount", invoiceData.due);
-//           }}else{
-//             Alert.alert("Invoice Paid", "This invoice has already been paid.", [
-//               {
-//                 text: "OK", 
-//               },
-//             ]);
-//           }
-//           // console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
-//         }else{
-//           handleInputChange("supplierId", "")
-//         }
-//       }, [invoiceSuccess, invoiceData])
-
-
-//       // ✅ Photo upload success callback
-//   const handlePhotoUploadSuccess = (url: string) => {
-//     setFormData((prev) => ({ ...prev, photo: url }));
-//   };
-//   return (
-//     <>
-//         <KeyboardAvoidingView
-//           behavior={Platform.OS === "ios" ? "padding" : "height"}
-//           className="flex-1"
-//           keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-//         >
-//       <ScrollView
-//             className="flex-1 px-6 pt-4"
-//            contentContainerStyle={{ paddingBottom: 300 }}
-//          keyboardShouldPersistTaps="handled"
-//          showsVerticalScrollIndicator={false}
-//           >
-//         <View className="flex-1 bg-dark">
-//          <StatusBar style="light" backgroundColor="#000" />
-//             {/* Supplier Input */}
-//             <View className="mb-4">
-//               <View className="flex justify-between items-center flex-row">
-//                 <Text className="text-gray-300 text-lg font-medium">
-//                 Supplier
-//               </Text>
-//               <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData?.currentBalance || 0}</Text>
-//               </View>
-//               <CustomDropdownWithSearch
-//                 data={type}
-//                 value={formData.supplierId}
-//                 placeholder="Select Supplier"
-//                 onValueChange={(value: string) =>
-//                   handleInputChange("supplierId", value)
-//                 }
-//                 onSearchChange={(query: string) => setQ(query)}
-//                 searchPlaceholder="Search suppliers..."
-//               />
-//             </View>
-
-//             {/* Date Input */}
-//             <View className="mb-4">
-//               <Text className="text-gray-300 text-lg font-medium">Date</Text>
-//               <TouchableOpacity
-//                 className="border border-black-200 bg-black-200 rounded-lg p-4 flex-row justify-between items-center"
-//                 onPress={handleDatePress}
-//                 activeOpacity={0.7}
-//               >
-//                 <Text className="text-white text-lg">
-//                   {formattedDateString}
-//                 </Text>
-//                 <Ionicons name="calendar" size={24} color="#FDB714" />
-//               </TouchableOpacity>
-//             </View>
-
-//             {/* Amount Input */}
-//             <View className="mb-4">
-            
-//               <View className="flex justify-between items-center flex-row">
-//                 <Text className="text-gray-300 text-lg font-medium">Amount</Text>
-//                 <Text className="text-gray-200">Invoice due: {formData.amount.toString()}</Text>
-//               </View>
-
-//               <TextInput
-//                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-//                 value={formData.amount.toString()}
-//                 onChangeText={(value) => handleInputChange("amount", value)}
-//                 placeholder="Enter amount"
-//                 placeholderTextColor="#9CA3AF"
-//                 keyboardType="numeric"
-//               />
-//             </View>
-
-//             {/* Note Input */}
-//             <View className="mb-4">
-//               <Text className="text-gray-300 text-lg font-medium">Note</Text>
-//               <TextInput
-//                 multiline={true}
-//                 numberOfLines={4}
-//                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-base text-white min-h-[120px]"
-//                 value={formData.note}
-//                 onChangeText={(value) => handleInputChange("note", value)}
-//                 placeholder="Enter transaction note..."
-//                 placeholderTextColor="#9CA3AF"
-//                 textAlignVertical="top"
-//               />
-//             </View>
-
-//             {/* Memo No Input */}
-//             <View className="mb-4">
-//               <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
-//               <TextInput
-//                 className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
-//                 value={formData.invoices.toString()}
-//                 onChangeText={(value) => {
-//                 handleInputChange("invoices", value)
-//                 setSearch(value)
-//               }}
-//                 placeholder="Enter invoice"
-//                 placeholderTextColor="#9CA3AF"
-//                 keyboardType="numeric"
-//               />
-//             </View>
-
-//             {/* Photo Upload */}
-//             <View className="mb-4">
-//               <Text className="text-gray-300 text-lg font-medium">
-//                 Invoice Photo
-//               </Text>
-
-//                <PhotoUploader
-//                 placeholder={photo}
-//                 onUploadSuccess={(url)=>handleInputChange("photo", url)}
-//                 previewStyle={"square"}
-//                 aspectRatio={[9,19]}
-//                 />
-
-            
-//             </View>
-
-//             {/* Submit Button */}
-//             <TouchableOpacity
-//               className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
-//               onPress={handleSubmit}
-//               activeOpacity={0.8}
-//             >
-//               <Text className="text-black text-center font-bold text-lg">
-//                 Payment
-//               </Text>
-//             </TouchableOpacity>
-
-
-//           {/* Date Picker Modal */}
-//           {showDatePicker && (
-//             <View className="absolute inset-0 bg-black/70 justify-center items-center z-50">
-//               <View className="bg-gray-900 rounded-2xl p-6 w-full border border-gray-700 shadow-2xl">
-//                 <View className="flex-row justify-between items-center mb-6">
-//                   <Text className="text-white text-xl font-bold">
-//                     Select Date
-//                   </Text>
-//                   <TouchableOpacity
-//                     onPress={() => setShowDatePicker(false)}
-//                     className="p-2"
-//                   >
-//                     <Ionicons name="close" size={24} color="#9CA3AF" />
-//                   </TouchableOpacity>
-//                 </View>
-
-//                 <View className="bg-gray-800 rounded-xl p-4 mb-6">
-//                   <DateTimePicker
-//                     value={formData.date}
-//                     mode="date"
-//                     display={Platform.OS === "ios" ? "spinner" : "default"}
-//                     onChange={handleDateChange}
-//                     maximumDate={new Date()}
-//                     minimumDate={new Date(2020, 0, 1)}
-//                     textColor="#ffffff"
-//                     themeVariant="dark"
-//                   />
-//                 </View>
-
-//                 {Platform.OS === "ios" && (
-//                   <View className="flex-row gap-3">
-//                     <TouchableOpacity
-//                       className="w-52 bg-gray-700 p-4 rounded-xl border border-gray-600"
-//                       onPress={() => setShowDatePicker(false)}
-//                       activeOpacity={0.7}
-//                     >
-//                       <Text className="text-gray-300 text-center font-semibold text-lg">
-//                         Cancel
-//                       </Text>
-//                     </TouchableOpacity>
-//                     <TouchableOpacity
-//                       className="flex-1 bg-primary p-4 rounded-xl"
-//                       onPress={() => setShowDatePicker(false)}
-//                       activeOpacity={0.7}
-//                     >
-//                       <Text className="text-black text-center font-bold text-lg">
-//                         Confirm
-//                       </Text>
-//                     </TouchableOpacity>
-//                   </View>
-//                 )}
-//               </View>
-//             </View>
-//           )}
-//         </View>
-//       </ScrollView>
-//       </KeyboardAvoidingView>
-//     </>
-//   );
-// };
-
-// export default Payment;
-
-
-// import photo from "@/assets/images/Invoice.jpg";
-// import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
-// import PhotoUploader from "@/components/PhotoUploader";
-// import { useGlobalContext } from "@/context/GlobalProvider";
-// import { useGetSupplierByInvoiceQuery, useSuppliersQuery } from "@/store/api/supplierApi";
-// import { useAddTransactionMutation } from "@/store/api/transactionApi";
-// import { Ionicons } from "@expo/vector-icons";
-// import DateTimePicker from "@react-native-community/datetimepicker";
-// import * as ImagePicker from "expo-image-picker";
-// import { useNavigation, useRouter } from "expo-router";
-// import { StatusBar } from "expo-status-bar";
-// import { useEffect, useLayoutEffect, useState } from "react";
-// import {
-//   Alert,
-//   KeyboardAvoidingView, Platform,
-//   ScrollView,
-//   Text,
-//   TextInput,
-//   TouchableOpacity,
-//   View
-// } from "react-native";
-
-// const Payment = () => {
-//   const [showDatePicker, setShowDatePicker] = useState(false);
-//   const router = useRouter();
-//   const navigation = useNavigation();
-//   const { userInfo } = useGlobalContext();
-  
-//   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
-//   const [q, setQ] = useState("all");
-//   const [search, setSearch] = useState("");
-
-//   const [createTransaction] = useAddTransactionMutation();
-
-//   // Form state
-//   const [formData, setFormData] = useState({
-//     date: new Date(),
-//     amount: 0,
-//     photo: null as string | null,
-//     supplierId: "",
-//     name: "",
-//     note: "",
-//     type: "payment",
-//     user: userInfo?.id,
-//     warehouse: userInfo?.warehouse,
-//     openingBalance: 0,
-//     currentBalance: 0,
-//     invoices: "",
-//     status: "complete",
-//   });
-
-//   // ✅ Fetch all suppliers
-//   const { data, isSuccess, refetch } = useSuppliersQuery({ q });
-
-//   useEffect(() => {
-//     refetch();
-//   }, [q]);
-
-//   useEffect(() => {
-//     if (data && isSuccess) {
-//       const supplierOptions = data.map((item) => ({
-//         label: item.name,
-//         value: item._id || item.id,
-//       }));
-//       setType(supplierOptions);
-//     }
-//   }, [data, isSuccess]);
-
-//   // ✅ Date formatting
-//   const today = new Date();
-//   const formattedDate = {
-//     day: today.getDate(),
-//     month: today.toLocaleString("en-US", { month: "long" }),
-//     year: today.getFullYear(),
-//   };
-//   const formattedDateString = `${formattedDate.day} ${formattedDate.month}, ${formattedDate.year}`;
-
-//   // ✅ Header config
-//   useLayoutEffect(() => {
-//     navigation.setOptions({
-//       title: "Create Payment",
-//       headerStyle: { backgroundColor: "#000000" },
-//       headerTintColor: "#ffffff",
-//       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
-//       headerShadowVisible: false,
-//       headerTitleAlign: "center",
-//       headerShown: true,
-//       headerLeft: () => (
-//         <TouchableOpacity onPress={() => router.back()}>
-//           <Ionicons name="arrow-back" size={24} color="white" />
-//         </TouchableOpacity>
-//       ),
-//     });
-//   }, [navigation]);
-
-//   // ✅ Input change handler
-//   const handleInputChange = (field: string, value: string | number) => {
-//     if (field === "amount") {
-//       const numValue = Number(value) || 0;
-//       setFormData((prev) => ({
-//         ...prev,
-//         [field]: numValue,
-//         currentBalance: prev.openingBalance - numValue, // current balance update
-//       }));
-//     } else {
-//       setFormData((prev) => ({ ...prev, [field]: value }));
-//     }
-//   };
-
-//   // ✅ Date picker
-//   const handleDatePress = () => setShowDatePicker(true);
-//   const handleDateChange = (_event: any, selectedDate?: Date) => {
-//     if (selectedDate) setFormData((prev) => ({ ...prev, date: selectedDate }));
-//     setShowDatePicker(false);
-//   };
-
-//   // ✅ Submit transaction
-//   const handleSubmit = async () => {
-//     console.log("Transaction Form Data:", formData);
-//     try {
-//       await createTransaction(formData).unwrap();
-//     } catch (error) {
-//       console.error("Error creating transaction:", error);
-//     }
-//     router.back();
-//   };
-
-//   // ✅ Photo upload
-//   const handlePhotoUpload = async () => {
-//     const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-//     if (status !== "granted") {
-//       Alert.alert("Permission Required", "Camera roll permission needed.");
-//       return;
-//     }
-//     const result = await ImagePicker.launchImageLibraryAsync({
-//       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-//       allowsEditing: true,
-//       aspect: [4, 3],
-//       quality: 0.8,
-//     });
-//     if (!result.canceled && result.assets[0]) {
-//       setFormData((prev) => ({ ...prev, photo: result.assets[0].uri }));
-//     }
-//   };
-
-//   const handleCameraCapture = async () => {
-//     const { status } = await ImagePicker.requestCameraPermissionsAsync();
-//     if (status !== "granted") {
-//       Alert.alert("Permission Required", "Camera permission needed.");
-//       return;
-//     }
-//     const result = await ImagePicker.launchCameraAsync({
-//       allowsEditing: true,
-//       aspect: [4, 3],
-//       quality: 0.8,
-//     });
-//     if (!result.canceled && result.assets[0]) {
-//       setFormData((prev) => ({ ...prev, photo: result.assets[0].uri }));
-//     }
-//   };
-
-//   // ✅ Invoice query (optional)
-//   const { data: invoiceData, refetch: invoiceRefetch } = useGetSupplierByInvoiceQuery({
-//     invoiceId: search,
-//     skip: !search,
-//   });
-
-//   useEffect(() => {
-//     invoiceRefetch();
-//   }, [search]);
-
-//   useEffect(() => {
-//     if (invoiceData && invoiceData.status !== "paid") {
-//       handleInputChange("supplierId", invoiceData.supplierId);
-//       handleInputChange("amount", invoiceData.due);
-//     }
-//   }, [invoiceData]);
-
-//   return (
-//     <KeyboardAvoidingView
-//       behavior={Platform.OS === "ios" ? "padding" : "height"}
-//       className="flex-1"
-//       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-//     >
-//       <ScrollView
-//         className="flex-1 px-6 pt-4"
-//         contentContainerStyle={{ paddingBottom: 300 }}
-//         keyboardShouldPersistTaps="handled"
-//         showsVerticalScrollIndicator={false}
-//       >
-//         <View className="flex-1 bg-dark">
-//           <StatusBar style="light" backgroundColor="#000" />
-
-//           {/* Supplier Input */}
-//           <View className="mb-4">
-//             <View className="flex justify-between items-center flex-row">
-//               <Text className="text-gray-300 text-lg font-medium">Supplier</Text>
-//               {/* ✅ Total Amount shows current balance */}
-//               <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm">
-//                 Total Amount: {formData.currentBalance}
-//               </Text>
-//             </View>
-
-//             <CustomDropdownWithSearch
-//               data={type}
-//               value={formData.supplierId}
-//               placeholder="Select Supplier"
-//               onValueChange={(value: string) => {
-//                 setFormData((prev) => ({ ...prev, supplierId: value }));
-//                 const selectedSupplier = data?.find((s) => s._id === value);
-//                 if (selectedSupplier) {
-//                   setFormData((prev) => ({
-//                     ...prev,
-//                     openingBalance: selectedSupplier.currentBalance ?? 0,
-//                     currentBalance: selectedSupplier.currentBalance ?? 0,
-//                   }));
-//                 } else {
-//                   setFormData((prev) => ({
-//                     ...prev,
-//                     openingBalance: 0,
-//                     currentBalance: 0,
-//                   }));
-//                 }
-//               }}
-//               onSearchChange={(query: string) => setQ(query)}
-//               searchPlaceholder="Search suppliers..."
-//             />
-//           </View>
-
-//           {/* Date Input */}
-//           <View className="mb-4">
-//             <Text className="text-gray-300 text-lg font-medium">Date</Text>
-//             <TouchableOpacity
-//               className="border border-black-200 bg-black-200 rounded-lg p-4 flex-row justify-between items-center"
-//               onPress={handleDatePress}
-//               activeOpacity={0.7}
-//             >
-//               <Text className="text-white text-lg">{formattedDateString}</Text>
-//               <Ionicons name="calendar" size={24} color="#FDB714" />
-//             </TouchableOpacity>
-//           </View>
-
-//           {/* Amount Input */}
-//           <View className="mb-4">
-//             <View className="flex justify-between items-center flex-row">
-//               <Text className="text-gray-300 text-lg font-medium">Amount</Text>
-//             </View>
-//             <TextInput
-//               className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
-//               value={formData.amount.toString()}
-//               onChangeText={(value) => handleInputChange("amount", value)}
-//               placeholder="Enter amount"
-//               placeholderTextColor="#9CA3AF"
-//               keyboardType="numeric"
-//             />
-//           </View>
-
-//           {/* Note Input */}
-//           <View className="mb-4">
-//             <Text className="text-gray-300 text-lg font-medium">Note</Text>
-//             <TextInput
-//               multiline
-//               numberOfLines={4}
-//               className="border border-black-200 bg-black-200 rounded-lg p-4 text-base text-white min-h-[120px]"
-//               value={formData.note}
-//               onChangeText={(value) => handleInputChange("note", value)}
-//               placeholder="Enter transaction note..."
-//               placeholderTextColor="#9CA3AF"
-//               textAlignVertical="top"
-//             />
-//           </View>
-
-//           {/* Photo Upload */}
-//           <View className="mb-4">
-//             <Text className="text-gray-300 text-lg font-medium">Invoice Photo</Text>
-//             <PhotoUploader
-//               placeholder={photo}
-//               onUploadSuccess={(url) => handleInputChange("photo", url)}
-//               previewStyle={"square"}
-//               aspectRatio={[9, 19]}
-//             />
-//           </View>
-
-//           {/* Submit Button */}
-//           <TouchableOpacity
-//             className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
-//             onPress={handleSubmit}
-//             activeOpacity={0.8}
-//           >
-//             <Text className="text-black text-center font-bold text-lg">Payment</Text>
-//           </TouchableOpacity>
-
-//           {/* Date Picker Modal */}
-//           {showDatePicker && (
-//             <View className="absolute inset-0 bg-black/70 justify-center items-center z-50">
-//               <View className="bg-gray-900 rounded-2xl p-6 w-full border border-gray-700 shadow-2xl">
-//                 <View className="flex-row justify-between items-center mb-6">
-//                   <Text className="text-white text-xl font-bold">Select Date</Text>
-//                   <TouchableOpacity
-//                     onPress={() => setShowDatePicker(false)}
-//                     className="p-2"
-//                   >
-//                     <Ionicons name="close" size={24} color="#9CA3AF" />
-//                   </TouchableOpacity>
-//                 </View>
-//                 <View className="bg-gray-800 rounded-xl p-4 mb-6">
-//                   <DateTimePicker
-//                     value={formData.date}
-//                     mode="date"
-//                     display={Platform.OS === "ios" ? "spinner" : "default"}
-//                     onChange={handleDateChange}
-//                     maximumDate={new Date()}
-//                     minimumDate={new Date(2020, 0, 1)}
-//                     textColor="#ffffff"
-//                     themeVariant="dark"
-//                   />
-//                 </View>
-//               </View>
-//             </View>
-//           )}
-//         </View>
-//       </ScrollView>
-//     </KeyboardAvoidingView>
-//   );
-// };
-
-// export default Payment;
-
 import photo from "@/assets/images/Invoice.jpg";
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import PhotoUploader from "@/components/PhotoUploader";
@@ -853,6 +6,7 @@ import { useGetSupplierByInvoiceQuery, useSuppliersQuery } from "@/store/api/sup
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import * as ImagePicker from "expo-image-picker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import { useEffect, useLayoutEffect, useState } from "react";
@@ -872,15 +26,26 @@ const Payment = () => {
   const navigation = useNavigation();
   const [type, setType] = useState([{ label: "Select Supplier", value: "" }]);
   const { userInfo } = useGlobalContext();
+  const [note, setNote] = useState("");
+  
+  const [createTransaction] = useAddTransactionMutation();
+  // const [supplier, setSupplier] = useState("");
 
   const [q, setQ] = useState("all");
-  const { data: suppliers, isSuccess, refetch } = useSuppliersQuery({ q });
+  const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
+    q: q,
+  });
+  console.log('supplier data', data);
+  const [search, setSearch] = useState('');
 
+  // Form state
   const [formData, setFormData] = useState({
     date: new Date(),
     amount: 0,
+    // note: "",
     photo: null as string | null,
     supplierId: "",
+    // invoice: "",
     name: "",
     note: "",
     type: "payment",
@@ -891,107 +56,61 @@ const Payment = () => {
     invoices: "",
     status: "complete",
   });
+//  console.log("Supplire formData", formData);
 
-  const [createTransaction] = useAddTransactionMutation();
 
-  // invoice fetch
-  const [search, setSearch] = useState("");
-  const {
-    data: invoiceData,
-    isSuccess: invoiceSuccess,
-    refetch: invoiceRefetch
-  } = useGetSupplierByInvoiceQuery({
-    invoiceId: search,
-    skip: !search
-  });
+  // const {
+  //   data: supplierData,
+  //   isSuccess: supplierIsSuccess,
+  //   refetch: supplierRefetch,
+  // } = useSuppliersQuery(formData.supplierId);
+  // console.log('supplierData', supplierData);
 
-  // Update supplier options
+  // useEffect(() => {
+  //   if (supplierData && supplierIsSuccess) {
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       openingBalance: supplierData?.currentBalance ?? 0,
+  //       currentBalance: supplierData?.currentBalance ?? 0,
+  //     }));
+  //   }
+  // }, [supplierData, supplierIsSuccess]);
+
+  // useEffect(() => {
+  //   supplierRefetch();
+  // }, [formData.supplierId]);
+
   useEffect(() => {
     refetch();
-    if (suppliers && isSuccess) {
-      const supplierOptions = suppliers.map((item) => ({
+  }, [q]);
+  useEffect(() => {
+    if (data && isSuccess) {
+      const supplierOptions = data.map((item) => ({
         label: item.name,
         value: item._id || item.id,
       }));
       setType(supplierOptions);
     }
-  }, [suppliers, isSuccess]);
+  }, [data, isSuccess]);
 
-  // Live current balance on amount change
-  const handleInputChange = (field: string, value: string) => {
-    if (field === "amount") {
-      const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({
-        ...prev,
-        [field]: numValue,
-        currentBalance: prev.openingBalance - numValue, // ✅ live update
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    }
+  // date formatting
+  const today = new Date();
+  const formattedDate = {
+    day: today.getDate(),
+    month: today.toLocaleString("en-US", { month: "long" }),
+    year: today.getFullYear(),
   };
-
-  // Supplier select changes opening/current balance
-  const handleSupplierSelect = (value: string) => {
-    setFormData((prev) => ({ ...prev, supplierId: value }));
-    const selectedSupplier = suppliers?.find((s) => s._id === value);
-    if (selectedSupplier) {
-      setFormData((prev) => ({
-        ...prev,
-        openingBalance: selectedSupplier.currentBalance ?? 0,
-        currentBalance: selectedSupplier.currentBalance ?? 0,
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, openingBalance: 0, currentBalance: 0 }));
-    }
-  };
-
-  // Invoice logic
-  useEffect(() => {
-    invoiceRefetch();
-  }, [search]);
-
-  useEffect(() => {
-    if (invoiceData && invoiceSuccess) {
-      if (invoiceData.status !== "paid") {
-        if (search !== "") {
-          handleInputChange("amount", invoiceData.due);
-          handleSupplierSelect(invoiceData.supplierId);
-        }
-      } else {
-        Alert.alert("Invoice Paid", "This invoice has already been paid.", [{ text: "OK" }]);
-      }
-    }
-  }, [invoiceData, invoiceSuccess]);
-
-  // Photo upload
-  const handlePhotoUploadSuccess = (url: string) => {
-    setFormData((prev) => ({ ...prev, photo: url }));
-  };
-
-  const handleSubmit = async () => {
-    try {
-      await createTransaction(formData).unwrap();
-      router.back();
-    } catch (error) {
-      console.error("Error creating transaction:", error);
-    }
-  };
-
-  // Date picker
-  const handleDatePress = () => setShowDatePicker(true);
-  const handleDateChange = (event: any, selectedDate?: Date) => {
-    setShowDatePicker(false);
-    if (selectedDate) {
-      setFormData((prev) => ({ ...prev, date: selectedDate }));
-    }
-  };
+  const formattedDateString = `${formattedDate.day} ${formattedDate.month}, ${formattedDate.year}`;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "Create Payment",
-      headerStyle: { backgroundColor: `#000` },
-      headerTintColor: "#fff",
+      //@ts-ignore
+      headerStyle: {
+        backgroundColor: `#000000`,
+      },
+      //@ts-ignore
+      headerTintColor: `#ffffff`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18 },
       headerShadowVisible: false,
       headerTitleAlign: "center",
@@ -1004,134 +123,388 @@ const Payment = () => {
     });
   }, [navigation]);
 
+  const handleInputChange = (field: string, value: string) => {
+    if (field === "amount") {
+      // Convert string to number for numeric fields
+      const numValue = parseInt(value) || 0;
+      setFormData((prev) => ({
+        ...prev,
+        [field]: numValue,
+        currentBalance: supplierData?.currentBalance
+          ? parseInt(supplierData?.currentBalance) - numValue
+          : 0 - numValue,
+      }));
+    } else {
+      // Handle string fields normally
+      setFormData((prev) => ({ ...prev, [field]: value }));
+    }
+  };
+
+  const handleDatePress = () => {
+    console.log("Opening date picker");
+    setShowDatePicker(true);
+  };
+
+  const handleTypeChange = (
+    type: "income" | "expense" | "payment" | "receipt",
+  ) => {
+    setFormData((prev) => ({ ...prev, type }));
+  };
+
+  const handleSubmit = async () => {
+    console.log("Transaction Form Data:", formData);
+    console.log("Photo URI:", formData.photo);
+
+    try {
+      const response = await createTransaction(formData).unwrap();
+      // console.log("Transaction created:", response);
+    } catch (error) {
+      // console.error("Error creating transaction:", error);
+    }
+    router.back();
+    
+  };
+
+
+  const handlePhotoUpload = async () => {
+    try {
+      // Request permissions
+      const { status } =
+        await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "Sorry, we need camera roll permissions to upload photos.",
+          [{ text: "OK" }],
+        );
+        return;
+      }
+
+      // Launch image picker
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets && result.assets[0]) {
+        const selectedImage = result.assets[0];
+        setFormData((prev) => ({ ...prev, photo: selectedImage.uri }));
+        console.log("Photo selected:", selectedImage.uri);
+      }
+    } catch (error) {
+      console.error("Error picking image:", error);
+      Alert.alert("Error", "Failed to pick image. Please try again.", [
+        { text: "OK" },
+      ]);
+    }
+  };
+
+  const handleCameraCapture = async () => {
+    try {
+      // Request camera permissions
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "Sorry, we need camera permissions to take photos.",
+          [{ text: "OK" }],
+        );
+        return;
+      }
+
+      // Launch camera
+      const result = await ImagePicker.launchCameraAsync({
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 0.8,
+      });
+
+      if (!result.canceled && result.assets && result.assets[0]) {
+        const capturedImage = result.assets[0];
+        setFormData((prev) => ({ ...prev, photo: capturedImage.uri }));
+        console.log("Photo captured:", capturedImage.uri);
+      }
+    } catch (error) {
+      console.error("Error capturing image:", error);
+      Alert.alert("Error", "Failed to capture image. Please try again.", [
+        { text: "OK" },
+      ]);
+    }
+  };
+
+  const showPhotoOptions = () => {
+    Alert.alert("Photo Upload", "Choose how you want to add a photo", [
+      {
+        text: "Camera",
+        onPress: handleCameraCapture,
+      },
+      {
+        text: "Gallery",
+        onPress: handlePhotoUpload,
+      },
+      {
+        text: "Cancel",
+        style: "cancel",
+      },
+    ]);
+  };
+
+  const removePhoto = () => {
+    setFormData((prev) => ({ ...prev, photo: null }));
+  };
+  
+  const {
+      data: invoiceData,
+      isSuccess: invoiceSuccess,
+      isError: invoiceError,
+      refetch: invoiceRefetch
+    } = useGetSupplierByInvoiceQuery({
+      invoiceId: search, 
+      skip: !search
+    });
+    console.log('supplireInvoicedata', invoiceData, invoiceError, invoiceSuccess);
+ 
+    console.log('')
+      useEffect(()=>{
+        invoiceRefetch()
+      }, [search])
+      
+      
+      useEffect(()=>{
+        // console.log(invoiceData)
+        if(invoiceData){
+          if(invoiceData?.status !== "paid"){
+          if(search === ""){
+            handleInputChange("supplierId", "")
+          }else{
+            handleInputChange("supplierId", invoiceData?.supplierId)
+            handleInputChange("amount", invoiceData.due);
+          }}else{
+            Alert.alert("Invoice Paid", "This invoice has already been paid.", [
+              {
+                text: "OK", 
+              },
+            ]);
+          }
+          // console.log('supplier invoiceId ', invoiceData, invoiceError, invoiceSuccess)
+        }else{
+          handleInputChange("supplierId", "")
+        }
+      }, [invoiceSuccess, invoiceData])
+
+
+      // 🔹 Supplier select করলে
+     const handleSupplierSelect = (value: string) => {
+  const selectedSupplier = data?.find(
+    (s) => s._id === value || s.id === value
+  );
+
+  setFormData((prev) => ({
+    ...prev,
+    supplierId: value,
+    amount: 0,
+    openingBalance: selectedSupplier?.balance ?? 0,
+    currentBalance: selectedSupplier?.balance ?? 0,
+  }));
+};
+
+
+      // ✅ Photo upload success callback
+  const handlePhotoUploadSuccess = (url: string) => {
+    setFormData((prev) => ({ ...prev, photo: url }));
+  };
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-    >
+    <>
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          className="flex-1"
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+        >
       <ScrollView
-        className="flex-1 px-6 pt-4"
-        contentContainerStyle={{ paddingBottom: 300 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <View className="flex-1 bg-dark">
-          <StatusBar style="light" backgroundColor="#000" />
-
-          {/* Supplier */}
-          <View className="mb-4">
-            <View className="flex flex-row justify-between items-center">
-              <Text className="text-gray-300 text-lg font-medium">Supplier</Text>
-              <Text className="text-gray-300 text-sm border border-gray-300 p-1 rounded-md">
-                Current Balance: {formData.currentBalance}
-              </Text>
-            </View>
-            <CustomDropdownWithSearch
-              data={type}
-              value={formData.supplierId}
-              placeholder="Select Supplier"
-              onValueChange={handleSupplierSelect}
-              onSearchChange={(query) => setQ(query)}
-              searchPlaceholder="Search suppliers..."
-            />
-          </View>
-
-          {/* Amount */}
-          <View className="mb-4">
-            <View className="flex flex-row justify-between items-center">
-              <Text className="text-gray-300 text-lg font-medium">Amount</Text>
-              <Text className="text-gray-200">Invoice due: {formData.amount}</Text>
-            </View>
-            <TextInput
-              className="border border-black-200 bg-black-200 rounded-lg p-4 text-lg text-white"
-              value={formData.amount.toString()}
-              onChangeText={(value) => handleInputChange("amount", value)}
-              placeholder="Enter amount"
-              placeholderTextColor="#9CA3AF"
-              keyboardType="numeric"
-            />
-          </View>
-
-          {/* Note */}
-          <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Note</Text>
-            <TextInput
-              multiline
-              numberOfLines={4}
-              className="border border-black-200 bg-black-200 rounded-lg p-4 text-white min-h-[120px]"
-              value={formData.note}
-              onChangeText={(value) => handleInputChange("note", value)}
-              placeholder="Enter transaction note..."
-              placeholderTextColor="#9CA3AF"
-              textAlignVertical="top"
-            />
-          </View>
-
-          {/* Invoice */}
-          <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
-            <TextInput
-              className="border border-black-200 bg-black-200 rounded-lg p-4 text-white"
-              value={formData.invoices.toString()}
-              onChangeText={(value) => {
-                handleInputChange("invoices", value);
-                setSearch(value);
-              }}
-              placeholder="Enter invoice"
-              placeholderTextColor="#9CA3AF"
-              keyboardType="numeric"
-            />
-          </View>
-
-          {/* Photo */}
-          <View className="mb-4">
-            <Text className="text-gray-300 text-lg font-medium">Invoice Photo</Text>
-            <PhotoUploader
-              placeholder={photo}
-              onUploadSuccess={(url) => handlePhotoUploadSuccess(url)}
-              previewStyle="square"
-              aspectRatio={[9, 19]}
-            />
-          </View>
-
-          {/* Submit */}
-          <TouchableOpacity
-            className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
-            onPress={handleSubmit}
-            activeOpacity={0.8}
+            className="flex-1 px-6 pt-4"
+           contentContainerStyle={{ paddingBottom: 300 }}
+         keyboardShouldPersistTaps="handled"
+         showsVerticalScrollIndicator={false}
           >
-            <Text className="text-black text-center font-bold text-lg">Payment</Text>
-          </TouchableOpacity>
+        <View className="flex-1 bg-dark">
+         <StatusBar style="light" backgroundColor="#000" />
+            {/* Supplier Input */}
+            <View className="mb-4">
+              <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">
+                Supplier
+              </Text>
+              <Text className="text-gray-300 text-lg">Balance: {formData.currentBalance}</Text>
+              {/* <Text className="text-gray-300 text-lg font-medium border border-gray-300 p-1 mb-2 rounded-md text-sm ">Total Amount: {invoiceData && invoiceData?.currentBalance || 0}</Text> */}
+              </View>
+              <CustomDropdownWithSearch
+                data={type}
+                value={formData.supplierId}
+                placeholder="Select Supplier"
+                // onValueChange={(value: string) =>
+                //   handleInputChange("supplierId", value)
+                // }
+                onValueChange={handleSupplierSelect}
+                onSearchChange={(query: string) => setQ(query)}
+                searchPlaceholder="Search suppliers..."
+              />
+            </View>
 
-          {/* Date Picker */}
+            {/* Date Input */}
+            <View className="mb-4">
+              <Text className="text-gray-300 text-lg font-medium">Date</Text>
+              <TouchableOpacity
+                className="border border-black-200 bg-black-200 rounded-lg p-4 flex-row justify-between items-center"
+                onPress={handleDatePress}
+                activeOpacity={0.7}
+              >
+                <Text className="text-white text-lg">
+                  {formattedDateString}
+                </Text>
+                <Ionicons name="calendar" size={24} color="#FDB714" />
+              </TouchableOpacity>
+            </View>
+
+            {/* Amount Input */}
+            <View className="mb-4">
+            
+              <View className="flex justify-between items-center flex-row">
+                <Text className="text-gray-300 text-lg font-medium">Amount</Text>
+                <Text className="text-gray-200">Invoice due: {formData.amount.toString()}</Text>
+              </View>
+
+              <TextInput
+                className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
+                value={formData.amount.toString()}
+                onChangeText={(value) => handleInputChange("amount", value)}
+                placeholder="Enter amount"
+                placeholderTextColor="#9CA3AF"
+                keyboardType="numeric"
+              />
+            </View>
+
+            {/* Note Input */}
+            <View className="mb-4">
+              <Text className="text-gray-300 text-lg font-medium">Note</Text>
+              <TextInput
+                multiline={true}
+                numberOfLines={4}
+                className="border  border-black-200 bg-black-200  rounded-lg p-4 text-base text-white min-h-[120px]"
+                value={formData.note}
+                onChangeText={(value) => handleInputChange("note", value)}
+                placeholder="Enter transaction note..."
+                placeholderTextColor="#9CA3AF"
+                textAlignVertical="top"
+              />
+            </View>
+
+            {/* Memo No Input */}
+            <View className="mb-4">
+              <Text className="text-gray-300 text-lg font-medium">Invoice</Text>
+              <TextInput
+                className="border  border-black-200 bg-black-200  rounded-lg p-4 text-lg text-white"
+                value={formData.invoices.toString()}
+                onChangeText={(value) => {
+                handleInputChange("invoices", value)
+                setSearch(value)
+              }}
+                placeholder="Enter invoice"
+                placeholderTextColor="#9CA3AF"
+                keyboardType="numeric"
+              />
+            </View>
+
+            {/* Photo Upload */}
+            <View className="mb-4">
+              <Text className="text-gray-300 text-lg font-medium">
+                Invoice Photo
+              </Text>
+
+               <PhotoUploader
+                placeholder={photo}
+                onUploadSuccess={(url)=>handleInputChange("photo", url)}
+                previewStyle={"square"}
+                aspectRatio={[9,19]}
+                />
+
+            
+            </View>
+
+            {/* Submit Button */}
+            <TouchableOpacity
+              className="w-full bg-primary p-4 rounded-lg mt-4 mb-8"
+              onPress={handleSubmit}
+              activeOpacity={0.8}
+            >
+              <Text className="text-black text-center font-bold text-lg">
+                Payment
+              </Text>
+            </TouchableOpacity>
+
+
+          {/* Date Picker Modal */}
           {showDatePicker && (
             <View className="absolute inset-0 bg-black/70 justify-center items-center z-50">
               <View className="bg-gray-900 rounded-2xl p-6 w-full border border-gray-700 shadow-2xl">
                 <View className="flex-row justify-between items-center mb-6">
-                  <Text className="text-white text-xl font-bold">Select Date</Text>
-                  <TouchableOpacity onPress={() => setShowDatePicker(false)}>
+                  <Text className="text-white text-xl font-bold">
+                    Select Date
+                  </Text>
+                  <TouchableOpacity
+                    onPress={() => setShowDatePicker(false)}
+                    className="p-2"
+                  >
                     <Ionicons name="close" size={24} color="#9CA3AF" />
                   </TouchableOpacity>
                 </View>
-                <DateTimePicker
-                  value={formData.date}
-                  mode="date"
-                  display={Platform.OS === "ios" ? "spinner" : "default"}
-                  onChange={handleDateChange}
-                  maximumDate={new Date()}
-                  minimumDate={new Date(2020, 0, 1)}
-                  textColor="#ffffff"
-                  themeVariant="dark"
-                />
+
+                <View className="bg-gray-800 rounded-xl p-4 mb-6">
+                  <DateTimePicker
+                    value={formData.date}
+                    mode="date"
+                    display={Platform.OS === "ios" ? "spinner" : "default"}
+                    onChange={handleDateChange}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(2020, 0, 1)}
+                    textColor="#ffffff"
+                    themeVariant="dark"
+                  />
+                </View>
+
+                {Platform.OS === "ios" && (
+                  <View className="flex-row gap-3">
+                    <TouchableOpacity
+                      className="w-52 bg-gray-700 p-4 rounded-xl border border-gray-600"
+                      onPress={() => setShowDatePicker(false)}
+                      activeOpacity={0.7}
+                    >
+                      <Text className="text-gray-300 text-center font-semibold text-lg">
+                        Cancel
+                      </Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      className="flex-1 bg-primary p-4 rounded-xl"
+                      onPress={() => setShowDatePicker(false)}
+                      activeOpacity={0.7}
+                    >
+                      <Text className="text-black text-center font-bold text-lg">
+                        Confirm
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
               </View>
             </View>
           )}
         </View>
       </ScrollView>
-    </KeyboardAvoidingView>
+      </KeyboardAvoidingView>
+    </>
   );
 };
 
 export default Payment;
-
