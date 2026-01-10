@@ -696,14 +696,9 @@ const SupplierDetails = () => {
         </View>
 
         {/* Start & Current Balance */}
-        <View className="flex flex-row justify-evely items-center mx-auto">
-          {/* <View className="flex bg-black-200 items-center justify-center p-5 text-center w-[180px] rounded-lg m-1">
-            <Text className="text-white text-xl">Starting balance</Text>
-            <Text className="text-primary font-bold text-center text-xl">
-              {data?.supplier?.balance} <Text className="text-white">BDT</Text>
-            </Text>
-          </View> */}
-          <View className="flex bg-black-200 items-center justify-center p-5 w-[180px] text-center rounded-lg m-1">
+        <View className="flex flex-row justify-evely items-center w-[380px] mx-auto">
+
+          <View className="flex bg-black-200 items-center justify-center p-4 text-center w-[360px] mx-auto rounded-lg ">
             <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-lg text-center">
               {currentBalance} <Text className="text-white">BDT</Text> {/* ✅ Updated */}
