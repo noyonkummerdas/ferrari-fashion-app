@@ -2,7 +2,7 @@ import photo from "@/assets/images/Invoice.jpg";
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useSuppliersQuery, useUpdateSupplierMutation } from "@/store/api/supplierApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -24,16 +24,12 @@ const Payment = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [search, setSearch] = useState("all");
-
   const { data: suppliers = [], refetch } = useSuppliersQuery({ q: search });
   const [createTransaction] = useAddTransactionMutation();
-
-  const [supplierOptions, setSupplierOptions] = useState<
-    { label: string; value: string }[]
-  >([]);
+  const [updateSupplier] = useUpdateSupplierMutation();
+  const [supplierOptions, setSupplierOptions] = useState<{ label: string; value: string }[]>([]);
 
   const [formData, setFormData] = useState({
     date: new Date(),
@@ -66,9 +62,9 @@ const Payment = () => {
   }, []);
 
   /* ---------------- Suppliers ---------------- */
-  useEffect(() => {
-    refetch();
-  }, [search]);
+  // useEffect(() => {
+  //   refetch();
+  // }, [search]);
 
   useEffect(() => {
     const options = suppliers.map((s) => ({
@@ -78,20 +74,33 @@ const Payment = () => {
     setSupplierOptions(options);
   }, [suppliers]);
 
+
   /* ---------------- Handlers ---------------- */
   const handleSupplierSelect = (supplierId: string) => {
-    const supplier = suppliers.find(
-      (s) => s._id === supplierId || s.id === supplierId
-    );
 
+    console.log("SELECTED SUPPLIER ID:", supplierId);
+    const supplier = suppliers.find((s) => s._id === supplierId || s.id === supplierId);
+
+    // const supplierTransactions = transactions.filter(
+    //   (t) => t.supplierId?._id === supplierId || t.supplierId === supplierId
+    // );
+
+    // const lastTransaction = supplierTransactions
+    //   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
+
+    // const balance = lastTransaction?.currentBalance ?? supplier?.balance ?? 0;
+
+    //SUPPLIER ID
+    console.log(supplier)
     const balance = supplier?.balance ?? 0;
+    console.log("SUPPLIER BALANCE:", balance);
 
     setFormData((prev) => ({
       ...prev,
       supplierId,
       amount: 0,
       openingBalance: balance,
-      currentBalance: balance,
+      currentBalance: balance
     }));
   };
 
@@ -110,7 +119,17 @@ const Payment = () => {
 
   const handleSubmit = async () => {
     try {
-      await createTransaction(formData).unwrap();
+      const payment = await createTransaction(formData).unwrap();
+
+      if (payment) {
+        const udateSupplierBlance = await updateSupplier({
+          _id: formData.supplierId,
+          balance: formData.currentBalance,
+        });
+        if (udateSupplierBlance) {
+          console.log("Success", "Payment created successfully", udateSupplierBlance);
+        }
+      }
       router.back();
     } catch {
       Alert.alert("Error", "Failed to create payment");

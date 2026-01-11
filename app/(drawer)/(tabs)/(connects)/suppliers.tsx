@@ -57,7 +57,7 @@ const Suppliers = ({}) => {
       q: searchQuery || "all",
       forceRefetch: true,
     });
-console.log("SUPPLIER LIST DATA::", data);
+// console.log("SUPPLIER LIST DATA first:", data);
   // console.log(data);
  const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
   skip: !searchQuery, //

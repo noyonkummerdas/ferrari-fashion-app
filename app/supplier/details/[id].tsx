@@ -633,16 +633,34 @@ console.log("SINGLE SUPPLIER DATA", data);
   };
 
   // ✅ Calculate current balance from starting balance + transactions
-  const calculateCurrentBalance = (startingBalance: number, transactions: any[]) => {
-    let balance = startingBalance || 0;
-    transactions.forEach(txn => {
-      if (txn.type === "Payment") balance += txn.amount;
-      else if (txn.type === "Purchase") balance -= txn.amount;
-    });
-    return balance;
-  };
+  const calculateCurrentBalance = (
+  openingBalance: number = 0,
+  transactions: any[] = []
+) => {
+  let balance = Number(openingBalance) || 0;
 
-  const currentBalance = calculateCurrentBalance(data?.supplier?.balance, transactions);
+  transactions.forEach((txn) => {
+    const amount = Number(txn.amount) || 0;
+
+    const type = txn.type
+      ?.toString()
+      .trim()
+      .toLowerCase();
+
+    if (type === "payment") {
+      balance -= amount;
+    } 
+    else if (type === "purchase") {
+      balance += amount;
+    }
+  });
+
+  return balance;
+};
+
+  const currentBalance = calculateCurrentBalance(data?.supplier?.balance) || 0;
+  // console.log("Opening:", data?.supplier?.balance);
+// console.log("Transactions length:", transactions?.length);
 
   return (
     <>

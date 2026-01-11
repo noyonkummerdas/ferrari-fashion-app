@@ -67,6 +67,8 @@ const PaymentList = () => {
       forceRefetch: true,
     });
 
+    // console.log("PAYMENT LIST DATA:", data);
+
   useEffect(() => {
     if (userInfo?.warehouse) {
       refetch();

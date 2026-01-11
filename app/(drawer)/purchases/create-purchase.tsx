@@ -4,7 +4,7 @@ import PhotoUploader from "@/components/PhotoUploader";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddPurchaseMutation } from "@/store/api/purchasApi";
-import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useSupplierByIdQuery, useSupplierQuery, useSuppliersQuery, useUpdateSupplierMutation } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
@@ -36,9 +36,11 @@ const createPurchase = () => {
   // const [supplier, setSupplier] = useState("");
 
   const [q, setQ] = useState("all");
+  const [sid, setSid] = useState("");
   const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
     q: q,
   });
+  // console.log("SUPPLIER LIST DATA in create purchase:", data);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -50,7 +52,7 @@ const createPurchase = () => {
     invoiceId: "",
     name: "",
     note: "",
-    type: "payment",
+    type: "purchase",
     user: userInfo?.id,
     warehouse: userInfo?.warehouse,
     status: "complete",
@@ -63,19 +65,39 @@ const createPurchase = () => {
     refetch: supplierRefetch,
   } = useSuppliersQuery(formData.supplierId);
 
+  
+
+  const {
+    data: supplierDataById,
+    isSuccess: supplierIsSuccessById,
+    refetch: supplierRefetchById,
+  } = useSupplierQuery({ _id: formData.supplierId, date: new Date().toISOString(), isDate: "false" });
+
+  // console.log('supplierDataById', supplierDataById, supplierIsSuccessById, formData.supplierId);
+
+  // console.log('supplierData', supplierData, supplierIsSuccess, formData.supplierId);
+
+
+  const {data: supplierByIdData, isSuccess: supplierByIdIsSuccess} = useSupplierByIdQuery({ _id:sid });
+
+  console.log('supplierByIdData', supplierByIdData, supplierByIdIsSuccess, sid);
+  
+  
   useEffect(() => {
     if (supplierData && supplierIsSuccess) {
       setFormData((prev) => ({
         ...prev,
-        openingBalance: supplierData?.currentBalance ?? 0,
-        currentBalance: supplierData?.currentBalance ?? 0,
+        openingBalance: supplierData?.balance ?? 0,
+        currentBalance: supplierData?.balance ?? 0,
       }));
     }
   }, [supplierData, supplierIsSuccess]);
 
+
+
   useEffect(() => {
-    supplierRefetch();
-  }, [formData.supplierId]);
+    supplierRefetchById();
+  }, [sid]);
 
   useEffect(() => {
     refetch();
@@ -128,8 +150,8 @@ const createPurchase = () => {
       setFormData((prev) => ({
         ...prev,
         [field]: numValue,
-        currentBalance: supplierData?.currentBalance
-          ? parseInt(supplierData?.currentBalance) - numValue
+        currentBalance: data?.currentBalance
+          ? parseInt(data?.currentBalance) - numValue
           : 0 - numValue,
       }));
     } else {
@@ -151,64 +173,26 @@ const createPurchase = () => {
 
    
   const [createPurchase]= useAddPurchaseMutation()
-  // const handleSubmit = async () => {
-  //   // console.log("Purchase Form Data:", formData);
-  //   // console.log("Photo URI:", formData.photo);
+  
+  const [updateSupplier] = useUpdateSupplierMutation();
 
-  //   try {
-  //     const formData = {
-  //       invoiceId,
-  //       amount,
-  //       supplierId,
-  //       date: format(new Date(), "yyyy-MM-dd"), 
-  //     };
-    
-  //     await createPurchase(formData);
-
-  //     const response = await createPurchase(formData).unwrap();
-  //     console.log("Purchase created:", response);
-  //   } catch (error) {
-  //     console.error("Error creating Purchase:", error);
-  //   }
-
-  //       router.back()
-
-  //   // Alert.alert(
-  //   //   "Success",
-  //   //   "Form data logged to console. Check console for details.",
-  //   //   [
-  //   //     {
-  //   //       text: "OK",
-  //   //       onPress: () => {
-  //   //         setFormData({
-  //   //           name: "",
-  //   //           user: userInfo?.id,
-  //   //           warehouse: userInfo?.warehouse,
-  //   //           amount: 0,
-  //   //           openingBalance: 0,
-  //   //           currentBalance: 0,
-  //   //           photo: "",
-  //   //           invoiceIds: "",
-  //   //           note: "",
-  //   //           date: new Date(),
-  //   //           type: "payment",
-  //   //           status: "complete",
-  //   //           supplierId: "",
-  //   //           invoiceId: "",
-  //   //         });
-  //   //         router.back();
-  //   //       },
-  //   //     },
-  //   //   ],
-  //   // );
-  // };
   const handleSubmit = async () => {
     try {
       const payload = {
         ...formData,
         poId: formData.invoiceId, // যদি backend poId expect করে
+        currentBalance: formData.amount + (supplierByIdData?.balance || 0),
       };
       const response = await createPurchase(payload).unwrap();
+      if (response) {
+        const udateSupplierBlance = await updateSupplier({
+          _id: formData.supplierId,
+          balance: formData.amount + (supplierByIdData?.balance || 0),
+        });
+        if (udateSupplierBlance) {
+          console.log("Success", "Payment created successfully", udateSupplierBlance);
+        }
+      }
       refetch();
       router.back();
       console.log("Purchase created:", response);
@@ -337,8 +321,10 @@ const createPurchase = () => {
                 data={supplier}
                 value={formData.supplierId}
                 placeholder="Select Supplier"
-                onValueChange={(value: string) =>
+                onValueChange={(value: string) =>{
                   handleInputChange("supplierId", value)
+                  setSid(value)}
+                
                 }
                 onSearchChange={(query: string) => setQ(query)}
                 searchPlaceholder="Search suppliers..."

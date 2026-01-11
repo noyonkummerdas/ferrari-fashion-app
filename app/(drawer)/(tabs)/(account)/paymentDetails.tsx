@@ -28,7 +28,7 @@ const PaymentDetails = () => {
     // console.log("TRANSACTION DETAILS", data);
 
 
-    const newCurrentBalance = data?.openingBalance - data?.amount || 0;
+    const newCurrentBalance = data?.openingBalance + data?.amount || 0;
     console.log("NEW CURRENT BALANCE", newCurrentBalance);
     
 
@@ -246,7 +246,7 @@ const PaymentDetails = () => {
               New Balance
             </Text>
             <Text className="text-white text-lg font-bold">
-              ৳{newCurrentBalance}
+              ৳{data.currentBalance?.toLocaleString()}
             </Text>
           </View>
         </View>

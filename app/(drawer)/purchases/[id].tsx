@@ -2,7 +2,7 @@ import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { usePurchaseQuery } from "@/store/api/purchasApi";
 import { Ionicons } from "@expo/vector-icons";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { router, useLocalSearchParams, useNavigation } from "expo-router";
 import React, { useLayoutEffect } from "react";
 import {
@@ -24,7 +24,7 @@ const PruchasesDetails = () => {
 
 
   const { data, isLoading, error, isSuccess } = usePurchaseQuery(id as string);
-  // console.log('details data', data, isLoading, isSuccess)
+  console.log(' purchases details data', data, isLoading, isSuccess)
 
   // console.log('error',data, isSuccess, error)
 
