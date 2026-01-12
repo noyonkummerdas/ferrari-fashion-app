@@ -103,12 +103,24 @@ const PaymentReceivedList = () => {
   };
 
  
-  const filteredList = paymentReceivedList.filter(
-    (item) =>
-      item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
-      item?.amount?.toString()?.includes(search) ||
-      item?.date?.includes(search),
+  // const filteredList = paymentReceivedList.filter(
+  //   (item) =>
+  //     item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
+  //     item?.amount?.toString()?.includes(search) ||
+  //     item?.date?.includes(search),
+  // );
+  const filteredList = paymentReceivedList.filter((item) => {
+  const supplierName = item?.supplierId?.name?.toLowerCase() || "";  // name safe
+  const amountStr = item?.amount?.toString() || "";                   // amount safe
+  const dateStr = item?.date ? format(new Date(item.date), "dd-MM-yyyy") : ""; // date safe
+  const term = search.toLowerCase();
+
+  return (
+    supplierName.includes(term) ||
+    amountStr.includes(term) ||
+    dateStr.includes(term)
   );
+});
 
   // Date navigation functions
   const goToPreviousDay = () => {
