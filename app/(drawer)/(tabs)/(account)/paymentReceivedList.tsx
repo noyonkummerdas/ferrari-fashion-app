@@ -110,13 +110,14 @@ const PaymentReceivedList = () => {
   //     item?.date?.includes(search),
   // );
   const filteredList = paymentReceivedList.filter((item) => {
-  const supplierName = item?.supplierId?.name?.toLowerCase() || "";  // name safe
-  const amountStr = item?.amount?.toString() || "";                   // amount safe
+  const customerName = item?.customerId?.name?.toLowerCase() || "";  // Correct field for PaymentReceivedList
+  const amountStr = item?.amount?.toString() || "";                  // amount safe
   const dateStr = item?.date ? format(new Date(item.date), "dd-MM-yyyy") : ""; // date safe
   const term = search.toLowerCase();
 
+  // match either name, amount or date
   return (
-    supplierName.includes(term) ||
+    customerName.includes(term) ||
     amountStr.includes(term) ||
     dateStr.includes(term)
   );
