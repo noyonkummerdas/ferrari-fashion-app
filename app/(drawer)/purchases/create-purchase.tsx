@@ -271,6 +271,27 @@ const createPurchase = () => {
       ]);
     }
   };
+  const handleDateChange = (
+  event: any,
+  selectedDate?: Date
+) => {
+  // Android এ cancel করলে
+  if (Platform.OS === "android") {
+    setShowDatePicker(false);
+  }
+
+  if (event?.type === "dismissed") {
+    return;
+  }
+
+  if (selectedDate) {
+    setFormData((prev) => ({
+      ...prev,
+      date: selectedDate,
+    }));
+  }
+};
+
 
   const showPhotoOptions = () => {
     Alert.alert("Photo Upload", "Choose how you want to add a photo", [
@@ -398,51 +419,6 @@ const createPurchase = () => {
                 previewStyle={"square"}
                 aspectRatio={[9,19]}
                 />
-
-
-              {/* {formData.photo ? (
-                <View className="border border-black-200 bg-black-200 rounded-lg p-4">
-                  <Image
-                    source={{ uri: formData.photo }}
-                    className="w-full h-48 rounded-lg mb-3"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-row gap-3">
-                    <TouchableOpacity
-                      className="flex-1 bg-red-600 p-3 rounded-lg"
-                      onPress={removePhoto}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-white text-center font-medium">
-                        Remove Photo
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      className="flex-1 bg-primary p-3 rounded-lg"
-                      onPress={showPhotoOptions}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-black text-center font-medium">
-                        Change Photo
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  className="border border-black-200 bg-black-200 rounded-lg p-6 flex-col justify-center items-center"
-                  onPress={showPhotoOptions}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="camera" size={32} color="#FDB714" />
-                  <Text className="text-white text-lg mt-2 font-medium">
-                    Upload Photo
-                  </Text>
-                  <Text className="text-gray-400 text-sm mt-1 text-center">
-                    Tap to select an image from your gallery
-                  </Text>
-                </TouchableOpacity>
-              )} */}
             </View>
 
             {/* Submit Button */}

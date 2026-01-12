@@ -78,22 +78,12 @@ const Payment = () => {
   /* ---------------- Handlers ---------------- */
   const handleSupplierSelect = (supplierId: string) => {
 
-    console.log("SELECTED SUPPLIER ID:", supplierId);
+    // console.log("SELECTED SUPPLIER ID:", supplierId);
     const supplier = suppliers.find((s) => s._id === supplierId || s.id === supplierId);
 
-    // const supplierTransactions = transactions.filter(
-    //   (t) => t.supplierId?._id === supplierId || t.supplierId === supplierId
-    // );
-
-    // const lastTransaction = supplierTransactions
-    //   .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())[0];
-
-    // const balance = lastTransaction?.currentBalance ?? supplier?.balance ?? 0;
-
-    //SUPPLIER ID
-    console.log(supplier)
+    // console.log(supplier)
     const balance = supplier?.balance ?? 0;
-    console.log("SUPPLIER BALANCE:", balance);
+    // console.log("SUPPLIER BALANCE:", balance);
 
     setFormData((prev) => ({
       ...prev,
