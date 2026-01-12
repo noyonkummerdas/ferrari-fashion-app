@@ -1,8 +1,280 @@
+// import photo from "@/assets/images/Invoice.jpg";
+// import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
+// import PhotoUploader from "@/components/PhotoUploader";
+// import { useGlobalContext } from "@/context/GlobalProvider";
+// import { useSuppliersQuery, useUpdateSupplierMutation } from "@/store/api/supplierApi";
+// import { useAddTransactionMutation } from "@/store/api/transactionApi";
+// import { Ionicons } from "@expo/vector-icons";
+// import DateTimePicker from "@react-native-community/datetimepicker";
+// import { useNavigation, useRouter } from "expo-router";
+// import { StatusBar } from "expo-status-bar";
+// import { useEffect, useLayoutEffect, useState } from "react";
+// import {
+//   Alert,
+//   KeyboardAvoidingView,
+//   Platform,
+//   ScrollView,
+//   Text,
+//   TextInput,
+//   TouchableOpacity,
+//   View,
+// } from "react-native";
+
+// const Payment = () => {
+//   const router = useRouter();
+//   const navigation = useNavigation();
+//   const { userInfo } = useGlobalContext();
+//   const [showDatePicker, setShowDatePicker] = useState(false);
+//   const [search, setSearch] = useState("all");
+//   const { data: suppliers = [], refetch } = useSuppliersQuery({ q: search });
+//   const [createTransaction] = useAddTransactionMutation();
+//   const [updateSupplier] = useUpdateSupplierMutation();
+//   const [supplierOptions, setSupplierOptions] = useState<{ label: string; value: string }[]>([]);
+
+//   const [formData, setFormData] = useState({
+//     date: new Date(),
+//     supplierId: "",
+//     amount: 0,
+//     openingBalance: 0,
+//     currentBalance: 0,
+//     note: "",
+//     invoices: "",
+//     photo: null as string | null,
+//     type: "payment",
+//     user: userInfo?.id,
+//     warehouse: userInfo?.warehouse,
+//     status: "complete",
+//   });
+
+//   /* ---------------- Navigation ---------------- */
+//   useLayoutEffect(() => {
+//     navigation.setOptions({
+//       title: "Create Payment",
+//       headerStyle: { backgroundColor: "#000" },
+//       headerTintColor: "#fff",
+//       headerTitleAlign: "center",
+//       headerLeft: () => (
+//         <TouchableOpacity onPress={() => router.back()}>
+//           <Ionicons name="arrow-back" size={24} color="white" />
+//         </TouchableOpacity>
+//       ),
+//     });
+//   }, []);
+
+//   /* ---------------- Suppliers ---------------- */
+//   // useEffect(() => {
+//   //   refetch();
+//   // }, [search]);
+
+//   useEffect(() => {
+//     const options = suppliers.map((s) => ({
+//       label: s.name,
+//       value: s._id || s.id,
+//     }));
+//     setSupplierOptions(options);
+//   }, [suppliers]);
+
+
+//   /* ---------------- Handlers ---------------- */
+//   const handleSupplierSelect = (supplierId: string) => {
+
+//     // console.log("SELECTED SUPPLIER ID:", supplierId);
+//     const supplier = suppliers.find((s) => s._id === supplierId || s.id === supplierId);
+
+//     // console.log(supplier)
+//     const balance = supplier?.balance ?? 0;
+//     // console.log("SUPPLIER BALANCE:", balance);
+
+//     setFormData((prev) => ({
+//       ...prev,
+//       supplierId,
+//       amount: 0,
+//       openingBalance: balance,
+//       currentBalance: balance
+//     }));
+//   };
+
+//   const handleInputChange = (field: string, value: string) => {
+//     if (field === "amount") {
+//       const amount = Number(value) || 0;
+//       setFormData((prev) => ({
+//         ...prev,
+//         amount,
+//         currentBalance: prev.openingBalance - amount,
+//       }));
+//     } else {
+//       setFormData((prev) => ({ ...prev, [field]: value }));
+//     }
+//   };
+
+//   const handleSubmit = async () => {
+//     try {
+//       const payment = await createTransaction(formData).unwrap();
+
+//       if (payment) {
+//         const udateSupplierBlance = await updateSupplier({
+//           _id: formData.supplierId,
+//           balance: formData.currentBalance,
+//         });
+//         if (udateSupplierBlance) {
+//           console.log("Success", "Payment created successfully", udateSupplierBlance);
+//         }
+//       }
+//       router.back();
+//     } catch {
+//       Alert.alert("Error", "Failed to create payment");
+//     }
+//   };
+
+//   /* ---------------- Date ---------------- */
+//   const today = new Date();
+//   const formattedDate = `${today.getDate()} ${today.toLocaleString("en-US", {
+//     month: "long",
+//   })}, ${today.getFullYear()}`;
+
+
+//   const handleDateChange = (
+//   event: any,
+//   selectedDate?: Date
+// ) => {
+//   // Android এ cancel করলে
+//   if (Platform.OS === "android") {
+//     setShowDatePicker(false);
+//   }
+
+//   if (event?.type === "dismissed") {
+//     return;
+//   }
+
+//   if (selectedDate) {
+//     setFormData((prev) => ({
+//       ...prev,
+//       date: selectedDate,
+//     }));
+//   }
+// };
+
+
+//   /* ---------------- UI ---------------- */
+//   return (
+//     <>
+//       <KeyboardAvoidingView
+//       behavior={Platform.OS === "ios" ? "padding" : "height"}
+//       className="flex-1"
+//       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+//     >
+//        <ScrollView
+//         className="px-6 pt-4"
+//         contentContainerStyle={{ paddingBottom: 300 }}
+//         keyboardShouldPersistTaps="handled"
+//         showsVerticalScrollIndicator={false}
+//       >
+//           <View className="flex-1 bg-dark">
+//             <StatusBar style="light" />
+
+//             {/* Supplier */}
+//             <View className="mb-4">
+//               <View className="flex-row justify-between mb-2">
+//                 <Text className="text-gray-300 text-lg">Supplier</Text>
+//                 <Text className="text-gray-300">
+//                   Balance: {formData.currentBalance}
+//                 </Text>
+//               </View>
+
+//               <CustomDropdownWithSearch
+//                 data={supplierOptions}
+//                 value={formData.supplierId}
+//                 placeholder="Select Supplier"
+//                 onValueChange={handleSupplierSelect}
+//                 onSearchChange={(q) => setSearch(q)}
+//               />
+//             </View>
+
+//             {/* Date */}
+//             <View className="mb-4">
+//               <Text className="text-gray-300 text-lg">Date</Text>
+//               <TouchableOpacity
+//                 className="bg-black-200 p-4 rounded-lg flex-row justify-between"
+//                 onPress={() => setShowDatePicker(true)}
+//               >
+//                 <Text className="text-white">{formattedDate}</Text>
+//                 <Ionicons name="calendar" size={22} color="#FDB714" />
+//               </TouchableOpacity>
+//             </View>
+
+
+            
+
+//             {/* Amount */}
+//             <View className="mb-4">
+//               <Text className="text-gray-300 text-lg">Amount</Text>
+//               <TextInput
+//                 className="bg-black-200 p-4 rounded-lg text-white"
+//                 keyboardType="numeric"
+//                 value={String(formData.amount)}
+//                 onChangeText={(v) => handleInputChange("amount", v)}
+//               />
+//             </View>
+
+//             {/* Note */}
+//             <View className="mb-4">
+//               <Text className="text-gray-300 text-lg">Note</Text>
+//               <TextInput
+//                 multiline
+//                 className="bg-black-200 p-4 rounded-lg text-white min-h-[100px]"
+//                 value={formData.note}
+//                 onChangeText={(v) => handleInputChange("note", v)}
+//               />
+//             </View>
+
+//             {/* Photo */}
+//             <View className="mb-4">
+//               <Text className="text-gray-300 text-lg">Invoice Photo</Text>
+//               <PhotoUploader
+//                 placeholder={photo}
+//                 onUploadSuccess={(url) =>
+//                   setFormData((p) => ({ ...p, photo: url }))
+//                 }
+//               />
+//             </View>
+
+//             {/* Submit */}
+//             <TouchableOpacity
+//               className="bg-primary p-4 rounded-lg mt-6"
+//               onPress={handleSubmit}
+//             >
+//               <Text className="text-black text-center font-bold text-lg">
+//                 Payment
+//               </Text>
+//             </TouchableOpacity>
+//           </View>
+//         </ScrollView>
+//       </KeyboardAvoidingView>
+
+//       {showDatePicker && (
+//         <DateTimePicker
+//           value={formData.date}
+//           mode="date"
+//           onChange={(_, d) =>
+//             setFormData((p) => ({ ...p, date: d || p.date }))
+//           }
+//         />
+//       )}
+//     </>
+//   );
+// };
+
+// export default Payment;
+
+
 import photo from "@/assets/images/Invoice.jpg";
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useSuppliersQuery, useUpdateSupplierMutation } from "@/store/api/supplierApi";
+import {
+  useSuppliersQuery,
+  useUpdateSupplierMutation,
+} from "@/store/api/supplierApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -24,12 +296,17 @@ const Payment = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
+
   const [showDatePicker, setShowDatePicker] = useState(false);
   const [search, setSearch] = useState("all");
-  const { data: suppliers = [], refetch } = useSuppliersQuery({ q: search });
+
+  const { data: suppliers = [] } = useSuppliersQuery({ q: search });
   const [createTransaction] = useAddTransactionMutation();
   const [updateSupplier] = useUpdateSupplierMutation();
-  const [supplierOptions, setSupplierOptions] = useState<{ label: string; value: string }[]>([]);
+
+  const [supplierOptions, setSupplierOptions] = useState<
+    { label: string; value: string }[]
+  >([]);
 
   const [formData, setFormData] = useState({
     date: new Date(),
@@ -62,35 +339,28 @@ const Payment = () => {
   }, []);
 
   /* ---------------- Suppliers ---------------- */
-  // useEffect(() => {
-  //   refetch();
-  // }, [search]);
-
   useEffect(() => {
-    const options = suppliers.map((s) => ({
+    const options = suppliers.map((s: any) => ({
       label: s.name,
       value: s._id || s.id,
     }));
     setSupplierOptions(options);
   }, [suppliers]);
 
-
   /* ---------------- Handlers ---------------- */
   const handleSupplierSelect = (supplierId: string) => {
+    const supplier = suppliers.find(
+      (s: any) => s._id === supplierId || s.id === supplierId
+    );
 
-    // console.log("SELECTED SUPPLIER ID:", supplierId);
-    const supplier = suppliers.find((s) => s._id === supplierId || s.id === supplierId);
-
-    // console.log(supplier)
     const balance = supplier?.balance ?? 0;
-    // console.log("SUPPLIER BALANCE:", balance);
 
     setFormData((prev) => ({
       ...prev,
       supplierId,
       amount: 0,
       openingBalance: balance,
-      currentBalance: balance
+      currentBalance: balance,
     }));
   };
 
@@ -107,68 +377,64 @@ const Payment = () => {
     }
   };
 
+  const handleDateChange = (event: any, selectedDate?: Date) => {
+    if (Platform.OS === "android") {
+      setShowDatePicker(false);
+    }
+
+    if (event?.type === "dismissed") return;
+
+    if (selectedDate) {
+      setFormData((prev) => ({
+        ...prev,
+        date: selectedDate,
+      }));
+    }
+  };
+
   const handleSubmit = async () => {
     try {
-      const payment = await createTransaction(formData).unwrap();
+      const payload = {
+        ...formData,
+        date: formData.date.toISOString(),
+      };
+
+      const payment = await createTransaction(payload).unwrap();
 
       if (payment) {
-        const udateSupplierBlance = await updateSupplier({
+        await updateSupplier({
           _id: formData.supplierId,
           balance: formData.currentBalance,
         });
-        if (udateSupplierBlance) {
-          console.log("Success", "Payment created successfully", udateSupplierBlance);
-        }
       }
+
       router.back();
-    } catch {
+    } catch (err) {
       Alert.alert("Error", "Failed to create payment");
     }
   };
 
-  /* ---------------- Date ---------------- */
-  const today = new Date();
-  const formattedDate = `${today.getDate()} ${today.toLocaleString("en-US", {
+  /* ---------------- Date Format ---------------- */
+  const formattedDate = formData.date.toLocaleDateString("en-US", {
+    day: "2-digit",
     month: "long",
-  })}, ${today.getFullYear()}`;
-
-
-  const handleDateChange = (
-  event: any,
-  selectedDate?: Date
-) => {
-  // Android এ cancel করলে
-  if (Platform.OS === "android") {
-    setShowDatePicker(false);
-  }
-
-  if (event?.type === "dismissed") {
-    return;
-  }
-
-  if (selectedDate) {
-    setFormData((prev) => ({
-      ...prev,
-      date: selectedDate,
-    }));
-  }
-};
-
+    year: "numeric",
+  });
 
   /* ---------------- UI ---------------- */
   return (
     <>
       <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
-      className="flex-1"
-      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-    >
-       <ScrollView
-        className="px-6 pt-4"
-        contentContainerStyle={{ paddingBottom: 300 }}
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 0}
       >
+        <ScrollView
+          contentContainerStyle={{ paddingBottom: 300 }}
+          keyboardShouldPersistTaps="handled"
+          showsVerticalScrollIndicator={false}
+          className="px-6 pt-4"
+        >
           <View className="flex-1 bg-dark">
             <StatusBar style="light" />
 
@@ -193,17 +459,19 @@ const Payment = () => {
             {/* Date */}
             <View className="mb-4">
               <Text className="text-gray-300 text-lg">Date</Text>
+
               <TouchableOpacity
-                className="bg-black-200 p-4 rounded-lg flex-row justify-between"
+                className="bg-black-200 p-4 rounded-lg flex-row justify-between items-center"
                 onPress={() => setShowDatePicker(true)}
               >
                 <Text className="text-white">{formattedDate}</Text>
-                <Ionicons name="calendar" size={22} color="#FDB714" />
+                <Ionicons
+                  name="calendar-outline"
+                  size={22}
+                  color="#FDB714"
+                />
               </TouchableOpacity>
             </View>
-
-
-            
 
             {/* Amount */}
             <View className="mb-4">
@@ -255,9 +523,10 @@ const Payment = () => {
         <DateTimePicker
           value={formData.date}
           mode="date"
-          onChange={(_, d) =>
-            setFormData((p) => ({ ...p, date: d || p.date }))
-          }
+          display={Platform.OS === "ios" ? "spinner" : "default"}
+          onChange={handleDateChange}
+          maximumDate={new Date()}
+          minimumDate={new Date(2020, 0, 1)}
         />
       )}
     </>
