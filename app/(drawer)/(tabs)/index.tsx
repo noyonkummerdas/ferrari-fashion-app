@@ -183,7 +183,7 @@ useEffect(() => {
           onProfilePress={() => router.push("/settings/profile")}
         />
         {/* current & opening balance */}
-         <View className="flex-row mb-4 w-full">
+         <View className="flex-row mb-4 w-full mx-auto">
                   {/* <View className="flex-1 bg-black-200  rounded-xl h-24 p-4 mr-2 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="trending-up" size={22} color="#fdb714" />
@@ -191,7 +191,7 @@ useEffect(() => {
                     </View>
                     <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
                   </View> */}
-                  <View className="flex-1 ml-2  bg-black-200 rounded-xl h-24 p-4 ">
+                  <View className="flex-1  bg-black-200 rounded-xl h-24 p-4 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="wallet" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Balance</Text>
