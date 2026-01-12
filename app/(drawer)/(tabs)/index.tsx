@@ -184,17 +184,17 @@ useEffect(() => {
         />
         {/* current & opening balance */}
          <View className="flex-row mb-4 w-full">
-                  <View className="flex-1 bg-black-200  rounded-xl h-24 p-4 mr-2 ">
+                  {/* <View className="flex-1 bg-black-200  rounded-xl h-24 p-4 mr-2 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="trending-up" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Opening Balance</Text>
                     </View>
                     <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
-                  </View>
+                  </View> */}
                   <View className="flex-1 ml-2  bg-black-200 rounded-xl h-24 p-4 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="wallet" size={22} color="#fdb714" />
-                      <Text className="text-gray-300">Current Balance</Text>
+                      <Text className="text-gray-300">Balance</Text>
                     </View>
                     <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
                   </View>

@@ -126,12 +126,12 @@ const Accounts = () => {
           <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
           </View> */}
           <View className="flex-1 ml-2 bg-black-200 rounded-xl h-28 p-4 ">
-            <View className="flex-row items-center justify-between mb-2 px-1">
+            <View className="flex-row items-center mb-2 py-1">
               <Ionicons name="wallet" size={22} color="#fdb714" />
-              <Text className="text-gray-300 text-lg text-white">Current Balance</Text>
+              <Text className="text-gray-300 text-lg ml-3 text-white">Balance</Text>
             </View>
-            {/* <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text> */}
-            <Text className="text-white text-xl font-pbold">100</Text>
+            <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
+            {/* <Text className="text-white text-xl font-pbold">100</Text> */}
           </View>
         </View>
      

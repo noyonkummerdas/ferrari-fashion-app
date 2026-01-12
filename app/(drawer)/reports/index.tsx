@@ -253,14 +253,14 @@ const Report = () => {
           </TouchableOpacity>
         </View>
 
-        <View className="bg-black-200 p-4 rounded-lg mt-4">
+        {/* <View className="bg-black-200 p-4 rounded-lg mt-4">
           <TouchableOpacity 
           onPress={()=>router.push('/(drawer)/reports/salesReport/ProductWiseSale')}
           className="flex-row items-center">
             <Ionicons name="pricetag-outline" size={28} color="#fdb714" />
             <Text className="text-gray-200 text-lg ms-2">Product Wise Sale</Text>
           </TouchableOpacity>
-        </View>
+        </View> */}
 
        
       </View>
