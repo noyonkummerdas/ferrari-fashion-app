@@ -72,15 +72,7 @@ const createPurchase = () => {
     isSuccess: supplierIsSuccessById,
     refetch: supplierRefetchById,
   } = useSupplierQuery({ _id: formData.supplierId, date: new Date().toISOString(), isDate: "false" });
-
-  // console.log('supplierDataById', supplierDataById, supplierIsSuccessById, formData.supplierId);
-
-  // console.log('supplierData', supplierData, supplierIsSuccess, formData.supplierId);
-
-
   const {data: supplierByIdData, isSuccess: supplierByIdIsSuccess} = useSupplierByIdQuery({ _id:sid });
-
-  // console.log('supplierByIdData', supplierByIdData, supplierByIdIsSuccess, sid);
   
   
   useEffect(() => {

@@ -1,7 +1,7 @@
 import CustomDropdownWithSearch from "@/components/CustomDropdownWithSearch";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useCustomerListQuery } from "@/store/api/customerApi";
+import { useCustomerListQuery, useUpdateCustomerMutation } from "@/store/api/customerApi";
 import { useAddSaleMutation } from "@/store/api/saleApi";
 // import { useSuppliersQuery } from "@/store/api/supplierApi";
 // import { useAddTransactionMutation } from "@/store/api/transactionApi";
@@ -9,9 +9,9 @@ import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { router } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  KeyboardAvoidingView,
   Platform,
   ScrollView,
   Text,
@@ -20,7 +20,6 @@ import {
   useColorScheme,
   View
 } from "react-native";
-import { KeyboardAvoidingView } from "react-native";
 
 const CreateDueSelas = () => {
   const [showDatePicker, setShowDatePicker] = useState(false);
@@ -59,6 +58,7 @@ const CreateDueSelas = () => {
     amount: 0,
     note: "",
     customerId: "",
+    currentBalance:0,
     user: userInfo?.id,
     warehouse: userInfo?.warehouse,
     status: "complete",
@@ -121,54 +121,50 @@ const CreateDueSelas = () => {
   };
   
 
-  
+  const [updateCustomer] = useUpdateCustomerMutation();
   const [createSale] = useAddSaleMutation()
 
-  const handleSubmit = async () => {
-    // Validation: ensure customer is selected
-    // if (!formData.customerId) {
-    //   alert("Please select a customer before submitting");
-    //   return;
-    // }
   
-    // if (!formData.amount || formData.amount <= 0) {
-    //   alert("Please enter a valid amount");
-    //   return;
-    // }
   
-    try {
-      const sales = await createSale(formData);
-      // console.log("SALE RESPONSE", JSON.stringify(sales, null, 2));
-      // alert("Sale created successfully!");
 
+const handleSubmit = async () => {
+  try {
+    // find selected customer
+    const selectedCustomer = data?.find(c => c._id === formData.customerId);
+    const newBalance = (selectedCustomer?.balance || 0) - formData.amount;
 
+    // create sale
+    const sales = await createSale(formData);
 
-
-      // Optionally, reset form
-      setFormData({
-        invoiceId: '',
-        date: new Date(),
-        amount: 0,
-        note: "",
-        customerId: "",
-        user: userInfo?.id,
-        warehouse: userInfo?.warehouse,
-        status: "complete",
+    // update customer balance
+    if(sales) {
+      await updateCustomer({
+        _id: formData.customerId,
+        balance: newBalance,
       });
 
-
-
-
-    } catch (err) {
-      console.log("Error creating sale:", err);
-      // alert("Error creating sale. Check console for details.");
+      // update local formData if needed
+      setFormData(prev => ({ ...prev, currentBalance: newBalance }));
     }
 
-    router.back()
-  };
-  
+    // reset form
+    setFormData({
+      invoiceId: '',
+      date: new Date(),
+      amount: 0,
+      note: "",
+      customerId: "",
+      currentBalance: 0,
+      user: userInfo?.id,
+      warehouse: userInfo?.warehouse,
+      status: "complete",
+    });
 
-
+    router.back();
+  } catch (err) {
+    console.log("Error creating sale:", err);
+  }
+};
   
 
   return (

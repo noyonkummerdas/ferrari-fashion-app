@@ -22,7 +22,7 @@ const CustomerDetails = () => {
     isDate:'month',
     forceRefetch: true,
   });
-  console.log("customer data", data);
+  // console.log("customer data", data);
 
   useEffect(() => {
     refetch();
