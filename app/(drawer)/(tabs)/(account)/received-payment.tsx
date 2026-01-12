@@ -4,6 +4,7 @@ import {
   useCustomerListQuery,
   useCustomerQuery,
   useGetCustomerByInvoiceQuery,
+  useUpdateCustomerMutation,
 } from "@/store/api/customerApi";
 import { useAddTransactionMutation } from "@/store/api/transactionApi";
 import { Ionicons } from "@expo/vector-icons";
@@ -55,6 +56,7 @@ const RecivedPayment = () => {
   const { data: customerList, isSuccess, refetch } = useCustomerListQuery({
     q: q,
   });
+  console.log('customer list', customerList);
 
 
   useEffect(() => {
@@ -136,24 +138,61 @@ console.log('get Invoice data', invoiceData)
     }
   };
 
-  const handleInputChange = (field: string, value: any) => {
-    if (field === "amount") {
-      const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({
+  // const handleInputChange = (field: string, value: any) => {
+  //   if (field === "amount") {
+  //     const numValue = parseInt(value) || 0;
+  //     setFormData((prev) => ({
+  //       ...prev,
+  //       [field]: numValue,
+  //       currentBalance:
+  //         customerData?.balance != null ? customerData.balance - numValue : -numValue,
+  //     }));
+  //   } else {
+  //     setFormData((prev) => ({ ...prev, [field]: value }));
+  //   }
+  // };
+
+  const handleInputChange = (field: string, value: string) => {
+    setFormData((prev) => {
+      const updated = {
         ...prev,
-        [field]: numValue,
-        currentBalance:
-          customerData?.balance != null ? customerData.balance - numValue : -numValue,
-      }));
-    } else {
-      setFormData((prev) => ({ ...prev, [field]: value }));
-    }
+        [field]: field === "amount" ? parseInt(value) || 0 : value
+      };
+      return updated;
+    });
   };
 
+
+  const [updateCustomer] = useUpdateCustomerMutation();
   const handleSubmit = async () => {
     try {
+
+      const selectedCustomer = customerList?.find(c => c._id === formData.customerId);
+    const newBalance = (selectedCustomer?.balance || 0) + formData.amount;
+
       const response = await createTransaction(formData).unwrap();
       console.log("Transaction created:", response);
+      if(response) {
+      await updateCustomer({
+        _id: formData.customerId,
+        balance: newBalance,
+      });
+
+      // update local formData if needed
+      setFormData(prev => ({ ...prev, currentBalance: newBalance }));
+    }
+
+    setFormData({
+      invoiceId: '',
+      date: new Date(),
+      amount: 0,
+      note: "",
+      customerId: "",
+      currentBalance: 0,
+      user: userInfo?.id,
+      warehouse: userInfo?.warehouse,
+      status: "complete",
+    });
     } catch (error) {
       console.error("Error creating transaction:", error);
     }

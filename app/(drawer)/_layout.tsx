@@ -288,7 +288,7 @@ const CustomDrawerComponent = (props: any) => {
       />
       {/* } */}
       {/* {userInfo?.permissions?.users && */}
-
+       {userInfo.type === 'admin' &&
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -311,6 +311,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/user")}
       />
+        }
 {/* } */}
 {/* {userInfo?.permissions?.users &&  */}
       <DrawerItem

@@ -27,6 +27,11 @@ const PaymentDetails = () => {
 
     // console.log("TRANSACTION DETAILS", data);
 
+
+    const newCurrentBalance = data?.openingBalance + data?.amount || 0;
+    console.log("NEW CURRENT BALANCE", newCurrentBalance);
+    
+
   useEffect(() => {
     refetch();
   }, [_id]);
@@ -232,7 +237,7 @@ const PaymentDetails = () => {
           <View className="flex-row justify-between items-center py-3 border-b border-gray-700">
             <Text className="text-gray-300 text-base">Transaction Amount</Text>
             <Text className="text-red-400 text-base font-medium">
-              -৳{data.amount?.toLocaleString()}
+              {data.amount?.toLocaleString()}
             </Text>
           </View>
 

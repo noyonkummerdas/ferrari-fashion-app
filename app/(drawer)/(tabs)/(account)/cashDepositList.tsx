@@ -69,7 +69,7 @@ const CashDepositList = () => {
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
     });
-    console.log('deposit data',data);
+    // console.log('deposit data',data);
 
   useEffect(() => {
     if (userInfo?.warehouse) {
@@ -151,7 +151,7 @@ const CashDepositList = () => {
     setShowDatePicker(false);
   };
 
-  console.log("SUMMARY", (data as any)?.summary);
+  // console.log("SUMMARY", (data as any)?.summary);
   return (
     <>
       <StatusBar style="light" backgroundColor="#000" />

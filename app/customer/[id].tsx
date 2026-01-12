@@ -110,7 +110,6 @@ const updateCustomer = () => {
       setForm({ ...form, photo: result.assets[0].uri });
     }
   };
-
   useEffect(() => {
     setForm({
       ...form,
@@ -126,13 +125,9 @@ const updateCustomer = () => {
       status: data?.status || "active",
     });
   }, [data, isSuccess]);
-
   useEffect(() => {
     refetch();
   }, [id]);
-  // console.log("FORM DATA",data)
-  // console.log("ID",data)
-
   const handleCreateCustomer = async () => {
     try {
       const response = await updateCustomer(form).unwrap();

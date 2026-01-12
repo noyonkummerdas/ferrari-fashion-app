@@ -118,19 +118,20 @@ const Accounts = () => {
         </Text>
           {/* opening & current balance  */}
         <View className="flex-row mb-4 w-full">
-          <View className="flex-1 bg-black-200 rounded-xl h-28 p-4 mr-2 ">
+          {/* <View className="flex-1 bg-black-200 rounded-xl h-28 p-4 mr-2 ">
             <View className="flex-row items-center justify-between mb-2 px-1">
               <Ionicons name="trending-up" size={22} color="#fdb714" />
               <Text className="text-gray-300">Opening Balance</Text>
             </View>
           <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
-          </View>
+          </View> */}
           <View className="flex-1 ml-2 bg-black-200 rounded-xl h-28 p-4 ">
-            <View className="flex-row items-center justify-between mb-2 px-1">
+            <View className="flex-row items-center mb-2 py-1">
               <Ionicons name="wallet" size={22} color="#fdb714" />
-              <Text className="text-gray-300">Current Balance</Text>
+              <Text className="text-gray-300 text-lg ml-3 text-white">Balance</Text>
             </View>
             <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
+            {/* <Text className="text-white text-xl font-pbold">100</Text> */}
           </View>
         </View>
      
@@ -191,7 +192,7 @@ const Accounts = () => {
       <View className="mt-2 flex-row bg-black-200 rounded-xl h-20 justify-center items-center border border-gray-700">
         <Ionicons name="storefront-outline" size={24} color="#FDB714" />
       <Text className="text-gray-200 text-lg p-2">
-          Warehouse Balance 
+          Pritty cash Balance 
         </Text>
      </View>
 

@@ -4,7 +4,7 @@ import PhotoUploader from "@/components/PhotoUploader";
 import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useAddPurchaseMutation } from "@/store/api/purchasApi";
-import { useSuppliersQuery } from "@/store/api/supplierApi";
+import { useSupplierByIdQuery, useSupplierQuery, useSuppliersQuery, useUpdateSupplierMutation } from "@/store/api/supplierApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import * as ImagePicker from "expo-image-picker";
@@ -36,9 +36,11 @@ const createPurchase = () => {
   // const [supplier, setSupplier] = useState("");
 
   const [q, setQ] = useState("all");
+  const [sid, setSid] = useState("");
   const { data, isSuccess, isLoading, refetch } = useSuppliersQuery({
     q: q,
   });
+  // console.log("SUPPLIER LIST DATA in create purchase:", data);
 
   // Form state
   const [formData, setFormData] = useState({
@@ -50,7 +52,7 @@ const createPurchase = () => {
     invoiceId: "",
     name: "",
     note: "",
-    type: "payment",
+    type: "purchase",
     user: userInfo?.id,
     warehouse: userInfo?.warehouse,
     status: "complete",
@@ -63,19 +65,31 @@ const createPurchase = () => {
     refetch: supplierRefetch,
   } = useSuppliersQuery(formData.supplierId);
 
+  
+
+  const {
+    data: supplierDataById,
+    isSuccess: supplierIsSuccessById,
+    refetch: supplierRefetchById,
+  } = useSupplierQuery({ _id: formData.supplierId, date: new Date().toISOString(), isDate: "false" });
+  const {data: supplierByIdData, isSuccess: supplierByIdIsSuccess} = useSupplierByIdQuery({ _id:sid });
+  
+  
   useEffect(() => {
     if (supplierData && supplierIsSuccess) {
       setFormData((prev) => ({
         ...prev,
-        openingBalance: supplierData?.currentBalance ?? 0,
-        currentBalance: supplierData?.currentBalance ?? 0,
+        openingBalance: supplierData?.balance ?? 0,
+        currentBalance: supplierData?.balance ?? 0,
       }));
     }
   }, [supplierData, supplierIsSuccess]);
 
+
+
   useEffect(() => {
-    supplierRefetch();
-  }, [formData.supplierId]);
+    supplierRefetchById();
+  }, [sid]);
 
   useEffect(() => {
     refetch();
@@ -128,8 +142,8 @@ const createPurchase = () => {
       setFormData((prev) => ({
         ...prev,
         [field]: numValue,
-        currentBalance: supplierData?.currentBalance
-          ? parseInt(supplierData?.currentBalance) - numValue
+        currentBalance: data?.currentBalance
+          ? parseInt(data?.currentBalance) - numValue
           : 0 - numValue,
       }));
     } else {
@@ -151,64 +165,26 @@ const createPurchase = () => {
 
    
   const [createPurchase]= useAddPurchaseMutation()
-  // const handleSubmit = async () => {
-  //   // console.log("Purchase Form Data:", formData);
-  //   // console.log("Photo URI:", formData.photo);
+  
+  const [updateSupplier] = useUpdateSupplierMutation();
 
-  //   try {
-  //     const formData = {
-  //       invoiceId,
-  //       amount,
-  //       supplierId,
-  //       date: format(new Date(), "yyyy-MM-dd"), 
-  //     };
-    
-  //     await createPurchase(formData);
-
-  //     const response = await createPurchase(formData).unwrap();
-  //     console.log("Purchase created:", response);
-  //   } catch (error) {
-  //     console.error("Error creating Purchase:", error);
-  //   }
-
-  //       router.back()
-
-  //   // Alert.alert(
-  //   //   "Success",
-  //   //   "Form data logged to console. Check console for details.",
-  //   //   [
-  //   //     {
-  //   //       text: "OK",
-  //   //       onPress: () => {
-  //   //         setFormData({
-  //   //           name: "",
-  //   //           user: userInfo?.id,
-  //   //           warehouse: userInfo?.warehouse,
-  //   //           amount: 0,
-  //   //           openingBalance: 0,
-  //   //           currentBalance: 0,
-  //   //           photo: "",
-  //   //           invoiceIds: "",
-  //   //           note: "",
-  //   //           date: new Date(),
-  //   //           type: "payment",
-  //   //           status: "complete",
-  //   //           supplierId: "",
-  //   //           invoiceId: "",
-  //   //         });
-  //   //         router.back();
-  //   //       },
-  //   //     },
-  //   //   ],
-  //   // );
-  // };
   const handleSubmit = async () => {
     try {
       const payload = {
         ...formData,
         poId: formData.invoiceId, // যদি backend poId expect করে
+        currentBalance: formData.amount + (supplierByIdData?.balance || 0),
       };
       const response = await createPurchase(payload).unwrap();
+      if (response) {
+        const udateSupplierBlance = await updateSupplier({
+          _id: formData.supplierId,
+          balance: formData.amount + (supplierByIdData?.balance || 0),
+        });
+        if (udateSupplierBlance) {
+          console.log("Success", "Payment created successfully", udateSupplierBlance);
+        }
+      }
       refetch();
       router.back();
       console.log("Purchase created:", response);
@@ -308,7 +284,26 @@ const createPurchase = () => {
   const removePhoto = () => {
     setFormData((prev) => ({ ...prev, photo: null }));
   };
+const handleDateChange = (
+  event: any,
+  selectedDate?: Date
+) => {
+  // Android এ cancel করলে
+  if (Platform.OS === "android") {
+    setShowDatePicker(false);
+  }
 
+  if (event?.type === "dismissed") {
+    return;
+  }
+
+  if (selectedDate) {
+    setFormData((prev) => ({
+      ...prev,
+      date: selectedDate,
+    }));
+  }
+};
   return (
     <>
     <KeyboardAvoidingView
@@ -337,8 +332,10 @@ const createPurchase = () => {
                 data={supplier}
                 value={formData.supplierId}
                 placeholder="Select Supplier"
-                onValueChange={(value: string) =>
+                onValueChange={(value: string) =>{
                   handleInputChange("supplierId", value)
+                  setSid(value)}
+                
                 }
                 onSearchChange={(query: string) => setQ(query)}
                 searchPlaceholder="Search suppliers..."
@@ -413,50 +410,6 @@ const createPurchase = () => {
                 aspectRatio={[9,19]}
                 />
 
-
-              {/* {formData.photo ? (
-                <View className="border border-black-200 bg-black-200 rounded-lg p-4">
-                  <Image
-                    source={{ uri: formData.photo }}
-                    className="w-full h-48 rounded-lg mb-3"
-                    resizeMode="cover"
-                  />
-                  <View className="flex-row gap-3">
-                    <TouchableOpacity
-                      className="flex-1 bg-red-600 p-3 rounded-lg"
-                      onPress={removePhoto}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-white text-center font-medium">
-                        Remove Photo
-                      </Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      className="flex-1 bg-primary p-3 rounded-lg"
-                      onPress={showPhotoOptions}
-                      activeOpacity={0.7}
-                    >
-                      <Text className="text-black text-center font-medium">
-                        Change Photo
-                      </Text>
-                    </TouchableOpacity>
-                  </View>
-                </View>
-              ) : (
-                <TouchableOpacity
-                  className="border border-black-200 bg-black-200 rounded-lg p-6 flex-col justify-center items-center"
-                  onPress={showPhotoOptions}
-                  activeOpacity={0.7}
-                >
-                  <Ionicons name="camera" size={32} color="#FDB714" />
-                  <Text className="text-white text-lg mt-2 font-medium">
-                    Upload Photo
-                  </Text>
-                  <Text className="text-gray-400 text-sm mt-1 text-center">
-                    Tap to select an image from your gallery
-                  </Text>
-                </TouchableOpacity>
-              )} */}
             </View>
 
             {/* Submit Button */}

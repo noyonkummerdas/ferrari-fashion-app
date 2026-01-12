@@ -19,6 +19,11 @@ export const SupplierApi = createApi({
       query: ({ _id, date, isDate }) => `/supplier/byTime/${_id}/${date}/${isDate}`,
       providesTags: ["Supplier"],
     }),
+    SupplierById: builder.query<any, { _id: string }>({
+      query: ({ _id }) => `/supplier/${_id}`,
+      providesTags: ["Supplier"],
+    }),
+    
     GetSupplierByInvoice: builder.query<string, any>({
            query: ({invoiceId}) => `/supplier/invoice/${invoiceId}`,
             keepUnusedDataFor: 0,
@@ -100,6 +105,7 @@ export const SupplierApi = createApi({
 
 export const {
   useSuppliersQuery,
+  useSupplierByIdQuery,
   useSupplierQuery,
   useSupplierTestQuery,
   useGetSupplierByInvoiceQuery,

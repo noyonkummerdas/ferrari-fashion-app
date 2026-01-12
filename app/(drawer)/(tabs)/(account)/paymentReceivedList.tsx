@@ -39,7 +39,7 @@ const PaymentReceivedList = () => {
           </TouchableOpacity>
         </View>
       ),
-      title: "Payment Received List",
+      title: "Payment Received",
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
       },
@@ -103,12 +103,25 @@ const PaymentReceivedList = () => {
   };
 
  
-  const filteredList = paymentReceivedList.filter(
-    (item) =>
-      item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
-      item?.amount?.toString()?.includes(search) ||
-      item?.date?.includes(search),
+  // const filteredList = paymentReceivedList.filter(
+  //   (item) =>
+  //     item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
+  //     item?.amount?.toString()?.includes(search) ||
+  //     item?.date?.includes(search),
+  // );
+  const filteredList = paymentReceivedList.filter((item) => {
+  const customerName = item?.customerId?.name?.toLowerCase() || "";  // Correct field for PaymentReceivedList
+  const amountStr = item?.amount?.toString() || "";                  // amount safe
+  const dateStr = item?.date ? format(new Date(item.date), "dd-MM-yyyy") : ""; // date safe
+  const term = search.toLowerCase();
+
+  // match either name, amount or date
+  return (
+    customerName.includes(term) ||
+    amountStr.includes(term) ||
+    dateStr.includes(term)
   );
+});
 
   // Date navigation functions
   const goToPreviousDay = () => {
@@ -149,7 +162,6 @@ const PaymentReceivedList = () => {
   return (
     <>
     <StatusBar style="light" backgroundColor="#000" />
-    <ScrollView>
       {/* calendar */}
 
       <View className="mt-2 mb-2">
@@ -181,12 +193,12 @@ const PaymentReceivedList = () => {
             onPress={goToNextDay}
             disabled={isToday(currentDay)}
             className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
-          >
+            >
             <Ionicons
               name="arrow-forward"
               size={24}
               color={isToday(currentDay) ? "#666" : "white"}
-            />
+              />
           </TouchableOpacity>
         </View>
       </View>
@@ -222,7 +234,7 @@ const PaymentReceivedList = () => {
                 <TouchableOpacity
                   onPress={cancelDateSelection}
                   className="px-6 py-3 rounded-lg bg-gray-600"
-                >
+                  >
                   <Text className="text-white font-semibold">Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -249,9 +261,10 @@ const PaymentReceivedList = () => {
             borderWidth: 0,
             width: "100%",
           }}
-        />
+          />
         <Ionicons name="search" size={20} color="#fdb714" />
       </View>
+          <ScrollView>
 
       {filteredList?.length > 0 ? (
         filteredList?.map((item) => (
