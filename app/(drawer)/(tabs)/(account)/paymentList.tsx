@@ -102,12 +102,25 @@ const PaymentList = () => {
   };
 
 
-  const filteredList = paymentList.filter(
-    (item) =>
-      item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
-      item?.amount?.toString()?.includes(search) ||
-      item?.date?.includes(search),
+  // const filteredList = paymentList.filter(
+  //   (item) =>
+  //     item?.name?.toLowerCase()?.includes(search.toLowerCase()) ||
+  //     item?.amount?.toString()?.includes(search) ||
+  //     item?.date?.includes(search),
+  // );
+
+  const filteredList = paymentList.filter((item) => {
+  const supplierName = item?.supplierId?.name?.toLowerCase() || "";  // name safe
+  const amountStr = item?.amount?.toString() || "";                   // amount safe
+  const dateStr = item?.date ? format(new Date(item.date), "dd-MM-yyyy") : ""; // date safe
+  const term = search.toLowerCase();
+
+  return (
+    supplierName.includes(term) ||
+    amountStr.includes(term) ||
+    dateStr.includes(term)
   );
+});
 
   // Date navigation functions
   const goToPreviousDay = () => {
@@ -137,7 +150,6 @@ const PaymentList = () => {
   return (
     <>
       <StatusBar style="light" backgroundColor="#000" />
-    <ScrollView>
       {/* calendar */}
       <View className="mt-2 mb-2">
         <View className="flex flex-row justify-between items-center bg-black-200  p-2 rounded-lg mx-4">
@@ -148,7 +160,7 @@ const PaymentList = () => {
           <TouchableOpacity
             onPress={openDatePicker}
             className="flex flex-row items-center px-4  rounded-lg"
-          >
+            >
             <Text className="text-white text-lg me-2">{formattedDate.day}</Text>
             <Text className="text-primary text-lg">
               {formattedDate.month}
@@ -161,19 +173,19 @@ const PaymentList = () => {
               size={20}
               color="#fdb714"
               className="ml-2"
-            />
+              />
           </TouchableOpacity>
 
           <TouchableOpacity
             onPress={goToNextDay}
             disabled={isToday(currentDay)}
             className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
-          >
+            >
             <Ionicons
               name="arrow-forward"
               size={24}
               color={isToday(currentDay) ? "#666" : "white"}
-            />
+              />
           </TouchableOpacity>
         </View>
       </View>
@@ -181,11 +193,11 @@ const PaymentList = () => {
       {/* Date Picker Modal */}
       {showDatePicker && (
         <DateTimePicker
-          value={currentDay}   // ✅ always show selected date
-          mode="date"
-          display={Platform.OS === "ios" ? "spinner" : "default"}
-          onChange={handleDateChange}
-          maximumDate={new Date()}
+        value={currentDay}   // ✅ always show selected date
+        mode="date"
+        display={Platform.OS === "ios" ? "spinner" : "default"}
+        onChange={handleDateChange}
+        maximumDate={new Date()}
         />
       )}
 
@@ -201,9 +213,10 @@ const PaymentList = () => {
             borderWidth: 0,
             width: "100%",
           }}
-        />
+          />
         <Ionicons name="search" size={20} color="#fdb714" />
       </View>
+          <ScrollView>
 
       {filteredList?.length > 0 ? (
         filteredList?.map((item) => (

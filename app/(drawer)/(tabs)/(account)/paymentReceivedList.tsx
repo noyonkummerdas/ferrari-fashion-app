@@ -39,7 +39,7 @@ const PaymentReceivedList = () => {
           </TouchableOpacity>
         </View>
       ),
-      title: "Payment Received List",
+      title: "Payment Received",
       headerStyle: {
         backgroundColor: Colors[colorScheme ?? "dark"].backgroundColor,
       },
