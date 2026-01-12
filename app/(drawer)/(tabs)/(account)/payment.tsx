@@ -132,6 +132,29 @@ const Payment = () => {
     month: "long",
   })}, ${today.getFullYear()}`;
 
+
+  const handleDateChange = (
+  event: any,
+  selectedDate?: Date
+) => {
+  // Android এ cancel করলে
+  if (Platform.OS === "android") {
+    setShowDatePicker(false);
+  }
+
+  if (event?.type === "dismissed") {
+    return;
+  }
+
+  if (selectedDate) {
+    setFormData((prev) => ({
+      ...prev,
+      date: selectedDate,
+    }));
+  }
+};
+
+
   /* ---------------- UI ---------------- */
   return (
     <>
@@ -178,6 +201,9 @@ const Payment = () => {
                 <Ionicons name="calendar" size={22} color="#FDB714" />
               </TouchableOpacity>
             </View>
+
+
+            
 
             {/* Amount */}
             <View className="mb-4">

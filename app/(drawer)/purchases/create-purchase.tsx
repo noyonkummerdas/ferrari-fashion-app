@@ -271,27 +271,6 @@ const createPurchase = () => {
       ]);
     }
   };
-  const handleDateChange = (
-  event: any,
-  selectedDate?: Date
-) => {
-  // Android এ cancel করলে
-  if (Platform.OS === "android") {
-    setShowDatePicker(false);
-  }
-
-  if (event?.type === "dismissed") {
-    return;
-  }
-
-  if (selectedDate) {
-    setFormData((prev) => ({
-      ...prev,
-      date: selectedDate,
-    }));
-  }
-};
-
 
   const showPhotoOptions = () => {
     Alert.alert("Photo Upload", "Choose how you want to add a photo", [
@@ -313,7 +292,26 @@ const createPurchase = () => {
   const removePhoto = () => {
     setFormData((prev) => ({ ...prev, photo: null }));
   };
+const handleDateChange = (
+  event: any,
+  selectedDate?: Date
+) => {
+  // Android এ cancel করলে
+  if (Platform.OS === "android") {
+    setShowDatePicker(false);
+  }
 
+  if (event?.type === "dismissed") {
+    return;
+  }
+
+  if (selectedDate) {
+    setFormData((prev) => ({
+      ...prev,
+      date: selectedDate,
+    }));
+  }
+};
   return (
     <>
     <KeyboardAvoidingView
@@ -419,6 +417,7 @@ const createPurchase = () => {
                 previewStyle={"square"}
                 aspectRatio={[9,19]}
                 />
+
             </View>
 
             {/* Submit Button */}
