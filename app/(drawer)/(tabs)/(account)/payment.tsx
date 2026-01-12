@@ -146,13 +146,16 @@ const Payment = () => {
   return (
     <>
       <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        className="flex-1"
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      className="flex-1"
+      keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+    >
+       <ScrollView
+        className="px-6 pt-4"
+        contentContainerStyle={{ paddingBottom: 300 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
       >
-        <ScrollView
-          className="flex-1 px-6 pt-4"
-          keyboardShouldPersistTaps="handled"
-        >
           <View className="flex-1 bg-dark">
             <StatusBar style="light" />
 

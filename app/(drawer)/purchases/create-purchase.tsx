@@ -80,7 +80,7 @@ const createPurchase = () => {
 
   const {data: supplierByIdData, isSuccess: supplierByIdIsSuccess} = useSupplierByIdQuery({ _id:sid });
 
-  console.log('supplierByIdData', supplierByIdData, supplierByIdIsSuccess, sid);
+  // console.log('supplierByIdData', supplierByIdData, supplierByIdIsSuccess, sid);
   
   
   useEffect(() => {
