@@ -162,7 +162,6 @@ const PaymentReceivedList = () => {
   return (
     <>
     <StatusBar style="light" backgroundColor="#000" />
-    <ScrollView>
       {/* calendar */}
 
       <View className="mt-2 mb-2">
@@ -194,12 +193,12 @@ const PaymentReceivedList = () => {
             onPress={goToNextDay}
             disabled={isToday(currentDay)}
             className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
-          >
+            >
             <Ionicons
               name="arrow-forward"
               size={24}
               color={isToday(currentDay) ? "#666" : "white"}
-            />
+              />
           </TouchableOpacity>
         </View>
       </View>
@@ -235,7 +234,7 @@ const PaymentReceivedList = () => {
                 <TouchableOpacity
                   onPress={cancelDateSelection}
                   className="px-6 py-3 rounded-lg bg-gray-600"
-                >
+                  >
                   <Text className="text-white font-semibold">Cancel</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
@@ -262,9 +261,10 @@ const PaymentReceivedList = () => {
             borderWidth: 0,
             width: "100%",
           }}
-        />
+          />
         <Ionicons name="search" size={20} color="#fdb714" />
       </View>
+          <ScrollView>
 
       {filteredList?.length > 0 ? (
         filteredList?.map((item) => (
