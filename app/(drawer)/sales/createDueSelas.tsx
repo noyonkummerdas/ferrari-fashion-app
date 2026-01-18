@@ -64,7 +64,7 @@ const CreateDueSelas = () => {
     status: "complete",
 
   });
-  console.log('saleData for invoiceId ', data)
+  // console.log('saleData for invoiceId ', data)
 
   // date formatting
   const today = new Date();

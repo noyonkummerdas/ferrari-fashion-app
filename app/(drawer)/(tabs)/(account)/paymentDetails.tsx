@@ -13,25 +13,15 @@ import {
   useColorScheme,
   View,
 } from "react-native";
-
 const PaymentDetails = () => {
   const { _id } = useLocalSearchParams();
   const colorScheme = useColorScheme();
   const navigation = useNavigation();
-
   const { userInfo,  } = useGlobalContext();
   const type = userInfo?.type
-
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionQuery(_id as string);
-
-    // console.log("TRANSACTION DETAILS", data);
-
-
     const newCurrentBalance = data?.openingBalance + data?.amount || 0;
-    console.log("NEW CURRENT BALANCE", newCurrentBalance);
-    
-
   useEffect(() => {
     refetch();
   }, [_id]);

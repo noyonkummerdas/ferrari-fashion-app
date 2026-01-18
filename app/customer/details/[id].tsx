@@ -5,7 +5,7 @@ import { addMonths, format, subMonths } from "date-fns";
 import { useLocalSearchParams, useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-import { KeyboardAvoidingView, Modal, Platform, ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { Modal, ScrollView, Text, TouchableOpacity, View } from "react-native";
 
 const CustomerDetails = () => {
   const { id } = useLocalSearchParams();
@@ -82,11 +82,7 @@ const CustomerDetails = () => {
   return (
     <>
     <StatusBar style="light" backgroundColor="#000" />
-    <KeyboardAvoidingView
-          behavior={Platform.OS === "ios" ? "padding" : "height"}
-          className="flex-1 bg-dark"
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-        >
+    
         <ScrollView className="bg-dark p-4"
         
                contentContainerStyle={{ paddingBottom: 360 }}
@@ -230,7 +226,6 @@ const CustomerDetails = () => {
         </View>
       </Modal>
           </ScrollView>
-    </KeyboardAvoidingView>
     </>
   );
 };

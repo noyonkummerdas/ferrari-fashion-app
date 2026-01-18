@@ -311,7 +311,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/user")}
       />
-        }
+       }
 {/* } */}
 {/* {userInfo?.permissions?.users &&  */}
       <DrawerItem

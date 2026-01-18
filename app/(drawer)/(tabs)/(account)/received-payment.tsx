@@ -56,7 +56,7 @@ const RecivedPayment = () => {
   const { data: customerList, isSuccess, refetch } = useCustomerListQuery({
     q: q,
   });
-  console.log('customer list', customerList);
+  // console.log('customer list', customerList);
 
 
   useEffect(() => {
@@ -82,7 +82,7 @@ const RecivedPayment = () => {
     { invoiceId: search },
     { skip: !search }
   );
-console.log('get Invoice data', invoiceData)
+// console.log('get Invoice data', invoiceData)
   useEffect(() => {
     if (search) invoiceRefetch();
   }, [search]);
