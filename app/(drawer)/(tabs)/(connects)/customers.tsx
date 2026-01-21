@@ -42,6 +42,7 @@ const Customers = () => {
   const { data, error, isLoading, refetch } = useCustomerListQuery({
     q: searchQuery || "all",
   });
+  // console.log("customer list error", data);
   // console.log("customer list data", data);
   // reset search data
   const resetData = () => {

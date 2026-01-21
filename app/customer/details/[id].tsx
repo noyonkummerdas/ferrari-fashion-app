@@ -22,7 +22,7 @@ const CustomerDetails = () => {
     isDate:'month',
     forceRefetch: true,
   });
-  // console.log("customer data", data);
+  console.log("customer data", data);
 
   useEffect(() => {
     refetch();
@@ -147,7 +147,7 @@ const CustomerDetails = () => {
           <View className="flex bg-black-200 items-center justify-center p-5 w-[360px] mx-auto text-center rounded-lg m-1">
             <Text className="text-white text-xl">Due Balance</Text>
             <Text className="text-primary font-bold text-lg text-center">
-              {data?.customer?.currentBalance} <Text className="text-white">BDT</Text>
+              {data?.customer?.balance} <Text className="text-white">BDT</Text>
             </Text>
           </View>
         </View>
