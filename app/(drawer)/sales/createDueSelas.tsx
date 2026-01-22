@@ -64,7 +64,7 @@ const CreateDueSelas = () => {
     status: "complete",
 
   });
-  console.log('saleData for invoiceId ', data)
+  // console.log('saleData for invoiceId ', data)
 
   // date formatting
   const today = new Date();
@@ -131,7 +131,7 @@ const handleSubmit = async () => {
   try {
     // find selected customer
     const selectedCustomer = data?.find(c => c._id === formData.customerId);
-    const newBalance = (selectedCustomer?.balance || 0) - formData.amount;
+    const newBalance = (selectedCustomer?.balance || 0) + formData.amount;
 
     // create sale
     const sales = await createSale(formData);

@@ -145,7 +145,7 @@ const WarehouserBalance = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Warehouser Balance",
+      title: "Pritty cash Balance",
       headerStyle: { backgroundColor: "#000" },
       headerLeft: () => (
         <Link href="/" className="ms-2">
