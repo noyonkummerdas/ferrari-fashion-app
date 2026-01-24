@@ -22,3 +22,16 @@ allprojects {
 
 apply plugin: "expo-root-project"
 apply plugin: "com.facebook.react.rootproject"
+
+// Force a newer Material Components version for transitive dependencies
+subprojects {
+  afterEvaluate { project ->
+    try {
+      project.configurations.all {
+        resolutionStrategy.force 'com.google.android.material:material:1.9.0'
+      }
+    } catch (ignored) {
+      // Some subprojects may not have configurations; ignore them.
+    }
+  }
+}

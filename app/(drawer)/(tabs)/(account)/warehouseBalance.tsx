@@ -62,7 +62,16 @@ const WarehouserBalance = () => {
       forceRefetch: true,
     });
     console.log('cashoutData', cashoutData);
-
+  const { data: payment, isLoading: isLodingPayment, refetch: refetchPayment } =
+    useTransactionListQuery({
+      warehouse: userInfo?.warehouse,
+      type: "payment",
+      date: format(currentDay, "MM-dd-yyyy"),
+      startDate,
+      endDate,
+      forceRefetch: true,
+    });
+    console.log('payment', payment);
   const { data: warehouseData } = useWarehousesQuery();
 
   // Refresh on date/id change
