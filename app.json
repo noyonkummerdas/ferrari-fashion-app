@@ -3,7 +3,7 @@
     "name": "FFApp",
     "slug": "ff-app",
     "version": "1.0.1",
-    "orientation": "portrait",
+    "orientation": "default",
     "icon": "./assets/images/icon.png",
     "scheme": "ffapp",
     "userInterfaceStyle": "light",

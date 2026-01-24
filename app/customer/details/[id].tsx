@@ -22,7 +22,8 @@ const CustomerDetails = () => {
     isDate:'month',
     forceRefetch: true,
   });
-  console.log("customer data", data);
+  // console.log("customer data", data);
+  
 
   useEffect(() => {
     refetch();
@@ -90,7 +91,7 @@ const CustomerDetails = () => {
                showsVerticalScrollIndicator={false}
         >
         {/* Customer Info */}
-        <View className="px-4 space-y-2">
+        <View className="px-4 space-y-2 flex flex-row mb-4 justify-between items-center">
           <View key={data?.customer?._id} className="mb-4">
             <View className="flex flex-row ">
               <Ionicons name="business-outline" size={18} color={"#fdb714"} />
@@ -105,6 +106,15 @@ const CustomerDetails = () => {
               <Text className="text-gray-400 p-1 ms-2">{data?.customer?.address}</Text>
             </View>
           </View>
+
+          <TouchableOpacity
+            disabled={!data?.customer}
+            onPress={() => router.push(`customer/customerLadger`)}
+            className="flex flex-row items-center bg-primary px-4 py-2 rounded-lg"
+          >
+            <Ionicons name="book-outline" size={20} color="white" />
+            <Text className="text-white text-lg ms-2">Ledger</Text>
+          </TouchableOpacity>
         </View>
 
         {/* Calendar header */}
