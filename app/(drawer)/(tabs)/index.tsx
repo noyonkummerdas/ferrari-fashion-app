@@ -275,13 +275,13 @@ useEffect(() => {
                 />
               <StatItem 
               title="Stock Items"
-               value={dashboardData?.customerCount || 0}
+               value={dashboardData?.productCount || 0}
                iconName="archive"
                onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
                 />
               <StatItem 
               title="Suppliers"
-               value={dashboardData?.productCount || 0}
+               value={dashboardData?.supplierCount || 0}
                iconName="people"
                onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers" as any)}
                 />
