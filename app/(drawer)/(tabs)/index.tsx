@@ -271,12 +271,12 @@ export default function PosDashboard() {
               iconName="cube"
               onPress={() => router.push("/(drawer)/(tabs)/(stock)/products")}
             />
-            <StatItem
+            {/* <StatItem
               title="Stock Items"
               value={dashboardData?.productCount || 0}
               iconName="archive"
               onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
-            />
+            /> */}
             <StatItem
               title="Suppliers"
               value={dashboardData?.supplierCount || 0}
