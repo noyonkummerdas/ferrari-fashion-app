@@ -87,14 +87,14 @@ export default function PosDashboard() {
     } else {
       setStartDate(format(new Date(), "MM-dd-yyyy"));
     }
-    // refetch();
+    refetch();
   };
 
   // Function to fetch updated data
   const onRefresh = () => {
     setRefreshing(true);
 
-    // refetch();
+    refetch();
     // chartRefetch();
     // latestRefetch();
     // Simulate fetching dashboard data
