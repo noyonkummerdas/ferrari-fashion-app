@@ -522,7 +522,7 @@ const CashDepositList = () => {
         {Object.keys(searchedList).length > 0 ? (
           Object.keys(searchedList).map(date => (
             <View key={date} className="mb-4">
-              <Text className="text-white text-lg font-bold mx-4 mt-2">{format(new Date(date), "dd MMM yyyy")}</Text>
+              {/* <Text className="text-white text-lg font-bold mx-4 mt-2">{format(new Date(date), "dd MMM yyyy")}</Text> */}
               {searchedList[date].map((item, index) => (
                 <TouchableOpacity
                   key={item._id || index}

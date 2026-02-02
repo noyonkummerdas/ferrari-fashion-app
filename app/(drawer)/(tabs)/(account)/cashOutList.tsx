@@ -498,7 +498,7 @@ const CashOutList = () => {
         {Object.keys(searchedList).length > 0 ? (
           Object.keys(searchedList).map(date => (
             <View key={date} className="mb-4">
-              <Text className="text-white text-lg font-bold mx-4 mt-2">{format(new Date(date), "dd MMM yyyy")}</Text>
+              {/* <Text className="text-white text-lg font-bold mx-4 mt-2">{format(new Date(date), "dd MMM yyyy")}</Text> */}
               {searchedList[date].map((item, index) => (
                 <TouchableOpacity key={item._id || index} onPress={() => router.push({ pathname: "/cashOutDetails", params: { _id: item._id } })} className="flex-row justify-between bg-black-200 rounded-xl p-4 mx-4 mt-2 items-center">
                   <View className="flex flex-col items-start">
