@@ -165,7 +165,7 @@ export default function CustomerDueReport() {
         </View>
 
         {/* List */}
-        <FlatList
+        {/* <FlatList
           data={customerDue}
           keyExtractor={(item) => item._id}
           renderItem={({ item }) => (
@@ -183,7 +183,33 @@ export default function CustomerDueReport() {
               </View>
             </View>
           )}
-        />
+        /> */}
+        <FlatList
+  data={customerDue}
+  keyExtractor={(item, index) =>
+    item?._id ? item._id.toString() : index.toString()
+  }
+  renderItem={({ item }) => (
+    <View className="bg-black-200 p-4 rounded-2xl mb-3">
+      <View className="flex-row justify-between items-center">
+        <Text className="text-gray-200 text-xl font-semibold">
+          {item?.customerName}
+        </Text>
+      </View>
+
+      <View className="flex-row justify-between items-center mt-2">
+        <Text className="text-gray-400 font-bold">
+          {item?.formatedDate}
+        </Text>
+
+        <Text className="text-gray-300 font-bold text-lg">
+          Due <Text className="text-primary">{item?.amount}</Text> BDT
+        </Text>
+      </View>
+    </View>
+  )}
+/>
+
       </View>
     </>
   );
