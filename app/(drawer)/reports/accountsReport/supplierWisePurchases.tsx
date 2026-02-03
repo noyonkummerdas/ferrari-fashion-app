@@ -158,7 +158,7 @@ export default function SupplierPaymentReport() {
       </View>
 
       {/* List */}
-      <FlatList
+      {/* <FlatList
         data={purchasesData}
         keyExtractor={(item) => item?.id}
         renderItem={({ item }) => (
@@ -170,7 +170,31 @@ export default function SupplierPaymentReport() {
             </View>
           </View>
         )}
-      />
+      /> */}
+      <FlatList
+  data={purchasesData}
+  keyExtractor={(item, index) =>
+    item?.id ? item.id.toString() : index.toString()
+  }
+  renderItem={({ item }) => (
+    <View className="bg-black-200 p-4 rounded-xl mb-3">
+      <Text className="text-gray-200 font-semibold text-lg">
+        {item?.supplierName}
+      </Text>
+
+      <View className="flex-row justify-between mt-2">
+        <Text className="text-gray-400">
+          {item?.formatedDate}
+        </Text>
+
+        <Text className="text-primary font-bold text-lg">
+          {item?.amount?.toLocaleString()}
+          <Text className="text-gray-200"> BDT</Text>
+        </Text>
+      </View>
+    </View>
+  )}
+/>
     </View>
      </>
   );
