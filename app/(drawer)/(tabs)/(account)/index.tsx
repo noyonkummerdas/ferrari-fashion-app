@@ -89,23 +89,14 @@ const Accounts = () => {
   const totalReceivedPaymentAmount = receivedPaymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
 
-  const Balance = (totalDepositAmount - totalCashOutAmount);
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setOpeningBalance(Balance);
-  //     setCurrentBalance(Balance);
-  //   }, 24 * 60 * 60 * 1000); // 24 hours = 86400000 ms
-
-  //   return () => clearInterval(timer);
-  // }, [Balance]);
+  const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
+  const Balance = warehouseInfo?.currentBalance || 0;
 
   useEffect(() => {
-    // ekbar calculation kore state set kora
+    // Keep internal state if needed for consistency
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
-    // kono interval nai, tai value lifetime thakbe
-  }, [Balance]); // sudhu Balance change hole set hobe
+  }, [Balance]);
 
   return (
 

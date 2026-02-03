@@ -53,9 +53,17 @@ export const TransactionApi = createApi({
 
     // new to cashIn report
     cashInTransaction: builder.query<Transaction[], { warehouse: string; date?: string }>({
-  query: ({ warehouse, date }) => `/transaction/list/${warehouse}/deposit/${date || ""}`,
-  providesTags: ["Transaction"],
-}),
+      query: ({ warehouse, date }) => `/transaction/list/${warehouse}/deposit/${date || ""}`,
+      providesTags: ["Transaction"],
+    }),
+    addBalanceTransaction: builder.mutation<{}, Transaction>({
+      query: (Transaction) => ({
+        url: "/transaction/balance",
+        method: "POST",
+        body: Transaction,
+      }),
+      invalidatesTags: ["Transaction", "Warehouse" as any],
+    }),
   }),
 });
 
@@ -68,6 +76,7 @@ export const {
   useUpdateTransactionMutation,
   useDeleteTransactionMutation,
   useCashInTransactionQuery,
+  useAddBalanceTransactionMutation,
 } = TransactionApi;
 
 export default TransactionApi;

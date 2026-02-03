@@ -15,12 +15,12 @@ export const warehouseApi = createApi({
       providesTags: ["Warehouse"],
     }),
     Warehouse: builder.query<WarehouseTypes, any>({
-      query: ({_id, date}) => `/warehouse/${_id}/${date}`,
-      providesTags: ["Warehouse"],
+      query: (_id) => `/warehouse/${_id}`,
+      providesTags: (result, error, _id) => [{ type: "Warehouse", id: _id }],
     }),
     WarehouseAccounts: builder.query<WarehouseTypes, any>({
-      query: ({_id, date}) => `/warehouse/accounts/${_id}/${date}`,
-      providesTags: ["Warehouse"],
+      query: ({ _id, date }) => `/warehouse/accounts/${_id}/${date}`,
+      providesTags: (result, error, { _id }) => [{ type: "Warehouse", id: _id }],
     }),
     addWarehouse: builder.mutation<{}, WarehouseTypes>({
       query: (Warehouse) => ({
@@ -36,14 +36,14 @@ export const warehouseApi = createApi({
         method: "PUT",
         body: rest,
       }),
-      invalidatesTags: ["Warehouse"],
+      invalidatesTags: (result, error, { _id }) => [{ type: "Warehouse", id: _id }],
     }),
     deleteWarehouse: builder.mutation<void, string>({
       query: (id) => ({
         url: `/warehouse/${id}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["Warehouse"],
+      invalidatesTags: (result, error, id) => [{ type: "Warehouse", id }],
     }),
   }),
 });
