@@ -20,7 +20,7 @@ const CashDepositDetails = () => {
   const router = useRouter();
   const navigation = useNavigation();
   const { userInfo } = useGlobalContext();
-// const type = userInfo?.type
+  // const type = userInfo?.type
 
   const { data, isSuccess, isLoading, refetch } = useWarehouseQuery(
     userInfo?.warehouse,
@@ -116,12 +116,7 @@ const CashDepositDetails = () => {
     if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
-
-      setFormData((prev) => ({
-        ...prev,
-        [field]: numValue,
-        currentBalance: parseInt(data?.currentBalance) + numValue,
-      }));
+      setFormData((prev) => ({ ...prev, [field]: numValue }));
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -143,11 +138,11 @@ const CashDepositDetails = () => {
       // console.log("Transaction created:", response);
     } catch (error) {
       // console.error("Error creating transaction:", error);
-    
-    }
-      router.back();
 
-    
+    }
+    router.back();
+
+
   };
 
   const formatDate = (date: Date) => {
@@ -165,12 +160,12 @@ const CashDepositDetails = () => {
       keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
     >
       <ScrollView
-            className="flex-1 px-6 pt-4"
-            contentContainerStyle={{ paddingBottom: 300 }}
-            keyboardShouldPersistTaps="handled"
-            showsVerticalScrollIndicator={false}
-          >
-      <StatusBar style="light" backgroundColor="#000" />
+        className="flex-1 px-6 pt-4"
+        contentContainerStyle={{ paddingBottom: 300 }}
+        keyboardShouldPersistTaps="handled"
+        showsVerticalScrollIndicator={false}
+      >
+        <StatusBar style="light" backgroundColor="#000" />
 
         {/* Name Input */}
         <View className="mb-4">
@@ -237,59 +232,59 @@ const CashDepositDetails = () => {
           </Text>
         </TouchableOpacity>
 
-      {/* Date Picker Modal */}
-      {showDatePicker && (
-        <View className="absolute inset-0 bg-black/70 justify-center items-center z-50">
-          <View className="bg-gray-900 rounded-2xl p-6 w-full border border-gray-700 shadow-2xl">
-            <View className="flex-row justify-between items-center mb-6">
-              <Text className="text-white text-xl font-bold">Select Date</Text>
-              <TouchableOpacity
-                onPress={() => setShowDatePicker(false)}
-                className="p-2"
-              >
-                <Ionicons name="close" size={24} color="#9CA3AF" />
-              </TouchableOpacity>
-            </View>
-
-            <View className="bg-gray-800 rounded-xl p-4 mb-6">
-              <DateTimePicker
-                value={formData.date}
-                mode="date"
-                display={Platform.OS === "ios" ? "spinner" : "default"}
-                onChange={handleDateChange}
-                maximumDate={new Date()}
-                minimumDate={new Date(2020, 0, 1)}
-                textColor="#ffffff"
-                themeVariant="dark"
-              />
-            </View>
-
-            {Platform.OS === "ios" && (
-              <View className="flex-row gap-3">
+        {/* Date Picker Modal */}
+        {showDatePicker && (
+          <View className="absolute inset-0 bg-black/70 justify-center items-center z-50">
+            <View className="bg-gray-900 rounded-2xl p-6 w-full border border-gray-700 shadow-2xl">
+              <View className="flex-row justify-between items-center mb-6">
+                <Text className="text-white text-xl font-bold">Select Date</Text>
                 <TouchableOpacity
-                  className="w-52 bg-gray-700 p-4 rounded-xl border border-gray-600"
                   onPress={() => setShowDatePicker(false)}
-                  activeOpacity={0.7}
+                  className="p-2"
                 >
-                  <Text className="text-gray-300 text-center font-semibold text-lg">
-                    Cancel
-                  </Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  className="flex-1 bg-primary p-4 rounded-xl"
-                  onPress={() => setShowDatePicker(false)}
-                  activeOpacity={0.7}
-                >
-                  <Text className="text-black text-center font-bold text-lg">
-                    Confirm
-                  </Text>
+                  <Ionicons name="close" size={24} color="#9CA3AF" />
                 </TouchableOpacity>
               </View>
-            )}
+
+              <View className="bg-gray-800 rounded-xl p-4 mb-6">
+                <DateTimePicker
+                  value={formData.date}
+                  mode="date"
+                  display={Platform.OS === "ios" ? "spinner" : "default"}
+                  onChange={handleDateChange}
+                  maximumDate={new Date()}
+                  minimumDate={new Date(2020, 0, 1)}
+                  textColor="#ffffff"
+                  themeVariant="dark"
+                />
+              </View>
+
+              {Platform.OS === "ios" && (
+                <View className="flex-row gap-3">
+                  <TouchableOpacity
+                    className="w-52 bg-gray-700 p-4 rounded-xl border border-gray-600"
+                    onPress={() => setShowDatePicker(false)}
+                    activeOpacity={0.7}
+                  >
+                    <Text className="text-gray-300 text-center font-semibold text-lg">
+                      Cancel
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    className="flex-1 bg-primary p-4 rounded-xl"
+                    onPress={() => setShowDatePicker(false)}
+                    activeOpacity={0.7}
+                  >
+                    <Text className="text-black text-center font-bold text-lg">
+                      Confirm
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </View>
           </View>
-        </View>
-      )}
-    </ScrollView>
+        )}
+      </ScrollView>
     </KeyboardAvoidingView>
   );
 };

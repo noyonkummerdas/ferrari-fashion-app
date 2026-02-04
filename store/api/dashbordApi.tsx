@@ -6,8 +6,9 @@ const DashbordApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
   tagTypes: ["Dashbord"],
   endpoints: (builder) => ({
-    dashbord: builder.query<any , any>({
-      query: ({date,warehouse}) => `/dashboard/byDate/${warehouse}/${date}`,
+    dashbord: builder.query<any, any>({
+      query: ({ date, warehouse }) => `/dashboard/byDate/${warehouse}/${date}`,
+      providesTags: ["Dashbord"],
     }),
   }),
 });

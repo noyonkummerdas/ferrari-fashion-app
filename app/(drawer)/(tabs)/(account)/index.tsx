@@ -9,6 +9,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 // import { useColorScheme } from "react-native";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionListQuery } from "@/store/api/transactionApi";
+import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { format } from "date-fns";
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -89,23 +90,14 @@ const Accounts = () => {
   const totalReceivedPaymentAmount = receivedPaymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
 
-  const Balance = (totalDepositAmount - totalCashOutAmount);
-
-  // useEffect(() => {
-  //   const timer = setInterval(() => {
-  //     setOpeningBalance(Balance);
-  //     setCurrentBalance(Balance);
-  //   }, 24 * 60 * 60 * 1000); // 24 hours = 86400000 ms
-
-  //   return () => clearInterval(timer);
-  // }, [Balance]);
+  const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
+  const Balance = warehouseInfo?.currentBalance || 0;
 
   useEffect(() => {
-    // ekbar calculation kore state set kora
+    // Sync with backend balance directly
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
-    // kono interval nai, tai value lifetime thakbe
-  }, [Balance]); // sudhu Balance change hole set hobe
+  }, [Balance]);
 
   return (
 

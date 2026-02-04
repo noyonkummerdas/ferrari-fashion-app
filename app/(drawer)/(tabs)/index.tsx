@@ -4,6 +4,7 @@ import { WelcomeCard } from "@/components/WelcomeCard";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useDashbordQuery } from "@/store/api/dashbordApi";
 import { useGetuserPhotoQuery } from "@/store/api/userApi";
+import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
@@ -153,15 +154,13 @@ export default function PosDashboard() {
       </ItemWrapper>
     );
   };
-  const cashIn = dashboardData?.accountsData?.deposit?.totalAmount || 0;
-  const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
+  const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
+  const Balance = warehouseInfo?.currentBalance || 0;
 
-  const Balance = cashIn - cashOut;
   useEffect(() => {
-    // ekbar calculation kore state set kora
+    // Sync with backend balance directly
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
-    // kono interval nai, tai value lifetime thakbe
   }, [Balance]);
 
   return (
