@@ -1,4 +1,4 @@
- import { Colors } from "@/constants/Colors";
+import { Colors } from "@/constants/Colors";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { Ionicons } from "@expo/vector-icons";
 import React, { useEffect, useLayoutEffect, useState } from "react";
@@ -39,10 +39,10 @@ interface Customer {
   status: string;
 }
 
-const Suppliers = ({}) => {
+const Suppliers = ({ }) => {
   const router = useRouter();
   const { userInfo } = useGlobalContext()
- const {id} = useLocalSearchParams()
+  const { id } = useLocalSearchParams()
   const aamarId = userInfo?.aamarId;
   const warehouse = userInfo?.warehouse;
   const colorScheme = useColorScheme();
@@ -50,27 +50,27 @@ const Suppliers = ({}) => {
   // const [stockData, setStockData] = useState<Customer[]>([])
   const [searchQuery, setSearchQuery] = useState("");
   const [refreshing, setRefreshing] = useState(false);
-  
+
   // useInventoriesQuery
   const { data, error, isLoading, isFetching, isSuccess, refetch } =
     useSuppliersQuery({
       q: searchQuery || "all",
       forceRefetch: true,
     });
-// console.log("SUPPLIER LIST DATA first:", data);
+  // console.log("SUPPLIER LIST DATA first:", data);
   // console.log(data);
- const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
-  skip: !searchQuery, //
-})
-const [currentDate, setCurrentDate] = useState(new Date());
- const { data: supplierData, refetch: refetchSupplier } = useSupplierQuery({
+  const { data: invoiceData, isSuccess: invoiceIdSuccess, isError: invoiceIdError } = useSupplierExportQuery(searchQuery, {
+    skip: !searchQuery, //
+  })
+  const [currentDate, setCurrentDate] = useState(new Date());
+  const { data: supplierData, refetch: refetchSupplier } = useSupplierQuery({
     _id: id,
     date: currentDate.toISOString(),
     isDate: 'month',
     forceRefetch: true,
   });
   console.log("SUPPLIER DATA::", supplierData);
-  
+
   useEffect(() => {
     refetch();
   }, [aamarId]);
@@ -135,7 +135,7 @@ const [currentDate, setCurrentDate] = useState(new Date());
           value={searchQuery}
           onChangeText={setSearchQuery}
         />
-        <Ionicons name="search-outline" size={24} color={"#CDCDE0"}/>
+        <Ionicons name="search-outline" size={24} color={"#CDCDE0"} />
       </View>
 
       <ScrollView>
@@ -144,7 +144,7 @@ const [currentDate, setCurrentDate] = useState(new Date());
             key={data._id}
             onPress={() => router.push(`/supplier/details/${data._id}`)}
           >
-            <View className="flex flex-col justify-between item-center bg-black-200 w-[380px] h-[84px] p-4 rounded-lg mb-4 mx-auto  ">
+            <View className="flex flex-col justify-between item-center bg-black-200  w-full h-[84px] p-4 rounded-lg mb-4 mx-auto  ">
               <View className="flex flex-row justify-between items-center w-full gap-2">
                 <Text className="text-white text-lg ">{data.name}</Text>
                 <Text className="text-primary text-md ">{data.status}</Text>

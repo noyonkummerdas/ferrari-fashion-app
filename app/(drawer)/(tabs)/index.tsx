@@ -4,6 +4,7 @@ import { WelcomeCard } from "@/components/WelcomeCard";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useDashbordQuery } from "@/store/api/dashbordApi";
 import { useGetuserPhotoQuery } from "@/store/api/userApi";
+import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
 import { format } from "date-fns";
 import { subDays } from "date-fns/subDays";
@@ -27,11 +28,11 @@ import {
 // } from "../../../store/api/saleApi";
 
 const screenWidth = Dimensions.get("window").width;
-const cardWidth = screenWidth * 0.4; 
+const cardWidth = screenWidth * 0.4;
 const profile = require("@/assets/images/profile.jpg");
 
 export default function PosDashboard() {
-    const scheme = useColorScheme(); // "light" or "dark"
+  const scheme = useColorScheme(); // "light" or "dark"
   const [startDate, setStartDate] = useState(format(new Date(), "MM-dd-yyyy"));
   const [endDate, setEndDate] = useState(format(new Date(), "MM-dd-yyyy"));
   // const [warehouse, setWarehouse] = useState("allWh");
@@ -40,18 +41,18 @@ export default function PosDashboard() {
   const [currentBalance, setCurrentBalance] = useState(0);
   const type = userInfo?.type;
   const [warehouse, setWarehouse] = useState(userInfo?.type && userInfo?.type !== "admin" && userInfo?.warehouse || "all");
-  
+
 
   const { data: dashboardData, error, isLoading, isFetching, isSuccess, refetch } = useDashbordQuery(
     { warehouse: warehouse, date: startDate, type: type } as any,
     { skip: !userInfo } // Skip query until userInfo is available
   );
-  // console.log("Dashboard Data:", dashboardData);
+  console.log("Dashboard Data:", dashboardData);
 
-  const {data: userPhoto} = useGetuserPhotoQuery({id:userInfo?.id});
-  
-    // console.log("User Photo Data:", userPhoto)
-  
+  const { data: userPhoto } = useGetuserPhotoQuery({ id: userInfo?.id });
+
+  // console.log("User Photo Data:", userPhoto)
+
 
   // console.log(dashboardData, error, isLoading, isFetching, isSuccess, refetch);
 
@@ -64,7 +65,7 @@ export default function PosDashboard() {
   useEffect(() => {
     fetchUser();
   }, []);
-  
+
   useEffect(() => {
     fetchUser();
   }, [warehouse]);
@@ -87,14 +88,14 @@ export default function PosDashboard() {
     } else {
       setStartDate(format(new Date(), "MM-dd-yyyy"));
     }
-    // refetch();
+    refetch();
   };
-  
+
   // Function to fetch updated data
   const onRefresh = () => {
     setRefreshing(true);
 
-    // refetch();
+    refetch();
     // chartRefetch();
     // latestRefetch();
     // Simulate fetching dashboard data
@@ -115,7 +116,7 @@ export default function PosDashboard() {
     iconName: keyof typeof Ionicons.glyphMap;
     onPress?: () => void;
   }
-  
+
   const StatItem: React.FC<StatItemProps> = ({
     title,
     value,
@@ -123,7 +124,7 @@ export default function PosDashboard() {
     onPress,
   }) => {
     const ItemWrapper = onPress ? TouchableOpacity : View;
-  
+
     return (
       <ItemWrapper
         className="bg-black-200 p-4 rounded-lg mr-3"
@@ -145,7 +146,7 @@ export default function PosDashboard() {
         <View className="justify-end">
           <Text className="text-gray-400 text-xs leading-3">{title}</Text>
         </View>
-  
+
         {/* Value - large number */}
         <View className="flex-1 justify-center">
           <Text className="text-white text-3xl font-pbold mb-1">{value}</Text>
@@ -153,22 +154,21 @@ export default function PosDashboard() {
       </ItemWrapper>
     );
   };
+  const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
+
   const cashIn = dashboardData?.accountsData?.deposit?.totalAmount || 0;
   const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
 
-const totalCurrentBalance = cashIn - cashOut;
-useEffect(() => {
-          const timer = setInterval(() => {
-              setOpeningBalance(totalCurrentBalance);
-              setCurrentBalance(totalCurrentBalance);
-            }, 24 * 60 * 60 * 1000); // 24 hours = 86400000 ms
-
-          return () => clearInterval(timer);
-        }, [totalCurrentBalance]);
+  const Balance = warehouseInfo?.currentBalance || 0;
+  useEffect(() => {
+    // Keep internal state if needed for consistency with other parts of the app
+    setOpeningBalance(Balance);
+    setCurrentBalance(Balance);
+  }, [Balance]);
 
   return (
     <>
-    
+
       <ScrollView
         className="flex-1 bg-black-700 p-4"
         refreshControl={
@@ -183,22 +183,22 @@ useEffect(() => {
           onProfilePress={() => router.push("/settings/profile")}
         />
         {/* current & opening balance */}
-         <View className="flex-row mb-4 w-full mx-auto">
-                  {/* <View className="flex-1 bg-black-200  rounded-xl h-24 p-4 mr-2 ">
+        <View className="flex-row mb-4 w-full mx-auto">
+          {/* <View className="flex-1 bg-black-200  rounded-xl h-24 p-4 mr-2 ">
                     <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
                       <Ionicons name="trending-up" size={22} color="#fdb714" />
                       <Text className="text-gray-300">Opening Balance</Text>
                     </View>
                     <Text className="text-white text-xl font-pbold">{openingBalance}</Text>
                   </View> */}
-                  <View className="flex-1  bg-black-200 rounded-xl h-24 p-4 ">
-                    <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
-                      <Ionicons name="wallet" size={22} color="#fdb714" />
-                      <Text className="text-gray-300">Balance</Text>
-                    </View>
-                    <Text className="text-white text-xl font-pbold">{totalCurrentBalance}</Text>
-                  </View>
+          <View className="flex-1  bg-black-200 rounded-xl h-24 p-4 ">
+            <View className="flex-row items-center gap-2 justify-start mb-2 px-1">
+              <Ionicons name="wallet" size={22} color="#fdb714" />
+              <Text className="text-gray-300">Balance</Text>
             </View>
+            <Text className="text-white text-xl font-pbold">{Balance}</Text>
+          </View>
+        </View>
         {/* Cash In/Out Cards */}
         <View className="flex-row mb-2">
           <View className="flex-1 mr-2">
@@ -206,53 +206,53 @@ useEffect(() => {
               onPress={() => router.push("/(drawer)/(tabs)/(account)/cashDepositList")}
             >
               <DashboardCard
-              title="Cash In"
-              value={dashboardData?.accountsData?.deposit?.totalAmount || 0}
-              iconName="wallet"
-              bgColor="bg-black-200"
-            />
+                title="Cash In"
+                value={dashboardData?.accountsData?.deposit?.totalAmount || 0}
+                iconName="wallet"
+                bgColor="bg-black-200"
+              />
             </TouchableOpacity>
           </View>
           <View className="flex-1 ml-2">
             <TouchableOpacity
               onPress={() => router.push("/(drawer)/(tabs)/(account)/cashOutList")}
             >
-             
-                <DashboardCard
+
+              <DashboardCard
                 title="Cash Out"
                 value={dashboardData?.accountsData?.cashOut?.totalAmount || 0}
                 iconName="card"
                 bgColor="bg-black-200"
-            />
-              </TouchableOpacity>
-            
+              />
+            </TouchableOpacity>
+
           </View>
         </View>
 
         {/* Second Row Cash In/Out */}
         <View className="flex-row mb-4">
           <View className="flex-1 mr-2">
-             <TouchableOpacity
+            <TouchableOpacity
               onPress={() => router.push("/(drawer)/(tabs)/(account)/paymentList")}
-              >
-            <DashboardCard
-              title="Payment"
-              value={dashboardData?.accountsData?.payment?.totalAmount || 0}
-              iconName="trending-up"
-              bgColor="bg-black-200"
-            />
+            >
+              <DashboardCard
+                title="Payment"
+                value={dashboardData?.accountsData?.payment?.totalAmount || 0}
+                iconName="trending-up"
+                bgColor="bg-black-200"
+              />
             </TouchableOpacity>
           </View>
           <View className="flex-1 ml-2">
             <TouchableOpacity
-            onPress={() => router.push("/(drawer)/(tabs)/(account)/paymentReceivedList")}
+              onPress={() => router.push("/(drawer)/(tabs)/(account)/paymentReceivedList")}
             >
               <DashboardCard
-              title="Received"
-              value={dashboardData?.accountsData?.paymentReceived?.totalAmount || 0}
-              iconName="trending-down"
-              bgColor="bg-black-200"
-            />
+                title="Received"
+                value={dashboardData?.accountsData?.paymentReceived?.totalAmount || 0}
+                iconName="trending-down"
+                bgColor="bg-black-200"
+              />
             </TouchableOpacity>
           </View>
         </View>
@@ -267,35 +267,35 @@ useEffect(() => {
             contentContainerStyle={{ paddingRight: 16 }}
             className="flex-row"
           >
-              <StatItem 
-               title="Total Products"
-               value={dashboardData?.productCount || 0}
-               iconName="cube"
-               onPress={() => router.push("/(drawer)/(tabs)/(stock)/products" )}
-                />
-              <StatItem 
+            <StatItem
+              title="Total Products"
+              value={dashboardData?.productCount || 0}
+              iconName="cube"
+              onPress={() => router.push("/(drawer)/(tabs)/(stock)/products")}
+            />
+            {/* <StatItem
               title="Stock Items"
-               value={dashboardData?.customerCount || 0}
-               iconName="archive"
-               onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
-                />
-              <StatItem 
+              value={dashboardData?.productCount || 0}
+              iconName="archive"
+              onPress={() => router.push("/(drawer)/(tabs)/(stock)")}
+            /> */}
+            <StatItem
               title="Suppliers"
-               value={dashboardData?.productCount || 0}
-               iconName="people"
-               onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers" as any)}
-                />
-              <StatItem 
-               title="Customers"
-               value={dashboardData?.customerCount || 0}
-               iconName="person"
-               onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
-                />
-              <StatItem title="Orders"
-               value={dashboardData?.orderCount || 0}
-               iconName="receipt"
-               onPress={() => router.push("/(drawer)/(tabs)/accounts")}
-             />
+              value={dashboardData?.supplierCount || 0}
+              iconName="people"
+              onPress={() => router.push("/(drawer)/(tabs)/(connects)/suppliers" as any)}
+            />
+            <StatItem
+              title="Customers"
+              value={dashboardData?.customerCount || 0}
+              iconName="person"
+              onPress={() => router.push("/(drawer)/(tabs)/(connects)/customers")}
+            />
+            <StatItem title="Orders"
+              value={dashboardData?.orderCount || 0}
+              iconName="receipt"
+              onPress={() => router.push("/(drawer)/(tabs)/accounts")}
+            />
           </ScrollView>
         </View>
 
@@ -307,9 +307,9 @@ useEffect(() => {
           <PaymentChart data={dashboardData?.chartData || {}} />
         </View>
         <StatusBar
-                barStyle={scheme === "dark" ? "light-content" : "dark-content"}
-                backgroundColor={scheme === "dark" ? "#000000" : "#ffffff"}
-              />
+          barStyle={scheme === "dark" ? "light-content" : "dark-content"}
+          backgroundColor={scheme === "dark" ? "#000000" : "#ffffff"}
+        />
       </ScrollView>
     </>
   );

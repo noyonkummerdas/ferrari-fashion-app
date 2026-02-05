@@ -15,7 +15,7 @@
 //   const [transactions, setTransactions] = useState<any[]>([]);
 //   const userInfo = useGlobalContext();
 
-  
+
 //   const { data, refetch } = useSupplierQuery({
 //     _id: id,
 //     date: currentDate.toISOString(),
@@ -199,7 +199,7 @@
 //         <View className="flex-1 bg-black/70 justify-center items-center">
 //           <View className="bg-black-200 rounded-2xl p-6 mx-4 w-full">
 //             <Text className="text-white text-xl font-semibold mb-4">Select Month</Text>
-            
+
 //             {/* Year select */}
 //             <View className="flex flex-row justify-between mb-4">
 //               <TouchableOpacity onPress={() => setCurrentDate(prev => new Date(prev.getFullYear() - 1, prev.getMonth(), 1))}>
@@ -568,7 +568,7 @@ const SupplierDetails = () => {
     isDate: 'month',
     forceRefetch: true,
   });
-console.log("SINGLE SUPPLIER DATA", data);
+  console.log("SINGLE SUPPLIER DATA", data);
   // ✅ Update transactions whenever data changes
   useEffect(() => {
     if (data?.transaction) setTransactions(data.transaction);
@@ -634,33 +634,33 @@ console.log("SINGLE SUPPLIER DATA", data);
 
   // ✅ Calculate current balance from starting balance + transactions
   const calculateCurrentBalance = (
-  openingBalance: number = 0,
-  transactions: any[] = []
-) => {
-  let balance = Number(openingBalance) || 0;
+    openingBalance: number = 0,
+    transactions: any[] = []
+  ) => {
+    let balance = Number(openingBalance) || 0;
 
-  transactions.forEach((txn) => {
-    const amount = Number(txn.amount) || 0;
+    transactions.forEach((txn) => {
+      const amount = Number(txn.amount) || 0;
 
-    const type = txn.type
-      ?.toString()
-      .trim()
-      .toLowerCase();
+      const type = txn.type
+        ?.toString()
+        .trim()
+        .toLowerCase();
 
-    if (type === "payment") {
-      balance -= amount;
-    } 
-    else if (type === "purchase") {
-      balance += amount;
-    }
-  });
+      if (type === "payment") {
+        balance -= amount;
+      }
+      else if (type === "purchase") {
+        balance += amount;
+      }
+    });
 
-  return balance;
-};
+    return balance;
+  };
 
   const currentBalance = calculateCurrentBalance(data?.supplier?.balance) || 0;
   // console.log("Opening:", data?.supplier?.balance);
-// console.log("Transactions length:", transactions?.length);
+  // console.log("Transactions length:", transactions?.length);
 
   return (
     <>
@@ -716,7 +716,7 @@ console.log("SINGLE SUPPLIER DATA", data);
         {/* Start & Current Balance */}
         <View className="flex flex-row justify-evely items-center w-[380px] mx-auto">
 
-          <View className="flex bg-black-200 items-center justify-center p-4 text-center w-[360px] mx-auto rounded-lg ">
+          <View className="flex bg-black-200 items-center justify-center p-4 text-center w-[340px] mx-auto rounded-lg ">
             <Text className="text-white text-xl">Current balance</Text>
             <Text className="text-primary font-bold text-lg text-center">
               {currentBalance} <Text className="text-white">BDT</Text> {/* ✅ Updated */}
@@ -728,7 +728,7 @@ console.log("SINGLE SUPPLIER DATA", data);
         {transactions.map((item: any) => (
           <View
             key={item?._id}
-            className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-[380px] h-[84px] p-4 mx-auto"
+            className="bg-black-200 flex justify-between p-4 rounded-lg mt-4 w-full h-[84px] p-4 mx-auto"
           >
             <Text className="text-white text-xl">{item?.type}</Text>
             <View className="flex flex-row justify-between items-center">
@@ -741,8 +741,8 @@ console.log("SINGLE SUPPLIER DATA", data);
                     item?.type === "Payment"
                       ? "#22c55e"
                       : item?.type === "Purchase"
-                      ? "#ef4444"
-                      : "#ffffff",
+                        ? "#ef4444"
+                        : "#ffffff",
                 }}
                 className="text-lg font-bold"
               >
@@ -782,14 +782,12 @@ console.log("SINGLE SUPPLIER DATA", data);
                 <TouchableOpacity
                   key={i}
                   onPress={() => selectMonth(i)}
-                  className={`p-4 rounded-lg mb-2 w-[28%] ${
-                    currentDate.getMonth() === i ? "bg-primary" : "bg-black-300"
-                  }`}
+                  className={`p-4 rounded-lg mb-2 w-[28%] ${currentDate.getMonth() === i ? "bg-primary" : "bg-black-300"
+                    }`}
                 >
                   <Text
-                    className={`${
-                      currentDate.getMonth() === i ? "text-white" : "text-white"
-                    } text-center`}
+                    className={`${currentDate.getMonth() === i ? "text-white" : "text-white"
+                      } text-center`}
                   >
                     {m.slice(0, 3)}
                   </Text>

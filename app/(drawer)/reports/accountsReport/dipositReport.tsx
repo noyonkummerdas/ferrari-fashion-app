@@ -17,8 +17,7 @@ export default function CashInReport() {
   const { userInfo } = useGlobalContext();
 
   const { data: warehousesData } = useWarehousesQuery();
-
-  const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
+   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
@@ -55,13 +54,15 @@ export default function CashInReport() {
   );
 
   // Set warehouses after fetch
-  useEffect(() => {
-    if (userInfo?.role === "userInfo") {
+useEffect(() => {
+    if (warehousesData) {
       setWarehouses(warehousesData);
-    } else if (userInfo?.role === "admin") {
-      setSelectedWarehouse(warehousesData?.[0]?._id);
+      if (userInfo.role === "admin" && warehousesData.length > 0) {
+        setSelectedWarehouse(warehousesData[0]._id);
+      }
     }
-  }, [warehousesData, userInfo]);
+  }, [warehousesData]);
+  
 
   // Header with print button
   useLayoutEffect(() => {
@@ -91,6 +92,12 @@ export default function CashInReport() {
       (sum, item) => sum + (item.amount || 0),
       0
     ) || 0;
+     useEffect(() => {
+              if (userInfo && selectedWarehouse) {
+                refetch();
+              }
+            }, [selectedWarehouse]);
+    if (!warehousesData) return null;
 
   return (
     <>
@@ -100,26 +107,17 @@ export default function CashInReport() {
         <View className="flex-row justify-between items-center mb-4">
           {userInfo?.type === "admin" && warehouses?.length > 0 && (
             <Dropdown
-              data={warehouses.map((wh) => ({
-                label: wh.name,
-                value: wh._id,
-              }))}
-              labelField="label"
-              valueField="value"
-              placeholder="Select Warehouse"
-              value={selectedWarehouse}
-              onChange={(item: any) => setSelectedWarehouse(item.value)}
-              placeholderStyle={{ color: "white" }}
-              style={{
-                backgroundColor: "#1f1f1f",
-                borderRadius: 8,
-                padding: 8,
-                width: 180,
-                height: 45,
-              }}
-              selectedTextStyle={{ color: "white" }}
-              itemTextStyle={{ color: "black" }}
-            />
+                        data={warehouses.map((wh) => ({ label: wh.name, value: wh._id }))}
+                        labelField="label"
+                        valueField="value"
+                        placeholder="Select Warehouse"
+                        value={selectedWarehouse}
+                        onChange={(item: any) => setSelectedWarehouse(item.value)}
+                        placeholderStyle={{ color: "white" }}
+                        style={{ backgroundColor: "#1f1f1f", borderRadius: 8, padding: 8, width: 180, height: 45 }}
+                        selectedTextStyle={{ color: "white" }}
+                        itemTextStyle={{ color: "black" }}
+                      />
           )}
 
           {/* From / To Dates */}
@@ -214,3 +212,5 @@ export default function CashInReport() {
     </>
   );
 }
+
+
