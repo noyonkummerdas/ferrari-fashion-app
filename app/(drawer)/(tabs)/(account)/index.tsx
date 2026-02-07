@@ -102,7 +102,6 @@ const Accounts = () => {
   const Balance = warehouseInfo?.currentBalance || 0;
 
   useEffect(() => {
-    // Sync with backend balance directly
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
   }, [Balance]);

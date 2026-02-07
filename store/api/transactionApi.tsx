@@ -82,12 +82,14 @@ export const TransactionApi = createApi({
     }),
 
     // new to cashIn report
+
     cashInTransaction: builder.query<{ transactions: Transaction[] }, { warehouse: string; date?: string }>({
       query: ({ warehouse, date }) => `/transaction/list/${warehouse}/deposit/${date || ""}`,
       providesTags: (result, error, { warehouse }) => [
         { type: "Transaction", id: warehouse },
         "Transaction",
       ],
+
     }),
   }),
 });
@@ -101,6 +103,7 @@ export const {
   useUpdateTransactionMutation,
   useDeleteTransactionMutation,
   useCashInTransactionQuery,
+  useAddBalanceTransactionMutation,
 } = TransactionApi;
 
 export default TransactionApi;

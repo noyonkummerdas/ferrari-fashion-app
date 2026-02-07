@@ -1,5 +1,5 @@
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useAddTransactionMutation } from "@/store/api/transactionApi";
+import { useAddBalanceTransactionMutation } from "@/store/api/transactionApi";
 import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -40,7 +40,7 @@ const CashDepositDetails = () => {
     }
   }, [data, isSuccess]);
 
-  const [createTransaction] = useAddTransactionMutation();
+  const [createTransaction] = useAddBalanceTransactionMutation();
 
   // Form state
   const [formData, setFormData] = useState({
@@ -57,8 +57,7 @@ const CashDepositDetails = () => {
     type: "deposit",
     status: "complete",
   });
-  // console.log("FD", formData);
-  // console.log(data);
+
   useEffect(() => {
     if (data && isSuccess) {
       setFormData((prev) => ({
@@ -93,12 +92,8 @@ const CashDepositDetails = () => {
   }, [navigation]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    console.log("Date picker event:", event);
-    console.log("Selected date:", selectedDate);
-
     if (selectedDate) {
       setFormData((prev) => ({ ...prev, date: selectedDate }));
-      console.log("Date updated to:", selectedDate);
 
       // Close picker after selection
       if (Platform.OS === "android") {
@@ -108,7 +103,6 @@ const CashDepositDetails = () => {
   };
 
   const handleDatePress = () => {
-    console.log("Opening date picker");
     setShowDatePicker(true);
   };
 
@@ -116,7 +110,9 @@ const CashDepositDetails = () => {
     if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
+
       setFormData((prev) => ({ ...prev, [field]: numValue }));
+
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -130,18 +126,14 @@ const CashDepositDetails = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("Transaction Form Data:", formData);
-    console.log("Photo URI:", formData.photo);
-
     try {
-      const response = await createTransaction(formData).unwrap();
-      // console.log("Transaction created:", response);
+      await createTransaction(formData as any).unwrap();
     } catch (error) {
+
       // console.error("Error creating transaction:", error);
 
     }
     router.back();
-
 
   };
 

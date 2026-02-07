@@ -1,7 +1,7 @@
 import photo from "@/assets/images/Invoice.jpg";
 import PhotoUploader from "@/components/PhotoUploader";
 import { useGlobalContext } from "@/context/GlobalProvider";
-import { useAddTransactionMutation } from "@/store/api/transactionApi";
+import { useAddBalanceTransactionMutation } from "@/store/api/transactionApi";
 import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { Ionicons } from "@expo/vector-icons";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -28,7 +28,8 @@ const CashOut = () => {
 
   const type = userInfo?.type
 
-  const [createTransaction] = useAddTransactionMutation();
+  const [createTransaction] = useAddBalanceTransactionMutation();
+
 
   // Form state
   const [formData, setFormData] = useState({
@@ -52,12 +53,6 @@ const CashOut = () => {
   const { data, isSuccess, isLoading, refetch } = useWarehouseQuery(
     userInfo?.warehouse,
   );
-
-  // console.log(data);
-
-  useEffect(() => {
-    refetch();
-  }, [userInfo]);
 
   useEffect(() => {
     if (data && isSuccess) {
@@ -91,12 +86,8 @@ const CashOut = () => {
   }, [navigation]);
 
   const handleDateChange = (event: any, selectedDate?: Date) => {
-    console.log("Date picker event:", event);
-    console.log("Selected date:", selectedDate);
-
     if (selectedDate) {
       setFormData((prev) => ({ ...prev, date: selectedDate }));
-      console.log("Date updated to:", selectedDate);
 
       // Close picker after selection
       if (Platform.OS === "android") {
@@ -106,7 +97,6 @@ const CashOut = () => {
   };
 
   const handleDatePress = () => {
-    console.log("Opening date picker");
     setShowDatePicker(true);
   };
 
@@ -114,7 +104,9 @@ const CashOut = () => {
     if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
+
       setFormData((prev) => ({ ...prev, [field]: numValue }));
+
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -213,14 +205,10 @@ const CashOut = () => {
   };
 
   const handleSubmit = async () => {
-    console.log("Transaction Form Data:", formData);
-    console.log("Photo URI:", formData.photo);
-
     try {
-      const response = await createTransaction(formData).unwrap();
-      console.log("Transaction created:", response);
+      await createTransaction(formData as any).unwrap();
     } catch (error) {
-      // console.error("Error creating transaction:", error);
+      // error handling
     }
     router.back();
   };

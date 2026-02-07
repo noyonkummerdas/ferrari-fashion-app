@@ -155,10 +155,11 @@ export default function PosDashboard() {
     );
   };
   const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
+
   const Balance = warehouseInfo?.currentBalance || 0;
 
   useEffect(() => {
-    // Sync with backend balance directly
+
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
   }, [Balance]);
