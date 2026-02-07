@@ -44,9 +44,9 @@ const CustomDrawerComponent = (props: any) => {
 
   // const userInfo = useSelector((state: any) => state.user);
 
-  const {userInfo} = useGlobalContext();
+  const { userInfo } = useGlobalContext();
 
-  const {data, isSuccess, refetch} = useGetuserPhotoQuery({id:userInfo?.id});
+  const { data, isSuccess, refetch } = useGetuserPhotoQuery({ id: userInfo?.id });
   // console.log("User Photo Data:", data, isSuccess);
 
   // console.log(userInfo)
@@ -75,14 +75,14 @@ const CustomDrawerComponent = (props: any) => {
     checkLogin();
   }, [pathname, loggedIn, segments, isMounted]);
 
-  
+
   return (
     <DrawerContentScrollView {...props}>
       <StatusBar style="light" />
       <TouchableOpacity onPress={() => router.push("/")} className="mx-2 pe-3">
         <View className="flex flex-row gap-x-3 border-b items-center border-slate-400 pb-4 mb-2">
-            <Image source={data?.photo !== null ?{uri:data?.photo}:profile} className="w-12 h-12 rounded-full" />
-          
+          <Image source={data?.photo !== null ? { uri: data?.photo } : profile} className="w-12 h-12 rounded-full" />
+
           <View>
             <Text className="text-xl text-gray-200 font-pmedium">
               {userInfo?.name}
@@ -94,48 +94,48 @@ const CustomDrawerComponent = (props: any) => {
           </View>
         </View>
       </TouchableOpacity>
-      {userInfo.type === 'admin' &&
-      <DrawerItem
-        icon={({ color }) => (
-          <TabIcon
-            pathname={pathname}
-            icon="home"
-            iconAlt="home-outline"
-            color={color}
-            focused={["/"]}
-          />
-        )}
-        label={"Home"}
-        labelStyle={[
-          styles.labelStyle,
-          { color: pathname === "/" ? "#ffffff" : "#ffffff" },
-        ]}
-        style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
-        onPress={() => router.push("/(drawer)/(tabs)")}
-      />
+      {userInfo?.type === 'admin' &&
+        <DrawerItem
+          icon={({ color }) => (
+            <TabIcon
+              pathname={pathname}
+              icon="home"
+              iconAlt="home-outline"
+              color={color}
+              focused={["/"]}
+            />
+          )}
+          label={"Home"}
+          labelStyle={[
+            styles.labelStyle,
+            { color: pathname === "/" ? "#ffffff" : "#ffffff" },
+          ]}
+          style={{ backgroundColor: pathname === "/" ? "#000000" : "#131313" }}
+          onPress={() => router.push("/(drawer)/(tabs)")}
+        />
       }
       {
-        userInfo?.type === "admin"  &&
-          <DrawerItem
-            icon={({ color }) => (
-              <TabIcon
-                pathname={pathname}
-                icon="storefront"
-                iconAlt="storefront-outline"
-                color={color}
-                focused={["/warehouse"]}
-              />
-            )}
-            label={"Warehouse"} 
-            labelStyle={[
-              styles.labelStyle,
-              { color: pathname === "/warehouse" ? "#ffffff" : "#ffffff" },
-            ]}
-            style={{
-              backgroundColor: pathname === "/warehouse" ? "#000000" : "#131313",
-            }}
-            onPress={() => router.push("/(drawer)/warehouse")}
-          />
+        userInfo?.type === "admin" &&
+        <DrawerItem
+          icon={({ color }) => (
+            <TabIcon
+              pathname={pathname}
+              icon="storefront"
+              iconAlt="storefront-outline"
+              color={color}
+              focused={["/warehouse"]}
+            />
+          )}
+          label={"Warehouse"}
+          labelStyle={[
+            styles.labelStyle,
+            { color: pathname === "/warehouse" ? "#ffffff" : "#ffffff" },
+          ]}
+          style={{
+            backgroundColor: pathname === "/warehouse" ? "#000000" : "#131313",
+          }}
+          onPress={() => router.push("/(drawer)/warehouse")}
+        />
       }
       {/* {userInfo?.permissions?.users && */}
 
@@ -187,7 +187,7 @@ const CustomDrawerComponent = (props: any) => {
       />
       {/* } */}
 
-{/* {userInfo?.permissions?.customers && */}
+      {/* {userInfo?.permissions?.customers && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -236,8 +236,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/sales")}
       />
-{/* } */}
-{/* {userInfo?.permissions?.users && */}
+      {/* } */}
+      {/* {userInfo?.permissions?.users && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -261,8 +261,8 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/purchases")}
       />
-{/* } */}
-{/* {userInfo?.permissions?.users && */}
+      {/* } */}
+      {/* {userInfo?.permissions?.users && */}
 
       <DrawerItem
         icon={({ size, color, focused }) => (
@@ -288,32 +288,32 @@ const CustomDrawerComponent = (props: any) => {
       />
       {/* } */}
       {/* {userInfo?.permissions?.users && */}
-       {userInfo.type === 'admin' &&
-      <DrawerItem
-        icon={({ size, color, focused }) => (
-          <TabIcon
-            pathname={pathname}
-            icon="person"
-            iconAlt="person-outline"
-            color={color}
-            focused={["/user"]}
-          />
-        )}
-        label={"Users"}
-        labelStyle={[
-          styles.labelStyle,
-          {
-            color: pathname === "/user" ? "#ffffff" : "#ffffff",
-          },
-        ]}
-        style={{
-          backgroundColor: pathname === "/user" ? "#000000" : "#131313",
-        }}
-        onPress={() => router.push("/user")}
-      />
-       }
-{/* } */}
-{/* {userInfo?.permissions?.users &&  */}
+      {userInfo.type === 'admin' &&
+        <DrawerItem
+          icon={({ size, color, focused }) => (
+            <TabIcon
+              pathname={pathname}
+              icon="person"
+              iconAlt="person-outline"
+              color={color}
+              focused={["/user"]}
+            />
+          )}
+          label={"Users"}
+          labelStyle={[
+            styles.labelStyle,
+            {
+              color: pathname === "/user" ? "#ffffff" : "#ffffff",
+            },
+          ]}
+          style={{
+            backgroundColor: pathname === "/user" ? "#000000" : "#131313",
+          }}
+          onPress={() => router.push("/user")}
+        />
+      }
+      {/* } */}
+      {/* {userInfo?.permissions?.users &&  */}
       <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon
@@ -334,7 +334,7 @@ const CustomDrawerComponent = (props: any) => {
         }}
         onPress={() => router.push("/(drawer)/reports")}
       />
-{/* } */}
+      {/* } */}
       {/* <DrawerItem
         icon={({ size, color, focused }) => (
           <TabIcon

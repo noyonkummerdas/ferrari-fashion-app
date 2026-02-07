@@ -156,12 +156,10 @@ export default function PosDashboard() {
   };
   const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
 
-  const cashIn = dashboardData?.accountsData?.deposit?.totalAmount || 0;
-  const cashOut = dashboardData?.accountsData?.cashOut?.totalAmount || 0;
-
   const Balance = warehouseInfo?.currentBalance || 0;
+
   useEffect(() => {
-    // Keep internal state if needed for consistency with other parts of the app
+
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
   }, [Balance]);

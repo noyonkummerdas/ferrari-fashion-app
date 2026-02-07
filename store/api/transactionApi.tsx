@@ -1,13 +1,15 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { BASE_URL } from "../../constants/baseUrl";
 import { Transaction } from "../../types/transactions";
+import DashbordApi from "./dashbordApi";
+import { warehouseApi } from "./warehouseApi";
 
 // console.log(BASE_URL);
 
 export const TransactionApi = createApi({
   reducerPath: "TransactionApi",
   baseQuery: fetchBaseQuery({ baseUrl: BASE_URL }),
-  tagTypes: ["Transaction"],
+  tagTypes: ["Transaction", "Warehouse", "Dashbord"],
   endpoints: (builder) => ({
     Transactions: builder.query<Transaction[], void>({
       query: () => "/transaction",
@@ -17,10 +19,13 @@ export const TransactionApi = createApi({
       query: (_id) => `/transaction/${_id}`,
       providesTags: ["Transaction"],
     }),
-    TransactionList: builder.query<Transaction, any>({
+    TransactionList: builder.query<{ transactions: Transaction[] }, any>({
       query: ({ warehouse, type, date }) =>
         `/transaction/list/${warehouse}/${type}/${date}`,
-      providesTags: ["Transaction"],
+      providesTags: (result, error, { warehouse }) => [
+        { type: "Transaction", id: warehouse },
+        "Transaction",
+      ],
     }),
     TransactionByCustomer: builder.query<Transaction[], any>({
       query: ({ startDate, endDate, customerId }) =>
@@ -34,10 +39,35 @@ export const TransactionApi = createApi({
         body: Transaction,
       }),
       invalidatesTags: ["Transaction"],
+      async onQueryStarted(arg, { dispatch, queryFulfilled }) {
+        try {
+          await queryFulfilled;
+          if (arg.warehouse) {
+            // Invalidate Warehouse specifically and generally
+            dispatch(
+              warehouseApi.util.invalidateTags([
+                { type: "Warehouse", id: arg.warehouse },
+                "Warehouse",
+              ])
+            );
+            // Invalidate Transaction specifically and generally
+            dispatch(
+              TransactionApi.util.invalidateTags([
+                { type: "Transaction", id: arg.warehouse },
+                "Transaction",
+              ])
+            );
+            // Invalidate Dashboard
+            dispatch(
+              DashbordApi.util.invalidateTags(["Dashbord"])
+            );
+          }
+        } catch { }
+      },
     }),
     updateTransaction: builder.mutation<void, Transaction>({
       query: ({ _id, ...rest }) => ({
-        url: `/transaction/${_id}`, // not found
+        url: `/transaction/${_id}`,
         method: "PUT",
         body: rest,
       }),
@@ -52,17 +82,14 @@ export const TransactionApi = createApi({
     }),
 
     // new to cashIn report
-    cashInTransaction: builder.query<Transaction[], { warehouse: string; date?: string }>({
+
+    cashInTransaction: builder.query<{ transactions: Transaction[] }, { warehouse: string; date?: string }>({
       query: ({ warehouse, date }) => `/transaction/list/${warehouse}/deposit/${date || ""}`,
-      providesTags: ["Transaction"],
-    }),
-    addBalanceTransaction: builder.mutation<{}, Transaction>({
-      query: (Transaction) => ({
-        url: "/transaction/balance",
-        method: "POST",
-        body: Transaction,
-      }),
-      invalidatesTags: ["Transaction", "Warehouse" as any],
+      providesTags: (result, error, { warehouse }) => [
+        { type: "Transaction", id: warehouse },
+        "Transaction",
+      ],
+
     }),
   }),
 });

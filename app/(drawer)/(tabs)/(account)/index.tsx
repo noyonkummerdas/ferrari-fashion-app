@@ -1,14 +1,15 @@
 import { CustomDrawerToggleButton } from "@/components";
 import { Colors } from "@/constants/Colors";
-import { useColorScheme } from "@/hooks/useColorScheme.web";
+import { useColorScheme } from "react-native";
 // import { CustomDrawerToggleButton } from "@/components";
 import { Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { router } from "expo-router";
 import React, { useEffect, useLayoutEffect, useState } from "react";
-// import { useColorScheme } from "react-native";
+// // import { useColorScheme } from "react-native";
 import { useGlobalContext } from "@/context/GlobalProvider";
 import { useTransactionListQuery } from "@/store/api/transactionApi";
+import { useWarehouseQuery } from "@/store/api/warehouseApi";
 import { format } from "date-fns";
 import { StatusBar } from "expo-status-bar";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
@@ -40,7 +41,7 @@ const Accounts = () => {
       },
       headerLeft: () => <CustomDrawerToggleButton tintColor="#ffffff" />,
       //@ts-ignore
-      headerTintColor: `${Colors[colorScheme ?? "dark"].backgroundColor}`,
+      headerTintColor: `${Colors[colorScheme ?? "dark"]?.backgroundColor || Colors[colorScheme ?? "dark"]?.background}`,
       headerTitleStyle: { fontWeight: "bold", fontSize: 18, color: "#ffffff" },
       headerShadowVisible: false,
       headerTitleAlign: "center",
@@ -54,6 +55,8 @@ const Accounts = () => {
       type: "deposit",
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
+    }, {
+      skip: !userInfo?.warehouse
     });
   const totalDepositAmount = data?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -65,6 +68,8 @@ const Accounts = () => {
       type: "cashOut",
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
+    }, {
+      skip: !userInfo?.warehouse
     });
   const totalCashOutAmount = cashOutData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -75,6 +80,8 @@ const Accounts = () => {
       type: "payment",
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
+    }, {
+      skip: !userInfo?.warehouse
     });
   const totalPaymentAmount = paymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -85,6 +92,8 @@ const Accounts = () => {
       type: "paymentReceived",
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
+    }, {
+      skip: !userInfo?.warehouse
     });
   const totalReceivedPaymentAmount = receivedPaymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -93,7 +102,6 @@ const Accounts = () => {
   const Balance = warehouseInfo?.currentBalance || 0;
 
   useEffect(() => {
-    // Keep internal state if needed for consistency
     setOpeningBalance(Balance);
     setCurrentBalance(Balance);
   }, [Balance]);

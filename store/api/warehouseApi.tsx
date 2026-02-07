@@ -14,6 +14,7 @@ export const warehouseApi = createApi({
       query: () => "/warehouse",
       providesTags: ["Warehouse"],
     }),
+
     Warehouse: builder.query<WarehouseTypes, any>({
       query: (_id) => `/warehouse/${_id}`,
       providesTags: (result, error, _id) => [{ type: "Warehouse", id: _id }],
@@ -21,6 +22,7 @@ export const warehouseApi = createApi({
     WarehouseAccounts: builder.query<WarehouseTypes, any>({
       query: ({ _id, date }) => `/warehouse/accounts/${_id}/${date}`,
       providesTags: (result, error, { _id }) => [{ type: "Warehouse", id: _id }],
+
     }),
     addWarehouse: builder.mutation<{}, WarehouseTypes>({
       query: (Warehouse) => ({

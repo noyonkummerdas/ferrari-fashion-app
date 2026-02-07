@@ -30,6 +30,7 @@ const CashOut = () => {
 
   const [createTransaction] = useAddBalanceTransactionMutation();
 
+
   // Form state
   const [formData, setFormData] = useState({
     date: new Date(),
@@ -103,10 +104,9 @@ const CashOut = () => {
     if (field === "amount") {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
-      setFormData((prev) => ({
-        ...prev,
-        [field]: numValue,
-      }));
+
+      setFormData((prev) => ({ ...prev, [field]: numValue }));
+
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));

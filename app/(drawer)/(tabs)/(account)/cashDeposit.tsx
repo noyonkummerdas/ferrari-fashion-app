@@ -111,10 +111,8 @@ const CashDepositDetails = () => {
       // Convert string to number for numeric fields
       const numValue = parseInt(value) || 0;
 
-      setFormData((prev) => ({
-        ...prev,
-        [field]: numValue,
-      }));
+      setFormData((prev) => ({ ...prev, [field]: numValue }));
+
     } else {
       // Handle string fields normally
       setFormData((prev) => ({ ...prev, [field]: value }));
@@ -131,9 +129,12 @@ const CashDepositDetails = () => {
     try {
       await createTransaction(formData as any).unwrap();
     } catch (error) {
-      // Error is handled by RTK Query or can be shown via Alert
+
+      // console.error("Error creating transaction:", error);
+
     }
     router.back();
+
   };
 
   const formatDate = (date: Date) => {
