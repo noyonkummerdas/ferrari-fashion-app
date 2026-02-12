@@ -22,6 +22,14 @@ export const TransactionApi = createApi({
     TransactionList: builder.query<{ transactions: Transaction[] }, any>({
       query: ({ warehouse, type, date }) =>
         `/transaction/list/${warehouse}/${type}/${date}`,
+      onQueryStarted: async (arg, { queryFulfilled }) => {
+        try {
+          const { data } = await queryFulfilled;
+          console.log(`[API DEBUG] TransactionList Success - Type: ${arg.type}`, data);
+        } catch (err) {
+          console.error(`[API DEBUG] TransactionList Error - Type: ${arg.type}`, err);
+        }
+      },
       providesTags: (result, error, { warehouse }) => [
         { type: "Transaction", id: warehouse },
         "Transaction",
@@ -90,6 +98,14 @@ export const TransactionApi = createApi({
         "Transaction",
       ],
 
+    }),
+    addBalanceTransaction: builder.mutation<any, any>({
+      query: (data) => ({
+        url: "/transaction/add-balance",
+        method: "POST",
+        body: data,
+      }),
+      invalidatesTags: ["Transaction", "Warehouse", "Dashbord"],
     }),
   }),
 });

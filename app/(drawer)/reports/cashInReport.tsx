@@ -21,26 +21,26 @@ export default function CashInReport() {
   const { data: warehousesData } = useWarehousesQuery();
   const [warehouses, setWarehouses] = useState<WarehouseTypes[]>([]);
 
-  
-//   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
+
+  //   const [cashInData, setCashInData] = useState<any[]>([]); // backend data
   const [fromDate, setFromDate] = useState<Date>(new Date());
   const [toDate, setToDate] = useState<Date>(new Date());
   const [showStartPicker, setShowStartPicker] = useState(false);
   const [showEndPicker, setShowEndPicker] = useState(false);
 
-const formatDateString = (date: Date) => date.toISOString().split("T")[0];
+  const formatDateString = (date: Date) => date.toISOString().split("T")[0];
 
-// replace this
-// const selectedDateString = formatDate(selectedDate);
-const selectedDateString = formatDateString(fromDate);
+  // replace this
+  // const selectedDateString = formatDate(selectedDate);
+  const selectedDateString = formatDateString(fromDate);
 
-const {data: cashInData, isLoading, refetch} = useTransactionListQuery({ warehouse: "w1", type: "payment", date: selectedDateString })
-console.log("CashInData:", cashInData);
+  const { data: cashInData, isLoading, refetch } = useTransactionListQuery({ warehouse: selectedWarehouse ?? "all", type: "deposit", date: selectedDateString })
+  console.log("CashInData:", cashInData);
 
- useEffect(()=>{
+  useEffect(() => {
     refetch()
- },[cashInData])
-// warehouse  role
+  }, [cashInData])
+  // warehouse  role
   const [selectedWarehouse, setSelectedWarehouse] = useState<string | null>(
     currentUser.role === "user" ? currentUser.warehouse : null
   );
@@ -97,7 +97,7 @@ console.log("CashInData:", cashInData);
 
   // Filter data by role, warehouse, and date
   const filteredData = cashInData
-  ? cashInData.filter((item) => {
+    ? cashInData.filter((item) => {
       const itemDate = new Date(item.date);
       const matchesDate =
         (isAfter(itemDate, fromDate) || itemDate.toDateString() === fromDate.toDateString()) &&
@@ -112,7 +112,7 @@ console.log("CashInData:", cashInData);
 
       return matchesDate && matchesWarehouse;
     })
-  : [];
+    : [];
 
   return (
     <View className="flex-1 bg-dark p-2">
