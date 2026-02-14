@@ -99,14 +99,14 @@ export const TransactionApi = createApi({
       ],
 
     }),
-    addBalanceTransaction: builder.mutation<any, any>({
-      query: (data) => ({
-        url: "/transaction/add-balance",
-        method: "POST",
-        body: data,
-      }),
-      invalidatesTags: ["Transaction", "Warehouse", "Dashbord"],
-    }),
+    // addBalanceTransaction: builder.mutation<any, any>({
+    //   query: (data) => ({
+    //     url: "/transaction/add-balance",
+    //     method: "POST",
+    //     body: data,
+    //   }),
+    //   invalidatesTags: ["Transaction", "Warehouse", "Dashbord"],
+    // }),
   }),
 });
 
@@ -119,7 +119,7 @@ export const {
   useUpdateTransactionMutation,
   useDeleteTransactionMutation,
   useCashInTransactionQuery,
-  useAddBalanceTransactionMutation,
+  // useAddBalanceTransactionMutation,
 } = TransactionApi;
 
 export default TransactionApi;
