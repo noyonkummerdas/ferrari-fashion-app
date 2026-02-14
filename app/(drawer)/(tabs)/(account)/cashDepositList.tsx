@@ -62,10 +62,10 @@ const CashDepositList = () => {
     });
   }, [navigation]);
 
-  const hasWarehouse = !!userInfo?.warehouse;
+  const hasWarehouse = !!userInfo?.warehouse && userInfo.warehouse.trim() !== '';
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionListQuery({
-      warehouse: userInfo?.warehouse,
+      warehouse: userInfo?.warehouse || 'placeholder',
       type: "deposit",
       date: format(currentDay, "MM-dd-yyyy"),
       forceRefetch: true,
