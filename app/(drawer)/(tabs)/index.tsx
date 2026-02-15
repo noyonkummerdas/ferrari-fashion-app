@@ -72,6 +72,8 @@ export default function PosDashboard() {
 
 
 
+
+
   const { data: userPhoto } = useGetuserPhotoQuery({ id: userInfo?.id });
 
   // console.log("User Photo Data:", userPhoto)
@@ -179,7 +181,10 @@ export default function PosDashboard() {
   };
   const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
 
-  const Balance = warehouseInfo?.currentBalance || 0;
+  const cashIn = warehouseInfo?.totalCashIn || 0;
+  const cashOut = warehouseInfo?.totalCashOut || 0;
+  const Balance = cashIn - cashOut;
+
 
   useEffect(() => {
 
