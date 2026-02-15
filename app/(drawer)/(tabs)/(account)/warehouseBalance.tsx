@@ -283,30 +283,28 @@ const WarehouserBalance = () => {
   // Fetch deposits
   const { data: depositData, isLoading: depositLoading, refetch: refetchDeposit } =
     useTransactionListQuery({
-      warehouse: userInfo?.warehouse,
+      warehouse: id,
       type: "deposit",
       date: format(currentDay, "MM-dd-yyyy"),
       startDate,
       endDate,
       forceRefetch: true,
+    }, {
+      skip: !id || (id === "" && userInfo?.type !== "admin")
     });
 
   // Fetch cashouts
   const { data: cashoutData, isLoading: cashoutLoading, refetch: refetchCashout } =
     useTransactionListQuery({
-      warehouse: userInfo?.warehouse,
+      warehouse: id,
       type: "cashOut",
       date: format(currentDay, "MM-dd-yyyy"),
       startDate,
       endDate,
       forceRefetch: true,
+    }, {
+      skip: !id || (id === "" && userInfo?.type !== "admin")
     });
-
-  // Refresh on date/id change
-  useEffect(() => {
-    refetchDeposit();
-    refetchCashout();
-  }, [id, currentDay]);
 
   // Process transactions & calculate running balance
   useEffect(() => {
@@ -402,7 +400,7 @@ const WarehouserBalance = () => {
     });
   }, [navigation, id]);
 
-  const renderRow = ({ item }) => (
+  const renderRow = ({ item }: { item: any }) => (
     <View className="flex-row py-2 bg-white mx-[1px]">
       <Text className="flex-[1] text-[11px] px-1 mx-[1px]">{item.date}</Text>
       <Text className="flex-[1] text-[11px] px-1 mx-[1px]">{item.entryBy}</Text>
@@ -424,7 +422,7 @@ const WarehouserBalance = () => {
     return <Text className="text-center mt-4 text-gray-400">No transactions found</Text>;
 
   return (
-    <>
+    <View style={{ flex: 1 }} className="bg-dark">
       <StatusBar style="light" backgroundColor="#000" />
 
       {/* Table Header */}
@@ -481,7 +479,7 @@ const WarehouserBalance = () => {
           </View>
         </View>
       </Modal>
-    </>
+    </View>
   );
 };
 

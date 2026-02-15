@@ -33,21 +33,20 @@ export default function CustomerDueReport() {
     if (warehousesData) {
       setWarehouses(warehousesData);
       if (currentUser?.type === "admin" && warehousesData.length > 0 && !selectedWarehouse) {
-        setSelectedWarehouse(warehousesData[0]._id);
+        setSelectedWarehouse(warehousesData[0]._id as string);
       }
     }
   }, [warehousesData]);
 
   const { data: customerDue, refetch } = useAllSaleQuery({
-    warehouse: selectedWarehouse || currentUser?.warehouse,
-    startDate: format(currentDay, "MM-dd-yyyy"),
-    isDate: "month",
-    forceRefetch: true,
+    warehouse: selectedWarehouse || currentUser?.warehouse || "all",
+    startDate: format(fromDate, "MM-dd-yyyy"),
+    endDate: format(toDate, "MM-dd-yyyy")
   });
 
   useEffect(() => {
     if (selectedWarehouse) refetch();
-  }, [selectedWarehouse, currentDay]);
+  }, [selectedWarehouse, fromDate, toDate]);
 
   // Header
   useLayoutEffect(() => {
@@ -63,7 +62,7 @@ export default function CustomerDueReport() {
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <PrintButton filteredData={customerDue} title="Customer Due Report" />
+        <PrintButton filteredData={customerDue as any[]} title="Customer Due Report" />
       ),
     });
   }, [navigation]);
@@ -168,7 +167,7 @@ export default function CustomerDueReport() {
         {/* <FlatList
           data={customerDue}
           keyExtractor={(item) => item._id}
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: any }) => (
             <View className="bg-black-200 p-4 rounded-2xl mb-3">
               <View className="flex-row justify-between items-center">
                 <Text className="text-gray-200 text-xl font-semibold">
@@ -185,30 +184,30 @@ export default function CustomerDueReport() {
           )}
         /> */}
         <FlatList
-  data={customerDue}
-  keyExtractor={(item, index) =>
-    item?._id ? item._id.toString() : index.toString()
-  }
-  renderItem={({ item }) => (
-    <View className="bg-black-200 p-4 rounded-2xl mb-3">
-      <View className="flex-row justify-between items-center">
-        <Text className="text-gray-200 text-xl font-semibold">
-          {item?.customerName}
-        </Text>
-      </View>
+          data={customerDue}
+          keyExtractor={(item: any, index: number) =>
+            item?._id ? item._id.toString() : index.toString()
+          }
+          renderItem={({ item }) => (
+            <View className="bg-black-200 p-4 rounded-2xl mb-3">
+              <View className="flex-row justify-between items-center">
+                <Text className="text-gray-200 text-xl font-semibold">
+                  {item?.customerName}
+                </Text>
+              </View>
 
-      <View className="flex-row justify-between items-center mt-2">
-        <Text className="text-gray-400 font-bold">
-          {item?.formatedDate}
-        </Text>
+              <View className="flex-row justify-between items-center mt-2">
+                <Text className="text-gray-400 font-bold">
+                  {item?.formatedDate}
+                </Text>
 
-        <Text className="text-gray-300 font-bold text-lg">
-          Due <Text className="text-primary">{item?.amount}</Text> BDT
-        </Text>
-      </View>
-    </View>
-  )}
-/>
+                <Text className="text-gray-300 font-bold text-lg">
+                  Due <Text className="text-primary">{item?.amount}</Text> BDT
+                </Text>
+              </View>
+            </View>
+          )}
+        />
 
       </View>
     </>
