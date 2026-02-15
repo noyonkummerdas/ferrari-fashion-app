@@ -49,6 +49,8 @@ const Accounts = () => {
       headerShown: true,
     });
   }, [navigation]);
+  const { data: warehousedata } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
+  console.log('warehousedata', warehousedata)
   // cash deposit data fetch
   const { data, isSuccess, isLoading, error, isError, refetch } =
     useTransactionListQuery({
@@ -100,7 +102,10 @@ const Accounts = () => {
 
 
   const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
-  const Balance = warehouseInfo?.currentBalance || 0;
+  console.log('warehouseInfo', warehouseInfo)
+  const cashIn = warehouseInfo?.totalCashIn || 0;
+  const cashOut = warehouseInfo?.totalCashOut || 0;
+  const Balance = cashIn - cashOut;
 
   useEffect(() => {
     setOpeningBalance(Balance);

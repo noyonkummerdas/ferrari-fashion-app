@@ -314,22 +314,30 @@ const WarehouserBalance = () => {
     const cashouts = Array.isArray(cashoutData?.transactions) ? cashoutData.transactions : [];
 
     const combined = [
-      ...deposits.map((t) => ({
-        date: format(new Date(t.date), "dd MMM yyyy"),
-        entryBy: t.name || "-",
-        category: t.note || "-",
-        mode: "Cash",
-        cashIn: t.amount,
-        cashOut: null,
-      })),
-      ...cashouts.map((t) => ({
-        date: format(new Date(t.date), "dd MMM yyyy"),
-        entryBy: t.name || "-",
-        category: t.note || "-",
-        mode: "Cash",
-        cashIn: null,
-        cashOut: t.amount,
-      })),
+      ...deposits.map((t) => {
+        const date = t.date ? new Date(t.date) : null;
+        const validDate = date && !isNaN(date.getTime());
+        return {
+          date: validDate ? format(date, "dd MMM yyyy") : "N/A",
+          entryBy: t.name || "-",
+          category: t.note || "-",
+          mode: "Cash",
+          cashIn: t.amount,
+          cashOut: null,
+        };
+      }),
+      ...cashouts.map((t) => {
+        const date = t.date ? new Date(t.date) : null;
+        const validDate = date && !isNaN(date.getTime());
+        return {
+          date: validDate ? format(date, "dd MMM yyyy") : "N/A",
+          entryBy: t.name || "-",
+          category: t.note || "-",
+          mode: "Cash",
+          cashIn: null,
+          cashOut: t.amount,
+        };
+      }),
     ].sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
 
     // Correct running balance calculation

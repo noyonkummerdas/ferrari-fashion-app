@@ -7,6 +7,7 @@ import { useNavigation, useRouter } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import {
+  Alert,
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -128,29 +129,21 @@ const CashDepositDetails = () => {
 
   const handleSubmit = async () => {
     try {
-      // Calculate new balance (deposit increases balance)
-      const newBalance = formData.openingBalance + formData.amount;
-
       const payload = {
         ...formData,
         date: formData.date.toISOString(),
-        currentBalance: newBalance,
       };
 
       const response = await createTransaction(payload as any).unwrap();
       console.log("Transaction response:", response);
 
-      if (response && formData.warehouse) {
-        await updateWarehouse({
-          _id: formData.warehouse,
-          currentBalance: newBalance,
-        } as any);
-      }
-
       router.back();
+
     } catch (error) {
       console.error("Error creating deposit:", error);
-      Alert.alert("Error", "Failed to create transaction. Please try again.");
+      const errorMessage = error?.data?.error || error?.message || "Failed to create transaction. Please try again.";
+      const displayMessage = typeof errorMessage === 'string' ? errorMessage : JSON.stringify(errorMessage);
+      Alert.alert("Error", displayMessage);
     }
   };
 
