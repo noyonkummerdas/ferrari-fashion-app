@@ -59,31 +59,36 @@ const CustomerLedger = () => {
   const ledgerRows = useMemo(() => {
     if (!data?.customer || filteredTransactions.length === 0) return [];
 
-    // Get opening balance (total balance minus today's transactions)
+    // Accounting for Customer:
+    // Debit (Due Sale) increases customer's debt
+    // Credit (Recieve Payment) decreases customer's debt
+
+    // Calculate totals of current list to find opening balance
     const totalDebit = filteredTransactions
       .filter((t: any) => t.type === "Due Sale")
       .reduce((sum: number, t: any) => sum + (t.amount || 0), 0);
 
     const totalCredit = filteredTransactions
-      .filter((t: any) => t.type !== "Due Sale")
+      .filter((t: any) => t.type === "Recieve Payment")
       .reduce((sum: number, t: any) => sum + (t.amount || 0), 0);
 
-    let runningBalance = (data.customer.currentBalance || 0) - totalDebit + totalCredit;
+    // Opening Balance = Current - Sum(Debits) + Sum(Credits)
+    // Using 'balance' field which is used in details page
+    let baseBalance = (data.customer.balance || 0) - totalDebit + totalCredit;
 
     return [...filteredTransactions]
       .reverse()
       .map((item: any) => {
-        const isDue = item.type === "Due Sale";
-        const debit = isDue ? item.amount : 0;
-        const credit = !isDue ? item.amount : 0;
+        const debit = item.type === "Due Sale" ? item.amount : 0;
+        const credit = item.type === "Recieve Payment" ? item.amount : 0;
 
-        runningBalance = runningBalance + debit - credit;
+        baseBalance = baseBalance + debit - credit;
 
         return {
           ...item,
           debit,
           credit,
-          balance: runningBalance,
+          balance: baseBalance,
         };
       });
   }, [data, filteredTransactions]);
@@ -94,10 +99,10 @@ const CustomerLedger = () => {
     const totalCredit = ledgerRows.reduce((sum, row) => sum + (row.credit || 0), 0);
     const finalBalance = ledgerRows.length > 0
       ? ledgerRows[ledgerRows.length - 1].balance
-      : (data?.customer?.currentBalance || 0);
+      : (data?.customer?.balance || 0);
 
     return { totalDebit, totalCredit, finalBalance };
-  }, [ledgerRows, data?.customer?.currentBalance]);
+  }, [ledgerRows, data?.customer?.balance]);
 
   const onRefresh = useCallback(() => {
     setRefreshing(true);
@@ -130,44 +135,55 @@ const CustomerLedger = () => {
       <StatusBar style="light" backgroundColor="#000" />
 
       {/* Customer Info Card */}
-      <View className="bg-black-200 mx-2 mt-2 p-4 rounded-xl">
-        <Text className="text-white text-xl font-bold">
-          {data?.customer?.name}
-        </Text>
-        <Text className="text-gray-400 text-sm mt-1">
-          {data?.customer?.company} • {data?.customer?.phone}
-        </Text>
-        <View className="h-[1px] bg-white/10 my-2" />
-        <View className="flex-row justify-between items-center">
-          <Text className="text-gray-300 text-sm">Current Balance</Text>
-          <Text className="text-primary text-lg font-bold">
-            {data?.customer?.currentBalance?.toLocaleString() || 0} BDT
+      <View className="bg-black-200 mt-3 rounded-2xl overflow-hidden mb-3">
+        {/* Customer Info */}
+        <View className="p-4">
+          <Text className="text-white text-xl font-bold">
+            {data?.customer?.name}
+          </Text>
+          <Text className="text-gray-400 text-sm mt-1">
+            {data?.customer?.company} • {data?.customer?.phone}
           </Text>
         </View>
-      </View>
 
-      {/* Summary Card */}
-      <View className="bg-black-200 mx-2 mb-2 p-4 rounded-xl">
-        <View className="flex-row justify-between mb-2">
-          <View>
-            <Text className="text-gray-400 text-xs">Total Debit</Text>
-            <Text className="text-red-500 text-lg font-bold">
-              {summary.totalDebit.toLocaleString()}
+        {/* Divider */}
+        <View className="h-[1px] bg-white/10 mx-4" />
+
+        {/* Summary Section */}
+        <View className="p-4 space-y-3">
+          {/* Debit / Credit */}
+          <View className="flex-row justify-between">
+            <View>
+              <Text className="text-gray-400 text-xs uppercase">
+                Total Due
+              </Text>
+              <Text className="text-red-500 text-lg font-bold mt-1">
+                {summary.totalDebit.toLocaleString()}
+              </Text>
+            </View>
+
+            <View className="items-end">
+              <Text className="text-gray-400 text-xs uppercase">
+                Total Received
+              </Text>
+              <Text className="text-green-500 text-lg font-bold mt-1">
+                {summary.totalCredit.toLocaleString()}
+              </Text>
+            </View>
+          </View>
+
+          {/* Inner Divider */}
+          <View className="h-[1px] bg-white/10" />
+
+          {/* Balance */}
+          <View className="flex-row justify-between items-center">
+            <Text className="text-gray-300 text-sm font-semibold">
+              Current Balance
+            </Text>
+            <Text className="text-primary text-2xl font-extrabold">
+              {data?.customer?.balance?.toLocaleString() || 0}
             </Text>
           </View>
-          <View className="items-end">
-            <Text className="text-gray-400 text-xs">Total Credit</Text>
-            <Text className="text-green-500 text-lg font-bold">
-              {summary.totalCredit.toLocaleString()}
-            </Text>
-          </View>
-        </View>
-        <View className="h-[1px] bg-white/10 my-2" />
-        <View className="flex-row justify-between items-center">
-          <Text className="text-gray-300 font-semibold">Balance</Text>
-          <Text className="text-primary text-xl font-bold">
-            {summary.finalBalance.toLocaleString()}
-          </Text>
         </View>
       </View>
 
@@ -184,7 +200,7 @@ const CustomerLedger = () => {
       {ledgerRows.length > 0 ? (
         <FlatList
           data={ledgerRows}
-          keyExtractor={(item) => item._id}
+          keyExtractor={(item, index) => item?._id || index.toString()}
           showsVerticalScrollIndicator={false}
           refreshing={refreshing}
           onRefresh={onRefresh}

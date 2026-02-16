@@ -132,46 +132,63 @@ const SupplierLedger = () => {
             <StatusBar style="light" backgroundColor="#000" />
 
             {/* Supplier Info Card */}
-            <View className="bg-black-200 mx-2 mt-2 p-4 rounded-xl">
-                <Text className="text-white text-xl font-bold">
-                    {data?.supplier?.name}
-                </Text>
-                <Text className="text-gray-400 text-sm mt-1">
-                    {data?.supplier?.company} • {data?.supplier?.phone}
-                </Text>
-                <View className="h-[1px] bg-white/10 my-2" />
-                <View className="flex-row justify-between items-center">
-                    <Text className="text-gray-300 text-sm">Current Balance</Text>
-                    <Text className="text-primary text-lg font-bold">
-                        {data?.supplier?.balance?.toLocaleString() || 0} BDT
+            <View className="bg-black-200 mx-3 mt-3 rounded-2xl overflow-hidden mb-3">
+                {/* Supplier Info */}
+                <View className="p-4">
+                    <Text className="text-white text-xl font-bold">
+                        {data?.supplier?.name}
                     </Text>
+
+                    <Text className="text-gray-400 text-sm mt-1">
+                        {data?.supplier?.company} • {data?.supplier?.phone}
+                    </Text>
+                </View>
+
+                {/* Divider */}
+                <View className="h-[1px] bg-white/10 mx-4" />
+
+                {/* Summary Section */}
+                <View className="p-4 space-y-3">
+                    {/* Debit / Credit */}
+                    <View className="flex-row justify-between">
+                        <View>
+                            <Text className="text-gray-400 text-xs uppercase">
+                                Total Paid
+                            </Text>
+                            <Text className="text-green-500 text-lg font-bold mt-1">
+                                {summary.totalDebit.toLocaleString()}
+                            </Text>
+                        </View>
+
+                        <View className="items-end">
+                            <Text className="text-gray-400 text-xs uppercase">
+                                Total Purchase
+                            </Text>
+                            <Text className="text-red-500 text-lg font-bold mt-1">
+                                {summary.totalCredit.toLocaleString()}
+                            </Text>
+                        </View>
+                    </View>
+
+                    {/* Inner Divider */}
+                    <View className="h-[1px] bg-white/10" />
+
+                    {/* Balance */}
+                    <View className="flex-row justify-between items-center">
+                        <Text className="text-gray-300 text-sm font-semibold">
+                            Current Balance
+                        </Text>
+
+                        <Text className="text-primary text-2xl font-extrabold">
+                            {summary.finalBalance.toLocaleString()}
+                        </Text>
+                    </View>
                 </View>
             </View>
 
+
             {/* Summary Card */}
-            <View className="bg-black-200 mx-2 mb-2 p-4 rounded-xl">
-                <View className="flex-row justify-between mb-2">
-                    <View>
-                        <Text className="text-gray-400 text-xs">Total Debit (Paid)</Text>
-                        <Text className="text-green-500 text-lg font-bold">
-                            {summary.totalDebit.toLocaleString()}
-                        </Text>
-                    </View>
-                    <View className="items-end">
-                        <Text className="text-gray-400 text-xs">Total Credit (Purchase)</Text>
-                        <Text className="text-red-500 text-lg font-bold">
-                            {summary.totalCredit.toLocaleString()}
-                        </Text>
-                    </View>
-                </View>
-                <View className="h-[1px] bg-white/10 my-2" />
-                <View className="flex-row justify-between items-center">
-                    <Text className="text-gray-300 font-semibold">Balance</Text>
-                    <Text className="text-primary text-xl font-bold">
-                        {summary.finalBalance.toLocaleString()}
-                    </Text>
-                </View>
-            </View>
+
 
             {/* Table Header */}
             <View className="flex-row bg-gray-300 py-2 mx-[1px]">
@@ -186,7 +203,7 @@ const SupplierLedger = () => {
             {ledgerRows.length > 0 ? (
                 <FlatList
                     data={ledgerRows}
-                    keyExtractor={(item) => item._id}
+                    keyExtractor={(item, index) => item?._id || index.toString()}
                     showsVerticalScrollIndicator={false}
                     refreshing={refreshing}
                     onRefresh={onRefresh}
