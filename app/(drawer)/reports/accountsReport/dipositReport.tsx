@@ -67,6 +67,12 @@ export default function CashInReport() {
   }, [warehousesData]);
 
 
+  const selectedWarehouseName = React.useMemo(() => {
+    if (!selectedWarehouse) return "All Warehouses";
+    const wh = warehouses.find(w => w._id === selectedWarehouse);
+    return wh ? wh.name : "Unknown Warehouse";
+  }, [selectedWarehouse, warehouses]);
+
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -84,9 +90,10 @@ export default function CashInReport() {
         <PrintButton
           filteredData={cashDeposit?.transactions || []}
           title="Cash Deposit Report"
+          subtitle={`Warehouse: ${selectedWarehouseName}`}
         />),
     });
-  }, [navigation, cashDeposit]);
+  }, [navigation, cashDeposit, selectedWarehouseName]);
 
   // Filter data by role, warehouse, and date
   const totalCashIn = cashDeposit?.transactions?.length || 0;

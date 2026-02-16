@@ -89,6 +89,12 @@ export default function CurrentStock() {
 
   // Fetch CashIn data from backend
 
+  const selectedWarehouseName = React.useMemo(() => {
+    if (!selectedWarehouse) return "All Warehouses";
+    const wh = warehouses.find(w => w._id === selectedWarehouse);
+    return wh ? wh.name : "Unknown Warehouse";
+  }, [selectedWarehouse, warehouses]);
+
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -103,10 +109,14 @@ export default function CurrentStock() {
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <PrintButton filteredData={filteredProducts} title="Current Stock Report" />
+        <PrintButton
+          filteredData={filteredProducts}
+          title="Current Stock Report"
+          subtitle={`Warehouse: ${selectedWarehouseName}`}
+        />
       ),
     });
-  }, [navigation, filteredProducts]);
+  }, [navigation, filteredProducts, selectedWarehouseName]);
 
 
   // if (isLoading) return <Text>Loading .......</Text>;

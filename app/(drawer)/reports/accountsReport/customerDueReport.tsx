@@ -39,14 +39,22 @@ export default function CustomerDueReport() {
   }, [warehousesData]);
 
   const { data: customerDue, refetch } = useAllSaleQuery({
-    warehouse: selectedWarehouse || currentUser?.warehouse || "all",
+    warehouse: (selectedWarehouse || currentUser?.warehouse || "all") as string,
     startDate: format(fromDate, "MM-dd-yyyy"),
-    endDate: format(toDate, "MM-dd-yyyy")
-  });
+    endDate: format(toDate, "MM-dd-yyyy"),
+    aamarId: currentUser?.id || "",
+    isDate: "range"
+  } as any);
 
   useEffect(() => {
     if (selectedWarehouse) refetch();
   }, [selectedWarehouse, fromDate, toDate]);
+
+  const selectedWarehouseName = React.useMemo(() => {
+    if (!selectedWarehouse) return "All Warehouses";
+    const wh = warehouses.find(w => w._id === selectedWarehouse);
+    return wh ? wh.name : "Unknown Warehouse";
+  }, [selectedWarehouse, warehouses]);
 
   // Header
   useLayoutEffect(() => {
@@ -62,10 +70,14 @@ export default function CustomerDueReport() {
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <PrintButton filteredData={customerDue as any[]} title="Customer Due Report" />
+        <PrintButton
+          filteredData={customerDue as any[]}
+          title="Customer Due Report"
+          subtitle={`Warehouse: ${selectedWarehouseName}`}
+        />
       ),
     });
-  }, [navigation]);
+  }, [navigation, customerDue, selectedWarehouseName]);
 
   const totalCustomerDue = customerDue?.length || 0;
   const totalAmount =
@@ -184,11 +196,11 @@ export default function CustomerDueReport() {
           )}
         /> */}
         <FlatList
-          data={customerDue}
+          data={customerDue as any[]}
           keyExtractor={(item: any, index: number) =>
             item?._id ? item._id.toString() : index.toString()
           }
-          renderItem={({ item }) => (
+          renderItem={({ item }: { item: any }) => (
             <View className="bg-black-200 p-4 rounded-2xl mb-3">
               <View className="flex-row justify-between items-center">
                 <Text className="text-gray-200 text-xl font-semibold">

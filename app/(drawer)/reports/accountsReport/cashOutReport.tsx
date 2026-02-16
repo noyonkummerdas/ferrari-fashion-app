@@ -45,6 +45,23 @@ export default function CashOutReport() {
   }, [warehousesData]);
 
 
+  const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
+    useTransactionListQuery({
+      warehouse: selectedWarehouse || currentUser?.warehouse,
+      type: "cashOut",
+      startDate: format(fromDate, "MM-dd-yyyy"),
+      endDate: format(toDate, "MM-dd-yyyy"),
+      forceRefetch: true,
+    }, {
+      skip: !selectedWarehouse
+    });
+
+  const selectedWarehouseName = React.useMemo(() => {
+    if (!selectedWarehouse) return "All Warehouses";
+    const wh = warehouses.find(w => w._id === selectedWarehouse);
+    return wh ? wh.name : "Unknown Warehouse";
+  }, [selectedWarehouse, warehouses]);
+
   // Header with print button
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -59,20 +76,15 @@ export default function CashOutReport() {
         </TouchableOpacity>
       ),
       headerRight: () => (
-        <PrintButton filteredData={cashOutData?.transactions || []} title="Cash Out Report" />
+        <PrintButton
+          filteredData={cashOutData?.transactions || []}
+          title="Cash Out Report"
+          subtitle={`Warehouse: ${selectedWarehouseName}`}
+        />
       ),
     });
-  }, [navigation]);
-  const { data: cashOutData, isSuccess, isLoading, error, isError, refetch } =
-    useTransactionListQuery({
-      warehouse: selectedWarehouse || currentUser?.warehouse,
-      type: "cashOut",
-      startDate: format(fromDate, "MM-dd-yyyy"),
-      endDate: format(toDate, "MM-dd-yyyy"),
-      forceRefetch: true,
-    }, {
-      skip: !selectedWarehouse
-    });
+  }, [navigation, cashOutData, selectedWarehouseName]);
+
   console.log('cashout list ', cashOutData);
   // refetch handled by hook args change
   // useEffect(() => {

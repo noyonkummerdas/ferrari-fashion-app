@@ -50,23 +50,22 @@ export default function PaymentReceivedReport() {
     }, {
       skip: !selectedWarehouse && !currentUser?.warehouse
     });
-  // console.log("PaymentReceivedData:", paymentReceivedData, isSuccess, isError);
 
-
-  // refetch handled by hook args change
-  // useEffect(() => {
-  //   refetch()
-  // }, [selectedWarehouse, fromDate, toDate])
-  // warehouse  role
   // Set warehouses after fetch
   useEffect(() => {
     if (warehousesData) {
       setWarehouses(warehousesData);
-      if (currentUser.role === "admin" && warehousesData.length > 0) {
-        setSelectedWarehouse(warehousesData[0]._id);
+      if (currentUser?.type === "admin" && warehousesData.length > 0) {
+        setSelectedWarehouse(warehousesData[0]._id || null);
       }
     }
   }, [warehousesData, currentUser]);
+
+  const selectedWarehouseName = React.useMemo(() => {
+    if (!selectedWarehouse) return "All Warehouses";
+    const wh = warehouses.find(w => w._id === selectedWarehouse);
+    return wh ? wh.name : "Unknown Warehouse";
+  }, [selectedWarehouse, warehouses]);
 
   // Header with print button
   useLayoutEffect(() => {
@@ -81,22 +80,15 @@ export default function PaymentReceivedReport() {
           <Ionicons name="arrow-back" size={24} color="white" />
         </TouchableOpacity>
       ),
-      // headerRight: () => (
-      //   <TouchableOpacity
-      //     onPress={() => Alert.alert("Print", "Printing Cash In Report...")}
-      //     className="me-4"
-      //   >
-      //     <Ionicons name="print-outline" size={28} color="white" />
-      //   </TouchableOpacity>
-      // ),
       headerRight: () => (
-        <>
-          {/* <PrintButton filteredData={paymentReceivedData} title="Payment Received Report" /> */}
-          <PrintButton filteredData={paymentReceivedData?.transactions || []} title="Payment Received Report" />
-        </>
+        <PrintButton
+          filteredData={paymentReceivedData?.transactions || []}
+          title="Payment Received Report"
+          subtitle={`Warehouse: ${selectedWarehouseName}`}
+        />
       ),
     });
-  }, [navigation])
+  }, [navigation, paymentReceivedData, selectedWarehouseName]);
 
   const totalPayments = paymentReceivedData?.transactions?.length || 0;
   const totalAmount = paymentReceivedData?.transactions?.reduce(
@@ -178,11 +170,11 @@ export default function PaymentReceivedReport() {
             </Text>
           </View>
         </View>
-        {paymentReceivedData?.transactions?.length > 0 ? (
+        {(paymentReceivedData?.transactions?.length ?? 0) > 0 ? (
           <FlatList
             data={paymentReceivedData?.transactions}
-            keyExtractor={(item, index) => item._id || item.id || index.toString()}
-            renderItem={({ item }) => (
+            keyExtractor={(item: any, index) => item._id || item.id || index.toString()}
+            renderItem={({ item }: { item: any }) => (
               <View className="bg-[#1f1f1f] p-3 rounded-lg mb-3">
                 <Text className="text-gray-200 text-xl mb-2">{item.type}</Text>
 
