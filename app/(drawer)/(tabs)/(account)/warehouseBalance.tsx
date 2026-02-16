@@ -431,7 +431,7 @@ const WarehouserBalance = () => {
       <StatusBar style="light" backgroundColor="#000" />
 
       {/* Date Filter */}
-      <View className="bg-black-200 mx-2 my-2 p-3 rounded-xl">
+      {/* <View className="bg-black-200 mx-2 my-2 p-3 rounded-xl">
         <View className="flex-row justify-between items-center">
           <TouchableOpacity onPress={goToPreviousDay} className="p-2">
             <Ionicons name="arrow-back" size={24} color="white" />
@@ -459,7 +459,7 @@ const WarehouserBalance = () => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </View> */}
 
       {/* Summary Card */}
       <View className="bg-black-200 mx-2 mb-2 p-4 rounded-xl">
