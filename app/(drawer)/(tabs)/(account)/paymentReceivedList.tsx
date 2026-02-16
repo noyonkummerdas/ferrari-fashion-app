@@ -65,8 +65,10 @@ const PaymentReceivedList = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "paymentReceived",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
+    }, {
+      skip: !userInfo?.warehouse || !currentDay
     });
   // console.log('payment recived', data)
   useEffect(() => {

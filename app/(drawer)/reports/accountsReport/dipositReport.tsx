@@ -49,7 +49,7 @@ export default function CashInReport() {
     endDate: format(toDate, "MM-dd-yyyy"),
     forceRefetch: true,
   }, {
-    skip: !selectedWarehouse && !userInfo?.warehouse
+    skip: (!selectedWarehouse && !userInfo?.warehouse) || !fromDate || !toDate
   });
 
   useEffect(() => {

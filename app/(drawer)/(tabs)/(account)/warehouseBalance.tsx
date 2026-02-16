@@ -283,27 +283,27 @@ const WarehouserBalance = () => {
   // Fetch deposits
   const { data: depositData, isLoading: depositLoading, refetch: refetchDeposit } =
     useTransactionListQuery({
-      warehouse: id,
+      warehouse: userInfo?.warehouse,
       type: "deposit",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       startDate,
       endDate,
       forceRefetch: true,
     }, {
-      skip: !id || (id === "" && userInfo?.type !== "admin")
+      skip: !userInfo?.warehouse || !currentDay
     });
 
   // Fetch cashouts
   const { data: cashoutData, isLoading: cashoutLoading, refetch: refetchCashout } =
     useTransactionListQuery({
-      warehouse: id,
+      warehouse: userInfo?.warehouse,
       type: "cashOut",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       startDate,
       endDate,
       forceRefetch: true,
     }, {
-      skip: !id || (id === "" && userInfo?.type !== "admin")
+      skip: !userInfo?.warehouse || !currentDay
     });
 
   // Process transactions & calculate running balance

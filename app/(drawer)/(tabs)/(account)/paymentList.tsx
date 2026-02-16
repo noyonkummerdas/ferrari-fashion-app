@@ -64,8 +64,10 @@ const PaymentList = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "payment",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
+    }, {
+      skip: !userInfo?.warehouse || !currentDay
     });
 
   // console.log("PAYMENT LIST DATA:", data);

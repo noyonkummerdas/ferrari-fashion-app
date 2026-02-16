@@ -68,10 +68,10 @@ const CashOutList = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "cashOut",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
     }, {
-      skip: !hasWarehouse
+      skip: !hasWarehouse || !currentDay
     });
 
   useEffect(() => {

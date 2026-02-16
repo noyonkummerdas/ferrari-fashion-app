@@ -20,8 +20,17 @@ export const TransactionApi = createApi({
       providesTags: ["Transaction"],
     }),
     TransactionList: builder.query<{ transactions: Transaction[] }, any>({
-      query: ({ warehouse, type, date }) =>
-        `/transaction/list/${warehouse}/${type}/${date}`,
+      query: ({ warehouse, type, date, startDate, endDate }) => {
+        // Use startDate/endDate if provided, otherwise fall back to single date
+        if (startDate && endDate) {
+          return `/transaction/list/${warehouse}/${type}?startDate=${startDate}&endDate=${endDate}`;
+        } else if (date) {
+          return `/transaction/list/${warehouse}/${type}/${date}`;
+        } else {
+          // If no date parameters provided, throw error to prevent undefined in URL
+          throw new Error('Either date or startDate/endDate must be provided');
+        }
+      },
       onQueryStarted: async (arg, { queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;

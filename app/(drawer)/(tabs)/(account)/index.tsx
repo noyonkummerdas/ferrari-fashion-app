@@ -56,10 +56,10 @@ const Accounts = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "deposit",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
     }, {
-      skip: !userInfo?.warehouse
+      skip: !userInfo?.warehouse || !currentDay
     });
   const totalDepositAmount = data?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -69,10 +69,10 @@ const Accounts = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "cashOut",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
     }, {
-      skip: !userInfo?.warehouse
+      skip: !userInfo?.warehouse || !currentDay
     });
   const totalCashOutAmount = cashOutData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -81,10 +81,10 @@ const Accounts = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "payment",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
     }, {
-      skip: !userInfo?.warehouse
+      skip: !userInfo?.warehouse || !currentDay
     });
   const totalPaymentAmount = paymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 
@@ -93,10 +93,10 @@ const Accounts = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse,
       type: "paymentReceived",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
     }, {
-      skip: !userInfo?.warehouse
+      skip: !userInfo?.warehouse || !currentDay
     });
   const totalReceivedPaymentAmount = receivedPaymentData?.transactions?.reduce((sum, item) => sum + (item.amount || 0), 0) || 0;
 

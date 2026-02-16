@@ -284,7 +284,7 @@ export default function PosDashboard() {
         </View>
 
         {/* Lifetime Petty Cash Summary */}
-        {pettyCashData && (
+        {/* {pettyCashData && (
           <View className="mb-4">
             <View className="bg-black-200 p-4 rounded-xl">
               <View className="flex-row items-center gap-2 mb-3">
@@ -317,7 +317,7 @@ export default function PosDashboard() {
               </View>
             </View>
           </View>
-        )}
+        )} */}
 
         {/* Stats Grid */}
         {/* <StatsGrid stats={statsData} /> */}

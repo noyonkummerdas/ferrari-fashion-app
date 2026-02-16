@@ -42,8 +42,11 @@ export default function CashInReport() {
   const { data: cashInData, isLoading, refetch } = useTransactionListQuery({
     warehouse: selectedWarehouse ?? "all",
     type: "deposit",
+    date: fromDate ? format(fromDate, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
     startDate: format(fromDate, "MM-dd-yyyy"),
     endDate: format(toDate, "MM-dd-yyyy")
+  }, {
+    skip: !fromDate || !toDate
   })
   console.log("CashInData:", cashInData);
 

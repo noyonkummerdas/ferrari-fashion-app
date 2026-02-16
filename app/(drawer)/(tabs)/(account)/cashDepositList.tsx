@@ -67,10 +67,10 @@ const CashDepositList = () => {
     useTransactionListQuery({
       warehouse: userInfo?.warehouse || 'placeholder',
       type: "deposit",
-      date: format(currentDay, "MM-dd-yyyy"),
+      date: currentDay ? format(currentDay, "MM-dd-yyyy") : format(new Date(), "MM-dd-yyyy"),
       forceRefetch: true,
     }, {
-      skip: !hasWarehouse
+      skip: !hasWarehouse || !currentDay
     });
 
   useEffect(() => {
