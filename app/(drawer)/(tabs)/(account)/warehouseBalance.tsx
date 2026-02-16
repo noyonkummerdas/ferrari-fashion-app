@@ -270,9 +270,11 @@ const WarehouserBalance = () => {
   const startDate = format(subDays(currentDay, 29), "MM-dd-yyyy");
   const endDate = format(currentDay, "MM-dd-yyyy");
 
-  // Get warehouse info
+  // Get warehouse info (same calculation as index.tsx)
   const { data: warehouseInfo } = useWarehouseQuery(userInfo?.warehouse, { skip: !userInfo?.warehouse });
-  const Balance = warehouseInfo?.currentBalance || 0;
+  const cashIn = warehouseInfo?.totalCashIn || 0;
+  const cashOut = warehouseInfo?.totalCashOut || 0;
+  const Balance = cashIn - cashOut;
 
   // Set warehouse id for user/admin
   useEffect(() => {
@@ -416,14 +418,67 @@ const WarehouserBalance = () => {
     </View>
   );
 
+  // Calculate totals for summary
+  const totalCashIn = transactions.reduce((sum, t) => sum + (t.cashIn || 0), 0);
+  const totalCashOutSum = transactions.reduce((sum, t) => sum + (t.cashOut || 0), 0);
+  const finalBalance = transactions.length > 0 ? transactions[transactions.length - 1].balance : Balance;
+
   if (depositLoading || cashoutLoading)
-    return <ActivityIndicator size="large" color="blue" className="mt-4" />;
-  if (!transactions.length)
-    return <Text className="text-center mt-4 text-gray-400">No transactions found</Text>;
+    return <ActivityIndicator size="large" color="#fdb714" className="mt-4" />;
 
   return (
     <View style={{ flex: 1 }} className="bg-dark">
       <StatusBar style="light" backgroundColor="#000" />
+
+      {/* Date Filter */}
+      <View className="bg-black-200 mx-2 my-2 p-3 rounded-xl">
+        <View className="flex-row justify-between items-center">
+          <TouchableOpacity onPress={goToPreviousDay} className="p-2">
+            <Ionicons name="arrow-back" size={24} color="white" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={openDatePicker}
+            className="flex-row items-center px-4 rounded-lg"
+          >
+            <Text className="text-white text-lg me-2">
+              {format(currentDay, "dd MMM yyyy")}
+            </Text>
+            <Ionicons name="calendar-outline" size={20} color="#fdb714" />
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={goToNextDay}
+            disabled={isToday(currentDay)}
+            className={`p-2 ${isToday(currentDay) ? "opacity-50" : ""}`}
+          >
+            <Ionicons
+              name="arrow-forward"
+              size={24}
+              color={isToday(currentDay) ? "#666" : "white"}
+            />
+          </TouchableOpacity>
+        </View>
+      </View>
+
+      {/* Summary Card */}
+      <View className="bg-black-200 mx-2 mb-2 p-4 rounded-xl">
+        <View className="flex-row justify-between mb-2">
+          <View>
+            <Text className="text-gray-400 text-xs">Total Cash In</Text>
+            <Text className="text-green-500 text-lg font-bold">{totalCashIn.toLocaleString()}</Text>
+          </View>
+          <View className="items-end">
+            <Text className="text-gray-400 text-xs">Total Cash Out</Text>
+            <Text className="text-red-500 text-lg font-bold">{totalCashOutSum.toLocaleString()}</Text>
+          </View>
+        </View>
+        <View className="h-[1px] bg-white/10 my-2" />
+        <View className="flex-row justify-between items-center">
+          <Text className="text-gray-300 font-semibold">Current Balance</Text>
+          <Text className="text-primary text-xl font-bold">{finalBalance.toLocaleString()}</Text>
+        </View>
+      </View>
 
       {/* Table Header */}
       <View className="flex-row bg-gray-300 py-2 mx-[1px]">
@@ -437,13 +492,21 @@ const WarehouserBalance = () => {
       </View>
 
       {/* Transactions */}
-      <FlatList
-        data={transactions}
-        renderItem={renderRow}
-        keyExtractor={(item, index) => index.toString()}
-        refreshing={refreshing}
-        onRefresh={onRefresh}
-      />
+      {transactions.length > 0 ? (
+        <FlatList
+          data={transactions}
+          renderItem={renderRow}
+          keyExtractor={(item, index) => index.toString()}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      ) : (
+        <View className="flex-1 justify-center items-center mt-10">
+          <Ionicons name="receipt-outline" size={60} color="gray" />
+          <Text className="text-gray-400 text-lg mt-4">No transactions found</Text>
+          <Text className="text-gray-500 text-sm">for {format(currentDay, "dd MMM yyyy")}</Text>
+        </View>
+      )}
 
       {/* Date Picker Modal */}
       <Modal visible={showDatePicker} transparent animationType="fade">

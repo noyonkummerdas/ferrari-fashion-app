@@ -219,40 +219,7 @@ const Accounts = () => {
           </View>
 
           {/* Lifetime Petty Cash Summary */}
-          {pettyCashData && (
-            <View className="mb-4">
-              <View className="bg-black-200 p-4 rounded-xl">
-                <View className="flex-row items-center gap-2 mb-3">
-                  <Ionicons name="cash" size={20} color="#fdb714" />
-                  <Text className="text-white text-lg font-pbold">Petty Cash Summary</Text>
-                </View>
-
-                <View className="flex-row justify-between mb-2">
-                  <View>
-                    <Text className="text-gray-400 text-xs">Total Deposit</Text>
-                    <Text className="text-white text-lg font-psemibold">
-                      {pettyCashData?.summary?.totalDeposit || 0}
-                    </Text>
-                  </View>
-                  <View className="items-end">
-                    <Text className="text-gray-400 text-xs">Total Cash Out</Text>
-                    <Text className="text-white text-lg font-psemibold">
-                      {pettyCashData?.summary?.totalCashOut || 0}
-                    </Text>
-                  </View>
-                </View>
-
-                <View className="h-[1px] bg-white/10 my-2" />
-
-                <View className="flex-row justify-between items-center">
-                  <Text className="text-gray-300 font-pmedium">Net Cash Balance</Text>
-                  <Text className="text-primary text-xl font-pbold">
-                    {pettyCashData?.summary?.balance || 0}
-                  </Text>
-                </View>
-              </View>
-            </View>
-          )}
+          {/*  */}
 
           <TouchableOpacity
             onPress={() => router.push("/(account)/warehouseBalance")}
