@@ -13,21 +13,21 @@
       "bundleIdentifier": "com.manishankarvakta.FFApp"
     },
     "android": {
-  "adaptiveIcon": {
-    "foregroundImage": "./assets/images/icon.png",
-    "backgroundColor": "#000000"
-  },
-  "edgeToEdgeEnabled": false,
-  "package": "com.manishankarvakta.FFApp",
-  "blockedPermissions": [
-    "com.google.android.gms.permission.AD_ID"
-  ],
-  "versionCode": 4,
-  "navigationBar": {
-    "visible": true,
-    "backgroundColor": "#000000"
-  }
-},
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/icon.png",
+        "backgroundColor": "#000000"
+      },
+      "edgeToEdgeEnabled": false,
+      "package": "com.manishankarvakta.FFApp",
+      "blockedPermissions": [
+        "com.google.android.gms.permission.AD_ID"
+      ],
+      "versionCode": 4,
+      "navigationBar": {
+        "visible": true,
+        "backgroundColor": "#000000"
+      }
+    },
     "web": {
       "bundler": "metro",
       "output": "static",
@@ -51,9 +51,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "9a215206-00f1-44d7-85c4-35973e56a0e3"
+        "projectId": "0fe3e27f-0818-46b8-bbbd-0c178202725d"
       }
     },
-    "owner": "manishankarvakta"
+    "owner": "nknoyon"
   }
 }
