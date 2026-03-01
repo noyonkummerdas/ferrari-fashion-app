@@ -11,13 +11,14 @@
     "preview": {
       "distribution": "internal"
     },
-   "production": {
+    "production": {
       "android": {
         "buildType": "app-bundle",
         "gradleCommand": ":app:bundleRelease"
       },
       "env": {
-        "EXPO_USE_FAST_RESOLVER": "1"
+        "EXPO_USE_FAST_RESOLVER": "1",
+        "NPM_CONFIG_OPTIONAL": "true"
       },
       "autoIncrement": true
     }
