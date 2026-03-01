@@ -13,8 +13,7 @@
     },
     "production": {
       "android": {
-        "buildType": "app-bundle",
-        "gradleCommand": ":app:bundleRelease"
+        "buildType": "apk"
       },
       "env": {
         "EXPO_USE_FAST_RESOLVER": "1",
