@@ -87,7 +87,6 @@
     "eslint": "^9.25.0",
     "eslint-config-expo": "~10.0.0",
     "lightningcss": "^1.25.0",
-    "lightningcss-win32-x64-msvc": "^1.31.1",
     "postcss": "^8.5.6",
     "react-native-worklets": "0.5.1",
     "tailwindcss": "^3.4.17",
