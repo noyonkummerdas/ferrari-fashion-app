@@ -13,11 +13,11 @@
     },
     "production": {
       "android": {
-        "buildType": "apk"
+        "buildType": "app-bundle",
+        "gradleCommand": ":app:bundleRelease"
       },
       "env": {
-        "EXPO_USE_FAST_RESOLVER": "1",
-        "NPM_CONFIG_OPTIONAL": "true"
+        "EXPO_USE_FAST_RESOLVER": "1"
       },
       "autoIncrement": true
     }
